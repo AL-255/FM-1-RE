@@ -1,0 +1,1 @@
+[probonopd/SMK-37_Pro.md](https://gist.github.com/probonopd/18b3ed65a69d0229eb630c47d7e316dc?permalink_comment_id=5754479)

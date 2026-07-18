@@ -1,0 +1,3 @@
+[submodule "3rd-party/jl-misctools"]
+	path = 3rd-party/jl-misctools
+	url = https://github.com/kagaimiq/jl-misctools
