@@ -1,0 +1,3 @@
+# JieLi FM-1 (and ota-FM-1) USB access for the plugdev group
+# install: sudo cp tools/99-jieli-fm1.rules /etc/udev/rules.d/ && sudo udevadm control --reload && replug
+SUBSYSTEM=="usb", ATTR{idVendor}=="4c4a", MODE="0660", GROUP="plugdev"
