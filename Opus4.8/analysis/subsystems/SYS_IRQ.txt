@@ -1,0 +1,11 @@
+0x020000a0  sz=36    calls_in=0   out=1   conf=high    Exception/interrupt vector entry: saves full CPU context and calls IRQ dispatcher 0x2a2
+0x020002a2  sz=556   calls_in=1   out=1   conf=high    Main per-core interrupt dispatcher: scans pending IRQ SFRs, jump-table dispatch, wakes tasks; fault tail hangs
+0x020004ce  sz=20    calls_in=1   out=0   conf=medium  Clears bit3 of per-core interrupt control SFR (0x1eef0d0) to disable/ack source
+0x020004e2  sz=88    calls_in=1   out=0   conf=medium  Per-core SFR set plus timer ISRs (0x13100/0x13400): ack timer IRQ and capture value into MIDI engine global
+0x0200167e  sz=12    calls_in=3   out=0   conf=high    Disable interrupts: clears icfg interrupt-enable bit
+0x0200168a  sz=12    calls_in=3   out=0   conf=high    Enable interrupts: sets icfg interrupt-enable bit
+0x02001696  sz=60    calls_in=1   out=2   conf=medium  Clears per-core interrupt mask/pending arrays (0x1eef100/0x1eef300)
+0x020016d2  sz=134   calls_in=18  out=2   conf=high    request_irq / set IRQ priority+routing: table lookup, program IRQ SFRs, store handler pointer
+0x02001758  sz=512   calls_in=1   out=1   conf=low     Registers timer/peripheral ISRs and sets up ping-pong DMA buffers and per-core control SFRs
+0x02001a60  sz=20    calls_in=1   out=1   conf=medium  Registers IRQ #2 handler (0x1c06ea8) via request_irq 0x16d2
+0x02026478  sz=64    calls_in=4   out=2   conf=low     Unregister/disable an interrupt/notify channel: clear RAM handler entry and priority bits in SFRs (irq-locked)

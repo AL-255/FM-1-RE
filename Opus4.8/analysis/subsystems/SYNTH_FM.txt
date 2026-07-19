@@ -1,0 +1,19 @@
+0x0201d99c  sz=52    calls_in=2   out=0   conf=medium  Apply patch parameters (algorithm/feedback/etc.) from lookup tables into the synth global state
+0x0201da10  sz=168   calls_in=2   out=0   conf=medium  Compute LFO/pitch/portamento rate parameters from DX7 patch bytes (division + scaling)
+0x0201f368  sz=148   calls_in=1   out=0   conf=medium  Copy 6-operator DX7 voice/patch parameter block (per-op + global regions) between structs
+0x0201f3fc  sz=112   calls_in=1   out=0   conf=medium  Compute one operator's envelope (EG) rate/level from DX7 tables on key state change
+0x0201f46c  sz=126   calls_in=1   out=1   conf=medium  Advance/key-off envelopes across all 6 operators plus pitch EG of a voice
+0x0201f4ea  sz=266   calls_in=1   out=0   conf=medium  Compute per-operator output level/scaling from algorithm carrier/modulator matrix
+0x0201f5f4  sz=2026  calls_in=4   out=3   conf=high    MIDI channel-voice dispatcher: note on/off, CC (incl sustain), program, pitch-bend applied to FM voices
+0x0201fe64  sz=478   calls_in=5   out=9   conf=medium  Note-off to FM engine + MIDI out; also all-notes-off/panic and full parameter/UI refresh
+0x02020042  sz=410   calls_in=2   out=0   conf=medium  Parse step-sequencer/arp pattern into runtime 16-step active-note table
+0x020201dc  sz=886   calls_in=0   out=13  conf=low     Arpeggiator/sequencer mode and transport controller (start/stop/mode, pattern load, UI updates)
+0x02020552  sz=56    calls_in=2   out=2   conf=medium  Send NOTE ON (velocity) to FM voice engine and optionally echo to MIDI out
+0x0202058a  sz=410   calls_in=2   out=0   conf=medium  Quicksort held notes by pitch/priority lookup table for arpeggiator ordering
+0x02020724  sz=1132  calls_in=1   out=2   conf=medium  Build arpeggiator note sequence from held notes applying mode/octave/direction
+0x02020b90  sz=62    calls_in=3   out=0   conf=medium  Arp/voice helper: clear a note slot flag and decrement active-note count
+0x02020bce  sz=64    calls_in=1   out=0   conf=medium  Arp/voice helper: set a note slot flag and increment active-note count
+0x02020c0e  sz=2102  calls_in=1   out=6   conf=medium  Arpeggiator/step-sequencer playback engine: build list, clock steps, trigger note on/off
+0x02022106  sz=380   calls_in=1   out=2   conf=medium  Held-note bookkeeping: add/remove active MIDI note in slot/map tables feeding the arp
+0x02022282  sz=142   calls_in=2   out=2   conf=medium  Note-on handler that triggers the note and latches it into the arpeggiator chord table
+0x02022310  sz=170   calls_in=2   out=2   conf=medium  Note-off handler that releases the note and updates arp min/max note range

@@ -1,0 +1,6 @@
+0x02019e9e  sz=954   calls_in=0   out=1   conf=low     Effect process dispatcher: runs the current audio effect (3-way mode) via per-sample float loop over the active effect object, plus init/copy/deinit helpers
+0x0201a2a0  sz=20    calls_in=1   out=1   conf=medium  Effect stage init: allocates a count*4 delay/state buffer and records length+ptr into the stage struct
+0x0201a2b4  sz=1326  calls_in=0   out=3   conf=medium  Effect constructor: builds a reverb/effect object (3 variants) with per-stage delay buffers and coefficient floats
+0x0201a7e2  sz=5474  calls_in=0   out=3   conf=low     Multi-stage audio effect DSP render core over a sample block (comb/delay/feedback stages)
+0x0201bf96  sz=3638  calls_in=0   out=4   conf=medium  Effect constructor (recursive 268-byte tree object) with per-node coefficient setup
+0x0201cdcc  sz=1372  calls_in=0   out=2   conf=medium  Chorus/flanger effect: allocate + set coefficients + LFO/sin-table modulated delay processing

@@ -1,0 +1,67 @@
+0x02001958  sz=24    calls_in=1   out=0   conf=low     Getter for per-core peripheral buffer/state (0x1c16eb4)
+0x02001970  sz=14    calls_in=1   out=0   conf=low     GPIO configuration wrapper (ROM 0xc00f2e(128,pin))
+0x02001f5a  sz=32    calls_in=1   out=1   conf=low     Initializes a peripheral SFR (0x10500=0x4000) and registers its IRQ #5 handler
+0x02002068  sz=56    calls_in=1   out=0   conf=low     Enables/configures hardware timer 0x13600 gated by MIDI-engine config flags
+0x020033a2  sz=34    calls_in=2   out=1   conf=medium  Free device handle, skipping frees for handles from static node pool
+0x020033c4  sz=524   calls_in=3   out=6   conf=medium  Open device by name: search registered device list, allocate handle
+0x020035d0  sz=20    calls_in=3   out=0   conf=medium  Invoke driver op at ops-table offset 104 on a device
+0x020035e4  sz=16    calls_in=15  out=0   conf=medium  Device ioctl dispatch (driver op offset 24), returns -EINVAL if unsupported
+0x020035f4  sz=286   calls_in=3   out=5   conf=medium  Close/release device handle: refcount, list removal, free
+0x020038b6  sz=38    calls_in=1   out=0   conf=medium  GPIO special-pin bit set/clear in SFR 0x51000
+0x020038dc  sz=16    calls_in=1   out=0   conf=medium  GPIO helper writing pin state via mask-ROM register write
+0x020038ec  sz=24    calls_in=8   out=0   conf=high    Look up GPIO port base-register address from pin number via table
+0x02003904  sz=186   calls_in=14  out=3   conf=high    Configure GPIO pin direction/mode (per-port bit, spinlock-guarded)
+0x020039be  sz=38    calls_in=3   out=0   conf=medium  GPIO special-pin bit set/clear in SFR 0x51000
+0x020039e4  sz=94    calls_in=1   out=0   conf=medium  GPIO special-pin function/config via SFR 0x51000 and 0x16a0c
+0x02003a42  sz=16    calls_in=1   out=0   conf=medium  GPIO helper writing pin state via mask-ROM register write
+0x02003a52  sz=76    calls_in=2   out=0   conf=medium  Configure GPIO port pull/pin registers via ROM reg read-modify-write
+0x02003a9e  sz=180   calls_in=8   out=5   conf=high    Set GPIO output value/level (per-port data+dir bit, spinlock-guarded)
+0x02003b52  sz=42    calls_in=1   out=0   conf=medium  Set GPIO pin pull/die register bit via ROM reg read-modify-write
+0x02003b7c  sz=214   calls_in=1   out=4   conf=medium  GPIO: set pin control bits in port attr regs +24/+28; dispatches special pins (16,144-147) to SFR helpers
+0x02003c52  sz=42    calls_in=2   out=0   conf=medium  GPIO: set bit in special-port SFR 0x809A for pins 0/1 (returns -22 for others)
+0x02003c7c  sz=146   calls_in=8   out=3   conf=medium  GPIO: set port attribute reg +8 bit for a pin; handles special pins 16/144-147 via SFR writes
+0x02003d0e  sz=66    calls_in=1   out=0   conf=medium  GPIO: configure special pins 148-151/150 via direct SFR 0x51000 and 0x16A0C bit fields
+0x02003d50  sz=16    calls_in=1   out=0   conf=medium  GPIO: write special-pin bit (arg&1) to peripheral SFR index 156
+0x02003d60  sz=188   calls_in=10  out=3   conf=medium  GPIO: clear/set port attribute reg +16 for a pin; dispatches special pins (16,148+)
+0x02003e1c  sz=84    calls_in=1   out=0   conf=medium  GPIO: configure special pins 148-151 via SFR 0x51000 / 0x16A0C (bits 256/512)
+0x02003e70  sz=16    calls_in=1   out=0   conf=medium  GPIO: write special-pin bit (arg&1) to peripheral SFR index 157
+0x02003e80  sz=188   calls_in=8   out=3   conf=medium  GPIO: clear/set port attribute reg +20 for a pin; dispatches special pins (16,148+)
+0x02003f3c  sz=32    calls_in=2   out=4   conf=medium  GPIO: configure a pin as combo (set dir + attr regs +8/+16/+20) via sub-helpers
+0x02003f5c  sz=28    calls_in=1   out=0   conf=medium  GPIO: special-pin 16 configuration via SFR indices 32 and 154
+0x02003f78  sz=156   calls_in=6   out=5   conf=medium  GPIO: clear/set port attribute reg +8 for a pin with enable flag; alt path via 0x3a52
+0x02004014  sz=34    calls_in=1   out=4   conf=medium  GPIO: configure pin combo (set dir + clear attr regs +16/+20/+8)
+0x02004058  sz=34    calls_in=1   out=4   conf=medium  GPIO: configure pin combo (clear dir + set attr +8, clear +20/+16)
+0x0200407a  sz=260   calls_in=2   out=0   conf=low     Reserve/register a pin-function slot in a 10-entry table (SFR-struct+2920), set enable halfword flag
+0x02005648  sz=46    calls_in=13  out=0   conf=medium  Indirect HW register write to peripheral 0x11800 (addr<<8|data to +4, busy-wait on ready bit)
+0x02005676  sz=10    calls_in=9   out=1   conf=medium  Latch HW register index 14 on the 0x11800 bus (bank/index select) via 0x5648
+0x02005782  sz=54    calls_in=9   out=0   conf=medium  Indirect HW register read from peripheral 0x11800 (busy-wait), returns low byte
+0x02027dd0  sz=274   calls_in=0   out=3   conf=low     Serial RX path: kfifo producer (wrap-around copy + event post) and hardware-FIFO RX interrupt handler (SFR 0x12100)
+0x02030942  sz=114   calls_in=2   out=0   conf=medium  clock_critical_enter: under SMP spinlock set busy flags in PLL/clock param struct 0x1c20160
+0x020309b4  sz=70    calls_in=2   out=1   conf=medium  Rate-limit clock changes: testset lock, compare now vs last-change timestamp in clock struct, return -EINVAL if too soon
+0x020309fa  sz=130   calls_in=3   out=0   conf=medium  Read HW capture counter byte-by-byte, scale *1e6/clockfreq to microseconds
+0x02030a7c  sz=348   calls_in=2   out=1   conf=medium  Clock-change notifier: walk registered consumer list, strcmp names, invoke pre/post callbacks; gate block via 0x1400c
+0x02030bd8  sz=2292  calls_in=3   out=2   conf=medium  HW-timer read helper plus full system/PLL clock reconfiguration (copies clock register banks, sets dividers)
+0x020314cc  sz=692   calls_in=1   out=2   conf=medium  Set system clock (PLL/dividers) and compute settle delay; used in BT low-power path (btstack_lowpwer_deal)
+0x02031780  sz=304   calls_in=2   out=1   conf=medium  Clock-consumer list walk issuing notify callbacks by name; set/clear clock busy flags
+0x020318b0  sz=360   calls_in=2   out=4   conf=medium  Clock-change orchestrator: check elapsed vs freq, capture HW counter, call clock-set and consumer-notify
+0x02031a18  sz=114   calls_in=2   out=0   conf=medium  clock_critical_exit: under spinlock clear per-CPU clock-busy flags in 0x1c20160
+0x02031a8a  sz=70    calls_in=2   out=1   conf=medium  Release clock spinlock, record change timestamp to clock struct; tail checks a list-empty condition
+0x020333a6  sz=406   calls_in=1   out=6   conf=medium  Compute/update system clock frequency divisor (480MHz ref, 64-bit div) and apply; ISR does adaptive freq measurement
+0x0203353c  sz=184   calls_in=2   out=0   conf=low     Stub (returns 0) plus clock-change lock/flag helper (set 0x1c09774) and clock status-bit read from 0x12f00
+0x020335f4  sz=398   calls_in=2   out=3   conf=medium  On clock change mark matching timer nodes; DVFS clock-divider adjust (5-bit fields in 0x119c4) and timer requeue
+0x02033782  sz=20    calls_in=1   out=0   conf=medium  Return clock/PLL status bit from register 0x11800 or 0x16a0c
+0x02033796  sz=54    calls_in=2   out=0   conf=medium  Configure clock/PLL enable registers: clear fields in 0x16a0c or write enable values via table 0x204ed30
+0x020337cc  sz=38    calls_in=1   out=0   conf=high    Enable/disable a peripheral clock gate (id ~148/149) bit in register 0x51000
+0x020337f2  sz=122   calls_in=1   out=2   conf=medium  Peripheral clock/reset gate control with per-group spinlock (0x1c0e670+656); route to gate or port bit
+0x0203386c  sz=192   calls_in=1   out=6   conf=medium  Clock-output (clkout) pin+source configuration: set 0x16a0c mode bits, configure two channel ids via pinmux/clock helpers
+0x0203392c  sz=28    calls_in=1   out=0   conf=high    Read clock/PLL lock/ready status bit (0x11800>>15 or 0x16a10>>17)
+0x02033948  sz=28    calls_in=1   out=0   conf=high    Read clock/PLL status bit (0x11800>>17 or 0x16a10>>15)
+0x02033964  sz=20    calls_in=1   out=0   conf=high    Read clock/PLL status bit16 from register 0x11800 or 0x16a10
+0x02033978  sz=114   calls_in=2   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x020339ea  sz=120   calls_in=1   out=8   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02033a62  sz=28    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02033a7e  sz=14    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02033a8c  sz=164   calls_in=2   out=3   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02033b30  sz=3362  calls_in=0   out=36  conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02036a70  sz=372   calls_in=4   out=0   conf=medium  Hardware 128-bit block-cipher (AES) engine driver at 0x41200: loads key+data, polls status, reads 16-byte result
+0x02038296  sz=242   calls_in=1   out=0   conf=medium  AES hardware engine single 128-bit block transform (SFR 0x41200, big-endian I/O)

@@ -1,0 +1,13 @@
+0x0200053a  sz=372   calls_in=1   out=1   conf=low     Timer-driven note/tone sequencer over MIDI engine state: programs tone timer per note, manages voice states
+0x02000856  sz=52    calls_in=5   out=4   conf=medium  Subscribes to event 64 and handles incoming 4-byte MIDI/control packets (0xD0/0xD4), dispatching to task
+0x0200088a  sz=18    calls_in=2   out=0   conf=low     Predicate: returns whether a MIDI engine slot (0x1c0e670+74) is active
+0x0200089c  sz=20    calls_in=2   out=0   conf=low     Returns MIDI engine slot index/value, or -1 if inactive
+0x020008b0  sz=226   calls_in=3   out=2   conf=medium  Builds and sends device-info/handshake SysEx packet from templates via message encoder 0x74b62
+0x02000992  sz=90    calls_in=1   out=1   conf=low     Resets MIDI engine pointer list and emits a notification message via 0x59a68
+0x020009ec  sz=22    calls_in=1   out=0   conf=low     Finds MIDI engine slot matching a value (returns 0/-1)
+0x02000a02  sz=536   calls_in=1   out=9   conf=high    MIDI/app SysEx command dispatcher: handles multiple subcommands (patch/device ops), builds replies
+0x02000c1a  sz=46    calls_in=1   out=1   conf=medium  Pre-filter/router for 4-byte control messages to command dispatcher 0xa02
+0x02000c48  sz=2614  calls_in=3   out=8   conf=high    MIDI byte-stream parser/engine: running-status + SysEx (0xF0/0xF7) decode via length tables, route and build responses
+0x02006384  sz=982   calls_in=0   out=5   conf=medium  USB-MIDI SysEx parser and DX7 7-bit voice parameter pack/unpack (0xF7/0x7F/0x7D)
+0x0201fdde  sz=134   calls_in=3   out=2   conf=medium  Queue an outgoing MIDI message into the TX ring buffer with running-status handling and signal
+0x02023ea0  sz=924   calls_in=1   out=8   conf=high    Yamaha/DX7 SysEx parser (F0 43): voice/bank bulk dump + single-param, checksum verify, loads into synth voice buffer

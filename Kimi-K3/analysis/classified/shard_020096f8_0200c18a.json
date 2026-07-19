@@ -1,0 +1,282 @@
+[
+ {
+  "addr": "0x020096f8",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_anim_action_start",
+  "purpose": "build and start element attribute animation action",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02009824",
+  "subsystem": "UI_MENU",
+  "name": "ui_action_slot_release",
+  "purpose": "find action in 16-slot table, clear active flag",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200993c",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_attr_change_propagate",
+  "purpose": "propagate style attr change to children with animations",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02009d18",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_container_get",
+  "purpose": "return element field+48 when type flags match",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02009d2c",
+  "subsystem": "UI_MENU",
+  "name": "ui_scroll_content_width",
+  "purpose": "compute horizontal content extent incl. padding/border",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02009e02",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_offset18_get_neg",
+  "purpose": "return negated element child offset halfword +18",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02009e12",
+  "subsystem": "UI_MENU",
+  "name": "ui_rect_span",
+  "purpose": "compute rect span r1-r0+1 (width or height)",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02009e1c",
+  "subsystem": "UI_MENU",
+  "name": "ui_rect_expand",
+  "purpose": "expand rect by dx,dy padding on both axes",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02009e36",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_content_rect_get",
+  "purpose": "element rect minus border/padding attrs into out rect",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02009ed0",
+  "subsystem": "UI_MENU",
+  "name": "ui_scroll_content_height",
+  "purpose": "compute vertical content extent incl. padding/border",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02009f92",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_scroll_mode_get",
+  "purpose": "return element scroll-mode nibble when flags match",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02009fac",
+  "subsystem": "UI_MENU",
+  "name": "ui_scroll_list_len_get",
+  "purpose": "read list length bitfield from root, default 60",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02009fc8",
+  "subsystem": "UI_MENU",
+  "name": "ui_scrollbar_rects_calc",
+  "purpose": "compute vertical/horizontal scrollbar thumb rects",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200a55c",
+  "subsystem": "UI_MENU",
+  "name": "ui_rect_area",
+  "purpose": "rect area = width*height from four halfwords",
+  "conf": "high"
+ },
+ {
+  "addr": "0x0200a578",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_invalidate_rect",
+  "purpose": "clip rect and queue element redraw region",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200a5ae",
+  "subsystem": "UI_MENU",
+  "name": "ui_scrollbar_redraw",
+  "purpose": "invalidate both scrollbar thumb rects if nonempty",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200a5e2",
+  "subsystem": "UI_MENU",
+  "name": "ui_anim_step_calc",
+  "purpose": "animation frame step from distance and duration",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200a5fc",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_tree_move",
+  "purpose": "recursively offset element subtree rects by dx,dy",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200a684",
+  "subsystem": "UI_MENU",
+  "name": "ui_scroll_to_offset",
+  "purpose": "scroll by dx,dy with optional 200-400ms animation",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200a7d0",
+  "subsystem": "UI_MENU",
+  "name": "ui_scroll_clamp_rebound",
+  "purpose": "clamp overscroll and animate rebound into range",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200a872",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_offset16_get_neg",
+  "purpose": "return negated element child offset halfword +16",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0200a882",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_reposition",
+  "purpose": "move element within parent, fix layout and redraw",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200a9ac",
+  "subsystem": "UI_MENU",
+  "name": "ui_scroll_mode_apply",
+  "purpose": "apply scroll mode/percent limits, reposition element",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200aca6",
+  "subsystem": "UI_MENU",
+  "name": "ui_scroll_y_by",
+  "purpose": "scroll element vertically by delta via animator",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200acd0",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_layout_arrange",
+  "purpose": "measure and arrange children, update rect, relayout",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200b546",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_relayout_tree",
+  "purpose": "recursive relayout of dirty element subtree",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200b59c",
+  "subsystem": "UI_MENU",
+  "name": "ui_layout_flush",
+  "purpose": "process pending relayout flags on root element",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200b5d6",
+  "subsystem": "UI_MENU",
+  "name": "ui_scroll_by_clamped",
+  "purpose": "scroll by delta clamped to content bounds",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200b6d4",
+  "subsystem": "UI_MENU",
+  "name": "ui_scroll_x_by",
+  "purpose": "scroll element horizontally by delta via animator",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200b6fe",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_scroll_dir_flags",
+  "purpose": "return scroll direction nibble from element flags",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0200b70e",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_first_child_get",
+  "purpose": "return element child-list head pointer or null",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0200b71a",
+  "subsystem": "UI_MENU",
+  "name": "ui_border_radius_extent",
+  "purpose": "compute corner radius plus border extents for clipping",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0200b820",
+  "subsystem": "UI_MENU",
+  "name": "ui_elm_typedata_get",
+  "purpose": "return element data field when type id in range",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0200b832",
+  "subsystem": "UI_DISPLAY",
+  "name": "ui_draw_style_init",
+  "purpose": "zero and default-init 56-byte text draw style struct",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200b87c",
+  "subsystem": "UI_DISPLAY",
+  "name": "ui_text_char_class",
+  "purpose": "classify string first byte: control/ascii/multibyte",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200b896",
+  "subsystem": "UI_DISPLAY",
+  "name": "ui_text_style_resolve",
+  "purpose": "fill text style struct from element attrs, apply opacity",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200bbe4",
+  "subsystem": "UI_DISPLAY",
+  "name": "ui_draw_ctx_init",
+  "purpose": "clear 72-byte draw context, store owner pointer",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0200bbf4",
+  "subsystem": "UI_DISPLAY",
+  "name": "ui_rect_callback_if_nonempty",
+  "purpose": "invoke draw callback when rect has positive size",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200bc1c",
+  "subsystem": "UI_DISPLAY",
+  "name": "ui_rounded_rect_raster_gen",
+  "purpose": "generate/cache rounded-rect arc scanline raster data",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200c18a",
+  "subsystem": "UI_MENU",
+  "name": "ui_slot_pair_register",
+  "purpose": "store pointer pair into first free of 16 slots",
+  "conf": "med"
+ }
+]

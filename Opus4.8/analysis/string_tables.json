@@ -1,0 +1,68 @@
+[
+ {
+  "start": "0x02045e90",
+  "n": 3,
+  "sample": [
+   "C <",
+   "@d!",
+   "\"*Q"
+  ]
+ },
+ {
+  "start": "0x0204e83c",
+  "n": 3,
+  "sample": [
+   "I@p",
+   "A R",
+   "HZ1"
+  ]
+ },
+ {
+  "start": "0x0204ebc0",
+  "n": 3,
+  "sample": [
+   "S&Hold",
+   "Fix",
+   "btstack_lowpwer_deal"
+  ]
+ },
+ {
+  "start": "0x0204f1c0",
+  "n": 3,
+  "sample": [
+   "1/4",
+   "btencry",
+   "nor_sdfile"
+  ]
+ },
+ {
+  "start": "0x0204f4e0",
+  "n": 3,
+  "sample": [
+   "11C010",
+   "A111",
+   "sys_power"
+  ]
+ },
+ {
+  "start": "0x0204f5fc",
+  "n": 3,
+  "sample": [
+   "222D",
+   "22222",
+   "audio_cmd"
+  ]
+ },
+ {
+  "start": "0x0204f90c",
+  "n": 6,
+  "sample": [
+   "Preset",
+   "Phaser",
+   "Low Pass",
+   "Band Pass",
+   "Preset",
+   "1/2  GLOBE"
+  ]
+ }
+]

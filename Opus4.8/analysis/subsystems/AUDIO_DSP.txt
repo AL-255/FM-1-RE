@@ -1,0 +1,30 @@
+0x02005500  sz=146   calls_in=3   out=2   conf=low     Stream/event parser: copy packet payload (16-bit length) into channel buffer via a 3-state machine
+0x02005598  sz=50    calls_in=3   out=0   conf=low     Cache a channel parameter into per-object param tables (SFR-struct +1512/+1552)
+0x020055ca  sz=104   calls_in=2   out=0   conf=low     Store value into sound-channel object shadow arrays (bank B: obj +8/+20/+24 and 0x5A08 table)
+0x02005632  sz=22    calls_in=1   out=0   conf=low     Store frequency/value into sound-channel object array (bank B, +72-4)
+0x0200584c  sz=112   calls_in=4   out=0   conf=low     Store value into sound-channel object shadow arrays (bank A: +52/+60 and 0x5A08+1)
+0x020058bc  sz=22    calls_in=1   out=0   conf=low     Store frequency/value into sound-channel object array (bank A, +88-4)
+0x020059da  sz=22    calls_in=1   out=0   conf=low     Store value into sound-channel object array (bank A, +56-4)
+0x02006e1a  sz=90    calls_in=1   out=0   conf=medium  Compute resample ratio from stream sample rate; reset SRC phase accumulators
+0x02006e74  sz=520   calls_in=0   out=12  conf=low     Compute resample ratio for second audio stream (entry); reset SRC state
+0x0203967c  sz=100   calls_in=1   out=1   conf=medium  Stream node flush/pause state helper: transition state byte, issue control ioctls 0x80044106/07 to downstream
+0x020396e0  sz=50    calls_in=1   out=1   conf=low     Release a stream node's sub-buffers/cbufs (input, resample, downstream) during teardown
+0x02039712  sz=26    calls_in=2   out=0   conf=low     Trampoline invoking a stream node's control op (op-table +52) with packed args from r1
+0x0203972c  sz=1724  calls_in=1   out=22  conf=medium  Large jlstream node command dispatcher (tbh jump table): start/stop/link/set-param with alloc/free and sem sync
+0x02039de8  sz=1018  calls_in=1   out=15  conf=medium  Create/open a stream node by name: match name table, alloc buffers, copy params into node struct, issue setup ioctls
+0x0203a1e2  sz=60    calls_in=1   out=2   conf=medium  Transition stream node to running: ioctl 0x80044104, set state 5, post semaphore
+0x0203a21e  sz=106   calls_in=1   out=6   conf=medium  Stop stream node: iterate/flush entries, post semaphore, issue stop ioctl 0x80044106
+0x0203a288  sz=870   calls_in=0   out=28  conf=medium  jlstream node close/destroy plus framework task loop reading msg queue and dispatching node ops (grouped)
+0x0203a5ee  sz=222   calls_in=0   out=6   conf=low     Node data-fill: read from source cbuf or memset silence on underrun, then notify downstream
+0x0203a6cc  sz=144   calls_in=2   out=0   conf=medium  Circular buffer: interrupt-safe get read pointer and available byte count
+0x0203a75c  sz=124   calls_in=2   out=0   conf=medium  Circular buffer: interrupt-safe commit/advance of read and mirror pointers
+0x0203aac0  sz=978   calls_in=0   out=15  conf=medium  Process one pipeline node: pull from source cbuf, run node handler, push to DAC output
+0x0203ae92  sz=60    calls_in=1   out=0   conf=low     Framer helper: call node read op and clamp returned length to configured max
+0x0203aece  sz=68    calls_in=1   out=0   conf=medium  Parse SBC frame header (sync 0x9C): compute header/scale-factor offset and locate next frame
+0x0203af12  sz=1164  calls_in=0   out=11  conf=medium  SBC framer node: compute frame length from header bitfields and implement open/read/param/free ops
+0x0203c0ae  sz=236   calls_in=0   out=5   conf=medium  Destroy pipeline: walk node children, call their close/free ops, unlink and free each node
+0x0203c19a  sz=606   calls_in=1   out=10  conf=low     Pipeline node data transfer: 32-byte block copy via cbuf using cipher routine 0x824fa
+0x0203c3f8  sz=1210  calls_in=0   out=15  conf=medium  jlstream node manager (grouped): framework init/register, data-pump loop, and DAC IRQ handlers
+0x0203ce06  sz=2932  calls_in=2   out=17  conf=medium  Notify subscriber node list of ready audio; block bundles DAC DMA IRQ, PCM format conversion, channel cfg
+0x0203e720  sz=578   calls_in=1   out=4   conf=medium  PCM interleave/deinterleave and sample-format conversion across 2-4 channels for output
+0x020413fa  sz=4458  calls_in=0   out=16  conf=low     Merged audio region: resample/format-convert, DAC/ADC DMA IRQ handlers, polyphase FIR and saturation-table DSP kernels (also context-switch/modf tail)

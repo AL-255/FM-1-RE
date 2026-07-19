@@ -1,0 +1,282 @@
+[
+ {
+  "addr": "0x0206201a",
+  "subsystem": "BT",
+  "name": "bt_work_item_enqueue",
+  "purpose": "alloc 16B work node, link callback+arg into link list under lock",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020620a2",
+  "subsystem": "BT",
+  "name": "ble_link_proc_report",
+  "purpose": "post procedure result report, code selected by step type",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020620e0",
+  "subsystem": "BT",
+  "name": "ble_link_event_report",
+  "purpose": "post link event report, param chosen by type, guarded by enable",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062146",
+  "subsystem": "BT",
+  "name": "ble_link_event_report2",
+  "purpose": "post link event report variant with type-chosen param",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062190",
+  "subsystem": "BT",
+  "name": "ble_link_state_set_disconnect",
+  "purpose": "mark link state 8, signal manager, log transition",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020621d0",
+  "subsystem": "BT",
+  "name": "ble_link_proc_step_dispatch",
+  "purpose": "execute current procedure step handler from link script table",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062356",
+  "subsystem": "BT",
+  "name": "ble_link_proc_event_match",
+  "purpose": "match event code against expected step, advance procedure",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020623f4",
+  "subsystem": "BT",
+  "name": "ble_link_proc_engine",
+  "purpose": "decode procedure opcode, compute backoff/timing, build response PDUs",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020627b4",
+  "subsystem": "BT",
+  "name": "ble_link_proc_queue",
+  "purpose": "queue procedure script into link slot, trigger engine",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020627de",
+  "subsystem": "BT",
+  "name": "ble_link_timeout_restart",
+  "purpose": "(re)arm 40s per-link timeout timer, freeing old one",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0206281e",
+  "subsystem": "BT",
+  "name": "ble_link_cmd_dispatch",
+  "purpose": "dispatch BLE command by opcode: copy params, enqueue procedures",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062a98",
+  "subsystem": "BT",
+  "name": "ble_adv_mgr_get",
+  "purpose": "lazily allocate 40-byte advertising manager singleton",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062ac0",
+  "subsystem": "BT",
+  "name": "ble_adv_config_store",
+  "purpose": "store 15-byte advertising config block if uninitialized",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062ae4",
+  "subsystem": "BT",
+  "name": "ble_adv_data_set1",
+  "purpose": "set length-prefixed advertising data string 1, notify 21",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062b26",
+  "subsystem": "BT",
+  "name": "ble_adv_data_set2",
+  "purpose": "set length-prefixed advertising data string 2, notify 22",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062b68",
+  "subsystem": "BT",
+  "name": "ble_adv_record_post",
+  "purpose": "assemble advertising record from stored config, post to link",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062bce",
+  "subsystem": "BT",
+  "name": "ble_addr_record_fill",
+  "purpose": "fill record with 6-byte address template selected by type",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02062bf6",
+  "subsystem": "BT",
+  "name": "ble_adv_record_build_post",
+  "purpose": "build type-templated address record, post via property 2",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062c10",
+  "subsystem": "BT",
+  "name": "ble_adv_start",
+  "purpose": "configure advertising params, arm 1280ms timer, start advertising",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062d58",
+  "subsystem": "BT",
+  "name": "ble_adv_init",
+  "purpose": "create advertising link instance, register callback, start advertising",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062daa",
+  "subsystem": "BT",
+  "name": "ble_adv_deinit",
+  "purpose": "stop advertising: teardown link, free timer and manager",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062dee",
+  "subsystem": "BT",
+  "name": "ble_initiator_mgr_get",
+  "purpose": "lazily allocate 32-byte connection-initiator manager singleton",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062e16",
+  "subsystem": "BT",
+  "name": "ble_connect_start",
+  "purpose": "create link, copy peer address/params, initiate connection",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062ec4",
+  "subsystem": "BT",
+  "name": "ble_connect_stop",
+  "purpose": "teardown initiator link, free node list and context",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062f0c",
+  "subsystem": "BT",
+  "name": "ble_bond_find_by_addr",
+  "purpose": "find bond-list node by 6-byte address plus type",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02062f40",
+  "subsystem": "BT",
+  "name": "ble_addr_bit_diversity",
+  "purpose": "count bits differing from first bit over N bits",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02062f80",
+  "subsystem": "BT",
+  "name": "ble_random_addr_generate",
+  "purpose": "generate spec-compliant random static address via RAND64",
+  "conf": "high"
+ },
+ {
+  "addr": "0x020631c4",
+  "subsystem": "BT",
+  "name": "ble_directed_init",
+  "purpose": "init directed-connection manager, copy 25-byte params, start",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0206321e",
+  "subsystem": "BT",
+  "name": "ble_directed_deinit",
+  "purpose": "teardown directed-connection link and free manager",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02063252",
+  "subsystem": "BT",
+  "name": "ble_link_timer_free",
+  "purpose": "delete per-link timer at offset 336, clear pointer",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02063268",
+  "subsystem": "BT",
+  "name": "ble_link_free",
+  "purpose": "full link teardown under lock: free lists, clear slot",
+  "conf": "high"
+ },
+ {
+  "addr": "0x0206342e",
+  "subsystem": "BT",
+  "name": "ble_link_release",
+  "purpose": "clear session if current, run callback, full teardown",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02063482",
+  "subsystem": "BT",
+  "name": "ble_module_deinit",
+  "purpose": "stop all roles, release every link, free controller state",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02063508",
+  "subsystem": "BT",
+  "name": "ble_link_data_send",
+  "purpose": "fragment payload into PDUs, enqueue on link tx queue",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02063620",
+  "subsystem": "BT",
+  "name": "ble_link_init",
+  "purpose": "allocate controller slot, set default conn params, register link",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02063706",
+  "subsystem": "BT",
+  "name": "ble_link_timer_create",
+  "purpose": "create per-link timer (callback 0x2064014) at offset 336",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02063738",
+  "subsystem": "BT",
+  "name": "ble_link_addr_report",
+  "purpose": "hex-format link address, enqueue report event 1",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020637d8",
+  "subsystem": "BT",
+  "name": "ble_link_event_handler",
+  "purpose": "on connect init link and timer, on disconnect clean up",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02063866",
+  "subsystem": "BT",
+  "name": "ble_conn_timing_compute",
+  "purpose": "compute link timing from interval/latency table into +22",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020638a0",
+  "subsystem": "BT",
+  "name": "ble_link_create",
+  "purpose": "construct 416-byte link object, init lists, register callback",
+  "conf": "med"
+ }
+]

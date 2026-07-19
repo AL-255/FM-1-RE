@@ -1,0 +1,93 @@
+0x0200083a  sz=14    calls_in=7   out=0   conf=low     Getter: returns global counter (0x1c08ff0+4) scaled by 10 (tick/time value)
+0x02000848  sz=14    calls_in=2   out=0   conf=low     Wrapper for ROM event/message subscribe-or-get (0xc00f94(128,arg))
+0x02001fa8  sz=192   calls_in=3   out=1   conf=low     System timer source calibration/init: compute tick rate, program timer registers via ROM serial writes
+0x020020de  sz=118   calls_in=5   out=1   conf=medium  Computes minimum next-timer delay by walking software timer node lists (capped at 1000)
+0x02002160  sz=110   calls_in=2   out=1   conf=low     Recompute timer/clock divider table from current core clock frequency
+0x020021ce  sz=46    calls_in=2   out=1   conf=low     One-time init of timer clock-divider state then recompute dividers
+0x020021fc  sz=492   calls_in=3   out=6   conf=medium  Allocate timer node, set deadline=now+timeout, insert into sorted timeout list
+0x020023e8  sz=16    calls_in=4   out=1   conf=medium [__udivdi3]  Thin wrapper adding a timeout with default arg (calls 0x21fc); LIB label spurious
+0x020023f8  sz=482   calls_in=2   out=4   conf=medium  Register prioritized timer/work node into per-priority sorted list
+0x02003210  sz=44    calls_in=2   out=2   conf=low     Allocate and init 292-byte device/event manager control block
+0x0200323c  sz=124   calls_in=1   out=5   conf=medium  One-time device/resource manager init (mutex, lists, node pool, task register)
+0x02003712  sz=26    calls_in=10  out=0   conf=low     Timer tick/counter delta adjustment helper (rebase against saved counters)
+0x0201e9a4  sz=380   calls_in=3   out=3   conf=low     SMP-safe waiter/event wakeup by id: per-CPU critical section, walks waiter list, signals and yields
+0x0201eb20  sz=8     calls_in=10  out=1   conf=low     Thin wrapper invoking the event/waiter wakeup routine 0x0201e9a4
+0x0201f07e  sz=82    calls_in=28  out=5   conf=medium  Allocate + format + post a system message/event to a task (common API, 28 callers)
+0x0201f11c  sz=40    calls_in=11  out=2   conf=medium  Create/register a software timer (callback+timeout) via locked list, returning a cancelable handle
+0x02021444  sz=66    calls_in=2   out=2   conf=low     Allocate and register a periodic timer/work node with callback and period from a pool
+0x0202799e  sz=10    calls_in=3   out=1   conf=low     Thin wrapper around device/task-manager routine 0x5b8d8
+0x02031ad6  sz=30    calls_in=2   out=0   conf=medium  Check pointer within static timer-node pool [0x1c0e184,+480) and clear node flag byte
+0x02031af4  sz=778   calls_in=0   out=10  conf=high    Software timer/alarm list processor: iterate list, check expiry via system tick, fire callbacks via queue post, free expired nodes
+0x02031dfe  sz=114   calls_in=1   out=2   conf=medium  Sorted list-insert helper plus timer-list init (link node into 0x1c08ff0 list, seed via 64-bit div)
+0x02031e70  sz=720   calls_in=0   out=9   conf=medium  Second timer/alarm list remove+process (lock +51); callbacks and queue post, with periodic clock recalibration
+0x020330b4  sz=754   calls_in=0   out=9   conf=medium  Timer-node recycle plus system timer-tick ISR that walks two timer lists and fires expired callbacks
+0x02036f1a  sz=76    calls_in=1   out=2   conf=medium  Walks notifier/subscriber list: invokes flagged callbacks, computes min over votes, final callback
+0x02036f66  sz=6     calls_in=1   out=1   conf=low     Wrapper for notifier-list walk 0x36f1a
+0x02037498  sz=206   calls_in=1   out=0   conf=medium  Spinlock-protected refcount decrement / flag-byte update accessor (JieLi cpu-lock idiom)
+0x0203756e  sz=132   calls_in=1   out=0   conf=low     Spinlock-protected OR of flag bit 0x8 into object halfword; trailing const-return stubs
+0x02038636  sz=100   calls_in=1   out=0   conf=medium  Spinlock-protected object refcount increment (retain)
+0x0203c8b2  sz=96    calls_in=6   out=0   conf=medium  Interrupt-safe atomic increment of a refcount [r0] under per-CPU spinlock
+0x0203ccb2  sz=190   calls_in=5   out=1   conf=medium  Interrupt-safe atomic decrement-and-test of a refcount under per-CPU spinlock
+0x02058812  sz=56    calls_in=1   out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205884a  sz=538   calls_in=0   out=4   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058a64  sz=2     calls_in=0   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058a66  sz=106   calls_in=6   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058ad0  sz=60    calls_in=14  out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058b0c  sz=118   calls_in=151 out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058b82  sz=60    calls_in=5   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058bbe  sz=80    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058c0e  sz=122   calls_in=8   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058c88  sz=22    calls_in=8   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058c9e  sz=36    calls_in=4   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058cc2  sz=426   calls_in=2   out=4   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058e6c  sz=186   calls_in=1   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02058f26  sz=230   calls_in=8   out=3   conf=medium  Scheduler reschedule trigger: under critical section compares per-CPU current vs pending task, raises cross-core resched bit
+0x0205900c  sz=240   calls_in=5   out=6   conf=medium  Scheduler unlock: decrement sched-lock nesting, process pending ready tasks and perform deferred context switch
+0x020590fc  sz=120   calls_in=4   out=4   conf=medium  Look up kernel object (task/queue) by name across registered object tables (strlen<64, strcmp scan)
+0x02059174  sz=158   calls_in=5   out=0   conf=medium  Search global object list for node whose key at +8 matches arg, return node payload (+12)
+0x02059212  sz=60    calls_in=11  out=2   conf=high    Fatal OS error handler: disable IRQ, take lock, log then abort/hang
+0x0205924e  sz=350   calls_in=2   out=4   conf=medium  Queue send worker: copy element into ring buffer (memmove, wrap), ready highest-priority waiting task
+0x020593ac  sz=298   calls_in=6   out=4   conf=high    Wake one waiter: move task to ready list, set ready bitmap, request reschedule if higher priority
+0x020594d6  sz=170   calls_in=2   out=3   conf=medium  Semaphore/queue give: bump count and release waiter when buffer has space
+0x02059580  sz=364   calls_in=2   out=4   conf=medium  Queue/mailbox multi-item post: look up object, deliver up to N (<=18) items to waiters
+0x020596ec  sz=12    calls_in=15  out=1   conf=medium  Public wrapper for queue post (0x59580), passes caller return address
+0x020596f8  sz=42    calls_in=2   out=0   conf=high    Insert task node into priority-sorted doubly-linked wait/timer list
+0x02059722  sz=802   calls_in=2   out=3   conf=medium  Block current task on object: clear ready bit, insert into wait list by priority/timeout
+0x02059a44  sz=30    calls_in=2   out=4   conf=low     Delete/release kernel object: critical section, unblock waiters via 0x59722, sched unlock
+0x02059a62  sz=6     calls_in=36  out=1   conf=medium  Public thin wrapper for object delete/release (0x59a44)
+0x02059a68  sz=56    calls_in=14  out=1   conf=medium  Variadic queue post: gather pointer array from stack list and post via 0x59580
+0x02059aa0  sz=18    calls_in=2   out=0   conf=high    Initialize sentinel doubly-linked list head (+4/+12/+16 self, +8=-1, count 0)
+0x02059ab2  sz=194   calls_in=6   out=2   conf=medium  Init kernel object control block (queue/pool): buffer bounds, element size/count, two wait lists
+0x02059b74  sz=32    calls_in=1   out=1   conf=medium  Init timeout struct from system-tick globals (0x1C0976C/0x1C09768)
+0x02059b94  sz=358   calls_in=2   out=2   conf=medium  Compute/refresh wait timeout against system tick; detect expiry (-1 = wait forever)
+0x02059cfa  sz=132   calls_in=2   out=3   conf=medium  Pend current task: append current task to object wait list then block (0x59722)
+0x02059d7e  sz=248   calls_in=2   out=1   conf=high    Wake all tasks on both wait lists of an object (flush waiters, set resched)
+0x02059e76  sz=550   calls_in=5   out=9   conf=medium  Blocking take/receive with timeout: loop pend/wake until count available or timed out
+0x0205a09c  sz=44    calls_in=15  out=2   conf=medium  Create counting semaphore (elem size 4) and perform initial acquire
+0x0205a0c8  sz=66    calls_in=1   out=0   conf=low     Low-level cross-core/hardware trigger: store entry ptr in RAM, poke SFRs, busy-wait on flag
+0x0205a10a  sz=22    calls_in=1   out=0   conf=high    OS init: set running flag (0x1C09778) and init global object-list head (0x1C20B6C)
+0x0205a120  sz=154   calls_in=2   out=1   conf=high    Task control block init: fill stack with 0xA5, copy name, set priority, init lists and entry/arg
+0x0205a1ba  sz=566   calls_in=2   out=2   conf=medium  Add task to scheduler: assign id, set ready bitmap/list, request reschedule
+0x0205a3f0  sz=80    calls_in=3   out=3   conf=high    Build task: initialize TCB (0x5a120) then register with scheduler (0x5a1ba)
+0x0205a440  sz=108   calls_in=3   out=0   conf=high    Register node into global object list (head insert) under critical section
+0x0205a4ac  sz=212   calls_in=2   out=3   conf=medium  Create task with associated queue/mutex resource
+0x0205a580  sz=94    calls_in=2   out=4   conf=high    Create task with dynamically allocated stack and TCB (malloc/free), init and schedule
+0x0205a5de  sz=216   calls_in=1   out=4   conf=medium  Higher-level task spawn: create task plus its mailbox/mutex resources
+0x0205a6b6  sz=268   calls_in=1   out=4   conf=high    Start scheduler: create initial/idle task and jump into first task's restored context
+0x0205a7c2  sz=30    calls_in=18  out=1   conf=medium  Create mutex object (count 255, type 2) and reset its count
+0x0205a7e0  sz=186   calls_in=32  out=4   conf=high    Semaphore/mutex give (post): bump count, wake waiter, or defer full-release if in ISR
+0x0205a89a  sz=36    calls_in=2   out=1   conf=high    Dequeue: copy one element out of queue ring buffer with wrap (memmove)
+0x0205a8be  sz=100   calls_in=1   out=0   conf=medium  Test-and-decrement queue/semaphore count under critical section; return was-empty flag
+0x0205a922  sz=1398  calls_in=5   out=12  conf=high    Core queue receive / mutex lock with timeout and priority inheritance (blocking pend)
+0x0205ae98  sz=414   calls_in=35  out=5   conf=high    Recursive mutex/sem lock (pend) public API with ISR/OS-state checks, recursion count at +12
+0x0205b036  sz=358   calls_in=34  out=5   conf=high    Recursive mutex/sem unlock (post) public API with ISR/OS-state checks, decrements recursion at +12
+0x0205b19c  sz=52    calls_in=22  out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205b1d0  sz=682   calls_in=3   out=12  conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205b47a  sz=102   calls_in=2   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205b4e0  sz=64    calls_in=1   out=3   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205b520  sz=368   calls_in=4   out=7   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205b690  sz=14    calls_in=3   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205b69e  sz=316   calls_in=1   out=6   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205b7da  sz=8     calls_in=2   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205b7e2  sz=36    calls_in=1   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205b806  sz=104   calls_in=14  out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)

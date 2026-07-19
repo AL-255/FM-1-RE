@@ -1,0 +1,282 @@
+[
+ {
+  "addr": "0x02063950",
+  "subsystem": "BT",
+  "name": "ble_rx_pkt_complete",
+  "purpose": "unlink completed RX packet and signal stack semaphore",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020639b0",
+  "subsystem": "BT",
+  "name": "ble_work_node_register",
+  "purpose": "register deferred work/callback node under per-CPU lock",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02063a8a",
+  "subsystem": "BT",
+  "name": "ble_link_state_machine",
+  "purpose": "main BLE connection state machine: timers, callbacks, app notify",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0206432e",
+  "subsystem": "BT",
+  "name": "ble_subscribe_register",
+  "purpose": "handle subscribe command: refcount subscriber node, ack",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020644d6",
+  "subsystem": "BT",
+  "name": "ble_conn_handle_get",
+  "purpose": "return stored 16-bit connection handle global",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020644e0",
+  "subsystem": "BT",
+  "name": "l2cap_tx_header_submit",
+  "purpose": "marshal TX header fields, submit to ACL data channel",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02064522",
+  "subsystem": "BT",
+  "name": "ble_seq16_cmp",
+  "purpose": "compare 16-bit sequence values with wraparound",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02064540",
+  "subsystem": "BT",
+  "name": "ble_ring_slot_pending",
+  "purpose": "test ring slot occupancy by read cursor",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02064554",
+  "subsystem": "BT",
+  "name": "ble_status_report",
+  "purpose": "timestamp and emit formatted status event 65",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020645a0",
+  "subsystem": "BT",
+  "name": "ble_devinfo_response",
+  "purpose": "unpack 32-bit id, emit device-info response event",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020645fc",
+  "subsystem": "BT",
+  "name": "ble_gatt_cmd_dispatch",
+  "purpose": "GATT/ATT command-byte jump-table dispatcher with acks",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02064ab6",
+  "subsystem": "BT",
+  "name": "ble_cmd_access_check",
+  "purpose": "command permission check by link state, sets gate flag",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02064bc6",
+  "subsystem": "BT",
+  "name": "ble_gatt_cmd_dispatch_ex",
+  "purpose": "secondary GATT cmd dispatcher plus AES key reinit",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02064df8",
+  "subsystem": "BT",
+  "name": "ble_peer_record_store",
+  "purpose": "cache 7-byte peer record, init registry if absent",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02064e1a",
+  "subsystem": "BT",
+  "name": "ble_aes128_crypt_record",
+  "purpose": "AES-128 transform of 3-byte record via 16B block",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02064e50",
+  "subsystem": "BT",
+  "name": "ble_static_addr_from_uid",
+  "purpose": "build static address from chip UID regs, marshal",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02064eb0",
+  "subsystem": "BT",
+  "name": "ble_set_local_addr",
+  "purpose": "store 6-byte local BT address into global",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02064ebe",
+  "subsystem": "BT",
+  "name": "ble_stack_event_dispatch",
+  "purpose": "top-level BLE event router via type jump table",
+  "conf": "high"
+ },
+ {
+  "addr": "0x020650fc",
+  "subsystem": "BT",
+  "name": "l2cap_acl_data_send",
+  "purpose": "parse handle and 12-bit length, enqueue ACL TX",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065126",
+  "subsystem": "BT",
+  "name": "ble_features_init",
+  "purpose": "init LE feature/event mask constants in control block",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0206513e",
+  "subsystem": "BT",
+  "name": "ble_dcb_hword_get",
+  "purpose": "return 16-bit field at BLE control block +66",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0206514a",
+  "subsystem": "BT",
+  "name": "ble_dcb_byte_get",
+  "purpose": "return byte field at BLE control block +64",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02065156",
+  "subsystem": "BT",
+  "name": "ble_get_own_addr",
+  "purpose": "copy own address selected by mode bit, return mode",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065188",
+  "subsystem": "BT",
+  "name": "ble_get_local_addr",
+  "purpose": "copy 6-byte local BT address to caller buffer",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02065196",
+  "subsystem": "BT",
+  "name": "hci_le_conn_update",
+  "purpose": "send HCI LE Connection Update 0x2013, seven params",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020651c8",
+  "subsystem": "BT",
+  "name": "ble_buffer_free",
+  "purpose": "free container given member pointer at +16",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020651d4",
+  "subsystem": "BT",
+  "name": "hci_le_set_adv_enable",
+  "purpose": "send HCI LE Set Advertise Enable 0x200A",
+  "conf": "high"
+ },
+ {
+  "addr": "0x020651ec",
+  "subsystem": "BT",
+  "name": "hci_le_set_adv_params",
+  "purpose": "send HCI LE Set Advertising Parameters 0x2006",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0206524a",
+  "subsystem": "BT",
+  "name": "hci_le_set_adv_data",
+  "purpose": "send HCI LE Set Advertising Data 0x2008, 32B",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0206529a",
+  "subsystem": "BT",
+  "name": "hci_le_set_scan_rsp_data",
+  "purpose": "send HCI LE Set Scan Response Data 0x2009, 32B",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0206531c",
+  "subsystem": "BT",
+  "name": "hci_le_set_scan_enable",
+  "purpose": "send HCI LE Set Scan Enable 0x200C",
+  "conf": "high"
+ },
+ {
+  "addr": "0x0206533e",
+  "subsystem": "BT",
+  "name": "ble_peer_addr_cache",
+  "purpose": "pack 7-byte peer record with mode byte, cache",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0206537e",
+  "subsystem": "BT",
+  "name": "hci_disconnect",
+  "purpose": "send HCI Disconnect 0x0406: handle, reason",
+  "conf": "high"
+ },
+ {
+  "addr": "0x020653a0",
+  "subsystem": "BT",
+  "name": "hci_le_create_connection",
+  "purpose": "build 25B param block, send LE Create Connection",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065460",
+  "subsystem": "BT",
+  "name": "hci_le_create_connection_raw",
+  "purpose": "send LE Create Connection from 25-byte descriptor",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065484",
+  "subsystem": "MEMLIB",
+  "name": "setlinebuf",
+  "purpose": "libc stub: set line buffering on stream",
+  "conf": "high"
+ },
+ {
+  "addr": "0x0206549a",
+  "subsystem": "BT",
+  "name": "hci_vendor_cmd_f883",
+  "purpose": "send JieLi vendor HCI command 0xF883",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020654bc",
+  "subsystem": "BT",
+  "name": "hci_vendor_cmd_f884",
+  "purpose": "send JieLi vendor HCI command 0xF884",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020654de",
+  "subsystem": "BT",
+  "name": "hci_le_add_resolving_list",
+  "purpose": "send LE Add Device To Resolving List with IRKs",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065552",
+  "subsystem": "MEMLIB",
+  "name": "setlinebuf",
+  "purpose": "libc stub: set line buffering on stream",
+  "conf": "high"
+ }
+]

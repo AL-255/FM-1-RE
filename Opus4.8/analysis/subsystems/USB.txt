@@ -1,0 +1,32 @@
+0x02005ce4  sz=26    calls_in=1   out=0   conf=medium  Get per-endpoint config field (chan_table[ep] + 68 + idx*4), else 0
+0x02005cfe  sz=136   calls_in=1   out=2   conf=high    Read endpoint TX CSR under lock: direct SFR 0x16100+ep*16 or MUSB indexed regs 17/18
+0x02005d86  sz=850   calls_in=0   out=8   conf=low     Endpoint TX FIFO data pump: write N bytes in packets; embeds USB-MIDI SysEx packet builder
+0x020060d8  sz=136   calls_in=1   out=2   conf=high    Read endpoint RX CSR under lock: SFR 0x16104+ep*16 or MUSB indexed regs 20/21
+0x02006160  sz=548   calls_in=1   out=6   conf=medium  Endpoint RX FIFO read pump: copy received bytes from FIFO into destination buffer
+0x0200675a  sz=86    calls_in=2   out=1   conf=medium  Enable USB endpoint/controller hardware via clock gating (0x3904) and register config
+0x020067b0  sz=28    calls_in=1   out=0   conf=medium  Set per-device endpoint slot[0..7] in table 0x1c0e520, or clear all 8 slots
+0x0200681e  sz=100   calls_in=1   out=2   conf=medium  Build descriptor/report by invoking per-device registered slot callbacks, fill length header
+0x02006882  sz=176   calls_in=2   out=1   conf=medium  USB controller/endpoint hardware init: PLL/clock enable and control-register setup
+0x02006932  sz=116   calls_in=1   out=1   conf=medium  Write control value 96 to controller (SFR 0x16000 or MUSB indexed reg 1) under lock
+0x020069a6  sz=110   calls_in=2   out=1   conf=medium  Write control reg 11 (SFR 0x1600A or MUSB indexed) under lock
+0x02006a14  sz=174   calls_in=3   out=2   conf=medium  Clear a bit in TX interrupt-enable mask (MUSB regs 7:8 / SFR 0x16006) under lock
+0x02006ac2  sz=174   calls_in=3   out=2   conf=medium  Clear a bit in RX interrupt-enable mask (MUSB regs 9:10 / SFR 0x16008) under lock
+0x02006b70  sz=12    calls_in=1   out=0   conf=medium  Get per-device endpoint handler-table pointer from table 0x1c0e910
+0x02006b7c  sz=520   calls_in=0   out=17  conf=medium  Open/close USB device: init endpoint buffers, control regs, IRQ masks, handlers; teardown
+0x02006d84  sz=150   calls_in=2   out=1   conf=medium  Read N bytes from RX FIFO (SFR 0x16020) into buffer under lock
+0x0200707c  sz=1564  calls_in=1   out=13  conf=medium  Parse USB SETUP packet, dispatch class/vendor request (bRequest 0x81-0x87) by wValue/wIndex
+0x02007698  sz=300   calls_in=0   out=4   conf=medium  USB control-request router/classifier (checks class request type), dispatch to handler
+0x020077c4  sz=120   calls_in=1   out=2   conf=medium  Read controller global status under lock (SFR 0x16102 or MUSB indexed reg 17)
+0x0200783c  sz=124   calls_in=2   out=2   conf=medium  Write controller control register under lock (SFR 0x16102 or MUSB indexed reg 17)
+0x020078b8  sz=38    calls_in=1   out=1   conf=medium  Set endpoint enable/trigger bit (arg+19) in 0x11800; control-write helper wrappers
+0x020078de  sz=228   calls_in=0   out=5   conf=medium  Flush pending TX data into endpoint FIFO (0x16020), update counts; embeds USB IRQ handlers
+0x020079c2  sz=94    calls_in=4   out=0   conf=low     Find descriptor entry value by key via typed/linear search in an attribute table
+0x02007a20  sz=740   calls_in=24  out=2   conf=low     USB descriptor/config database query engine: resolve type/instance/field to value (big switch)
+0x02007d04  sz=10    calls_in=11  out=0   conf=low     Null-safe descriptor-node accessor: return payload at [obj+4] or 0
+0x02007d0e  sz=322   calls_in=1   out=1   conf=medium  Traverse descriptor/endpoint node tree invoking matching node handlers (recursive)
+0x02007e50  sz=56    calls_in=17  out=1   conf=medium  Run descriptor tree traversal with a fresh save/restore iteration context
+0x02007e88  sz=26    calls_in=2   out=1   conf=low     Query descriptor attribute (type 44, flags 0xE0010000) via traversal, return 16-bit
+0x02007eac  sz=224   calls_in=7   out=4   conf=low     Compute descriptor/interface handle range/offset from database via multiple type queries
+0x02007f8c  sz=138   calls_in=3   out=3   conf=low     Populate a descriptor/service entry: compute handle ranges and attribute fields
+0x020080ea  sz=186   calls_in=2   out=2   conf=low     Insert/remove keyed entry in a growable handle-to-value table (realloc + parallel-array copy)
+0x020081a4  sz=12    calls_in=7   out=0   conf=low     Clear bit0 of state byte at offset 20 in endpoint/descriptor object

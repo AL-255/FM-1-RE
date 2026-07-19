@@ -1,0 +1,282 @@
+[
+ {
+  "addr": "0x02003b7c",
+  "subsystem": "PERIPH",
+  "name": "gpio_set_hd",
+  "purpose": "enable high-drive current (HD and HD1) on gpio pin",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02003c52",
+  "subsystem": "PERIPH",
+  "name": "gpio_pr_dir_set",
+  "purpose": "set PR-port pin direction bit via SFR 0x809a",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02003c7c",
+  "subsystem": "PERIPH",
+  "name": "gpio_direction_input",
+  "purpose": "configure gpio pin as input, set DIR bit",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02003d0e",
+  "subsystem": "PERIPH",
+  "name": "gpio_special_pull_up",
+  "purpose": "pull-up config for USB/PMU special pins 148-151",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02003d50",
+  "subsystem": "PERIPH",
+  "name": "gpio_pin16_pu_sfr",
+  "purpose": "write pin16 pull-up value to SFR 156",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02003d60",
+  "subsystem": "PERIPH",
+  "name": "gpio_set_pull_up",
+  "purpose": "enable or disable gpio pull-up resistor",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02003e1c",
+  "subsystem": "PERIPH",
+  "name": "gpio_special_pull_down",
+  "purpose": "pull-down config for USB/PMU special pins 148-151",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02003e70",
+  "subsystem": "PERIPH",
+  "name": "gpio_pin16_pd_sfr",
+  "purpose": "write pin16 pull-down value to SFR 157",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02003e80",
+  "subsystem": "PERIPH",
+  "name": "gpio_set_pull_down",
+  "purpose": "enable or disable gpio pull-down resistor",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02003f3c",
+  "subsystem": "PERIPH",
+  "name": "gpio_input_pullup",
+  "purpose": "configure pin as digital input with pull-up",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02003f5c",
+  "subsystem": "PERIPH",
+  "name": "gpio_pin16_dir_sfr",
+  "purpose": "write pin16 direction via SFRs 32 and 154",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02003f78",
+  "subsystem": "PERIPH",
+  "name": "gpio_set_direction",
+  "purpose": "set gpio direction, one=input zero=output",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02004014",
+  "subsystem": "PERIPH",
+  "name": "gpio_config_output",
+  "purpose": "configure pin as push-pull output, pulls off, die on",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02004036",
+  "subsystem": "RTOS",
+  "name": "sys_timer_add",
+  "purpose": "register periodic system timer callback with priv",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02004058",
+  "subsystem": "PERIPH",
+  "name": "gpio_config_input_hiz",
+  "purpose": "configure pin high-impedance input, die off, no pulls",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200407a",
+  "subsystem": "INPUT",
+  "name": "adc_add_sample_ch",
+  "purpose": "add adc channel to round-robin scan queue",
+  "conf": "high"
+ },
+ {
+  "addr": "0x0200417e",
+  "subsystem": "SYS",
+  "name": "board_init",
+  "purpose": "board init: keys, spi display, irqs, audio server, table",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200457a",
+  "subsystem": "SYS",
+  "name": "main",
+  "purpose": "system init, run initcalls, create tasks, device msg loop",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020053de",
+  "subsystem": "SYS",
+  "name": "boot_record_load",
+  "purpose": "checksum 78-byte boot record, store 32-bit field",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0200541a",
+  "subsystem": "USB",
+  "name": "usb_func_cb_register",
+  "purpose": "store callback pointer into usb function driver slot",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02005438",
+  "subsystem": "USB",
+  "name": "usb_midi_function_init",
+  "purpose": "build 92-byte midi function config, register ep callbacks",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02005500",
+  "subsystem": "USB",
+  "name": "usb_ep0_request_data_stage",
+  "purpose": "handle GET/SET_INTERFACE, copy wLength EP0 payload",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02005592",
+  "subsystem": "MATHLIB",
+  "name": "bit2_extract",
+  "purpose": "return bit 2 of argument",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02005598",
+  "subsystem": "USB",
+  "name": "usb_ep_cfg_ptr_set",
+  "purpose": "store endpoint config pointer into device param table",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020055ca",
+  "subsystem": "USB",
+  "name": "usb_ep_dma_cfg_set",
+  "purpose": "write ep dma reg 0x16820, mirror into struct",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02005632",
+  "subsystem": "USB",
+  "name": "usb_ep_struct_reg2_write",
+  "purpose": "write endpoint struct slot at +68",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02005648",
+  "subsystem": "USB",
+  "name": "usb_sfr_write",
+  "purpose": "write indexed usb reg via 0x11804 port, busy-wait",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02005676",
+  "subsystem": "USB",
+  "name": "usb_reg14_write",
+  "purpose": "write usb indexed register 14",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02005680",
+  "subsystem": "USB",
+  "name": "usb_ep_reg16_write",
+  "purpose": "write endpoint halfword reg 16, direct or indirect",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020056fc",
+  "subsystem": "USB",
+  "name": "usb_ep_reg17_18_write",
+  "purpose": "write endpoint 32-bit reg via 17/18 halfword pair",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02005782",
+  "subsystem": "USB",
+  "name": "usb_sfr_read",
+  "purpose": "read indexed usb reg via 0x11804 port, busy-wait",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020057b8",
+  "subsystem": "USB",
+  "name": "usb_ep_enable",
+  "purpose": "set endpoint enable bit in usb CON regs 7/8",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0200584c",
+  "subsystem": "USB",
+  "name": "usb_ep_dma_adr_set",
+  "purpose": "write ep dma addr reg 0x16824, mirror into struct",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020058bc",
+  "subsystem": "USB",
+  "name": "usb_ep_struct_reg3_write",
+  "purpose": "write endpoint struct slot at +84",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020058d2",
+  "subsystem": "USB",
+  "name": "usb_ep_reg19_write",
+  "purpose": "write endpoint halfword reg 19, direct or indirect",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02005952",
+  "subsystem": "USB",
+  "name": "usb_ep_reg20_21_write",
+  "purpose": "write endpoint 32-bit reg via 20/21 halfword pair",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020059da",
+  "subsystem": "USB",
+  "name": "usb_ep_struct_reg6_write",
+  "purpose": "write endpoint struct slot at +52",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020059f0",
+  "subsystem": "USB",
+  "name": "usb_ep_enable2",
+  "purpose": "set endpoint enable bit in usb CON regs 9/10",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02005a88",
+  "subsystem": "USB",
+  "name": "usb_ep_config",
+  "purpose": "configure endpoint direction, type, maxpacket, dma buffer",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02005bb2",
+  "subsystem": "USB",
+  "name": "usb_midi_ep_open",
+  "purpose": "post audio_server msg, open EP4 bulk IN/OUT pair",
+  "conf": "med"
+ }
+]

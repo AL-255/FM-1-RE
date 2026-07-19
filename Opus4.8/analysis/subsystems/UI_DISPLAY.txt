@@ -1,0 +1,81 @@
+0x020081b0  sz=12    calls_in=5   out=0   conf=low     Set bit0 of flag byte at obj+20 (mark manager pending-redraw/update)
+0x0200850c  sz=12    calls_in=3   out=0   conf=medium  Null-safe get element border/inset width from bitfield h[obj+22] (signed), used for clip inset
+0x020085ae  sz=108   calls_in=11  out=0   conf=high    Rectangle intersection: out=max(lefts/tops),min(rights/bottoms); return 1 if non-empty
+0x0200861a  sz=174   calls_in=2   out=8   conf=medium  Element visibility/occlusion test: intersect clip rect against overlapping sibling/overlay rects
+0x020086c8  sz=44    calls_in=6   out=0   conf=medium  Get screen/root width-related dimension from manager root object bitfield
+0x020086f4  sz=44    calls_in=4   out=0   conf=medium  Get screen/root height-related dimension from manager root object bitfield
+0x02008720  sz=228   calls_in=2   out=0   conf=medium  Point/rect hit-test with rounded-corner distance check (dx^2+dy^2 vs r^2)
+0x02008804  sz=124   calls_in=7   out=1   conf=medium  Rounded-rectangle containment test: check all four corners via the distance hit-test
+0x02008880  sz=230   calls_in=2   out=5   conf=medium  Build element clip/dirty rectangle list, subtracting overlapping regions (dirty-region accumulation)
+0x02008966  sz=92    calls_in=18  out=5   conf=medium  Recompute element clip region and child regions for redraw traversal
+0x020089c2  sz=40    calls_in=5   out=3   conf=medium  Mark element (and owning window) needs-redraw: set flags 1|2 at +34 and notify manager
+0x02008a82  sz=66    calls_in=1   out=4   conf=medium  Recursively refresh/redraw element subtree (children), issuing redraw + property id 42
+0x0200912e  sz=430   calls_in=11  out=3   conf=low     16-slot resource/font handle cache keyed by id with LRU eviction; load/realloc backing buffer
+0x02009824  sz=280   calls_in=10  out=0   conf=low     Find element's slot in the 16-entry global graphics/shape cache and clear its in-use flag bit
+0x0200a578  sz=54    calls_in=3   out=3   conf=low     Queue a screen invalidation/redraw region for a rectangle (dirty-rect)
+0x0200bbf4  sz=40    calls_in=6   out=0   conf=medium  Invoke element's draw method (vtable+12) only if its rectangle is non-empty
+0x0200bc1c  sz=1390  calls_in=4   out=5   conf=medium  Generate and cache rounded-rectangle corner alpha/geometry mask for rendering
+0x0200c236  sz=44    calls_in=2   out=0   conf=medium  Free/look-up an entry in the graphics handle/canvas pool table at 0x1c0e080 (16x8B)
+0x0200c262  sz=4114  calls_in=4   out=49  conf=medium  Widget draw/layout event handler: borders, backgrounds, alignment, RGB565 color blend
+0x0200d274  sz=104   calls_in=1   out=4   conf=medium  Recursive widget-tree search/hit-test by attribute and containing rect
+0x0200d2dc  sz=84    calls_in=2   out=3   conf=low     Dispatch a global list of registered widget hook callbacks
+0x0200d330  sz=34    calls_in=2   out=1   conf=medium  Initialize a 24-byte widget/style struct with defaults
+0x0200d352  sz=54    calls_in=3   out=1   conf=medium  Initialize a 32-byte text/draw style struct (default color 0xBE24, vtable ptr)
+0x0200d388  sz=226   calls_in=6   out=0   conf=high    UTF-8 decoder returning next codepoint, advancing index (text engine)
+0x0200d46a  sz=66    calls_in=6   out=0   conf=medium  Measure a glyph/char advance width via the font's measurement callback
+0x0200d4ac  sz=848   calls_in=3   out=2   conf=medium  Text line word-wrap/width measurement with break-point and CJK handling
+0x0200d7fc  sz=228   calls_in=3   out=2   conf=medium  Measure/trim text run width up to available space
+0x0200d8e0  sz=164   calls_in=4   out=2   conf=medium  Multi-line text block layout/measurement (width and height)
+0x0200d984  sz=24    calls_in=2   out=1   conf=medium  Initialize a 10-byte text-run/style struct with defaults
+0x0200d99c  sz=36    calls_in=2   out=1   conf=medium  Count UTF-8 characters / advance through string up to a byte length
+0x0200d9c0  sz=36    calls_in=2   out=1   conf=medium  Compute UTF-8 substring start/length byte offsets
+0x0200d9e4  sz=18    calls_in=2   out=0   conf=low     Conditional text-run flush/commit callback dispatch
+0x0200d9f6  sz=2002  calls_in=3   out=11  conf=medium  Text label render/layout with word-wrap and alignment
+0x0200e228  sz=36    calls_in=1   out=1   conf=medium  Destroy/free an image/canvas resource object (dtor + buffer free)
+0x0200e24c  sz=1594  calls_in=2   out=17  conf=medium  Render image/icon widget with rotation using sin/cos transform
+0x0200e886  sz=18    calls_in=2   out=0   conf=medium  Copy a widget rectangle (4 halfwords x,y,w,h) to destination
+0x0200e898  sz=232   calls_in=1   out=6   conf=medium  Recursive widget repaint over children with clip-rect transform
+0x0200e980  sz=130   calls_in=1   out=4   conf=medium  Recursive widget invalidate/redraw-request propagation
+0x0200ea02  sz=1336  calls_in=1   out=2   conf=medium  Lay out child widgets into rows/grid with clip rectangles
+0x0200ef3a  sz=1784  calls_in=0   out=21  conf=medium  Main paint/render pass recursing the widget tree, drawing bg/children
+0x0200f632  sz=2536  calls_in=0   out=2   conf=medium  Anti-aliased line/gradient rasterizer with 8-bit coverage blending
+0x0201004a  sz=132   calls_in=2   out=3   conf=medium  Look up image decoder in registered format handler list by signature
+0x020100ce  sz=306   calls_in=2   out=3   conf=medium  Read decoded image scanline/rows through a cached decoder with memmove
+0x02010200  sz=218   calls_in=1   out=7   conf=medium  Free image decoder context; open image resource / parse color value
+0x020102da  sz=48    calls_in=2   out=0   conf=medium  Map pixel-format code (4..14) to bits/bytes-per-pixel
+0x0201030a  sz=1436  calls_in=0   out=12  conf=medium  Decode indexed/RGB bitmap rows to RGB565 with palette; codec vtable ctor
+0x020108a6  sz=294   calls_in=2   out=1   conf=medium  Set up line-drawing primitive (endpoints, abs deltas, fixed-point slope)
+0x020109cc  sz=24    calls_in=4   out=0   conf=medium  Clear a graphics handle-table entry (0x1c0e080) by index
+0x020109e4  sz=8616  calls_in=0   out=11  conf=medium  Canvas drawing engine: arcs/lines/shapes via sin/cos and line primitives
+0x02012b8c  sz=122   calls_in=2   out=1   conf=medium  Rectangle overlap / region hit-test using corner point tests
+0x02012c06  sz=78    calls_in=4   out=2   conf=medium  Test a region against the active display layers/dirty rects
+0x02012c54  sz=48    calls_in=4   out=1   conf=medium  Intersect widget clip rect then invoke widget draw callbacks
+0x02012d04  sz=200   calls_in=1   out=1   conf=medium  Format-aware image get-pixel sampler (RGB565/indexed/etc.)
+0x02012dcc  sz=202   calls_in=1   out=0   conf=medium  Unpack a pixel/palette index from packed 1/2/4/8-bpp bitmap data via per-format bitfield extraction (tbb dispatch)
+0x02012e96  sz=3408  calls_in=3   out=12  conf=high    Blit/scale a bitmap into the framebuffer with clipping and RGB565 alpha blending
+0x02013be6  sz=48    calls_in=1   out=0   conf=medium  Walk an element/layer list invoking a predicate callback to locate a matching draw region
+0x02013c16  sz=4378  calls_in=0   out=19  conf=high    Draw image/widget with nine-slice scaling, palette expansion and clip-rect handling (vtable draw method)
+0x02014d30  sz=408   calls_in=1   out=3   conf=medium  Box-resample/downscale bitmap rows using fixed-point weights
+0x02014ec8  sz=278   calls_in=1   out=0   conf=high    Interpolate an RGB565 color from a multi-stop gradient table at a given position
+0x02014fde  sz=1588  calls_in=1   out=14  conf=high    Render a gradient/rounded-fill region row-by-row into the framebuffer with clipping
+0x02015612  sz=536   calls_in=1   out=7   conf=medium  Position and draw a centered child element within its parent rectangle
+0x0201582a  sz=6102  calls_in=0   out=20  conf=high    Render a framed/bordered region (edges, corners, fill) with clipping and sub-draws
+0x02017008  sz=1062  calls_in=0   out=9   conf=high    Font glyph cmap/metrics binary-search lookup plus UI tween/animation tick loop (grouped block)
+0x0201742e  sz=132   calls_in=0   out=1   conf=medium  Animation easing/interpolation helpers (progress ratio, linear and cubic ease, fixed-point)
+0x020174ec  sz=104   calls_in=13  out=5   conf=medium  Invalidate widget and free cached image/text render resources by dirty flags
+0x0201760c  sz=74    calls_in=1   out=1   conf=medium  Find a registered tween/animation object in the global list by (target,property) key
+0x02017656  sz=110   calls_in=2   out=2   conf=medium  Scan backward for previous UTF-8 char / line-break position during text layout
+0x020176c4  sz=696   calls_in=1   out=8   conf=high    Measure and lay out text: width, alignment offset and word-wrap break points
+0x0201797c  sz=1262  calls_in=4   out=22  conf=high    Render a text string glyph-by-glyph with metrics, alignment and blit
+0x02017e6a  sz=184   calls_in=5   out=4   conf=medium  Apply text transform (case/ordering) into display buffer and trigger label redraw
+0x02017f22  sz=232   calls_in=14  out=10  conf=medium  Text label content set/init/deinit: alloc+strcpy string then redraw
+0x02018038  sz=84    calls_in=1   out=1   conf=medium  Compute text vertical/baseline position from widget height and font attributes
+0x0201808c  sz=2068  calls_in=0   out=23  conf=high    Parse label style attributes (color/alpha/align/font) and draw/lay out the text widget
+0x020188a0  sz=30    calls_in=4   out=0   conf=low     Reset a UI region/animation table entry (compute size, set state=2) in global state
+0x020188cc  sz=70    calls_in=1   out=0   conf=low     Update display/animation timing limit from a config lookup table
+0x02018958  sz=348   calls_in=2   out=5   conf=low     Handle 0x07-prefixed control commands to configure UI transition/animation effect parameters
+0x0201d9d0  sz=64    calls_in=2   out=2   conf=low     Build the loaded voice's 10-char name string and push it to the display/name handler
+0x02021486  sz=282   calls_in=1   out=0   conf=high    LCD panel region fill/clear driving display-controller SFR/DMA registers
+0x020215a0  sz=74    calls_in=1   out=1   conf=medium  Initialize a display blit/DMA descriptor (source addr, callback, format config)
+0x020215ea  sz=32    calls_in=1   out=1   conf=low     Release/stop a display DMA channel of a canvas by clearing its enable bits
+0x0202160a  sz=250   calls_in=1   out=11  conf=medium  Create a display canvas/layer object with draw buffers and register it in the layer list

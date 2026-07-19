@@ -1,0 +1,282 @@
+[
+ {
+  "addr": "0x02078826",
+  "subsystem": "BT",
+  "name": "l2cap_data_send",
+  "purpose": "send L2CAP packet by handle, return success flag",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078836",
+  "subsystem": "BT",
+  "name": "avdtp_signal_msg_send",
+  "purpose": "build AVDTP 2-byte signaling header, send via L2CAP",
+  "conf": "high"
+ },
+ {
+  "addr": "0x0207886c",
+  "subsystem": "BT",
+  "name": "avdtp_signal_cmd_send",
+  "purpose": "build and send AVDTP signaling command incl delayreport",
+  "conf": "high"
+ },
+ {
+  "addr": "0x020788bc",
+  "subsystem": "BT",
+  "name": "avdtp_discover_cmd_send",
+  "purpose": "send DISCOVER signal then reset both SEP states",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020788f2",
+  "subsystem": "BT",
+  "name": "avdtp_connect_event_handle",
+  "purpose": "on connect: start discover, notify registered listeners",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207893e",
+  "subsystem": "BT",
+  "name": "l2cap_channel_close_req",
+  "purpose": "lookup channel by handle, request close when active",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207895c",
+  "subsystem": "BT",
+  "name": "avdtp_delayreport_send",
+  "purpose": "send DELAYREPORT signal with queued payload byte",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078972",
+  "subsystem": "BT",
+  "name": "avdtp_session_event_dispatch",
+  "purpose": "dispatch session events 13/50/51/59 to listeners",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078a44",
+  "subsystem": "BT",
+  "name": "avdtp_discover_rsp_build",
+  "purpose": "DISCOVER handler: collect both SEPs' info into response",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02078ab0",
+  "subsystem": "BT",
+  "name": "avdtp_sep_find_by_seid",
+  "purpose": "find stream endpoint by 6-bit SEID in table",
+  "conf": "high"
+ },
+ {
+  "addr": "0x02078aca",
+  "subsystem": "BT",
+  "name": "avdtp_get_capabilities_handle",
+  "purpose": "GET_(ALL_)CAPABILITIES: query SEP ops, build reply",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078b40",
+  "subsystem": "BT",
+  "name": "avdtp_set_configuration_handle",
+  "purpose": "SET_CONFIGURATION: bind SEP, configure via ops vtable",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078c0a",
+  "subsystem": "BT",
+  "name": "avdtp_get_configuration_handle",
+  "purpose": "GET_CONFIGURATION: return current SEP configuration",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078c7a",
+  "subsystem": "BT",
+  "name": "avdtp_reconfigure_handle",
+  "purpose": "RECONFIGURE: apply codec/reporting capability changes",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078d16",
+  "subsystem": "BT",
+  "name": "avdtp_open_handle",
+  "purpose": "OPEN signal: move configured SEP to open state",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078da6",
+  "subsystem": "BT",
+  "name": "avdtp_start_handle",
+  "purpose": "START signal: move open SEP to streaming state",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078e38",
+  "subsystem": "BT",
+  "name": "avdtp_close_handle",
+  "purpose": "CLOSE signal: stop stream, release SEP flags",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078ed2",
+  "subsystem": "BT",
+  "name": "avdtp_suspend_handle",
+  "purpose": "SUSPEND signal: streaming SEP back to open state",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078f62",
+  "subsystem": "BT",
+  "name": "avdtp_abort_handle",
+  "purpose": "ABORT signal: force SEP to aborted state",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078fb6",
+  "subsystem": "BT",
+  "name": "avdtp_accept_rsp_send",
+  "purpose": "send 2-byte AVDTP accept response for signal",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02078fec",
+  "subsystem": "BT",
+  "name": "avdtp_media_rtp_rx",
+  "purpose": "media RX: validate RTP header/seq, route to SEP",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207915a",
+  "subsystem": "BT",
+  "name": "avdtp_open_rsp_commit",
+  "purpose": "finalize SEP open state, emit signal response",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020791a2",
+  "subsystem": "BT",
+  "name": "avdtp_signaling_packet_process",
+  "purpose": "parse AVDTP signaling packet, dispatch signal handlers",
+  "conf": "high"
+ },
+ {
+  "addr": "0x020794a0",
+  "subsystem": "BT",
+  "name": "avdtp_disconnect_req",
+  "purpose": "mark signaling channel disconnecting, request close",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020794b4",
+  "subsystem": "BT",
+  "name": "a2dp_feature_mask_test",
+  "purpose": "test argument bits against global capability mask",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020794c0",
+  "subsystem": "BT",
+  "name": "a2dp_state_flags_update",
+  "purpose": "update A2DP connection flags, emit btstack events",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020798a8",
+  "subsystem": "BT",
+  "name": "a2dp_connect_ind_handle",
+  "purpose": "connect indication: find device by address, notify listeners",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020799c2",
+  "subsystem": "BT",
+  "name": "avdtp_sep_error_notify",
+  "purpose": "notify all listeners of SEP abort with error",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020799f6",
+  "subsystem": "BT",
+  "name": "avdtp_l2cap_event_dispatch",
+  "purpose": "L2CAP event router: signaling/media RX, connect, close",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02079c22",
+  "subsystem": "BT",
+  "name": "avdtp_service_cap_parse",
+  "purpose": "parse AVDTP capabilities, extract SBC rate and channels",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02079f50",
+  "subsystem": "BT",
+  "name": "a2dp_media_data_write",
+  "purpose": "route received media packet toward decoder output",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02079f8a",
+  "subsystem": "BT",
+  "name": "a2dp_media_sessions_poll",
+  "purpose": "iterate three stream sessions, flush pending media",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02079fd8",
+  "subsystem": "BT",
+  "name": "a2dp_state_flag_set",
+  "purpose": "set connection state bits on current device record",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207a00a",
+  "subsystem": "BT",
+  "name": "a2dp_user_ctrl_dispatch",
+  "purpose": "fifteen-case A2DP user command and state dispatcher",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207a2e8",
+  "subsystem": "BT",
+  "name": "bt_handle_entry_lookup",
+  "purpose": "scan two-entry table for matching channel handle",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207a30e",
+  "subsystem": "BT",
+  "name": "u24_pack_le",
+  "purpose": "pack three bytes into one 24-bit value",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207a31e",
+  "subsystem": "BT",
+  "name": "avrcp_vendor_cmd_dispatch",
+  "purpose": "match BT-SIG company id, call registered PDU handler",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207a374",
+  "subsystem": "BT",
+  "name": "avctp_tx_flush",
+  "purpose": "transmit queued AVCTP message, clear pending flag",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207a398",
+  "subsystem": "BT",
+  "name": "avrcp_packet_build_send",
+  "purpose": "build AVCTP frame with PID 0x110E, queue payload",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207a438",
+  "subsystem": "BT",
+  "name": "bt_event_flag_set",
+  "purpose": "set event bit in session flags, notify task",
+  "conf": "low"
+ }
+]

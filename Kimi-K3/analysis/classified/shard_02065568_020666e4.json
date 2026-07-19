@@ -1,0 +1,282 @@
+[
+ {
+  "addr": "0x02065568",
+  "subsystem": "BT",
+  "name": "bt_bd_addr_save",
+  "purpose": "copy 6-byte bd_addr to global slot 0x1c09c66",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065576",
+  "subsystem": "BT",
+  "name": "bt_evt_post_201a",
+  "purpose": "post 2-arg event msg 0x201a via taskq poster",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0206558e",
+  "subsystem": "BT",
+  "name": "bt_evt_rec_post_2018",
+  "purpose": "fill 16-byte event record, post msg 0x2018",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020655c6",
+  "subsystem": "BT",
+  "name": "bt_evt_data_post_201a",
+  "purpose": "copy 16-byte payload, post 6-arg msg 0x201a",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065612",
+  "subsystem": "BT",
+  "name": "bt_bd_addr_save_2",
+  "purpose": "duplicate 6-byte bd_addr copy to 0x1c09c66",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065634",
+  "subsystem": "BT",
+  "name": "bt_state_flag_clr_bit2",
+  "purpose": "clear bit2 of bt state halfword at 0x1c09b9c+146",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065646",
+  "subsystem": "BT",
+  "name": "bredr_handle_by_addr",
+  "purpose": "lookup link/connection handle by 6-byte bd_addr",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065686",
+  "subsystem": "BT",
+  "name": "bredr_link_find_by_handle",
+  "purpose": "scan 2-link table at 0x1c0c480 for handle/id match",
+  "conf": "high"
+ },
+ {
+  "addr": "0x020656ac",
+  "subsystem": "BT",
+  "name": "bredr_any_link_buf_pending",
+  "purpose": "return 1 if any link has buffer at +228",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020656ce",
+  "subsystem": "BT",
+  "name": "bredr_link_tx_ready_len",
+  "purpose": "if link idle in state 2, return queued pkt len<<1",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020656f6",
+  "subsystem": "BT",
+  "name": "bredr_link_op_cancel_by_id",
+  "purpose": "cancel pending link op, post event, mark link states",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02065790",
+  "subsystem": "BT",
+  "name": "bt_addr_evt_post_405",
+  "purpose": "pack 6 addr bytes into msg 0x405, post taskq",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020657d4",
+  "subsystem": "BT",
+  "name": "bt_clk_diff_wrap27",
+  "purpose": "wrapped 27-bit bt-clock difference with window check",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020657f4",
+  "subsystem": "BT",
+  "name": "bredr_link_deactivate",
+  "purpose": "stop link scheduler, free pending frag, fix link globals",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020658dc",
+  "subsystem": "BT",
+  "name": "bt_cmd14_link_report",
+  "purpose": "send dev cmd 0x14 with link id, state, arg",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020658fe",
+  "subsystem": "BT",
+  "name": "bredr_link_tx_complete",
+  "purpose": "tx completion: release frag, queue flow-ctrl pkt, report",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02065956",
+  "subsystem": "BT",
+  "name": "bredr_link_tx_abort",
+  "purpose": "mark current frag done, deactivate sched, report state",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02065986",
+  "subsystem": "BT",
+  "name": "bredr_link_tx_kick",
+  "purpose": "flag stalled frag 0x80 and queue ctrl pkt",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020659c0",
+  "subsystem": "BT",
+  "name": "bredr_frag_set_tx_clk",
+  "purpose": "stamp frag +32 with next bt-clock tx time",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020659ea",
+  "subsystem": "BT",
+  "name": "bredr_txq_unlink_free",
+  "purpose": "unlink tx queue node, free container via lm/pool",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065a72",
+  "subsystem": "BT",
+  "name": "bredr_link_tx_window_bytes",
+  "purpose": "sum matching queued payload bytes across link tx lists",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02065b66",
+  "subsystem": "BT",
+  "name": "bredr_txq_ack_upto_seq",
+  "purpose": "free acked tx frags on list, return last seq seen",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02065bf6",
+  "subsystem": "BT",
+  "name": "bredr_link_tx_flush_seq",
+  "purpose": "flush link tx queues up to seq, update slot counter",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02065d1a",
+  "subsystem": "BT",
+  "name": "bredr_link_tx_dequeue",
+  "purpose": "detach next tx frag, mark in-flight, return payload ptr/len",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065e8a",
+  "subsystem": "BT",
+  "name": "bredr_link_destroy_seq",
+  "purpose": "link destroy, op-complete(254), follow-up sequence",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02065ea2",
+  "subsystem": "BT",
+  "name": "bredr_link_sched_op8",
+  "purpose": "pass link sched byte +8 to hw layer fn",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02065f12",
+  "subsystem": "BT",
+  "name": "bredr_link_tx_inflight_count",
+  "purpose": "count in-flight (flag 0x8, unacked) tx frags on link",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02065fac",
+  "subsystem": "BT",
+  "name": "bredr_tx_frag_arm",
+  "purpose": "mark frag pending, program 27-bit deadline, feed hw",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020660a2",
+  "subsystem": "BT",
+  "name": "bredr_sched_advance_slot",
+  "purpose": "advance link schedule by interval, correct drift, re-arm",
+  "conf": "med"
+ },
+ {
+  "addr": "0x02066162",
+  "subsystem": "BT",
+  "name": "bredr_link_sched_tick",
+  "purpose": "scheduler tick: service tx, sync dual links, arm next wake",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020662d6",
+  "subsystem": "BT",
+  "name": "bredr_tx_slot_prepare",
+  "purpose": "feed next tx payload to baseband, arm slot timer",
+  "conf": "low"
+ },
+ {
+  "addr": "0x020663ce",
+  "subsystem": "BT",
+  "name": "bt_sched_flag_set",
+  "purpose": "set/clear bit0 of sched struct byte at +22",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020663e4",
+  "subsystem": "BT",
+  "name": "bredr_link_flow_ctrl_send",
+  "purpose": "clear sched flag, queue flow-ctrl pkt on link",
+  "conf": "low"
+ },
+ {
+  "addr": "0x02066424",
+  "subsystem": "BT",
+  "name": "bredr_active_link_count",
+  "purpose": "count table links with handle and sched attached",
+  "conf": "high"
+ },
+ {
+  "addr": "0x020664b0",
+  "subsystem": "BT",
+  "name": "bt_link_mode_bit2",
+  "purpose": "extract bit2 of link mode byte",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020664b6",
+  "subsystem": "BT",
+  "name": "bredr_link_txbuf_init",
+  "purpose": "alloc+init 40B tx sched buffer, register link active",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0206650e",
+  "subsystem": "BT",
+  "name": "bredr_clk_slots_to_event",
+  "purpose": "wrap-safe slots until next scheduled event on link",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0206655a",
+  "subsystem": "BT",
+  "name": "bredr_sched_phase_align",
+  "purpose": "compute wrap-safe phase delta between two links' schedules",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020665be",
+  "subsystem": "BT",
+  "name": "bredr_link_sched_setup",
+  "purpose": "configure periodic link schedule: interval<=800, phase, sync",
+  "conf": "med"
+ },
+ {
+  "addr": "0x020666e4",
+  "subsystem": "MEMLIB",
+  "name": "setlinebuf",
+  "purpose": "KNOWN_LIB setlinebuf",
+  "conf": "high"
+ }
+]

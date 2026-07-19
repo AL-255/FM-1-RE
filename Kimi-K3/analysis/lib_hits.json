@@ -1,0 +1,461 @@
+{
+ "0x020023e8": {
+  "name": "__udivdi3",
+  "names": [
+   "__udivdi3"
+  ],
+  "src": "base_libcompiler-rt",
+  "ninsn": 7
+ },
+ "0x020030f8": {
+  "name": "_diprintf_r",
+  "names": [
+   "_diprintf_r",
+   "_dprintf_r",
+   "_fiprintf_r",
+   "_fiscanf_r",
+   "_fprintf_r",
+   "_fscanf_r",
+   "_fwprintf_r",
+   "_fwscanf_r"
+  ],
+  "src": "base_libg",
+  "ninsn": 10
+ },
+ "0x0201d51e": {
+  "name": "_getwchar_r",
+  "names": [
+   "_getwchar_r",
+   "_getwchar_unlocked_r",
+   "_putwchar_r",
+   "_putwchar_unlocked_r",
+   "getchar",
+   "getchar_unlocked",
+   "getwchar",
+   "getwchar_unlocked",
+   "putchar_unlocked",
+   "putwchar",
+   "putwchar_unlocked"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0201db5e": {
+  "name": "_getwchar_r",
+  "names": [
+   "_getwchar_r",
+   "_getwchar_unlocked_r",
+   "_putwchar_r",
+   "_putwchar_unlocked_r",
+   "getchar",
+   "getchar_unlocked",
+   "getwchar",
+   "getwchar_unlocked",
+   "putchar_unlocked",
+   "putwchar",
+   "putwchar_unlocked"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0201db72": {
+  "name": "_getwchar_r",
+  "names": [
+   "_getwchar_r",
+   "_getwchar_unlocked_r",
+   "_putwchar_r",
+   "_putwchar_unlocked_r",
+   "getchar",
+   "getchar_unlocked",
+   "getwchar",
+   "getwchar_unlocked",
+   "putchar_unlocked",
+   "putwchar",
+   "putwchar_unlocked"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x02028fdc": {
+  "name": "get_number",
+  "names": [
+   "get_number"
+  ],
+  "src": "base_libg",
+  "ninsn": 9
+ },
+ "0x0202ca16": {
+  "name": "remquol",
+  "names": [
+   "remquol"
+  ],
+  "src": "base_libm",
+  "ninsn": 7
+ },
+ "0x0204260a": {
+  "name": "memcmp",
+  "names": [
+   "memcmp"
+  ],
+  "src": "base_libc",
+  "ninsn": 21
+ },
+ "0x02042642": {
+  "name": "memmove",
+  "names": [
+   "memmove"
+  ],
+  "src": "base_libc",
+  "ninsn": 74
+ },
+ "0x02042704": {
+  "name": "strcat",
+  "names": [
+   "strcat"
+  ],
+  "src": "base_libc",
+  "ninsn": 11
+ },
+ "0x0204271c": {
+  "name": "strchr",
+  "names": [
+   "strchr"
+  ],
+  "src": "base_libc",
+  "ninsn": 8
+ },
+ "0x02042730": {
+  "name": "strcmp",
+  "names": [
+   "strcmp"
+  ],
+  "src": "base_libc",
+  "ninsn": 58
+ },
+ "0x020427d0": {
+  "name": "strcpy",
+  "names": [
+   "strcpy"
+  ],
+  "src": "base_libc",
+  "ninsn": 38
+ },
+ "0x0204283e": {
+  "name": "strlen",
+  "names": [
+   "strlen"
+  ],
+  "src": "base_libc",
+  "ninsn": 6
+ },
+ "0x0204284a": {
+  "name": "strncmp",
+  "names": [
+   "strncmp"
+  ],
+  "src": "base_libc",
+  "ninsn": 12
+ },
+ "0x02042864": {
+  "name": "strnlen",
+  "names": [
+   "strnlen"
+  ],
+  "src": "base_libc",
+  "ninsn": 8
+ },
+ "0x020429c4": {
+  "name": "rep_clz",
+  "names": [
+   "rep_clz"
+  ],
+  "src": "r1-large_libcompiler-rt",
+  "ninsn": 9
+ },
+ "0x020429e2": {
+  "name": "normalize",
+  "names": [
+   "normalize"
+  ],
+  "src": "base_libcompiler-rt",
+  "ninsn": 10
+ },
+ "0x02042f08": {
+  "name": "memset",
+  "names": [
+   "memset"
+  ],
+  "src": "base_libc",
+  "ninsn": 17
+ },
+ "0x02042f34": {
+  "name": "normalize",
+  "names": [
+   "normalize"
+  ],
+  "src": "base_libcompiler-rt",
+  "ninsn": 16
+ },
+ "0x02042f6a": {
+  "name": "__divdf3",
+  "names": [
+   "__divdf3"
+  ],
+  "src": "base_libcompiler-rt",
+  "ninsn": 230
+ },
+ "0x0204327a": {
+  "name": "__fixdfsi",
+  "names": [
+   "__fixdfsi"
+  ],
+  "src": "base_libcompiler-rt",
+  "ninsn": 26
+ },
+ "0x020432ce": {
+  "name": "__floatsidf",
+  "names": [
+   "__floatsidf"
+  ],
+  "src": "base_libcompiler-rt",
+  "ninsn": 26
+ },
+ "0x0204331a": {
+  "name": "__floatunsidf",
+  "names": [
+   "__floatunsidf"
+  ],
+  "src": "base_libcompiler-rt",
+  "ninsn": 19
+ },
+ "0x0204334e": {
+  "name": "normalize",
+  "names": [
+   "normalize"
+  ],
+  "src": "base_libcompiler-rt",
+  "ninsn": 16
+ },
+ "0x0205e248": {
+  "name": "remquol",
+  "names": [
+   "remquol"
+  ],
+  "src": "base_libm",
+  "ninsn": 7
+ },
+ "0x0205e280": {
+  "name": "remquol",
+  "names": [
+   "remquol"
+  ],
+  "src": "base_libm",
+  "ninsn": 7
+ },
+ "0x0205e2b4": {
+  "name": "remquol",
+  "names": [
+   "remquol"
+  ],
+  "src": "base_libm",
+  "ninsn": 7
+ },
+ "0x0205e2ee": {
+  "name": "fmal",
+  "names": [
+   "fmal"
+  ],
+  "src": "base_libm",
+  "ninsn": 9
+ },
+ "0x02065484": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x02065552": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x020666e4": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0206699e": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x02069b24": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0206be80": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0206bfe6": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0206c052": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0206c0f8": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0206c3ee": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0206c4d4": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0206c4ea": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0206db5e": {
+  "name": "hsearch",
+  "names": [
+   "hsearch"
+  ],
+  "src": "base_libg",
+  "ninsn": 8
+ },
+ "0x0207605e": {
+  "name": "cfree",
+  "names": [
+   "cfree",
+   "close",
+   "fclose",
+   "free",
+   "ftell",
+   "ftello",
+   "malloc",
+   "malloc_trim",
+   "malloc_usable_size",
+   "perror",
+   "putenv",
+   "puts",
+   "pvalloc",
+   "sbrk",
+   "strdup",
+   "times",
+   "tmpnam",
+   "unlink",
+   "unsetenv",
+   "valloc",
+   "wait",
+   "wctype"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 8
+ },
+ "0x020770d6": {
+  "name": "asctime",
+  "names": [
+   "asctime",
+   "gmtime",
+   "localtime"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x020779ee": {
+  "name": "cfree",
+  "names": [
+   "cfree",
+   "close",
+   "fclose",
+   "free",
+   "ftell",
+   "ftello",
+   "malloc",
+   "malloc_trim",
+   "malloc_usable_size",
+   "perror",
+   "putenv",
+   "puts",
+   "pvalloc",
+   "sbrk",
+   "strdup",
+   "times",
+   "tmpnam",
+   "unlink",
+   "unsetenv",
+   "valloc",
+   "wait",
+   "wctype"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 8
+ },
+ "0x0207d756": {
+  "name": "asctime",
+  "names": [
+   "asctime",
+   "gmtime",
+   "localtime"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ },
+ "0x0207df56": {
+  "name": "setlinebuf",
+  "names": [
+   "setlinebuf"
+  ],
+  "src": "r1-large_libg",
+  "ninsn": 6
+ }
+}

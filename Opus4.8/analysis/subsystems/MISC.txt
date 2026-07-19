@@ -1,0 +1,36 @@
+0x020000c4  sz=2     calls_in=1   out=0   conf=low     Trivial stub that returns immediately (placeholder/get-arg)
+0x02000292  sz=16    calls_in=149 out=0   conf=medium  Fatal assert/fault handler: signals via GPIO/debug then hangs in infinite loop
+0x02004036  sz=34    calls_in=5   out=2   conf=medium  Device-node framework wrapper: find node by name (0x5c618) then register/config it via 0x21fc with data blob
+0x020053de  sz=60    calls_in=0   out=1   conf=low     Load/verify calibration record at RAM 0x1C7FD80 (78-byte check), pack value into global+140, then clear region
+0x0200541a  sz=30    calls_in=3   out=0   conf=low     Register a handler pointer into object[r0] table (0x1C0E910) at +32, slot r1 (<=7)
+0x02005438  sz=200   calls_in=2   out=4   conf=low     Register handler at object +64 (<=8); build a device/sound descriptor from flash blobs and register its callbacks
+0x02005592  sz=6     calls_in=5   out=0   conf=medium  Bit-field extract helper: return bit 2 of the argument
+0x02007ea2  sz=10    calls_in=5   out=0   conf=low     Compute inclusive range count (end - start + 1), sign-extended 16-bit
+0x020094c2  sz=8     calls_in=7   out=1   conf=low     Thin one-time-init wrapper around fn 0x83a (result stored to manager[188])
+0x0200e1c8  sz=12    calls_in=4   out=1   conf=low     Small wrapper computing f(x)-x via helper 0x83a
+0x0201d51e  sz=20    calls_in=2   out=1   conf=low     Small wrapper: dereference global[356] handle and call shared release/close primitive 0x18c9c
+0x0201d650  sz=76    calls_in=2   out=1   conf=low     Set audio/state mode variable (0x1C16EC0) among preset values and trigger notify callback
+0x0201db5e  sz=20    calls_in=4   out=1   conf=low     Small wrapper: dereference global[376] handle and call shared primitive 0x18c9c
+0x0201db72  sz=20    calls_in=4   out=1   conf=low     Small wrapper: dereference global[360] handle and call shared primitive 0x18c9c
+0x02026824  sz=76    calls_in=15  out=5   conf=low     Allocate a small node, copy data and register it into an object list (panic on alloc fail)
+0x02026bb8  sz=12    calls_in=1   out=1   conf=low     Thin wrapper delegating to helper 0x65e8a
+0x02026f84  sz=10    calls_in=6   out=0   conf=low     Thin wrapper calling a routine resident in RAM
+0x020273be  sz=8     calls_in=9   out=1   conf=low     Wrapper that pumps/handles a pending comm packet (0x856) to stay responsive during long flash operations
+0x02036192  sz=24    calls_in=1   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x020361aa  sz=36    calls_in=1   out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x020361ce  sz=410   calls_in=1   out=3   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02036368  sz=224   calls_in=1   out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02036448  sz=20    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0203645c  sz=28    calls_in=1   out=1   conf=low     Writes two indexed config words (idx 6 then bitfield-packed idx 7) via shared register-write helper 0x36448
+0x020364e0  sz=154   calls_in=2   out=5   conf=medium  Allocates 20-byte object, inits fields, registers it into global list at 0x1C09548 under irq-lock/refcount
+0x0203661e  sz=90    calls_in=1   out=1   conf=medium  Registers a named node into a hashed registry list, searching existing entries by hash first
+0x020368a8  sz=94    calls_in=1   out=0   conf=low     Irq-locked atomic store of a word ([r0]=r1)
+0x02036be4  sz=10    calls_in=2   out=1   conf=low     Thin wrapper invoking helper 0x350d0 with fixed size arg 16
+0x02036bee  sz=10    calls_in=3   out=1   conf=low     Wrapper: truncates arg to 16 bits and forwards to callee 0x306c6
+0x02036d2a  sz=12    calls_in=3   out=1   conf=low     Thin wrapper forwarding arg as r2 with r0=0 to callee 0x4036
+0x02036d36  sz=142   calls_in=3   out=0   conf=medium  Searches registry list (0x1C09000) for node by 16-bit id, updates its [+12] callback/data under busy-flag lock
+0x02037438  sz=96    calls_in=1   out=0   conf=low     Irq-locked atomic increment of a word ([r0]+=1)
+0x02037566  sz=8     calls_in=4   out=1   conf=low     Thin forwarding thunk to internal helper 0x020025da
+0x0203aab2  sz=14    calls_in=1   out=0   conf=medium  Indirect-call thunk: shuffle 4 args and call function pointer passed in r0
+0x02064522  sz=30    calls_in=1   out=0   conf=medium  32-bit sequence-number equality/in-window compare with rollover tolerance (<=32766); return match flag
+0x02064540  sz=20    calls_in=2   out=0   conf=low     Check whether indexed resource slot [obj + idx*8 + 152] is unallocated; return boolean

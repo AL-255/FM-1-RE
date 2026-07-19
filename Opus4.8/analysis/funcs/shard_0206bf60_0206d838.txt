@@ -1,0 +1,2238 @@
+
+===== FUNC 0x0206bf60  size=42B  ninsn=15  callers=2 callees=0 =====
+    0206bf60: [--sp] = {rets, r4}
+    0206bf62: r1 = 29410432 <_fw+0x1C0C480 : 1c0c480 >
+    0206bf68: r0 = 0
+    0206bf6a: r2 = r1
+    0206bf6c: goto 16 <_fw+0x6BF7E : 6bf7e >
+    0206bf6e: r4 = [r2+228]
+    0206bf72: r3 = 1
+    0206bf74: if (r4 != 0) goto 2 <_fw+0x6BF78 : 6bf78 >
+    0206bf76: r3 = r4
+    0206bf78: r0 += r3
+    0206bf7a: r2 = r2 + 280
+    0206bf7e: r3 = r1 + 560
+    0206bf82: if (r2 < r3) goto -24 <_fw+0x6BF6E : 6bf6e >
+    0206bf86: r0 = r0.b0 (u)
+    0206bf88: {pc, r4} = [sp++]
+
+===== FUNC 0x0206bf8a  size=24B  ninsn=7  callers=2 callees=1 =====
+  calls: 0x0205e110
+    0206bf8a: [--sp] = rets
+    0206bf8c: r3 = r0
+    0206bf8e: r0 = 4194306 <_fw+0x400002 : 400002 >
+    0206bf94: r1 = 2
+    0206bf96: r2 = 3098 <_fw+0xC1A : c1a >
+    0206bf9a: call -56976 <_fw+0x5E110 : 5e110 >
+    0206bfa0: pc = [sp++]
+
+===== FUNC 0x0206bfa2  size=68B  ninsn=23  callers=2 callees=1 =====
+  calls: 0x02065686
+    0206bfa2: [--sp] = {rets, r4}
+    0206bfa4: r4 = r0
+    0206bfa6: call -26916 <_fw+0x65686 : 65686 >
+    0206bfaa: if (r0 == 0) goto 6 <_fw+0x6BFB2 : 6bfb2 >
+    0206bfac: r0 = r0 + 181
+    0206bfb0: {pc, r4} = [sp++]
+    0206bfb2: r0 = 29410432 <_fw+0x1C0C480 : 1c0c480 >
+    0206bfb8: r1 = r0
+    0206bfba: goto 24 <_fw+0x6BFD4 : 6bfd4 >
+    0206bfbc: r2 = h[r1+212] (u)
+    0206bfc0: if (r2 == 0) goto 12 <_fw+0x6BFCE : 6bfce >
+    0206bfc2: r2 = [r1+228]
+    0206bfc6: if (r2 == 0) goto 6 <_fw+0x6BFCE : 6bfce >
+    0206bfc8: r2 = b[r2+0] (u)
+    0206bfca: if (r2 == r4) goto 18 <_fw+0x6BFE0 : 6bfe0 >
+    0206bfce: r1 = r1 + 212
+    0206bfd2: r1 += 68
+    0206bfd4: r2 = r0 + 560
+    0206bfd8: if (r1 < r2) goto -32 <_fw+0x6BFBC : 6bfbc >
+    0206bfdc: r0 = 0
+    0206bfde: {pc, r4} = [sp++]
+    0206bfe0: r0 = r1 + 181
+    0206bfe4: {pc, r4} = [sp++]
+
+===== FUNC 0x0206bfe6  size=18B  ninsn=6  callers=1 callees=1 =====
+  calls: 0x0205e018
+    0206bfe6: [--sp] = rets
+    0206bfe8: r1 = 2
+    0206bfea: r2 = 1043 <_fw+0x412 : 412 >
+    0206bfee: r3 = 1
+    0206bff0: call -57310 <_fw+0x5E018 : 5e018 >
+    0206bff6: pc = [sp++]
+
+===== FUNC 0x0206bff8  size=30B  ninsn=12  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206bff8: [--sp] = {rets, r5, r4}
+    0206bffa: sp += -8
+    0206bffc: r4 = r2  #
+    0206bffe:  [sp+4] = r3
+    0206c000: r5 = r1  #
+    0206c002:  [sp] = r4
+    0206c004: r1 = 4
+    0206c006: r2 = 1067 <_fw+0x42A : 42a >
+    0206c00a: r3 = r5
+    0206c00c: call -55934 <_fw+0x5E594 : 5e594 >
+    0206c012: sp += 8
+    0206c014: {pc, r5, r4} = [sp++]
+
+===== FUNC 0x0206c016  size=18B  ninsn=6  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206c016: [--sp] = rets
+    0206c018: r3 = r1
+    0206c01a: r1 = 2
+    0206c01c: r2 = 1033 <_fw+0x408 : 408 >
+    0206c020: call -55954 <_fw+0x5E594 : 5e594 >
+    0206c026: pc = [sp++]
+
+===== FUNC 0x0206c028  size=42B  ninsn=14  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206c028: [--sp] = {rets, r4}
+    0206c02a: sp += -12
+    0206c02c: r1 = 132040 <_fw+0x203C8 : 203c8 >
+    0206c032: r2 = 1065  # <_fw+0x428 : 428 >
+    0206c036:  [sp+8] = r1
+    0206c038: r1 = 4294901760 <_fw+0xFFFF0000 : ffff0000 >
+    0206c03e: [sp+4] = r1
+    0206c040: r4 = -1
+    0206c042: r1 = 5
+    0206c044: r3 = -1
+    0206c046: [sp] = r4
+    0206c048: call -55994 <_fw+0x5E594 : 5e594 >
+    0206c04e: sp += 12
+    0206c050: {pc, r4} = [sp++]
+
+===== FUNC 0x0206c052  size=18B  ninsn=6  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206c052: [--sp] = rets
+    0206c054: r1 = 2
+    0206c056: r2 = 1034 <_fw+0x40A : 40a >
+    0206c05a: r3 = 10
+    0206c05c: call -56014 <_fw+0x5E594 : 5e594 >
+    0206c062: pc = [sp++]
+
+===== FUNC 0x0206c064  size=72B  ninsn=29  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206c064: [--sp] = {rets, r8-r4}
+    0206c066: sp += -12
+    0206c068: r8 = b[r1+1] (u)
+    0206c06c: r3 = b[r1+0] (u)
+    0206c06e: r4 = b[r1+3] (u)
+    0206c070: r5 = b[r1+2] (u)
+    0206c072: r6 = r1 + 12
+    0206c074: r7 = sp + 8
+    0206c076: rep 4 4 {
+    0206c078: r2 = b[r6++=1] (u)
+    0206c07a: b[r7++=1] = r2
+    0206c07c: r2 = r1 + 8
+    0206c07e: r6 = sp + 4
+    0206c080: rep 4 4 {
+    0206c082: r7 = b[r2++=1] (u)
+    0206c084: b[r6++=1] = r7
+    0206c086: r1 += 4
+    0206c088: r2 = sp + 0
+    0206c08a: rep 4 4 {
+    0206c08c: r6 = b[r1++=1] (u)
+    0206c08e: b[r2++=1] = r6
+    0206c090: r5 <= insert(r4, p:8, l:8)
+    0206c094: r3 <= insert(r8, p:8, l:8)
+    0206c098: r3 <= insert(r5, p:16, l:16)
+    0206c09c: r1 = 5
+    0206c09e: r2 = 1035 <_fw+0x40A : 40a >
+    0206c0a2: call -56084 <_fw+0x5E594 : 5e594 >
+    0206c0a8: sp += 12
+    0206c0aa: {pc, r8-r4} = [sp++]
+
+===== FUNC 0x0206c0ac  size=16B  ninsn=5  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206c0ac: [--sp] = rets
+    0206c0ae: r1 = 1
+    0206c0b0: r2 = 1036 <_fw+0x40C : 40c >
+    0206c0b4: call -56102 <_fw+0x5E594 : 5e594 >
+    0206c0ba: pc = [sp++]
+
+===== FUNC 0x0206c0bc  size=60B  ninsn=27  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206c0bc: [--sp] = {rets, r4}
+    0206c0be: sp += -16
+    0206c0c0: r2 = r1 + 12
+    0206c0c2: r3 = sp + 12
+    0206c0c4: rep 4 4 {
+    0206c0c6: r4 = b[r2++=1] (u)
+    0206c0c8: b[r3++=1] = r4
+    0206c0ca: r2 = r1 + 8
+    0206c0cc: r3 = sp + 8
+    0206c0ce: rep 4 4 {
+    0206c0d0: r4 = b[r2++=1] (u)
+    0206c0d2: b[r3++=1] = r4
+    0206c0d4: r2 = r1 + 4
+    0206c0d6: r3 = sp + 4
+    0206c0d8: rep 4 4 {
+    0206c0da: r4 = b[r2++=1] (u)
+    0206c0dc: b[r3++=1] = r4
+    0206c0de: r2 = sp + 0
+    0206c0e0: rep 4 4 {
+    0206c0e2: r3 = b[r1++=1] (u)
+    0206c0e4: b[r2++=1] = r3
+    0206c0e6: r1 = 6
+    0206c0e8: r2 = 1037 <_fw+0x40C : 40c >
+    0206c0ec: r3 = 4
+    0206c0ee: call -56160 <_fw+0x5E594 : 5e594 >
+    0206c0f4: sp += 16
+    0206c0f6: {pc, r4} = [sp++]
+
+===== FUNC 0x0206c0f8  size=18B  ninsn=6  callers=1 callees=1 =====
+  calls: 0x0205e018
+    0206c0f8: [--sp] = rets
+    0206c0fa: r1 = 2
+    0206c0fc: r2 = 3125 <_fw+0xC34 : c34 >
+    0206c100: r3 = 1
+    0206c102: call -57584 <_fw+0x5E018 : 5e018 >
+    0206c108: pc = [sp++]
+
+===== FUNC 0x0206c10a  size=128B  ninsn=42  callers=2 callees=2 =====
+  calls: 0x0205e110, 0x02072ea0
+    0206c10a: [--sp] = rets
+    0206c10c: r0 = 4194306 <_fw+0x400002 : 400002 >
+    0206c112: r1 = 2
+    0206c114: r2 = 3325 <_fw+0xCFC : cfc >
+    0206c118: r3 = 0
+    0206c11a: call -57360 <_fw+0x5E110 : 5e110 >
+    0206c120: pc = [sp++]
+    0206c122: [--sp] = {rets, r6-r4}
+    0206c124: cli
+    0206c126: r2 = cnum
+    0206c12a: r2 = r2 << 2
+    0206c12c: r5 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0206c132: r2 += r5
+    0206c134: [r2+0] += 1
+    0206c138: csync
+    0206c13a: r6 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0206c140: r2 = cnum
+    0206c144: r3 = [r6+r2<<2]
+    0206c148: r4 = r1
+    0206c14a: r1 = r3 + 1
+    0206c14c: [r6+r2<<2] = r1
+    0206c150: if (r3 != 0) goto 2 <_fw+0x6C154 : 6c154 >
+    0206c152: lockset
+    0206c154: csync
+    0206c156: call 27972 <_fw+0x72EA0 : 72ea0 >
+    0206c15c: if (r0 == 0) goto 2 <_fw+0x6C160 : 6c160 >
+    0206c15e: h[r0+20] = r4
+    0206c160: csync
+    0206c162: r0 = cnum
+    0206c166: r1 = [r6+r0<<2]
+    0206c16a: r1 += -1
+    0206c16c: [r6+r0<<2] = r1
+    0206c170: if (r1 != 0) goto 2 <_fw+0x6C174 : 6c174 >
+    0206c172: lockclr
+    0206c174: r0 = cnum
+    0206c178: r1 = [r5+r0<<2]
+    0206c17c: r1 += -1
+    0206c17e: [r5+r0<<2] = r1
+    0206c182: if (r1 != 0) goto 4 <_fw+0x6C188 : 6c188 >
+    0206c184: csync
+    0206c186: sti
+    0206c188: {pc, r6-r4} = [sp++]
+
+===== FUNC 0x0206c18a  size=368B  ninsn=122  callers=1 callees=5 =====
+  calls: 0x0205a7c2, 0x0206f268, 0x0206fd10, 0x02072ea0, 0x0207437e
+    0206c18a: [--sp] = {rets, r9-r4}
+    0206c18c: r5 = r2
+    0206c18e: r6 = r1
+    0206c190: r4 = r0
+    0206c192: call 27912 <_fw+0x72EA0 : 72ea0 >
+    0206c198: r1 = 29400400 <_fw+0x1C09D50 : 1c09d50 >
+    0206c19e: r2 = 0
+    0206c1a0: h[r1+0] = r2
+    0206c1a2: h[r0+26] = r2
+    0206c1a4: cli
+    0206c1a6: r0 = cnum
+    0206c1aa: r0 = r0 << 2
+    0206c1ac: r8 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0206c1b2: r0 += r8
+    0206c1b4: [r0+0] += 1
+    0206c1b8: csync
+    0206c1ba: r9 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0206c1c0: r0 = cnum
+    0206c1c4: r1 = [r9+r0<<2]
+    0206c1c8: r2 = r1 + 1
+    0206c1ca: [r9+r0<<2] = r2
+    0206c1ce: if (r1 != 0) goto 2 <_fw+0x6C1D2 : 6c1d2 >
+    0206c1d0: lockset
+    0206c1d2: csync
+    0206c1d4: r0 = r4
+    0206c1d6: call 27844 <_fw+0x72EA0 : 72ea0 >
+    0206c1dc: r4 = r0
+    0206c1de: if (r4 == 0) goto 168 <_fw+0x6C288 : 6c288 >
+    0206c1e0: r0 = r4 + 44
+    0206c1e4: call -72232 <_fw+0x5A7C2 : 5a7c2 >
+    0206c1ea: h[r4+20] = r6
+    0206c1ec: b[r4+12] = r5
+    0206c1ee: r0 = 1
+    0206c1f0: r0 = r4 + 128  #
+    0206c1f4:  b[r4+9] = r0
+    0206c1f6: r1 = 0
+    0206c1f8: b[r4+10] = r1
+    0206c1fa: h[r4+26] = r1
+    0206c1fc: r1 = r0  #
+    0206c1fe:  b[r4+4] = r1
+    0206c200: goto 68 <_fw+0x6C246 : 6c246 >
+    0206c202: r2 = h[r1+-14] (u)
+    0206c204: if ((r2 & 8) != 0) goto 62 <_fw+0x6C246 : 6c246 >
+    0206c208: if ((r2 & 0xC0) != 0) goto 56 <_fw+0x6C246 : 6c246 >
+    0206c20e: r3 = b[r1+15] (u)
+    0206c210: r5 = b[r1+14] (u)
+    0206c212: r5 <= insert(r3, p:8, l:8)  #
+    0206c216:  r6 = h[r4+20] (u)
+    0206c218: if (r5 != r6) goto 42 <_fw+0x6C246 : 6c246 >
+    0206c21c: r2 = r2 & 0xFFFFFF0F
+    0206c220: r2 = r2 | 0x70
+    0206c224: h[r1+-14] = r2
+    0206c226: r2 = b[r1+13] (u)
+    0206c228: r3 = b[r1+12] (u)
+    0206c22a: r3 <= insert(r2, p:8, l:24)
+    0206c22e: h[r4+22] = r3
+    0206c230: r2 = h[r4+26] (u)
+    0206c232: if (r2 != 0) goto 18 <_fw+0x6C246 : 6c246 >
+    0206c234: r2 = b[r1+18] (u)
+    0206c238: r3 = b[r1+19] (u)
+    0206c23c: r3 <= insert(r2, p:8, l:24)
+    0206c240: r2 = r3 + -1
+    0206c244: h[r4+26] = r2
+    0206c246: r1 = [r1+0]
+    0206c248: if (r1 != r0) goto -74 <_fw+0x6C202 : 6c202 >
+    0206c24c: call 12310 <_fw+0x6F268 : 6f268 >
+    0206c252: r5 = r4 + 220
+    0206c256: if (r0 == 0) goto 92 <_fw+0x6C2B4 : 6c2b4 >
+    0206c258: r7 = 29410432 <_fw+0x1C0C480 : 1c0c480 >
+    0206c25e: r6 = r7
+    0206c260: goto 28 <_fw+0x6C27E : 6c27e >
+    0206c262: if (r6 != r4) goto 20 <_fw+0x6C27A : 6c27a >
+    0206c266: r0 = [r6+176]
+    0206c26a: if ((r0 & 0x8) == 0) {
+    0206c26e: r0 = [r5+0]
+    0206c270: r0 = b[r0+8] (u)
+    0206c272: r1 = 70
+    0206c274: call 14998
+    0206c27a: r6 = r6 + 280
+    0206c27e: r0 = r7 + 560
+    0206c282: if (r6 < r0) goto -36 <_fw+0x6C262 : 6c262 >
+    0206c286: goto 56 <_fw+0x6C2C0 : 6c2c0 >
+    0206c288: csync
+    0206c28a: r0 = cnum
+    0206c28e: r1 = [r9+r0<<2]
+    0206c292: r1 += -1
+    0206c294: [r9+r0<<2] = r1
+    0206c298: if (r1 != 0) goto 2 <_fw+0x6C29C : 6c29c >
+    0206c29a: lockclr
+    0206c29c: r0 = cnum
+    0206c2a0: r1 = [r8+r0<<2]
+    0206c2a4: r1 += -1
+    0206c2a6: [r8+r0<<2] = r1
+    0206c2aa: r4 = 0
+    0206c2ac: if (r1 != 0) goto 72 <_fw+0x6C2F6 : 6c2f6 >
+    0206c2ae: csync
+    0206c2b0: sti
+    0206c2b2: goto 66 <_fw+0x6C2F6 : 6c2f6 >
+    0206c2b4: r0 = [r5+0]
+    0206c2b6: r0 = b[r0+8] (u)
+    0206c2b8: r1 = 100
+    0206c2ba: call 14928 <_fw+0x6FD10 : 6fd10 >
+    0206c2c0: csync
+    0206c2c2: r0 = cnum
+    0206c2c6: r1 = [r9+r0<<2]
+    0206c2ca: r1 += -1
+    0206c2cc: [r9+r0<<2] = r1
+    0206c2d0: if (r1 != 0) goto 2 <_fw+0x6C2D4 : 6c2d4 >
+    0206c2d2: lockclr
+    0206c2d4: r0 = cnum
+    0206c2d8: r1 = [r8+r0<<2]
+    0206c2dc: r1 += -1
+    0206c2de: [r8+r0<<2] = r1
+    0206c2e2: if (r1 != 0) goto 4 <_fw+0x6C2E8 : 6c2e8 >
+    0206c2e4: csync
+    0206c2e6: sti
+    0206c2e8: r0 = [r5+0]
+    0206c2ea: r0 = r0 + 176
+    0206c2ee: r1 = 2
+    0206c2f0: call 32904 <_fw+0x7437E : 7437e >
+    0206c2f6: r0 = r4
+    0206c2f8: {pc, r9-r4} = [sp++]
+
+===== FUNC 0x0206c2fa  size=16B  ninsn=5  callers=1 callees=1 =====
+  calls: 0x0205e018
+    0206c2fa: [--sp] = rets
+    0206c2fc: r1 = 1
+    0206c2fe: r2 = 2052 <_fw+0x804 : 804 >
+    0206c302: call -58096 <_fw+0x5E018 : 5e018 >
+    0206c308: pc = [sp++]
+
+===== FUNC 0x0206c30a  size=34B  ninsn=14  callers=1 callees=1 =====
+  calls: 0x0205e018
+    0206c30a: [--sp] = {rets, r5, r4}
+    0206c30c: sp += -12
+    0206c30e: r5 = r1
+    0206c310: r4 = r2  #
+    0206c312:  r1 = [sp+24]
+    0206c314: r2 = 2051  # <_fw+0x802 : 802 >
+    0206c318:  [sp+8] = r1
+    0206c31a: r3 = r5  #
+    0206c31c:  [sp+4] = r3
+    0206c31e: r1 = 5
+    0206c320: [sp] = r4
+    0206c322: call -58128 <_fw+0x5E018 : 5e018 >
+    0206c328: sp += 12
+    0206c32a: {pc, r5, r4} = [sp++]
+
+===== FUNC 0x0206c32c  size=194B  ninsn=67  callers=1 callees=3 =====
+  calls: 0x0205a7e0, 0x02065bf6, 0x0207437e
+    0206c32c: [--sp] = {rets, r7-r4}
+    0206c32e: cli
+    0206c330: r1 = cnum
+    0206c334: r1 = r1 << 2
+    0206c336: r5 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0206c33c: r1 += r5
+    0206c33e: [r1+0] += 1
+    0206c342: csync
+    0206c344: r6 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0206c34a: r1 = cnum
+    0206c34e: r2 = [r6+r1<<2]
+    0206c352: r4 = r0
+    0206c354: r0 = r2 + 1
+    0206c356: [r6+r1<<2] = r0
+    0206c35a: if (r2 != 0) goto 2 <_fw+0x6C35E : 6c35e >
+    0206c35c: lockset
+    0206c35e: csync
+    0206c360: r0 = b[r4+9] (u)
+    0206c362: if (r0 == 0) goto 94 <_fw+0x6C3C2 : 6c3c2 >
+    0206c364: r7 = r4 + 176
+    0206c368: r0 = b[r7+0] (u)
+    0206c36a: if ((r0 & 8) != 0) goto 26 <_fw+0x6C388 : 6c388 >
+    0206c36e: r0 = [r7+44]
+    0206c370: if (r0 == 0) goto 22 <_fw+0x6C388 : 6c388 >
+    0206c372: r1 = 0
+    0206c374: r0 = r4
+    0206c376: call -26500 <_fw+0x65BF6 : 65bf6 >
+    0206c37a: r0 = [r7+44]
+    0206c37c: r0 = r0 + 176
+    0206c380: r1 = 1
+    0206c382: call 32758 <_fw+0x7437E : 7437e >
+    0206c388: r0 = 0
+    0206c38a: b[r4+9] = r0
+    0206c38c: b[r4+4] = r0
+    0206c38e: csync
+    0206c390: r0 = cnum
+    0206c394: r1 = [r6+r0<<2]
+    0206c398: r1 += -1
+    0206c39a: [r6+r0<<2] = r1
+    0206c39e: if (r1 != 0) goto 2 <_fw+0x6C3A2 : 6c3a2 >
+    0206c3a0: lockclr
+    0206c3a2: r0 = cnum
+    0206c3a6: r1 = [r5+r0<<2]
+    0206c3aa: r1 += -1
+    0206c3ac: [r5+r0<<2] = r1
+    0206c3b0: if (r1 != 0) goto 4 <_fw+0x6C3B6 : 6c3b6 >
+    0206c3b2: csync
+    0206c3b4: sti
+    0206c3b6: r0 = r4 + 44
+    0206c3ba: call -72672 <_fw+0x5A7E0 : 5a7e0 >
+    0206c3c0: {pc, r7-r4} = [sp++]
+    0206c3c2: csync
+    0206c3c4: r0 = cnum
+    0206c3c8: r1 = [r6+r0<<2]
+    0206c3cc: r1 += -1
+    0206c3ce: [r6+r0<<2] = r1
+    0206c3d2: if (r1 != 0) goto 2 <_fw+0x6C3D6 : 6c3d6 >
+    0206c3d4: lockclr
+    0206c3d6: r0 = cnum
+    0206c3da: r1 = [r5+r0<<2]
+    0206c3de: r1 += -1
+    0206c3e0: [r5+r0<<2] = r1
+    0206c3e4: if (r1 == 0) goto 2 <_fw+0x6C3E8 : 6c3e8 >
+    0206c3e6: {pc, r7-r4} = [sp++]
+    0206c3e8: csync
+    0206c3ea: sti
+    0206c3ec: {pc, r7-r4} = [sp++]
+
+===== FUNC 0x0206c3ee  size=22B  ninsn=6  callers=1 callees=1 =====
+  calls: 0x0205e110
+    0206c3ee: [--sp] = rets
+    0206c3f0: r0 = 4194306 <_fw+0x400002 : 400002 >
+    0206c3f6: r1 = 1
+    0206c3f8: r2 = 1026 <_fw+0x402 : 402 >
+    0206c3fc: call -58098 <_fw+0x5E110 : 5e110 >
+    0206c402: pc = [sp++]
+
+===== FUNC 0x0206c404  size=56B  ninsn=19  callers=1 callees=1 =====
+  calls: 0x0205e110
+    0206c404: [--sp] = {rets, r5, r4}
+    0206c406: sp += -4
+    0206c408: r1 = b[r0+5] (u)
+    0206c40a: r4 = b[r0+4] (u)
+    0206c40c: r4 <= insert(r1, p:8, l:8)  #
+    0206c410:  r2 = b[r0+1] (u)
+    0206c412: r3 = b[r0+0] (u)
+    0206c414: r5 = b[r0+3] (u)
+    0206c416: r0 = b[r0+2] (u)
+    0206c418: r0 <= insert(r5, p:8, l:8)  #
+    0206c41c:  [sp] = r4
+    0206c41e: r3 <= insert(r2, p:8, l:8)
+    0206c422: r3 <= insert(r0, p:16, l:16)
+    0206c426: r0 = 4194306 <_fw+0x400002 : 400002 >
+    0206c42c: r1 = 3
+    0206c42e: r2 = 3326 <_fw+0xCFE : cfe >
+    0206c432: call -58152 <_fw+0x5E110 : 5e110 >
+    0206c438: sp += 4
+    0206c43a: {pc, r5, r4} = [sp++]
+
+===== FUNC 0x0206c43c  size=32B  ninsn=12  callers=1 callees=2 =====
+  calls: 0x0205e018, 0x02065686
+    0206c43c: [--sp] = {rets, r5, r4}
+    0206c43e: r4 = r1
+    0206c440: r5 = r0
+    0206c442: r0 = r4
+    0206c444: call -28098 <_fw+0x65686 : 65686 >
+    0206c448: if (r0 == 0) goto 16 <_fw+0x6C45A : 6c45a >
+    0206c44a: r1 = 2
+    0206c44c: r2 = 3324 <_fw+0xCFC : cfc >
+    0206c450: r0 = r4
+    0206c452: r3 = r5
+    0206c454: call -58434 <_fw+0x5E018 : 5e018 >
+    0206c45a: {pc, r5, r4} = [sp++]
+
+===== FUNC 0x0206c45c  size=32B  ninsn=12  callers=1 callees=2 =====
+  calls: 0x0205e018, 0x02065686
+    0206c45c: [--sp] = {rets, r5, r4}
+    0206c45e: r4 = r1
+    0206c460: r5 = r0
+    0206c462: r0 = r4
+    0206c464: call -28130 <_fw+0x65686 : 65686 >
+    0206c468: if (r0 == 0) goto 16 <_fw+0x6C47A : 6c47a >
+    0206c46a: r1 = 2
+    0206c46c: r2 = 3323 <_fw+0xCFA : cfa >
+    0206c470: r0 = r4
+    0206c472: r3 = r5
+    0206c474: call -58466 <_fw+0x5E018 : 5e018 >
+    0206c47a: {pc, r5, r4} = [sp++]
+
+===== FUNC 0x0206c47c  size=40B  ninsn=12  callers=1 callees=1 =====
+  calls: 0x0205e110
+    0206c47c: [--sp] = {rets, r4}
+    0206c47e: sp += -8
+    0206c480: r1 = 0
+    0206c482: d[sp] = r1_r0
+    0206c486: r4 = 4194306 <_fw+0x400002 : 400002 >
+    0206c48c: r3 = 10390323 <_fw+0x9E8B32 : 9e8b32 >
+    0206c492: r1 = 4
+    0206c494: r2 = 1025 <_fw+0x400 : 400 >
+    0206c498: r0 = r4
+    0206c49a: call -58256 <_fw+0x5E110 : 5e110 >
+    0206c4a0: sp += 8
+    0206c4a2: {pc, r4} = [sp++]
+
+===== FUNC 0x0206c4a4  size=24B  ninsn=7  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206c4a4: [--sp] = rets
+    0206c4a6: r3 = r0
+    0206c4a8: r0 = 29412008 <_fw+0x1C0CAA8 : 1c0caa8 >
+    0206c4ae: r1 = 2
+    0206c4b0: r2 = 3168 <_fw+0xC60 : c60 >
+    0206c4b4: call -57126 <_fw+0x5E594 : 5e594 >
+    0206c4ba: pc = [sp++]
+
+===== FUNC 0x0206c4bc  size=24B  ninsn=7  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206c4bc: [--sp] = rets
+    0206c4be: r3 = r0
+    0206c4c0: r0 = 29412008 <_fw+0x1C0CAA8 : 1c0caa8 >
+    0206c4c6: r1 = 5
+    0206c4c8: r2 = 1070 <_fw+0x42E : 42e >
+    0206c4cc: call -57150 <_fw+0x5E594 : 5e594 >
+    0206c4d2: pc = [sp++]
+
+===== FUNC 0x0206c4d4  size=22B  ninsn=6  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206c4d4: [--sp] = rets
+    0206c4d6: r0 = 29412008 <_fw+0x1C0CAA8 : 1c0caa8 >
+    0206c4dc: r1 = 1
+    0206c4de: r2 = 1068 <_fw+0x42C : 42c >
+    0206c4e2: call -57172 <_fw+0x5E594 : 5e594 >
+    0206c4e8: pc = [sp++]
+
+===== FUNC 0x0206c4ea  size=22B  ninsn=6  callers=1 callees=1 =====
+  calls: 0x0205e594
+    0206c4ea: [--sp] = rets
+    0206c4ec: r0 = 29412008 <_fw+0x1C0CAA8 : 1c0caa8 >
+    0206c4f2: r1 = 1
+    0206c4f4: r2 = 1069 <_fw+0x42C : 42c >
+    0206c4f8: call -57194 <_fw+0x5E594 : 5e594 >
+    0206c4fe: pc = [sp++]
+
+===== FUNC 0x0206c500  size=552B  ninsn=209  callers=1 callees=2 =====
+  calls: 0x0205e110, 0x0206c728
+    0206c500: [--sp] = {rets, r6-r4}
+    0206c502: sp += -8
+    0206c504: r1 = b[r0+9] (u)
+    0206c506: r2 = b[r0+8] (u)
+    0206c508: r2 <= insert(r1, p:8, l:8)  #
+    0206c50c:  r4 = b[r0+1] (u)
+    0206c50e: r3 = b[r0+0] (u)
+    0206c510: r5 = b[r0+3] (u)
+    0206c512: r6 = b[r0+2] (u)
+    0206c514: [sp+4] = r2
+    0206c516: r0 += 4
+    0206c518: r1 = sp + 0
+    0206c51a: rep 4 4 {
+    0206c51c: r2 = b[r0++=1] (u)
+    0206c51e: b[r1++=1] = r2
+    0206c520: r6 <= insert(r5, p:8, l:8)
+    0206c524: r3 <= insert(r4, p:8, l:8)
+    0206c528: r3 <= insert(r6, p:16, l:16)
+    0206c52c: r0 = 4194306 <_fw+0x400002 : 400002 >
+    0206c532: r1 = 4
+    0206c534: r2 = 3135 <_fw+0xC3E : c3e >
+    0206c538: call -58414 <_fw+0x5E110 : 5e110 >
+    0206c53e: sp += 8
+    0206c540: {pc, r6-r4} = [sp++]
+    0206c542: r1 = [sp+52]
+    0206c544: sp += -52
+    0206c546: b[r3+5] = r6
+    0206c548: r5 = r1 << 14
+    0206c54a: rep 16 r8 {
+    0206c54c: r7 = r0 >> 4
+    0206c54e: r0 &= 4278190079
+    0206c550: r7 += 63
+    0206c552: r0 = h[r0+14] (u)
+    0206c554: r1 = r0 + 20
+    0206c556: r3 += -90
+    0206c558: h[r2+22] = r0
+    0206c55a: r13 += r11
+    0206c55c: r4 *= r3
+    0206c55e: r3 = r3 >>> 31
+    0206c562: r0 = 21
+    0206c564: r0 = r4 + 28
+    0206c566: r1 = 79
+    0206c568: r3 = b[r3+-11] (u)
+    0206c56c: r15 += r9  #
+    0206c570:  r5 = r0 >>> 17
+    0206c572: r7 = r7 >>> 7
+    0206c574: r6 = r3 + r1  #
+    0206c576:  [r0+-36] = r6
+    0206c578: r7 = r5 >> 6
+    0206c57a: if ((r1 & r1) != 0) goto -35352 <_fw+0x63B66 : 63b66 >
+    0206c580: goto 390 <_fw+0x6C708 : 6c708 >
+    0206c582: r1 += -45
+    0206c584: r7 >>>= r6  #
+    0206c586:  r4 = r2 <<< 21
+    0206c58e: r4 = sp + 4
+    0206c596: r7 = r5 <<< 3
+    0206c598: b[r0+-9] = r3
+    0206c59a: r4 = r3 + 2
+    0206c59c: if (r4 != 0) goto -220 <_fw+0x6C4C2 : 6c4c2 >
+    0206c59e: r4 = r5 + r1
+    0206c5a0: r0 = r6 >>> 32
+    0206c5a2: r4 = r0 << 20
+    0206c5a4: if (r5 != 0) goto 20 <_fw+0x6C5BA : 6c5ba >
+    0206c5a6: r6 = b[r7++=r15] (u)
+    0206c5a8: r4 = r5 << 22
+    0206c5aa: h[r5++=r9] = r7
+    0206c5ac: r2 = r1 + 14
+    0206c5b0: if (r9 > 461) goto -448 <_fw+0x6C3F4 : 6c3f4 >
+    0206c5b4: if (r4 == 0) goto 156 <_fw+0x6C652 : 6c652 >
+    0206c5b6: r1 = sp + 56
+    0206c5b8: r6 = r1 >>> 11
+    0206c5ba: [r7+0] = r2
+    0206c5bc: [r5+48] = r0
+    0206c5be: if ((r10 & r14) == 0) goto -19570 <_fw+0x67950 : 67950 >
+    0206c5c2: cc = 0  #
+    0206c5c4:  r7 = h[r1+28] (u)
+    0206c5c6: r3 = r4 << 28
+    0206c5c8: b[r6+-13] = r4
+    0206c5ca: ifs (r9 <= 46) goto -268 <_fw+0x6C4C2 : 6c4c2 >
+    0206c5d4: h[r7+26] = r0
+    0206c5d6: r6 *= r1  #
+    0206c5d8:  r1 = r5 + 22
+    0206c5de: if (r6 == 0) goto -252 <_fw+0x6C4E4 : 6c4e4 >
+    0206c5e0: [r0++=r13] = r7
+    0206c5e4: h[r3+10] = r1
+    0206c5e8: r6 = r4 >> 12
+    0206c5ea: r6 = b[r1+1] (u)
+    0206c5ec: r2 = 137
+    0206c5ee: h[r2++=r12] = r6
+    0206c5f0: if (r4 == 0) goto -32 <_fw+0x6C5D2 : 6c5d2 >
+    0206c5f2: if (r2 == 0) goto 52 <_fw+0x6C628 : 6c628 >
+    0206c5f4: r3 += 5
+    0206c5f6: r3 = r7 + 10
+    0206c5f8: r2 = b[r2+-5] (u)
+    0206c5fa: h[r7++=2] = r0
+    0206c5fc: r5 = b[r0+7] (u)
+    0206c5fe: r7 = h[r6+-32] (u)
+    0206c600: h[r1+-4] = r5
+    0206c604: r2 = -25
+    0206c606: if (r5 != 0) goto -168 <_fw+0x6C560 : 6c560 >
+    0206c608: r15 = r4  #
+    0206c60a:  r1 = 240
+    0206c60c: r0 = 182
+    0206c60e: r5 = [r7+-12]
+    0206c610: r7_r6 -= h[r8 ++= 0]*[r10 ++= 16] (u)
+    0206c616: if (r2 != 0) goto 188 <_fw+0x6C6D4 : 6c6d4 >
+    0206c618: r6 = r7 << 10
+    0206c61a: [r4+-4] = r5
+    0206c61c: r5 = r3 <<< 15
+    0206c61e: r7_r6 = r1 *|*|*|* 33 (m)
+    0206c622: b[r7+13] = r5
+    0206c624: r4 = r7 <<< 23
+    0206c628: b[r2+11] = r5
+    0206c62a: r7 = r14.h,r14.h +|- r3.l,r3.l (rnd,uavg)  #
+    0206c62e:  r3 = [sp+132]
+    0206c630: [r4++=-4] = r0
+    0206c632: [r6+24] = r1
+    0206c634: r5 = r5 >>> 19
+    0206c636: r0 = h[r5+18] (u)
+    0206c638: if (r3 == 0) goto -84 <_fw+0x6C5E6 : 6c5e6 >
+    0206c63a: r7 = r0 <<< 1
+    0206c63c: call 234 <_fw+0x6C728 : 6c728 >
+    0206c63e: r7 = b[r1++=1] (u)
+    0206c640: r2 ^= 256
+    0206c642: rts
+    0206c644: r0 = [r3++=r11]
+    0206c646: [r15+-128] ^= 0x1720
+    0206c64a: r0 = b[r1++=r12] (u)
+    0206c64c: r11.h = r6.l - 250
+    0206c650: if (r13 != 284) goto 384 <_fw+0x6C7D4 : 6c7d4 >
+    0206c654: [r4+20] = r2
+    0206c656: r7 = h[r4++=-2] (u)
+    0206c658: if (r4 <= 239) goto 50 <_fw+0x6C68E : 6c68e >
+    0206c65c: r10 *= r6
+    0206c65e: r5 = b[r5+14] (u)
+    0206c660: r0 = sp + 34
+    0206c664: r11_r10 = h[r7 ++= 4]*[r3 ++= -32] (s)
+    0206c66a: r7 = r7 >>> 11
+    0206c66c: if (r6 != 0) goto 206 <_fw+0x6C73C : 6c73c >
+    0206c670: [sp+148] = r12
+    0206c672: if ((r9 & r12) == 0) goto 33564 <_fw+0x74992 : 74992 >
+    0206c67a: r5 = h[r0+28] (u)
+    0206c67c: r6 += -26
+    0206c67e: r0 <<<= r5  #
+    0206c680:  r2 = h[r3++=r14] (u)
+    0206c682: r0 = r2 << 9
+    0206c686: [r1++=-4] = r0
+    0206c688: r4 = r1 >>> 27
+    0206c68a: sp += 176
+    0206c692: [sp+144] = r15
+    0206c694: r3 = r5 + 7
+    0206c696: r6 = 135
+    0206c698: if (r7 != 0) goto -18 <_fw+0x6C688 : 6c688 >
+    0206c69a: goto 1004 <_fw+0x6CA88 : 6ca88 >
+    0206c69c: r1 = r3 >> 23
+    0206c69e: r4 = r5 + 11
+    0206c6a0: if (r5 != 0) goto -152 <_fw+0x6C60A : 6c60a >
+    0206c6a2: r1 = r7 - r5  #
+    0206c6a6:  r6 = r3 <<< 3
+    0206c6a8: r1 = b[r7++=r11] (u)
+    0206c6aa: r1_r0 = r13.l,r13.h *|* 87 (usat)  #
+    0206c6ae:  r3 = r7 + 19
+    0206c6b0: r3 = r0 >> 28
+    0206c6b2: b[r3+-14] = r5
+    0206c6b4: {r15, r14, r11, r10, r7, r5, r3-r1} = [r14++]
+    0206c6b8: r6 += 85
+    0206c6bc: r2 = r0 >>> 20
+    0206c6c0: r7 = ~r3  #
+    0206c6c2:  if (r0 != 0) goto -160 <_fw+0x6C624 : 6c624 >
+    0206c6c4: r1 = 127
+    0206c6c6: r5 = h[r4+4] (u)
+    0206c6c8: r4 = [r3++=r12]
+    0206c6ca: r0 = r4 + 8
+    0206c6cc: if (r5 != 0) goto 236 <_fw+0x6C7BA : 6c7ba >
+    0206c6ce: r4 = 46
+    0206c6d0: r3 = r6 + 30
+    0206c6d2: r2 += 93
+    0206c6d4: rep 8 r12 {
+    0206c6d6: if ((r3 & r1) != 0) goto 41774 <_fw+0x76A08 : 76a08 >
+    0206c6da: if (r5 == 0) goto -44 <_fw+0x6C6B0 : 6c6b0 >
+    0206c6dc: [r1+-60] = r1
+    0206c6de: r3 = r2 << 30
+    0206c6e0: r6 = 202
+    0206c6e2: if (r15 >= 682) goto -88 <_fw+0x6C68E : 6c68e >
+    0206c6e6: r3 = r0 + r1  #
+    0206c6e8:  r7 |= 131072
+    0206c6ea: r6 = [r1+-48]
+    0206c6ec: [r5+-36] = r7
+    0206c6f0: r7 *= r0  #
+    0206c6f2:  [sp+188] = r4
+    0206c6f6: if (r1 == 0) goto -118 <_fw+0x6C682 : 6c682 >
+    0206c6fa: r4 = r0 <<< 2
+    0206c6fc: r3 = r3 + r1
+    0206c6fe: r5 += r8
+    0206c700: r4 = r0 + r4
+    0206c702: r1 = r2 <<< 32
+    0206c704: r7 = r0 >>> 18
+    0206c706: r10 += r5  #
+    0206c708:  [r2+-8] = r6
+    0206c70a: r6 = sp + 109
+    0206c70c: if (r3 == 0) goto -170 <_fw+0x6C664 : 6c664 >
+    0206c710: r1 = h[r4++=r13] (u)
+    0206c712: r2 = b[r7+9] (u)
+    0206c714: [sp+176] = r5
+    0206c718: r7 += 22
+    0206c71a: r3 = h[r2+-2] (u)
+    0206c720: r4 = h[r6+16] (u)
+    0206c724: r2 = [sp+32]
+    0206c726: r6 = r4 + r7  #
+
+===== FUNC 0x0206c728  size=778B  ninsn=335  callers=1 callees=0 =====
+    0206c728:  call 3617468 <_fw+0x3DF9E8 : 3df9e8 >
+    0206c730: if (r5 != 0) goto -124 <_fw+0x6C6B6 : 6c6b6 >
+    0206c732: b[r3+0] = r0
+    0206c734: r0 = 237
+    0206c736: if (r10 >= 3940) {
+    0206c73c: r5 = 249
+    0206c740: [sp+64] = r9
+    0206c742: r7 = r2 & 0x29FFFFFF  #
+    0206c746:  r6 = b[r7+7] (u)
+    0206c748: r3 = r1 + 6
+    0206c74a: h[r3+-32] = r5
+    0206c74c: r6 = r0 - r3
+    0206c74e: r3 = h[r3+-26] (u)
+    0206c750: rep 4 r6 {
+    0206c752: r4 = r6 << 12
+    0206c754: r0 = b[r2+-6] (u)
+    0206c756: r1 = r4 >>> 19
+    0206c75a: b[r0++=r8] = r2
+    0206c75c: r7 = r3 >> 3
+    0206c75e: r2 = r3 >>> 17
+    0206c760: if (r7 != 0) goto 76 <_fw+0x6C7AE : 6c7ae >
+    0206c762: r5 = [r3++=-4]
+    0206c764: h[r5+12] = r4
+    0206c768: if (r10 != 172) goto 26 <_fw+0x6C786 : 6c786 >
+    0206c76c: [r1+28] = r5
+    0206c76e: r6 = r4 >> 10
+    0206c770: if (r11 <= 5242880) {
+    0206c776: [r4+80] += 959
+    0206c77a: r1 = 54
+    0206c77c: h[r6+20] = r1
+    0206c77e: r9 += r8  #
+    0206c782:   [r1+12] = r4
+    0206c784: r1 = r1 >>> 28
+    0206c786: r3 = r7 <<< 30
+    0206c788: r1 += 2
+    0206c78a: b[r3+-4] = r3
+    0206c78e: r7 = r1 + 18
+    0206c790: if (r7 == 0) goto -134 <_fw+0x6C70C : 6c70c >
+    0206c792: b[r0+4] = r7
+    0206c794: r1 = r4 + r4
+    0206c798: r0 = r4.b0 (u)
+    0206c79a: ifs (r11 < -103) goto 50 <_fw+0x6C7D0 : 6c7d0 >
+    0206c79e: r4 = r3 << 24
+    0206c7a0: r1 = 138
+    0206c7a2: r2 += 35
+    0206c7a4: r7 <<<= r6  #
+    0206c7aa:  r15 = r7  #
+    0206c7b0:  r4 = r0 + r4  #
+    0206c7b2:  r4 = b[r2+-7] (u)
+    0206c7b4: r2 = r0 >> 15
+    0206c7b6: r8 = 0x23C0 - r12
+    0206c7ba: r1 = b[r2++=r13] (u)
+    0206c7bc: r6 ^= 65536
+    0206c7be: r1 = r5 + r2
+    0206c7c0: r0 += 90
+    0206c7c2: r3 = [r3+-56]
+    0206c7c4: r6 = b[r2+15] (u)
+    0206c7c8: r3 = h[r1++=2] (u)
+    0206c7ce: r7 = r6 >>> 18
+    0206c7d0: h[r2+-6] = r5
+    0206c7d4: if (r1 != 0) goto -92 <_fw+0x6C77A : 6c77a >
+    0206c7d6: h[r1+-12] = r7
+    0206c7d8: r4 = 175
+    0206c7dc: sp += -124
+    0206c7e2: r7 = r5 - r6  #
+    0206c7e4:  h[r7+0] = r7
+    0206c7e8: b[r0+-2] = r4
+    0206c7ea: r5 = [r5++=r10]
+    0206c7ec: r4 = [r6++=r9]
+    0206c7ee: if (r7 != 0) goto -252 <_fw+0x6C6F4 : 6c6f4 >
+    0206c7f0: if (r0 > 296) goto 420 <_fw+0x6C998 : 6c998 >
+    0206c7f4: r1 &= r1  #
+    0206c7f6:  r4 = h[r4+4] (u)
+    0206c7fa: r1 = r3 >>> 6
+    0206c7fc: r1 >>>= r7
+    0206c7fe: r0 = [sp+4]
+    0206c800: if ((r11 & r0) == 0) goto -51094 <_fw+0x6006E : 6006e >
+    0206c804: r6 = b[r4+11] (u)
+    0206c806: r1 = b[r6+8] (u)
+    0206c808: h[r4++=r13] = r3
+    0206c80a: r0 = r4 >>> 4
+    0206c80c: [r0+108] = 0x1080000
+    0206c810: r4 += r11
+    0206c812: r4 = r7 >> 14
+    0206c814: r11 *= r6  #
+    0206c818:  r7 = r3 + 11
+    0206c81a: h[r4++=r8] = r2
+    0206c81c: r4 ^= 32
+    0206c81e: if (r5 != 0) goto -88 <_fw+0x6C7C8 : 6c7c8 >
+    0206c820: r5 = b[r4+5] (u)
+    0206c822: ifs (r15 < r3) goto 34 <_fw+0x6C848 : 6c848 >
+    0206c826: if (r0 != 0) goto 230 <_fw+0x6C90E : 6c90e >
+    0206c82a: r4 = 198
+    0206c82c: goto 1786 <_fw+0x6CF28 : 6cf28 >
+    0206c82e: r5 = h[r6+-8] (u)
+    0206c830: r3 += -51
+    0206c832: if (r1 != 0) goto -20 <_fw+0x6C820 : 6c820 >
+    0206c834: r4 = [r2+-8]
+    0206c836: r7 *= r4
+    0206c838: r6 = r0 >> 29
+    0206c83a: rep 16 15 {
+    0206c83e: r3 = r7
+    0206c840: r3 = r0 << 22
+    0206c842: [sp+160] = r12
+    0206c848: r5 = [r4++=r13]
+    0206c84a: r0 = r1 << 23
+    0206c84c: r3 = r2 >> 26
+    0206c850: goto -1776 <_fw+0x6C162 : 6c162 >
+    0206c852: nop
+    0206c854: nop
+    0206c856: nop
+    0206c858: nop
+    0206c85a: nop
+    0206c85c: nop
+    0206c85e: nop
+    0206c860: r1 = r0 + r4
+    0206c862: nop
+    0206c864: nop
+    0206c866: nop
+    0206c868: nop
+    0206c86a: nop
+    0206c86c: nop
+    0206c86e: tbb [r0]
+    0206c870: r0 = [sp+124]
+    0206c872: nop
+    0206c874: nop
+    0206c876: nop
+    0206c878: nop
+    0206c87a: nop
+    0206c87c: nop
+    0206c87e: idle
+    0206c880: r0 *= r0  #
+    0206c882:  nop
+    0206c884: nop
+    0206c886: nop
+    0206c888: nop
+    0206c88a: nop
+    0206c88c: tbb [r0]
+    0206c88e: nop
+    0206c890: r0 = r0 << 15
+    0206c892: nop
+    0206c894: nop
+    0206c896: nop
+    0206c898: nop
+    0206c89a: nop
+    0206c89c: tbb [r0]
+    0206c89e: nop
+    0206c8a0: r0 = r0 << 15
+    0206c8a2: nop
+    0206c8a4: nop
+    0206c8a6: nop
+    0206c8a8: nop
+    0206c8aa: tbb [r0]
+    0206c8ac: nop
+    0206c8ae: nop
+    0206c8b0: sp += 68
+    0206c8b2: nop
+    0206c8b4: nop
+    0206c8b6: nop
+    0206c8b8: nop
+    0206c8ba: idle
+    0206c8bc: nop
+    0206c8be: nop
+    0206c8c0: rep 2 22 {
+    0206c8c2: nop
+    0206c8c4: nop
+    0206c8c6: nop
+    0206c8c8: tbb [r0]
+    0206c8ca: nop
+    0206c8cc: nop
+    0206c8ce: nop
+    0206c8d0: r0 *= r0
+    0206c8d2: nop
+    0206c8d4: nop
+    0206c8d6: nop
+    0206c8d8: idle
+    0206c8da: nop
+    0206c8dc: nop
+    0206c8de: nop
+    0206c8e0: r6 = [r0++=r10]
+    0206c8e2: nop
+    0206c8e4: nop
+    0206c8e6: tbb [r0]
+    0206c8e8: nop
+    0206c8ea: nop
+    0206c8ec: nop
+    0206c8ee: nop
+    0206c8f0: r3_r2 = r1_r0
+    0206c8f2: nop
+    0206c8f4: nop
+    0206c8f6: idle
+    0206c8f8: nop
+    0206c8fa: nop
+    0206c8fc: nop
+    0206c8fe: nop
+    0206c900: r1 = [sp+108]
+    0206c902: nop
+    0206c904: tbb [r0]
+    0206c906: nop
+    0206c908: nop
+    0206c90a: nop
+    0206c90c: nop
+    0206c90e: nop
+    0206c910: r0 = r0 + r4  #
+    0206c912:  nop
+    0206c914: tbb [r0]
+    0206c916: nop
+    0206c918: nop
+    0206c91a: nop
+    0206c91c: nop
+    0206c91e: nop
+    0206c920: r0 = r0 + r4  #
+    0206c922:  nop
+    0206c924: tbb [r0]
+    0206c926: nop
+    0206c928: nop
+    0206c92a: nop
+    0206c92c: nop
+    0206c92e: nop
+    0206c930: r0 = r0 + r4  #
+    0206c932:  idle
+    0206c934: nop
+    0206c936: nop
+    0206c938: nop
+    0206c93a: nop
+    0206c93c: nop
+    0206c93e: nop
+    0206c944: r5 = r7 << 32
+    0206c94a: r7 = sp + 82
+    0206c94c: r3 = sp + 27
+    0206c94e: h[r3+24] = r7
+    0206c950: rep 24 16 {
+    0206c952: tbb [r0]
+    0206c956: r5 = h[r3+-20] (u)
+    0206c958: r1 = r5 <<< 19
+    0206c95a: r15 += r7
+    0206c95c: if (r2 != 0) goto -208 <_fw+0x6C88E : 6c88e >
+    0206c960: [r0+-68] &= 0xFFFFFFFF
+    0206c964: r1 = r0 << 30
+    0206c966: [r7+48] = r6
+    0206c968: r4 = 186
+    0206c96a: rep 24 r1 {
+    0206c96c: r2 = b[r0+-6] (u)
+    0206c96e: r1 ^= r1
+    0206c970: rep 18 12 {
+    0206c972: nop
+    0206c974: tbb [r0]
+    0206c976: r2 = r6 <<< 24
+    0206c978: h[r1+18] = r1
+    0206c97a: r6 = r5.l (s)
+    0206c97c: r6 = [r4+-4]
+    0206c97e: [r5+-52] = r3
+    0206c980: r2 ^= r6  #
+    0206c982:  nop
+    0206c984: tbb [r0]
+    0206c986: r2 = r6 <<< 24
+    0206c988: h[r1+18] = r1
+    0206c98a: r6 = r5.l (s)
+    0206c98c: r6 = [r4+-4]
+    0206c98e: [r5+-52] = r3
+    0206c990: r2 ^= r6  #
+    0206c992:  nop
+    0206c994: nop
+    0206c996: nop
+    0206c998: r4 = r2 + 19
+    0206c99a: r2 = r5 << 10
+    0206c99e: if (r4 == 0) goto -180 <_fw+0x6C8EC : 6c8ec >
+    0206c9a0: r3 = b[r0++=r11] (u)
+    0206c9a2: nop
+    0206c9a4: nop
+    0206c9a6: nop
+    0206c9a8: r0 = r0 << 19
+    0206c9b0: [r2+-52] = r0
+    0206c9b2: nop
+    0206c9b4: nop
+    0206c9b6: nop
+    0206c9b8: nop
+    0206c9ba: r1 = r2 >> 11
+    0206c9bc: if (r1 != 0) goto 54 <_fw+0x6C9F4 : 6c9f4 >
+    0206c9c0: [sp+20] = r0
+    0206c9c2: nop
+    0206c9c4: nop
+    0206c9c6: nop
+    0206c9c8: nop
+    0206c9ca: pfetch [r0]
+    0206c9cc: r1 = sp + 64
+    0206c9ce: r1 += r1  #
+    0206c9d0:  if (r0 != 0) goto 218 <_fw+0x6CAAC : 6caac >
+    0206c9d2: nop
+    0206c9d4: nop
+    0206c9d6: nop
+    0206c9d8: nop
+    0206c9da: nop
+    0206c9dc: goto 1052 <_fw+0x6CDFA : 6cdfa >
+    0206c9de: if (r4 >= 349) goto -184 <_fw+0x6C92A : 6c92a >
+    0206c9e2: nop
+    0206c9e4: nop
+    0206c9e6: nop
+    0206c9e8: nop
+    0206c9ea: nop
+    0206c9ec: r0 = h[r0++=r8] (u)
+    0206c9ee: [r2+0] = r7
+    0206c9f0: r4 = r2.b0 (u)  #
+    0206c9f2:  nop
+    0206c9f4: nop
+    0206c9f6: nop
+    0206c9f8: nop
+    0206c9fa: nop
+    0206c9fc: nop
+    0206c9fe: r4 = r1 + 28
+    0206ca00: r6 = r2 << 25
+    0206ca02: nop
+    0206ca04: nop
+    0206ca06: nop
+    0206ca08: nop
+    0206ca0a: nop
+    0206ca0c: nop
+    0206ca0e: r4 = r1 + 28
+    0206ca10: r6 = r2 << 25
+    0206ca12: nop
+    0206ca14: nop
+    0206ca16: nop
+    0206ca18: nop
+    0206ca1a: nop
+    0206ca1c: nop
+    0206ca1e: r4 = r1 + 28
+    0206ca20: r6 = r2 << 25
+    0206ca22: nop
+    0206ca24: nop
+    0206ca26: nop
+    0206ca28: nop
+    0206ca2a: nop
+    0206ca2c: nop
+    0206ca2e: nop
+    0206ca30: rep 2 10 {
+
+===== FUNC 0x0206ca32  size=186B  ninsn=70  callers=3 callees=1 =====
+  calls: memset
+    0206ca32: [--sp] = {rets, r9-r4}
+    0206ca34: sp += -36
+    0206ca36: r4 = r1
+    0206ca38: r5 = r0
+    0206ca3a: r1 = 0
+    0206ca3c: r2 = 272 <_fw+0x110 : 110 >
+    0206ca40: r6 = 0
+    0206ca42: r0 = r4
+    0206ca44: call -170818 <_fw+0x42F08 : 42f08 >   ; -> memset
+    0206ca4a: b[sp+35] = r6
+    0206ca4e: r0 = sp + 19
+    0206ca50: r1 = 0
+    0206ca52: goto 22 <_fw+0x6CA6A : 6ca6a >
+    0206ca54: r2 = b[r5+r1] (u)
+    0206ca58: r3 = sp + 19
+    0206ca5a: b[r3+r1] = r2
+    0206ca5e: r3 = r0
+    0206ca60: r6 = b[++r3=16] (u)
+    0206ca64: r6 ^= r2
+    0206ca66: b[r3+0] = r6
+    0206ca68: r1 += 1
+    0206ca6a: if (r1 != 16) goto -26 <_fw+0x6CA54 : 6ca54 >
+    0206ca6e: r0 = 0
+    0206ca70: goto 18 <_fw+0x6CA84 : 6ca84 >
+    0206ca72: r1 = sp + 19
+    0206ca74: r1 = b[r1+r0] (u)
+    0206ca78: b[r4+r0] = r1
+    0206ca7c: r2 = sp + 2
+    0206ca7e: b[r2+r0] = r1
+    0206ca82: r0 += 1
+    0206ca84: if (r0 != 16) goto -22 <_fw+0x6CA72 : 6ca72 >
+    0206ca88: b[sp+18] = r6
+    0206ca8c: r8 = 33998977 <_fw+0x206C880 : 206c880 >
+    0206ca92: r9 = r4 + 16
+    0206ca96: r0 = sp + 2
+    0206ca98: r2 = r0 + 16
+    0206ca9a: r3 = 0
+    0206ca9c: goto 70 <_fw+0x6CAE4 : 6cae4 >
+    0206ca9e: r4 = 17
+    0206caa0: r5 = sp + 2
+    0206caa2: goto 12 <_fw+0x6CAB0 : 6cab0 >
+    0206caa4: r0 = b[r5+0] (u)
+    0206caa6: r6 = r0 >> 5
+    0206caa8: r6 <= insert(r0, p:3, l:8)
+    0206caac: b[r5++=1] = r6
+    0206caae: r4 += -1
+    0206cab0: if ((r4 & 0xFF) != 0) goto -18 <_fw+0x6CAA4 : 6caa4 >
+    0206cab6: r0 = sp + 2
+    0206cab8: r0 += r3
+    0206caba: r7 = r0 + 1
+    0206cabc: r3 += 1
+    0206cabe: r4 = 16
+    0206cac0: r5 = r8
+    0206cac2: r6 = r9
+    0206cac4: goto 20 <_fw+0x6CADA : 6cada >
+    0206cac6: r0 = b[r7++=1] (u)
+    0206cac8: r1 = b[r5++=-1] (u)
+    0206caca: r0 += r1
+    0206cacc: b[r6++=1] = r0
+    0206cace: r0 = sp + 2
+    0206cad0: if (r7 <= r2) {
+    0206cad4: r0 = r7
+    0206cad6: r4 += -1
+    0206cad8: r7 = r0
+    0206cada: if (r4 != 0) goto -22 <_fw+0x6CAC6 : 6cac6 >
+    0206cadc: r8 = r8 + 16
+    0206cae0: r9 = r9 + 16
+    0206cae4: if (r3 != 16) goto -74 <_fw+0x6CA9E : 6ca9e >
+    0206cae8: sp += 36
+    0206caea: {pc, r9-r4} = [sp++]
+
+===== FUNC 0x0206caec  size=32B  ninsn=13  callers=1 callees=0 =====
+    0206caec: [--sp] = {rets, r4}
+    0206caee: r1 = 8
+    0206caf0: goto 18 <_fw+0x6CB04 : 6cb04 >
+    0206caf2: r2 = b[r0+0] (u)
+    0206caf4: r3 = b[r0+1] (u)
+    0206caf6: r4 = r3 + r2
+    0206caf8: r2 = r2 << 1
+    0206cafa: r2 += r3  #
+    0206cafc:  b[r0+1] = r4
+    0206cafe: b[r0++=2] = r2
+    0206cb02: r1 += -1
+    0206cb04: if ((r1 & 0xFF) != 0) goto -24 <_fw+0x6CAF2 : 6caf2 >
+    0206cb0a: {pc, r4} = [sp++]
+
+===== FUNC 0x0206cb0c  size=122B  ninsn=42  callers=1 callees=0 =====
+    0206cb0c: sp += -16
+    0206cb0e: r1 = 0
+    0206cb10: r2 = sp + 0
+    0206cb12: goto 10 <_fw+0x6CB1E : 6cb1e >
+    0206cb14: r3 = b[r0+r1] (u)
+    0206cb18: b[r2+r1] = r3
+    0206cb1c: r1 += 1
+    0206cb1e: if (r1 != 16) goto -14 <_fw+0x6CB14 : 6cb14 >
+    0206cb22: r1 = b[sp+8] (u)
+    0206cb26: b[r0+0] = r1
+    0206cb28: r1 = b[sp+11] (u)
+    0206cb2c: b[r0+1] = r1
+    0206cb2e: r1 = b[sp+12] (u)
+    0206cb32: b[r0+2] = r1
+    0206cb34: r1 = b[sp+15] (u)
+    0206cb38: b[r0+3] = r1
+    0206cb3a: r1 = b[sp+2] (u)
+    0206cb3e: b[r0+4] = r1
+    0206cb40: r1 = b[sp+1] (u)
+    0206cb44: b[r0+5] = r1
+    0206cb46: r1 = b[sp+6] (u)
+    0206cb4a: b[r0+6] = r1
+    0206cb4c: r1 = b[sp+5] (u)
+    0206cb50: b[r0+7] = r1
+    0206cb52: r1 = b[sp+10] (u)
+    0206cb56: b[r0+8] = r1
+    0206cb58: r1 = b[sp+9] (u)
+    0206cb5c: b[r0+9] = r1
+    0206cb5e: r1 = b[sp+14] (u)
+    0206cb62: b[r0+10] = r1
+    0206cb64: r1 = b[sp+13] (u)
+    0206cb68: b[r0+11] = r1
+    0206cb6a: r1 = b[sp] (u)
+    0206cb6e: b[r0+12] = r1
+    0206cb70: r1 = b[sp+7] (u)
+    0206cb74: b[r0+13] = r1
+    0206cb76: r1 = b[sp+4] (u)
+    0206cb7a: b[r0+14] = r1
+    0206cb7c: r1 = b[sp+3] (u)
+    0206cb80: b[r0+15] = r1
+    0206cb82: sp += 16
+    0206cb84: rts
+
+===== FUNC 0x0206cb86  size=458B  ninsn=164  callers=3 callees=2 =====
+  calls: 0x0206caec, 0x0206cb0c
+    0206cb86: [--sp] = {rets, r12-r4}
+    0206cb88: sp += -16
+    0206cb8a: r9 = r2
+    0206cb8c: r8 = r1
+    0206cb8e: r4 = r0
+    0206cb90: r0 = 0
+    0206cb92: goto 12 <_fw+0x6CBA0 : 6cba0 >
+    0206cb94: r1 = b[r4+r0] (u)
+    0206cb98: r2 = sp + 0
+    0206cb9a: b[r2+r0] = r1
+    0206cb9e: r0 += 1
+    0206cba0: if (r0 != 16) goto -16 <_fw+0x6CB94 : 6cb94 >
+    0206cba4: r10 = 0
+    0206cba6: r7 = 39321 <_fw+0x9998 : 9998 >
+    0206cbac: r11 = 33998434 <_fw+0x206C662 : 206c662 >
+    0206cbb2: r12 = 33998690 <_fw+0x206C762 : 206c762 >
+    0206cbb8: r6 = r8
+    0206cbba: goto 336 <_fw+0x6CD0C : 6cd0c >
+    0206cbbc: if (r9 == 0) goto 62 <_fw+0x6CBFE : 6cbfe >
+    0206cbc0: if (r10 != 2) goto 58 <_fw+0x6CBFE : 6cbfe >
+    0206cbc4: r1_r0 = 0
+    0206cbc6: goto 50 <_fw+0x6CBFA : 6cbfa >
+    0206cbc8: r2 = r0.b0 (u)
+    0206cbca: if (r2 > 15) goto 28 <_fw+0x6CBEA : 6cbea >
+    0206cbce: r2 = r7 & (1 << r2)
+    0206cbd2: if (r2 == 0) goto 22 <_fw+0x6CBEA : 6cbea >
+    0206cbd4: r2 = sp + 0
+    0206cbd6: r3 = b[r2+r1] (u)
+    0206cbda: r2 = r4
+    0206cbdc: r5 = b[++r2=r1] (u)
+    0206cbe0: r3 ^= r5
+    0206cbe2: b[r2+0] = r3
+    0206cbe4: r0 += 1
+    0206cbe6: r1 += 1
+    0206cbe8: goto 16 <_fw+0x6CBFA : 6cbfa >
+    0206cbea: r2 = sp + 0
+    0206cbec: r3 = b[r2+r1] (u)
+    0206cbf0: r2 = r4
+    0206cbf2: r5 = b[++r2=r1] (u)
+    0206cbf6: r3 += r5
+    0206cbf8: goto -24 <_fw+0x6CBE2 : 6cbe2 >
+    0206cbfa: if (r1 != 16) goto -54 <_fw+0x6CBC8 : 6cbc8 >
+    0206cbfe: r0 = 0
+    0206cc00: r1 = r6
+    0206cc02: goto 10 <_fw+0x6CC0E : 6cc0e >
+    0206cc04: r2 = b[r4+r0] (u)
+    0206cc08: r3 = b[r1+0] (u)
+    0206cc0a: r2 += r3
+    0206cc0c: goto 18 <_fw+0x6CC20 : 6cc20 >
+    0206cc0e: if (r0 > 16) goto -14 <_fw+0x6CC04 : 6cc04 >
+    0206cc12: r2 = r7 & (1 << r0)
+    0206cc16: if (r2 == 0) goto 18 <_fw+0x6CC2A : 6cc2a >
+    0206cc18: r2 = b[r4+r0] (u)
+    0206cc1c: r3 = b[r1+0] (u)
+    0206cc1e: r2 ^= r3
+    0206cc20: b[r4+r0] = r2
+    0206cc24: r1 += 1
+    0206cc26: r0 += 1
+    0206cc28: goto -28 <_fw+0x6CC0E : 6cc0e >
+    0206cc2a: if (r0 != 16) goto -42 <_fw+0x6CC04 : 6cc04 >
+    0206cc2e: r0 = b[r4+0] (u)
+    0206cc30: r0 = b[r0+r11] (u)
+    0206cc34: b[r4+0] = r0
+    0206cc36: r0 = b[r4+3] (u)
+    0206cc38: r0 = b[r0+r11] (u)
+    0206cc3c: b[r4+3] = r0
+    0206cc3e: r0 = b[r4+4] (u)
+    0206cc40: r0 = b[r0+r11] (u)
+    0206cc44: b[r4+4] = r0
+    0206cc46: r0 = b[r4+7] (u)
+    0206cc48: r0 = b[r0+r11] (u)
+    0206cc4c: b[r4+7] = r0
+    0206cc4e: r0 = b[r4+8] (u)
+    0206cc50: r0 = b[r0+r11] (u)
+    0206cc54: b[r4+8] = r0
+    0206cc56: r0 = b[r4+11] (u)
+    0206cc58: r0 = b[r0+r11] (u)
+    0206cc5c: b[r4+11] = r0
+    0206cc5e: r0 = b[r4+12] (u)
+    0206cc60: r0 = b[r0+r11] (u)
+    0206cc64: b[r4+12] = r0
+    0206cc66: r0 = b[r4+15] (u)
+    0206cc68: r0 = b[r0+r11] (u)
+    0206cc6c: b[r4+15] = r0
+    0206cc6e: r0 = b[r4+1] (u)
+    0206cc70: r0 = b[r0+r12] (u)
+    0206cc74: b[r4+1] = r0
+    0206cc76: r0 = b[r4+2] (u)
+    0206cc78: r0 = b[r0+r12] (u)
+    0206cc7c: b[r4+2] = r0
+    0206cc7e: r0 = b[r4+5] (u)
+    0206cc80: r0 = b[r0+r12] (u)
+    0206cc84: b[r4+5] = r0
+    0206cc86: r0 = b[r4+6] (u)
+    0206cc88: r0 = b[r0+r12] (u)
+    0206cc8c: b[r4+6] = r0
+    0206cc8e: r0 = b[r4+9] (u)
+    0206cc90: r0 = b[r0+r12] (u)
+    0206cc94: b[r4+9] = r0
+    0206cc96: r0 = b[r4+10] (u)
+    0206cc98: r0 = b[r0+r12] (u)
+    0206cc9c: b[r4+10] = r0
+    0206cc9e: r0 = b[r4+13] (u)
+    0206cca0: r0 = b[r0+r12] (u)
+    0206cca4: b[r4+13] = r0
+    0206cca6: r0 = b[r4+14] (u)
+    0206cca8: r0 = b[r0+r12] (u)
+    0206ccac: b[r4+14] = r0
+    0206ccae: r0 = 0
+    0206ccb0: goto 14 <_fw+0x6CCC0 : 6ccc0 >
+    0206ccb2: r1 = b[r4+r0] (u)
+    0206ccb6: r2 = r6 + r0
+    0206ccb8: r2 = b[r2+16] (u)
+    0206ccbc: r1 ^= r2
+    0206ccbe: goto 22 <_fw+0x6CCD6 : 6ccd6 >
+    0206ccc0: if (r0 > 16) goto -18 <_fw+0x6CCB2 : 6ccb2 >
+    0206ccc4: r1 = r7 & (1 << r0)
+    0206ccc8: if (r1 == 0) goto 20 <_fw+0x6CCDE : 6ccde >
+    0206ccca: r1 = b[r4+r0] (u)
+    0206ccce: r2 = r6 + r0
+    0206ccd0: r2 = b[r2+16] (u)
+    0206ccd4: r1 += r2
+    0206ccd6: b[r4+r0] = r1
+    0206ccda: r0 += 1
+    0206ccdc: goto -30 <_fw+0x6CCC0 : 6ccc0 >
+    0206ccde: if (r0 != 16) goto -48 <_fw+0x6CCB2 : 6ccb2 >
+    0206cce2: r0 = r4
+    0206cce4: call -508 <_fw+0x6CAEC : 6caec >
+    0206cce8: r0 = r4
+    0206ccea: call -482 <_fw+0x6CB0C : 6cb0c >
+    0206ccee: call -518 <_fw+0x6CAEC : 6caec >
+    0206ccf2: r0 = r4
+    0206ccf4: call -492 <_fw+0x6CB0C : 6cb0c >
+    0206ccf8: call -528 <_fw+0x6CAEC : 6caec >
+    0206ccfc: r0 = r4
+    0206ccfe: call -502 <_fw+0x6CB0C : 6cb0c >
+    0206cd02: call -538 <_fw+0x6CAEC : 6caec >
+    0206cd06: r6 += 32
+    0206cd08: r10 = r10 + 1
+    0206cd0c: if (r10 != 8) goto -340 <_fw+0x6CBBC : 6cbbc >
+    0206cd10: r0 = r8 + 256
+    0206cd14: r1 = 0
+    0206cd16: r2 = 0
+    0206cd18: goto 46 <_fw+0x6CD48 : 6cd48 >
+    0206cd1a: r3 = r1.b0 (u)
+    0206cd1c: if (r3 > 15) goto 26 <_fw+0x6CD3A : 6cd3a >
+    0206cd20: r3 = r7 & (1 << r3)
+    0206cd24: if (r3 == 0) goto 20 <_fw+0x6CD3A : 6cd3a >
+    0206cd26: r5 = b[r0+r2] (u)
+    0206cd2a: r3 = r4
+    0206cd2c: r6 = b[++r3=r2] (u)
+    0206cd30: r5 ^= r6
+    0206cd32: b[r3+0] = r5
+    0206cd34: r1 += 1
+    0206cd36: r2 += 1
+    0206cd38: goto 14 <_fw+0x6CD48 : 6cd48 >
+    0206cd3a: r5 = b[r0+r2] (u)
+    0206cd3e: r3 = r4
+    0206cd40: r6 = b[++r3=r2] (u)
+    0206cd44: r5 += r6
+    0206cd46: goto -22 <_fw+0x6CD32 : 6cd32 >
+    0206cd48: if (r2 != 16) goto -50 <_fw+0x6CD1A : 6cd1a >
+    0206cd4c: sp += 16
+    0206cd4e: {pc, r12-r4} = [sp++]
+
+===== FUNC 0x0206cd50  size=550B  ninsn=170  callers=2 callees=17 =====
+  calls: 0x02000292, 0x0205672e, 0x0205789a, 0x02058b0c, 0x020668a2, 0x0206ca32, 0x0206cb86, 0x020734a8, 0x020734e0, 0x02080960, 0x02080986, 0x020809a0, 0x02080b88, 0x02080bb2, 0x02080c24, 0x02080ca8, 0x02080cd2
+    0206cd50: [--sp] = {rets, r10-r4}
+    0206cd52: sp += -32
+    0206cd54: r9 = r3
+    0206cd56: r10 = r2
+    0206cd58: r7 = r1
+    0206cd5a: r4 = r0
+    0206cd5c: r0 = 272 <_fw+0x110 : 110 >
+    0206cd60: call -91704 <_fw+0x5672E : 5672e >
+    0206cd66: r8 = r0
+    0206cd68: if (r0 == 0) goto 312 <_fw+0x6CEA4 : 6cea4 >
+    0206cd6c: r0 = r4 + r9  #
+    0206cd70:  r6 = [sp+64]
+    0206cd72: r0 += -1
+    0206cd74: r1 = 0
+    0206cd76: r2 = r4
+    0206cd78: goto 20 <_fw+0x6CD8E : 6cd8e >
+    0206cd7a: r3 = b[r2++=1] (u)
+    0206cd7c: r5 = sp + 16
+    0206cd7e: b[r5+r1] = r3
+    0206cd82: r3 = r4
+    0206cd84: if (r2 <= r0) {
+    0206cd88: r3 = r2
+    0206cd8a: r1 += 1
+    0206cd8c: r2 = r3
+    0206cd8e: if (r1 != 16) goto -24 <_fw+0x6CD7A : 6cd7a >
+    0206cd92: r0 = 0
+    0206cd94: goto 10 <_fw+0x6CDA0 : 6cda0 >
+    0206cd96: r1 = b[r7+r0] (u)
+    0206cd9a: b[r6+r0] = r1
+    0206cd9e: r0 += 1
+    0206cda0: if (r0 != 16) goto -14 <_fw+0x6CD96 : 6cd96 >
+    0206cda4: r0 = r10
+    0206cda6: r1 = r8
+    0206cda8: call -890 <_fw+0x6CA32 : 6ca32 >
+    0206cdac: r2 = 0
+    0206cdae: r4 = 0
+    0206cdb0: r0 = r6
+    0206cdb2: r1 = r8
+    0206cdb4: call -562 <_fw+0x6CB86 : 6cb86 >
+    0206cdb8: goto 24 <_fw+0x6CDD2 : 6cdd2 >
+    0206cdba: r0 = b[r7+r4] (u)
+    0206cdbe: r1 = b[r6+r4] (u)
+    0206cdc2: r2 = sp + 16
+    0206cdc4: r2 = b[r2+r4] (u)
+    0206cdc8: r0 ^= r1
+    0206cdca: r0 += r2
+    0206cdcc: b[r6+r4] = r0
+    0206cdd0: r4 += 1
+    0206cdd2: if (r4 != 16) goto -28 <_fw+0x6CDBA : 6cdba >
+    0206cdd6: r0 = b[r10+0] (u)
+    0206cdda: r0 += -23
+    0206cddc: b[sp] = r0
+    0206cde0: r0 = b[r10+1] (u)
+    0206cde4: r0 = r0 ^ 0xE5
+    0206cde8: b[sp+1] = r0
+    0206cdec: r0 = b[r10+2] (u)
+    0206cdf0: r0 += -33
+    0206cdf2: b[sp+2] = r0
+    0206cdf6: r0 = b[r10+3] (u)
+    0206cdfa: r0 = r0 ^ 0xC1
+    0206cdfe: b[sp+3] = r0
+    0206ce02: r0 = b[r10+4] (u)
+    0206ce06: r0 += -77
+    0206ce08: b[sp+4] = r0
+    0206ce0c: r0 = b[r10+5] (u)
+    0206ce10: r0 = r0 ^ 0xA7
+    0206ce14: b[sp+5] = r0
+    0206ce18: r0 = b[r10+6] (u)
+    0206ce1c: r0 += -107
+    0206ce1e: b[sp+6] = r0
+    0206ce22: r0 = b[r10+7] (u)
+    0206ce26: r0 = r0 ^ 0x83
+    0206ce2a: b[sp+7] = r0
+    0206ce2e: r0 = b[r10+8] (u)
+    0206ce32: r0 = r0 ^ 0xE9
+    0206ce36: b[sp+8] = r0
+    0206ce3a: r0 = b[r10+9] (u)
+    0206ce3e: r0 += -27
+    0206ce40: b[sp+9] = r0
+    0206ce44: r0 = b[r10+10] (u)
+    0206ce48: r0 = r0 ^ 0xDF
+    0206ce4c: b[sp+10] = r0
+    0206ce50: r0 = b[r10+11] (u)
+    0206ce54: r0 += -63
+    0206ce56: b[sp+11] = r0
+    0206ce5a: r0 = b[r10+12] (u)
+    0206ce5e: r0 = r0 ^ 0xB3
+    0206ce62: b[sp+12] = r0
+    0206ce66: r0 = b[r10+13] (u)
+    0206ce6a: r0 += -89
+    0206ce6c: b[sp+13] = r0
+    0206ce70: r0 = b[r10+14] (u)
+    0206ce74: r0 = r0 ^ 0x95
+    0206ce78: b[sp+14] = r0
+    0206ce7c: r0 = b[r10+15] (u)
+    0206ce80: r0 += -125
+    0206ce82: b[sp+15] = r0
+    0206ce86: r0 = sp + 0
+    0206ce88: r1 = r8
+    0206ce8a: call -1116 <_fw+0x6CA32 : 6ca32 >
+    0206ce8e: r2 = 1
+    0206ce90: r0 = r6
+    0206ce92: r1 = r8
+    0206ce94: call -786 <_fw+0x6CB86 : 6cb86 >
+    0206ce98: r0 = r8
+    0206ce9a: call -87558 <_fw+0x5789A : 5789a >
+    0206cea0: sp += 32
+    0206cea2: {pc, r10-r4} = [sp++]
+    0206cea4: call -82846 <_fw+0x58B0C : 58b0c >
+    0206ceaa: call -445470 <_fw+0x292 : 292 >
+    0206ceb0: goto -2 <_fw+0x6CEB0 : 6ceb0 >
+    0206ceb2: [--sp] = {rets, r8-r4}
+    0206ceb4: sp += -68
+    0206ceb6: r7 = r1
+    0206ceb8: r5 = r0
+    0206ceba: r0 = 800 <_fw+0x320 : 320 >
+    0206cebe: call 26140 <_fw+0x734E0 : 734e0 >
+    0206cec4: r8 = r0
+    0206cec6: if (r0 == 0) goto 160 <_fw+0x6CF68 : 6cf68 >
+    0206cec8: r6 = sp + 0
+    0206ceca: r0 = r6
+    0206cecc: r1 = r8
+    0206cece: call 80524 <_fw+0x80960 : 80960 >
+    0206ced4: r1 = 16
+    0206ced6: r0 = r5
+    0206ced8: call -26172 <_fw+0x668A2 : 668a2 >
+    0206cede: r0 = r7 << 4
+    0206cee0: r1 = 33999458 <_fw+0x206CA62 : 206ca62 >
+    0206cee6: r4 = r0 + r1
+    0206cee8: r1 = 33999218 <_fw+0x206C972 : 206c972 >
+    0206ceee: r0 += r1
+    0206cef0: r1 = r0 + -16
+    0206cef4: r0 = r6
+    0206cef6: call 80548 <_fw+0x809A0 : 809a0 >
+    0206cefc: r7 = r0
+    0206cefe: r1 = r4 + -16
+    0206cf02: r0 = r6
+    0206cf04: call 80534 <_fw+0x809A0 : 809a0 >
+    0206cf0a: r4 = r0
+    0206cf0c: r0 = r6
+    0206cf0e: r1 = r5
+    0206cf10: call 80522 <_fw+0x809A0 : 809a0 >
+    0206cf16: r1 = r0
+    0206cf18: r0 = r6
+    0206cf1a: r2 = r7
+    0206cf1c: call 81040 <_fw+0x80BB2 : 80bb2 >
+    0206cf22: r2 = r0
+    0206cf24: r0 = r6
+    0206cf26: r1 = r4
+    0206cf28: call 81142 <_fw+0x80C24 : 80c24 >
+    0206cf2e: r4 = r0
+    0206cf30: call 80464 <_fw+0x80986 : 80986 >
+    0206cf36: r2 = r5  #
+    0206cf38:  r1 = [r4+12]
+    0206cf3a: r0 = h[r4+4] (u)
+    0206cf3c: call 81254 <_fw+0x80CA8 : 80ca8 >
+    0206cf42: r1 = 16
+    0206cf44: r0 = r5
+    0206cf46: call -26282 <_fw+0x668A2 : 668a2 >
+    0206cf4c: r0 = r6
+    0206cf4e: r1 = r4
+    0206cf50: call 80946 <_fw+0x80B88 : 80b88 >
+    0206cf56: call 81270 <_fw+0x80CD2 : 80cd2 >
+    0206cf5c: r0 = r8
+    0206cf5e: call 25924 <_fw+0x734A8 : 734a8 >
+    0206cf64: sp += 68
+    0206cf66: {pc, r8-r4} = [sp++]
+    0206cf68: call -83042 <_fw+0x58B0C : 58b0c >
+    0206cf6e: call -445666 <_fw+0x292 : 292 >
+    0206cf74: goto -2 <_fw+0x6CF74 : 6cf74 >
+
+===== FUNC 0x0206cf76  size=36B  ninsn=16  callers=1 callees=1 =====
+  calls: 0x0206cd50
+    0206cf76: [--sp] = {rets, r6-r4}
+    0206cf78: sp += -4
+    0206cf7a: r4 = r3  #
+    0206cf7c:  r5 = [sp+20]
+    0206cf7e: r6 = r0  #
+    0206cf80:  [sp] = r5
+    0206cf82: r3 = 12
+    0206cf84: r0 = r2
+    0206cf86: r2 = r6
+    0206cf88: call -572 <_fw+0x6CD50 : 6cd50 >
+    0206cf8c: if (r4 != 16) {
+    0206cf90: r0 = r5
+    0206cf92: r1 = r4
+    0206cf94: call -228
+    0206cf96: sp += 4
+    0206cf98: {pc, r6-r4} = [sp++]
+
+===== FUNC 0x0206cf9a  size=18B  ninsn=8  callers=1 callees=1 =====
+  calls: 0x0206cd50
+    0206cf9a: [--sp] = {rets, r4}
+    0206cf9c: sp += -4
+    0206cf9e: r4 = r3
+    0206cfa0: r3 = 6
+    0206cfa2: [sp] = r4
+    0206cfa4: call -600 <_fw+0x6CD50 : 6cd50 >
+    0206cfa8: sp += 4
+    0206cfaa: {pc, r4} = [sp++]
+
+===== FUNC 0x0206cfac  size=186B  ninsn=72  callers=1 callees=6 =====
+  calls: 0x02000292, 0x02058b0c, 0x0206ca32, 0x0206cb86, 0x020734a8, 0x020734e0
+    0206cfac: [--sp] = {rets, r9-r4}
+    0206cfae: sp += -16
+    0206cfb0: r4 = r3
+    0206cfb2: r7 = r2
+    0206cfb4: r9 = r1
+    0206cfb6: r6 = r0
+    0206cfb8: r0 = 272 <_fw+0x110 : 110 >
+    0206cfbc: call 25886 <_fw+0x734E0 : 734e0 >
+    0206cfc2: r8 = r0
+    0206cfc4: if (r0 == 0) goto 146 <_fw+0x6D058 : 6d058 >
+    0206cfc6: r1 = r7  #
+    0206cfc8:  r5 = [sp+44]
+    0206cfca: r0 = sp + 0
+    0206cfcc: goto 6 <_fw+0x6CFD4 : 6cfd4 >
+    0206cfce: r2 = b[r6++=1] (u)
+    0206cfd0: b[r0++=1] = r2
+    0206cfd2: r1 += -1
+    0206cfd4: if (r1 != 0) goto -8 <_fw+0x6CFCE : 6cfce >
+    0206cfd6: r0 = sp + 0
+    0206cfd8: r1 = r0 + r7
+    0206cfda: r2 = 0
+    0206cfdc: r0 = r7
+    0206cfde: goto 18 <_fw+0x6CFF2 : 6cff2 >
+    0206cfe0: r3 = r7 + r2
+    0206cfe2: if (r3 > 15) goto 16 <_fw+0x6CFF6 : 6cff6 >
+    0206cfe6: r3 = b[r4+r2] (u)
+    0206cfea: b[r1+r2] = r3
+    0206cfee: r0 += 1
+    0206cff0: r2 += 1
+    0206cff2: if (r2 <= 5) goto -22 <_fw+0x6CFE0 : 6cfe0 >
+    0206cff6: r1 = r0.b0 (u)
+    0206cff8: r3 = sp + 0
+    0206cffa: r1 += r3
+    0206cffc: r4 = r3 + r7
+    0206cffe: r2 += r4
+    0206d000: r2 += -1
+    0206d002: goto 16 <_fw+0x6D014 : 6d014 >
+    0206d004: r4 = b[r3++=1] (u)
+    0206d006: b[r1++=1] = r4
+    0206d008: r4 = sp + 0
+    0206d00a: if (r3 <= r2) {
+    0206d00e: r4 = r3
+    0206d010: r0 += 1
+    0206d012: r3 = r4
+    0206d014: r4 = r0.b0 (u)
+    0206d016: if (r4 <= 15) goto -22 <_fw+0x6D004 : 6d004 >
+    0206d01a: r0 = r7 + 6
+    0206d01c: r1 = 0
+    0206d01e: goto 10 <_fw+0x6D02A : 6d02a >
+    0206d020: r2 = b[r9+r1] (u)
+    0206d024: b[r5+r1] = r2
+    0206d028: r1 += 1
+    0206d02a: if (r1 != 16) goto -14 <_fw+0x6D020 : 6d020 >
+    0206d02e: if (r0 >= 16) {
+    0206d032: r0 = 16
+    0206d034: r1 = b[r5+15] (u)
+    0206d036: r0 ^= r1
+    0206d038: r1 = r8  #
+    0206d03a:  b[r5+15] = r0
+    0206d03c: r0 = sp + 0
+    0206d03e: call -1552 <_fw+0x6CA32 : 6ca32 >
+    0206d042: r2 = 1
+    0206d044: r0 = r5
+    0206d046: r1 = r8
+    0206d048: call -1222 <_fw+0x6CB86 : 6cb86 >
+    0206d04c: r0 = r8
+    0206d04e: call 25684 <_fw+0x734A8 : 734a8 >
+    0206d054: sp += 16
+    0206d056: {pc, r9-r4} = [sp++]
+    0206d058: call -83282 <_fw+0x58B0C : 58b0c >
+    0206d05e: call -445906 <_fw+0x292 : 292 >
+    0206d064: goto -2 <_fw+0x6D064 : 6d064 >
+
+===== FUNC 0x0206d066  size=1294B  ninsn=287  callers=1 callees=6 =====
+  calls: 0x02000292, 0x02058b0c, 0x0206ca32, 0x0206cb86, 0x020734a8, 0x020734e0
+    0206d066: [--sp] = {rets, r7-r4}
+    0206d068: sp += -16
+    0206d06a: r4 = r2
+    0206d06c: r6 = r1
+    0206d06e: r7 = r0
+    0206d070: r0 = 272 <_fw+0x110 : 110 >
+    0206d074: call 25702 <_fw+0x734E0 : 734e0 >
+    0206d07a: r5 = r0
+    0206d07c: if (r5 == 0) goto 78 <_fw+0x6D0CC : 6d0cc >
+    0206d07e: r1_r0 = 0
+    0206d080: goto 30 <_fw+0x6D0A0 : 6d0a0 >
+    0206d082: r2 = b[r7+r1] (u)
+    0206d086: b[r4+r0] = r2
+    0206d08a: r2 = b[r6+r0] (u)
+    0206d08e: r3 = sp + 0
+    0206d090: b[r3+r0] = r2
+    0206d094: r2 = r1 + 1
+    0206d096: r1 = 0
+    0206d098: ifs (r2 <= 5) {
+    0206d09c: r1 = r2
+    0206d09e: r0 += 1
+    0206d0a0: if (r0 != 16) goto -34 <_fw+0x6D082 : 6d082 >
+    0206d0a4: r0 = b[sp+15] (u)
+    0206d0a8: r0 = r0 ^ 0x6
+    0206d0ac: b[sp+15] = r0
+    0206d0b0: r0 = sp + 0
+    0206d0b2: r1 = r5
+    0206d0b4: call -1670 <_fw+0x6CA32 : 6ca32 >
+    0206d0b8: r2 = 1
+    0206d0ba: r1_r0 = r5_r4
+    0206d0bc: call -1338 <_fw+0x6CB86 : 6cb86 >
+    0206d0c0: r0 = r5
+    0206d0c2: call 25568 <_fw+0x734A8 : 734a8 >
+    0206d0c8: sp += 16
+    0206d0ca: {pc, r7-r4} = [sp++]
+    0206d0cc: call -83398 <_fw+0x58B0C : 58b0c >
+    0206d0d2: call -446022 <_fw+0x292 : 292 >
+    0206d0d8: goto -2 <_fw+0x6D0D8 : 6d0d8 >
+    0206d0da: nop
+    0206d0de: callns r14
+    0206d0e0: nop
+    0206d0e2: r2 += -102
+    0206d0e6: bkpt
+    0206d0e8: r0 = r4 - r6
+    0206d0ea: pfetch [r7]
+    0206d0ec: r0 = [sp]
+    0206d0ee: pfetch [r7]
+    0206d0f0: h[r4++=r9] = r4
+    0206d0f2: pfetch [r7]
+    0206d0f4: [sp] = r0
+    0206d0f6: pfetch [r7]
+    0206d0f8: idle
+    0206d0fa: rts
+    0206d0fc: tbb [r0]
+    0206d0fe: nop
+    0206d100: r4 += 32
+    0206d102: pfetch [r7]
+    0206d104: [sp+4] = r8
+    0206d106: pfetch [r7]
+    0206d10c: rep 30 r8 {
+    0206d10e: b[r0++=r15] = r0
+    0206d110: ssync
+    0206d114: idle
+    0206d11a: hbkpt
+    0206d124: hbkpt
+    0206d126: idle
+    0206d12c: idle
+    0206d132: hbkpt
+    0206d134: testset b[r7]
+    0206d138: hbkpt
+    0206d13a: cli r0
+    0206d146: nop
+    0206d148: r6 += 65
+    0206d14a: pfetch [r7]
+    0206d14c: r10 = [sp+8]
+    0206d14e: pfetch [r7]
+    0206d150: nop
+    0206d152: hbkpt
+    0206d158: swi 5
+    0206d15c: nop
+    0206d15e: nop
+    0206d160: r7 = [r7+52]
+    0206d162: r6 = r3 + r6  #
+    0206d164:  h[r5+26] = r3
+    0206d166: [r3+-40] = r7
+    0206d168: h[r5+26] = r3
+    0206d16a: r5 = r5 >>> 22
+    0206d16c: h[r5+-18] = r3
+    0206d16e: r5 = r6 <<< 22
+    0206d170: r13 *= r13  #
+    0206d172:  r5 = r6 <<< 23
+    0206d174: r6 *= r7  #
+    0206d176:  r5 = r6 + r5  #
+    0206d178:  r6 *= r11  #
+    0206d17a:  r7 = [r7+52]
+    0206d17c: r6 = r3 + r6  #
+    0206d17e:  h[r5+26] = r3
+    0206d180: [r3+-40] = r7
+    0206d182: h[r5+26] = r3
+    0206d184: r5 = r5 >>> 22
+    0206d186: h[r5+-18] = r3
+    0206d188: r5 = r6 <<< 22
+    0206d18a: r13 *= r13  #
+    0206d18c:  r5 = r6 <<< 23
+    0206d18e: r6 *= r7  #
+    0206d192:  nop
+    0206d194: call -2358264 <_fw+0xFFFFFFFFFFE2D5A0 : ffffffffffe2d5a0 >
+    0206d198: r4 = [sp+164]
+    0206d19a: pfetch [r7]
+    0206d19c: nop
+    0206d19e: nop
+    0206d1a0: r0 = 137
+    0206d1a2: pfetch [r7]
+    0206d1a4: [sp+36] = r2
+    0206d1a6: pfetch [r7]
+    0206d1a8: [sp+164] = r8
+    0206d1aa: pfetch [r7]
+    0206d1ac: r2 += -23
+    0206d1ae: pfetch [r7]
+    0206d1b0: nop
+    0206d1b2: nop
+    0206d1b4: nop
+    0206d1b6: nop
+    0206d1b8: nop
+    0206d1ba: nop
+    0206d1c6: hbkpt
+    0206d1d8: testset b[r7]
+    0206d1dc: cli r0
+    0206d1e4: ssync
+    0206d1f0: flush [r8]
+    0206d1f8: rep 32 r13 {
+    0206d208: iflush [r12]
+    0206d214: testset b[r4]
+    0206d218: callns r0
+    0206d21c: cli r0
+    0206d222: swi 0
+    0206d224: testset b[r4]
+    0206d226: tbb [r4]
+    0206d22a: sti r0
+    0206d22e: cli
+    0206d230: swi 5
+    0206d23a: testset b[r9]
+    0206d23c: call r4
+    0206d23e: testset b[r0]
+    0206d240: goto r8
+    0206d242: cli r10
+    0206d244: sti r13
+    0206d246: csync
+    0206d256: goto r1
+    0206d262: rtss
+    0206d264: tbh [r7]
+    0206d266: callns r8
+    0206d268: swi 2
+    0206d26c: testset b[r8]
+    0206d26e: testset b[r13]
+    0206d272: swi 2
+    0206d278: syscall
+    0206d27e: tbh [r4]
+    0206d284: tbb [r9]
+    0206d292: call r2
+    0206d294: tbb [r0]
+    0206d29a: callns r1
+    0206d29c: tbh [r2]
+    0206d29e: tbb [r15]
+    0206d2ae: wfe
+    0206d2b0: goto r11
+    0206d2b2: goto r7
+    0206d2bc: tbb [r5]
+    0206d2c0: call r10
+    0206d2c6: btbclr
+    0206d2de: callns r15
+    0206d2e0: tbb [r14]
+    0206d2ea: goto r4
+    0206d2ee: call r9
+    0206d2f0: sti r12
+    0206d2f6: tbb [r11]
+    0206d2fc: sti r10
+    0206d2fe: rte
+    0206d300: tbb [r13]
+    0206d306: cli r8
+    0206d30a: sti r2
+    0206d30e: rtx
+    0206d310: tbb [r8]
+    0206d312: call r0
+    0206d314: goto r13
+    0206d316: tbh [r0]
+    0206d322: goto r2
+    0206d326: call r15
+    0206d33e: sti r1
+    0206d342: ssync
+    0206d344: swi 3
+    0206d34c: callns r11
+    0206d34e: callns r7
+    0206d350: goto r3
+    0206d35e: call r5
+    0206d362: ssync
+    0206d374: cli r15
+    0206d37c: goto r14
+    0206d380: tbh [r9]
+    0206d386: cli r6
+    0206d38a: ssync
+    0206d38e: btbclr
+    0206d3a4: cli r1
+    0206d3a8: call r14
+    0206d3ac: goto r6
+    0206d3b6: cli r5
+    0206d3ba: goto r12
+    0206d3be: callns r4
+    0206d3c0: callns r9
+    0206d3c8: call r12
+    0206d3ca: testset b[r12]
+    0206d3ce: call r6
+    0206d3dc: call r11
+    0206d3e2: testset b[r10]
+    0206d3e4: sti r5
+    0206d3e6: sevg
+    0206d3ea: call r13
+    0206d3ee: cli r12
+    0206d3f6: call r1
+    0206d3f8: tbb [r7]
+    0206d3fa: swi 0
+    0206d3fe: testset b[r2]
+    0206d406: swi 1
+    0206d408: call r8
+    0206d40a: sevl
+    0206d40e: callns r13
+    0206d410: tbh [r10]
+    0206d412: rts
+    0206d414: swi 4
+    0206d416: goto r0
+    0206d41a: sti r4
+    0206d422: cli r13
+    0206d428: sti r9
+    0206d42a: tbh [r8]
+    0206d42e: callns r2
+    0206d432: btbclr
+    0206d438: tbh [r1]
+    0206d43e: cli r2
+    0206d440: sti r8
+    0206d446: sti
+    0206d452: tbb [r2]
+    0206d45e: testset b[r6]
+    0206d462: tbh [r11]
+    0206d466: testset b[r1]
+    0206d46a: tbb [r10]
+    0206d47a: goto r15
+    0206d47e: btbclr
+    0206d488: callns r3
+    0206d48c: call r3
+    0206d492: tbh [r13]
+    0206d49a: btbclr
+    0206d4a8: rtns
+    0206d4aa: cli r3
+    0206d4ae: swi 7
+    0206d4b2: tbh [r3]
+    0206d4c6: swi 3
+    0206d4c8: tbh [r14]
+    0206d4ca: swi 6
+    0206d4d4: swi 7
+    0206d4d6: btbclr
+    0206d4de: callns r14
+    0206d4e0: tbh [r6]
+    0206d4e6: ssync
+    0206d4e8: tbh [r12]
+    0206d4ea: goto r9
+    0206d4f0: tbb [r12]
+    0206d4f4: tbb [r6]
+    0206d4f6: ssync
+    0206d4f8: swi 6
+    0206d4fe: testset b[r3]
+    0206d506: tbb [r1]
+    0206d50e: btbclr
+    0206d510: cli r9
+    0206d512: cli r4
+    0206d51a: idle
+    0206d52e: swi 1
+    0206d53c: sti r6
+    0206d542: callns r6
+    0206d546: ssync
+    0206d548: tbh [r15]
+    0206d550: tbb [r3]
+    0206d55a: swi 5
+    0206d55e: callns r12
+    0206d562: cli r7
+    0206d56e: cli r11
+    0206d570: cli r14
+    0206d572: testset b[r7]
+
+===== FUNC 0x0206d574  size=674B  ninsn=215  callers=0 callees=1 =====
+  calls: 0x0206d574
+    0206d578: callns r5
+    0206d588: rthw
+    0206d58a: sti r3
+    0206d596: lockset
+    0206d59a: testset b[r15]
+    0206d5a2: ssync
+    0206d5b4: testset b[r5]
+    0206d5b6: hbkpt
+    0206d5b8: testset b[r11]
+    0206d5ba: btbclr
+    0206d5be: ssync
+    0206d5c2: sti r7
+    0206d5c6: goto r5
+    0206d5ca: swi 4
+    0206d5ce: testset b[r14]
+    0206d5d6: rti
+    0206d5d8: sti r15
+    0206d5dc: call r7
+    0206d5e6: sti r11
+    0206d5ee: tbh [r5]
+    0206d5f2: sti r14
+    0206d5fc: callns r10
+    0206d602: bkpt
+    0206d606: goto r10
+    0206d612: nop
+    0206d614: lockclr
+    0206d618: r9 = sp + 76
+    0206d61e: r7 = r6 >> 19
+    0206d620: call -174 <_fw+0x6D574 : 6d574 >
+    0206d622: r3 = r6 << 11
+    0206d624: r3 = [sp+140]
+    0206d626: sp += 16
+    0206d628: r0 = h[r1+-28] (u)
+    0206d62a: h[r2+2] = r2
+    0206d62c: r15 = [sp+236]
+    0206d62e: r1 = r5 << 8
+    0206d630: r5 += -105
+    0206d632: if ((r9 & r4) != 0) goto -27246 <_fw+0x66BC8 : 66bc8 >
+    0206d636: r12 += r0
+    0206d638: r3 = 76
+    0206d63a: b[r7+5] = r5
+    0206d63e: r6 = r11 * 0x5D  #
+    0206d642:  r6 *= r11
+    0206d644: r4 = r3 >> 30
+    0206d646: r2 = b[r2+-16] (u)
+    0206d648: r9_r8 += [r0 ++= -8]*[r12 ++= -24] (s)
+    0206d64c: r3 = b[r4+-2] (u)
+    0206d64e: r7 = 68
+    0206d650: r4 = r4 >>> 1
+    0206d652: if (r7 != 0) goto 242 <_fw+0x6D746 : 6d746 >
+    0206d656: r15 = r7 - 0xFD000000
+    0206d65a: if (r6 == 0) goto 144 <_fw+0x6D6EC : 6d6ec >
+    0206d65e: r3 &= r7  #
+    0206d664:  r1 = b[r1++=r11] (u)
+    0206d666: if (r1 == 0) goto 4 <_fw+0x6D66C : 6d66c >
+    0206d668: r12 = [sp+100]
+    0206d66a: r5 = r5 >> 16
+    0206d66c: goto -390 <_fw+0x6D4E8 : 6d4e8 >
+    0206d672: ifs (r4 < 306) goto -312 <_fw+0x6D53E : 6d53e >
+    0206d676: goto -2024 <_fw+0x6CE90 : 6ce90 >
+    0206d678: r1 = r2 + 22
+    0206d67a: r6 = r7 >>> 2
+    0206d67c: if (r1 == 0) goto -38 <_fw+0x6D658 : 6d658 >
+    0206d67e: if (r3 != -84) goto 92 <_fw+0x6D6DE : 6d6de >
+    0206d682: h[r5++=r11] = r3
+    0206d684: r2 = b[r5+-1] (u)
+    0206d686: r5 = -24
+    0206d688: [r7+-48] = r5
+    0206d68c: r5 = r2 << 15
+    0206d68e: b[r2++=r12] = r3
+    0206d692: r3 += 108
+    0206d698: r6 ^= 67108864
+    0206d69a: r3 = r1 << 4
+    0206d69e: h[r7+24] = r1
+    0206d6a2: goto 3215760 <_fw+0x37E836 : 37e836 >
+    0206d6a6: r0 = [sp+4]
+    0206d6a8: goto -1480 <_fw+0x6D0E2 : 6d0e2 >
+    0206d6aa: r10 += r6  #
+    0206d6ac:  b[r4+14] = r3
+    0206d6ae: r4 = [r1+40]
+    0206d6b0: b[r7+13] = r1
+    0206d6b2: [r5+-8] = r2
+    0206d6b8: if (r4 == 0) goto 86 <_fw+0x6D710 : 6d710 >
+    0206d6bc: r0 = r3 >>> 6
+    0206d6be: r1 = h[r7+-8] (u)
+    0206d6c0: r7 = r1 << 12
+    0206d6c2: h[r6++=-2] = r5
+    0206d6c4: r5 = r2 >>> 15
+    0206d6c6: r2 = r0 + 20
+    0206d6c8: r2 = r7 <<< 26
+    0206d6cc: r2 = r1.l (u)  #
+    0206d6ce:  r5 = [r1++=r10]
+    0206d6d2: r13 = r6
+    0206d6d4: r14 = r7 * 0xBF0000
+    0206d6d8: r7 = r1 + 29
+    0206d6da: r1 = b[r0+-14] (u)
+    0206d6dc: r14 = r3 & 0xFC00000  #
+    0206d6e0:  r2 = h[r2+-30] (u)
+    0206d6e2: r4 = h[r6+-22] (u)
+    0206d6e4: if (r4 == 0) goto -120 <_fw+0x6D66E : 6d66e >
+    0206d6e6: r0 = b[r0++=r9] (u)
+    0206d6e8: if (r3 == 0) goto -228 <_fw+0x6D606 : 6d606 >
+    0206d6ea: if (r5 > 1893) {
+    0206d6ee: r2 = r0 <<< 21
+    0206d6f0: r4 += -26
+    0206d6f2: r1 = 191
+    0206d6f4: r1 = r5 + 25
+    0206d6f6: r1 = [r0+12]
+    0206d6f8: r2 = r0 >>> 5
+    0206d6fa: h[r3+16] = r7
+    0206d6fe: r4 = r3 <<< 30
+    0206d700: r11 = r0  #
+    0206d702:  goto -1594 <_fw+0x6D0CA : 6d0ca >
+    0206d704: if (r6 != 0) goto -146 <_fw+0x6D674 : 6d674 >
+    0206d706: if (r5 == 0) goto 20 <_fw+0x6D71C : 6d71c >
+    0206d708: r5 = r3 + r5  #
+    0206d70a:  [r0+-52] = r1
+    0206d70c: [r8+36] += 1162
+    0206d710: r0 = r3 + r11 (ssat)  #
+    0206d714:  r7 = r11 - 0x9F00  #
+    0206d71a:  r4 = [sp+36]
+    0206d71c: [r3+-32] = r7
+    0206d71e: r14 *= r3
+    0206d724: r2 |= 4
+    0206d726: rep 10 9 {
+    0206d728: r1 = r2 << 7
+    0206d72c: r2 = b[r3++=r15] (u)
+    0206d72e: if (r5 != 0) goto 52 <_fw+0x6D764 : 6d764 >
+    0206d730: r6 = r7 + 19
+    0206d732: goto 766
+    0206d736: [sp+68] = r0
+    0206d73a: r7 = 116
+    0206d73c: h[r2+18] = r6
+    0206d73e: r6 = r1 - r5  #
+    0206d740:  r5 = [r0+44]
+    0206d742: b[r3+1] = r3
+    0206d744: r3 = r6 >>> 11
+    0206d746: r2 = r0 << 5
+    0206d74a: r0 = r4 >> 25
+    0206d74c: [r6+-44] = r4
+    0206d750: r4 = h[r1+-12] (u)
+    0206d754: if (r11 == -17) goto 30 <_fw+0x6D776 : 6d776 >
+    0206d758: r7 = [r4+28]
+    0206d75a: sp += -432
+    0206d75c: r3 = 124
+    0206d760: r2 = r4 + r1
+    0206d762: r3 = r5 + r5
+    0206d764: b[r1++=r10] = r1
+    0206d768: if (r0 != 0) goto 102 <_fw+0x6D7D0 : 6d7d0 >
+    0206d76a: r5 = h[r0+-10] (u)
+    0206d76e: r2 = 13
+    0206d770: b[r3+9] = r7
+    0206d772: b[r5+15] = r2
+    0206d774: r6 = [r5+24]
+    0206d776: rep 26 25 {
+    0206d778: r1_r0 = [r2 ++= -4]*[r10 ++= 8] (s)
+    0206d77c: r7 += 84
+    0206d77e: [r11+60] &= 0x10400000
+    0206d782: r5 = r5 >>> 32
+    0206d784: if (r5 != 0) goto -22 <_fw+0x6D770 : 6d770 >
+    0206d786: if (r1 != 0) goto 36 <_fw+0x6D7AC : 6d7ac >
+    0206d788: r7 = h[r4+-18] (u)
+    0206d78a: if (r0 != 0) goto -72 <_fw+0x6D744 : 6d744 >
+    0206d78c: r2 = r7 >> 26
+    0206d78e: r2 = [r2+4]
+    0206d790: r6 = r0 <<< 29
+    0206d794: if (r13 > 503) goto -498 <_fw+0x6D5A6 : 6d5a6 >
+    0206d798: [sp+204] = r3
+    0206d79c: r5 = r2 + 30
+    0206d79e: b[r4+6] = r7
+    0206d7a0: goto 1180 <_fw+0x6DC3E : 6dc3e >
+    0206d7a2: r5 = sp + 46
+    0206d7a4: [r0++=r9] = r4
+    0206d7a6: r0 = [r1+8]
+    0206d7a8: r0 = r4 >>> 9
+    0206d7aa: r6 = r0 >> 29
+    0206d7ac: b[r6+4] = r4
+    0206d7b0: r7 += 100
+    0206d7b2: r5 += -89
+    0206d7b4: r11 = [sp+204]
+    0206d7b6: if (r0 == 0) goto -104 <_fw+0x6D750 : 6d750 >
+    0206d7b8: r8.l = r1.h - 141 (ssat)  #
+    0206d7bc:  r3 = r6 + 26
+    0206d7be: [r4+-36] = r7
+    0206d7c0: r1 >>= r4  #
+    0206d7c4:  r2 = r7 >>> 10
+    0206d7c6: r0 = r4 << 9
+    0206d7c8: [sp+236] = r7
+    0206d7ca: r0 = 206
+    0206d7cc: r1 = b[r7+-3] (u)
+    0206d7d0: r7 = r0 - r2  #
+    0206d7d2:  r6 = r15 & 0x9E0
+    0206d7da: r12 = r1.h,r1.l +|- r15.l,r15.l (uavg)
+    0206d7de: r7 = r6 << 3
+    0206d7e2: if (r6 == 0) goto -178 <_fw+0x6D732 : 6d732 >
+    0206d7e4: {r6-r4} = [sp++]
+    0206d7e6: r8 = [sp+68]
+    0206d7e8: if (r4 != 0) goto -88 <_fw+0x6D792 : 6d792 >
+    0206d7ea: if (r3 != 0) goto -196 <_fw+0x6D728 : 6d728 >
+    0206d7ec: r6 = r7 << 2
+    0206d7f0: r7 = r6 + 18
+    0206d7f2: goto -1050 <_fw+0x6D3DA : 6d3da >
+    0206d7f4: r5 &= r1
+    0206d7f6: r0 = r3 << 6
+    0206d7f8: if ((r8 & r5) == 0) goto -29418 <_fw+0x66512 : 66512 >
+    0206d7fe: r3 = r6 >> 27
+    0206d800: r0 = [r6+52]
+    0206d802: r7 = [r3+32]
+    0206d804: r5 = b[r7+-11] (u)
+    0206d808: r3 = r5 + r6
+    0206d80a: r0 = r3 + 23
+    0206d80c: r4 = r3 >>> 14
+    0206d80e: r0 = r4 + 24
+    0206d810: r3 = [r4+60]
+    0206d812: [r3+-64] = r3
+
+===== FUNC 0x0206d816  size=34B  ninsn=13  callers=2 callees=0 =====
+    0206d816: r1 = r1 << 1
+    0206d818: r0 += r1
+    0206d81a: r1 = h[r0+32] (u)
+    0206d81e: r3 = 32944 <_fw+0x80B0 : 80b0 >
+    0206d824: r1 &= r3
+    0206d826: r1 |= r2
+    0206d828: r1 |= 16384
+    0206d82a: h[r0+32] = r1
+    0206d82e: rts
+    0206d830: r1 = b[r0+12] (u)
+    0206d832: r1 |= 8
+    0206d834: b[r0+12] = r1
+    0206d836: rts
+
+===== FUNC 0x0206d838  size=42B  ninsn=17  callers=2 callees=0 =====
+    0206d838: [--sp] = {rets, r4}
+    0206d83a: r3 = h[++r0=32] (u)
+    0206d83e: r4 = 32639 <_fw+0x7F7E : 7f7e >
+    0206d842: r3 &= r4
+    0206d844: h[r0+0] = r3
+    0206d846: r3 = h[r0+2] (u)
+    0206d848: r3 &= r4
+    0206d84a: h[r0+2] = r3
+    0206d84c: r1 = r1 << 15
+    0206d84e: r1 <= insert(r2, p:7, l:8)  #
+    0206d852:  r3 = h[r0+0] (u)
+    0206d854: r2 = r3 | r1
+    0206d858: h[r0+0] = r2
+    0206d85a: r2 = h[r0+2] (u)
+    0206d85c: r1 |= r2
+    0206d85e: h[r0+2] = r1
+    0206d860: {pc, r4} = [sp++]

@@ -1,0 +1,287 @@
+0x0201f0d0  sz=76    calls_in=2   out=3   conf=low     BLE-MIDI connection-state check; counts BLE links and posts connect/disconnect messages via BLE msg dispatch
+0x0201f144  sz=188   calls_in=2   out=5   conf=low     BLE-MIDI advertising/connection manager with fade/restart timer gated on BLE-active flag
+0x0201f200  sz=360   calls_in=1   out=10  conf=medium  Enable BLE-MIDI mode: build "_BLE" device name, (re)init GATT/advertising, reset connections and voices
+0x0202657e  sz=574   calls_in=3   out=14  conf=low     Open app data/OTA comm session: device find/open by name, mutex + msg-queue, copy name buffer
+0x020267bc  sz=98    calls_in=3   out=4   conf=low     Close app data/OTA comm session: drain request queue, unlink and free session objects
+0x020268a8  sz=14    calls_in=2   out=1   conf=low     Thin wrapper: open transfer/pipe object at struct offset +176 via lib call
+0x020268b6  sz=770   calls_in=2   out=10  conf=low     Data-transfer session control (merged): close/reset session, value scale/clamp, stream receive pump reading chunks
+0x02026bc4  sz=926   calls_in=1   out=3   conf=medium  Framed vendor command protocol parser: length+checksum verify, tbh command dispatch, device-info/version responses via msg-queue
+0x020375f2  sz=48    calls_in=2   out=2   conf=medium  Build ATT response PDU from RAM template, append payload, clamp length to MTU-3
+0x02037622  sz=20    calls_in=5   out=1   conf=high    Build ATT Error Response PDU (opcode 0x01, req-opcode, handle, error code)
+0x02037636  sz=8     calls_in=1   out=1   conf=medium  ATT error-response thunk with error code 1
+0x0203763e  sz=98    calls_in=2   out=1   conf=high    GATT attribute-DB iterator: decode handle/type/flags, advance to next entry
+0x020376a0  sz=8     calls_in=1   out=1   conf=medium  ATT error-response thunk with error 0x0A (Read Not Permitted)
+0x020376a8  sz=40    calls_in=3   out=1   conf=high    Test whether a 128-bit UUID is a Bluetooth 16-bit UUID (memcmp vs base UUID)
+0x020376d0  sz=50    calls_in=2   out=2   conf=high    Compare an attribute's UUID against a 16-bit UUID value
+0x02037702  sz=100   calls_in=1   out=4   conf=high    Match attribute UUID (16- or 128-bit) against target UUID
+0x02037766  sz=68    calls_in=1   out=0   conf=high    ATT permission check returning ATT error codes (0x05/0x08/0x0C/0x0F)
+0x020377aa  sz=58    calls_in=2   out=3   conf=high    Find GATT service/group whose handle range contains a given handle
+0x020377e4  sz=20    calls_in=2   out=1   conf=medium  Return attribute group's read-handler pointer (field +8)
+0x020377f8  sz=38    calls_in=1   out=1   conf=medium  Invoke attribute's dynamic value/length callback, cache length at +16
+0x0203781e  sz=80    calls_in=1   out=2   conf=medium  Read attribute value into buffer via memmove or dynamic callback
+0x0203786e  sz=10    calls_in=1   out=1   conf=medium  ATT error-response thunk with error code 0x02
+0x02037878  sz=46    calls_in=1   out=1   conf=high    Locate a GATT attribute by handle via the DB iterator
+0x020378a6  sz=20    calls_in=1   out=1   conf=medium  Return attribute group's write-handler pointer (field +12)
+0x020378ba  sz=10    calls_in=1   out=1   conf=medium  ATT error-response thunk with error code 0x03
+0x020378c4  sz=90    calls_in=2   out=3   conf=medium  Iterate registered ATT/GATT clients invoking each callback
+0x0203791e  sz=8     calls_in=1   out=1   conf=medium  Thunk: notify registered clients with event type 3
+0x02037926  sz=2416  calls_in=1   out=24  conf=high    ATT server PDU dispatcher: opcode jump-table (MTU/Find/Read/Write requests)
+0x02038388  sz=468   calls_in=1   out=1   conf=medium  AES-CCM core: B0/flags formatting, CBC-MAC + CTR mode using hardware AES
+0x0203855c  sz=206   calls_in=2   out=1   conf=medium  AES-CCM entry: load key into engine under hardware mutex, run CCM
+0x020386a8  sz=90    calls_in=1   out=2   conf=medium  Locked list-unlink of object node then free (BT object manager)
+0x02038702  sz=716   calls_in=0   out=13  conf=medium  BT protocol/service registration and dispatch manager (name-keyed, recursive)
+0x020389ce  sz=768   calls_in=2   out=18  conf=medium  Send internal 0xA6 message plus BT event dispatch/init cluster
+0x02038cce  sz=84    calls_in=1   out=2   conf=medium  Query BT device value via callback (opcode 15) under mutex
+0x02038d74  sz=126   calls_in=1   out=1   conf=medium  Resolve BT protocol/profile name to canonical descriptor
+0x02038df2  sz=66    calls_in=1   out=0   conf=medium  Scan protocol descriptor table and dispatch to matching handler
+0x02038e34  sz=156   calls_in=1   out=0   conf=medium  Per-core BT state array initialization under mutex
+0x02038ee2  sz=1764  calls_in=1   out=23  conf=high    Set up BT connection/channel: alloc control blocks, register handlers, subscribe events
+0x020395c6  sz=182   calls_in=1   out=3   conf=medium  BT connection close / disconnect state machine
+0x0205ebbc  sz=12    calls_in=3   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205ebc8  sz=22    calls_in=6   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205ebde  sz=114   calls_in=9   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205ec50  sz=116   calls_in=17  out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205ecc4  sz=40    calls_in=2   out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205ecec  sz=146   calls_in=3   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205ed7e  sz=134   calls_in=3   out=10  conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205ee04  sz=68    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205ee48  sz=62    calls_in=2   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205ee86  sz=32    calls_in=1   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205eea6  sz=20    calls_in=3   out=0   conf=medium  Store 32-bit LL param (split hi/lo halfwords at +34/+36) plus aux word into per-link connection context
+0x0205eeba  sz=188   calls_in=2   out=0   conf=high    BLE data channel-map processing: from 5-byte channel bitmap build used-channel (37-ch) remap tables in link ctx
+0x0205ef76  sz=66    calls_in=3   out=1   conf=medium  Program LL radio timing/window register pair (zero regs 0/7/14 then write count-1 low/high|0x8000)
+0x0205efb8  sz=22    calls_in=2   out=1   conf=medium  Read current radio clock (0x72d62) and compute two connection-event timing anchors (t and t-3750)
+0x0205efce  sz=100   calls_in=1   out=2   conf=medium  Convert microsecond anchor into slot count + fine offset vs current radio counter and program event timing regs
+0x0205f032  sz=32    calls_in=1   out=1   conf=medium  Read LL hardware event/slot counter (reg0 low16 | reg14 bits16-23, +1)
+0x0205f052  sz=194   calls_in=4   out=2   conf=medium  Compute elapsed/remaining time (us) relative to connection-event anchor from radio slot & fine counters
+0x0205f114  sz=36    calls_in=4   out=1   conf=medium  Set radio PDU type/len/channel: store fields at link+338 and write packed controller register 2
+0x0205f138  sz=22    calls_in=1   out=1   conf=medium  Enable/trigger a radio window: write controller reg4 with enable bit 0x8000 (no-op if arg zero)
+0x0205f14e  sz=30    calls_in=1   out=0   conf=medium  Split a microsecond value into slot count (+72) and fine offset|type 0x5000 (+74) in link ctx
+0x0205f16c  sz=12    calls_in=2   out=1   conf=medium  Clear LL controller register 8 (reset/disable a radio channel field)
+0x0205f178  sz=50    calls_in=4   out=1   conf=medium  Program 32-bit timing value into controller regs 1/15 (low16 + flag<<15|high), cache to link+356
+0x0205f1aa  sz=1444  calls_in=17  out=20  conf=high    BLE LL control dispatcher: jump-table on opcode 0..23 applying channel-map/addr/window/timing fields and programming radio
+0x0205f74e  sz=26    calls_in=2   out=1   conf=medium  Reset a link's controller register bank: write 17 indexed hardware registers to zero
+0x0205f768  sz=68    calls_in=1   out=3   conf=high    Allocate a free link slot: find empty handle entry, zero its 28-byte context and clear its register bank
+0x0205f7ac  sz=88    calls_in=1   out=3   conf=medium  Allocate a large (616-byte) per-connection LL state buffer from a pool, memset it and mark in-use
+0x0205f804  sz=26    calls_in=1   out=1   conf=medium  Register a link into the controller handle table: compute radio value and store with active bit 0x8000
+0x0205f81e  sz=12    calls_in=2   out=1   conf=medium  Clear LL controller register 14 (disable timing/window register)
+0x0205f82a  sz=206   calls_in=2   out=0   conf=high    Critical-section: enable/disable a link's radio-event trigger/interrupt bits (bit-per-link) at controller 0x28028
+0x0205f8f8  sz=30    calls_in=3   out=3   conf=medium  Stop a link's radio activity: clear reg14, spin until controller idle (0x28038 bit1), disable its event trigger
+0x0205f916  sz=18    calls_in=1   out=1   conf=medium  Disable a connection: clear link state byte (+338) and stop its radio activity
+0x0205f928  sz=366   calls_in=4   out=7   conf=high    Create/initialize a BLE link (connection) context: allocate ctx+buffer, set default LL/radio params, init event list
+0x0205fa96  sz=10    calls_in=5   out=0   conf=medium  Register per-link event callback fn (+472) and context arg (+476)
+0x0205faa0  sz=64    calls_in=1   out=1   conf=medium  Select radio PHY/data-rate mode (1M/2M/coded) by writing rate bits in controller reg block
+0x0205fae0  sz=92    calls_in=1   out=1   conf=medium  Build hop/channel selection config from field bits and write controller register 6
+0x0205fb3c  sz=36    calls_in=4   out=3   conf=medium  Allocate a radio TX packet buffer from pool (asserts non-null, aligned)
+0x0205fb60  sz=24    calls_in=3   out=1   conf=medium  Compute and set radio TX/RX buffer address registers (+30/+32) for a link
+0x0205fb78  sz=156   calls_in=1   out=1   conf=high    Assemble a BLE PDU descriptor by packet-type (jump 0..6): pack header, copy 6-byte address and payload via memmove
+0x0205fc14  sz=8     calls_in=2   out=0   conf=medium  Clear control bit 0x10 in link register +8 (disable a radio feature)
+0x0205fc1c  sz=36    calls_in=3   out=3   conf=medium  Create/register a scheduler node (20-byte descriptor via 0x364e0) for the link, asserts success
+0x0205fc40  sz=14    calls_in=1   out=2   conf=medium  Enable a link's connection-event trigger (compute index, call trigger-enable with mode 1)
+0x0205fc4e  sz=18    calls_in=3   out=2   conf=medium  Start a connection event: enable link trigger then program its radio timing/window
+0x0205fc60  sz=50    calls_in=2   out=0   conf=medium  Poll controller 0x28028 status across 8 links; return 1 if any radio event active/pending else 0
+0x0205fc92  sz=26    calls_in=1   out=1   conf=medium  Request link stop: if state byte (+339) not already 3, set to 1 and disable link radio
+0x0205fcac  sz=24    calls_in=2   out=0   conf=medium  Activate link: if state byte (+339) not 2, set to 2 and start its connection event
+0x0205fcc4  sz=36    calls_in=3   out=2   conf=medium  Program connection window offset and interval timing (scale args by 625us into controller regs)
+0x0205fce8  sz=32    calls_in=2   out=1   conf=medium  Read config/NVM param index 22 and clamp to [1,8] (e.g. retransmit/window count)
+0x0205fd08  sz=124   calls_in=2   out=1   conf=medium  Advance connection-event counter from elapsed us, update per-link sub-counters and invoke event callback
+0x0205fd84  sz=646   calls_in=3   out=10  conf=high    BLE connection-event scheduler (critical section): iterate 8 links by state, compute earliest next anchor and program radio
+0x0206000a  sz=408   calls_in=1   out=14  conf=high    Set up advertising/connection event: program access addr 0x555555 & CRC, build PDU, alloc TX/RX buffers, start radio
+0x020601a2  sz=22    calls_in=1   out=1   conf=medium  Free resource pointed by link object +20 (if set) via mem free and clear the pointer
+0x020601b8  sz=14    calls_in=1   out=0   conf=medium  Clear a status/flag byte at object offset +612 when pointer is non-null
+0x020601c6  sz=444   calls_in=1   out=2   conf=medium  Scan 8-entry ACL link table under spinlock and recompute connection slot/interval timing (625us math)
+0x02060382  sz=262   calls_in=2   out=3   conf=medium  Build/sort active-link schedule list and pick next connection anchor by slot priority
+0x02060488  sz=652   calls_in=5   out=12  conf=high    Tear down a BT ACL link: free channel queues/buffers, clear link-controller regs, remove table slot
+0x02060714  sz=40    calls_in=2   out=0   conf=medium  Configure flow-control window fields (+598..+602) for a link data channel
+0x0206073c  sz=28    calls_in=1   out=0   conf=medium  Set/clear bit3 of channel control field +60 based on role/mode selector
+0x02060758  sz=26    calls_in=2   out=0   conf=medium  Set or clear bit 0x100 of channel flags +6 depending on flag arg and +488 state
+0x02060772  sz=14    calls_in=3   out=1   conf=medium  Write link-controller register field #6 with value OR'd with 0x2100 flags
+0x02060780  sz=68    calls_in=1   out=0   conf=medium  Build small link PDU/descriptor (mode 3): set header, copy 6-byte BD_ADDR into payload
+0x020607c4  sz=184   calls_in=1   out=13  conf=medium  Initialize a BT link channel pair: alloc buffers, set windows/flags, build address PDUs, arm channels
+0x0206087c  sz=106   calls_in=1   out=4   conf=medium  Add/start a link channel role wrapper: init channel then register callback or connect based on link count
+0x020608e6  sz=92    calls_in=1   out=0   conf=medium  Build larger link PDU/descriptor (mode 5, 34B): copy address plus data fields from config block
+0x02060942  sz=276   calls_in=1   out=16  conf=medium  Set up BT link channels for a role/mode: alloc buffers, build PDUs (via 0x608e6), config windows and callbacks
+0x02060a56  sz=96    calls_in=1   out=3   conf=high    Full BT link-manager shutdown: tear down all 8 links, free host buffers, clear global connection table
+0x02060ab6  sz=128   calls_in=1   out=10  conf=medium  Enqueue an outgoing data PDU (<256B) onto a link channel list and signal the link
+0x02060b36  sz=268   calls_in=1   out=5   conf=medium  Parse/validate an incoming framed packet: build header from BD_ADDR, encode, compare CRC/checksum
+0x02060c42  sz=62    calls_in=1   out=3   conf=medium  Dequeue a received packet, validate it, dispatch to handler callback, then release/free the buffer
+0x02060c80  sz=30    calls_in=2   out=0   conf=low     Compute clock-drift/resample ratio (Q20, /24000) from a clock offset and store at stream +304
+0x02060c9e  sz=36    calls_in=1   out=1   conf=medium  Copy payload into a PDU descriptor for eligible channel modes (mode mask 0x45)
+0x02060cc2  sz=1146  calls_in=1   out=11  conf=high    Link register-field accessor plus BT baseband ISR: per-connection state machine, retransmit, slot/role timers
+0x0206113c  sz=100   calls_in=1   out=2   conf=medium  Allocate/configure a link data-channel slot (buffer + list head) for index 0/1, return success
+0x020611a0  sz=44    calls_in=1   out=1   conf=medium  Derive pseudo-random offset (mod window at +454) and store link anchor param at +458
+0x020611cc  sz=1372  calls_in=0   out=12  conf=medium  Build per-connection TX descriptor and advance link role state machine; includes second connection-scan ISR
+0x02061728  sz=20    calls_in=1   out=1   conf=medium  Read link-controller register field #3 minus one, return low 16 bits
+0x0206173c  sz=12    calls_in=1   out=1   conf=medium  Read link-controller register field #5, return low 16 bits
+0x02061748  sz=14    calls_in=2   out=1   conf=medium  Read link-controller register field #9, extract 9-bit value at bit 7
+0x02061756  sz=44    calls_in=1   out=1   conf=medium  Check link active/valid state (fields +342/+343) and read counter via field #9
+0x02061782  sz=1070  calls_in=0   out=12  conf=medium  Compute BT connection anchor/slot timing (625us) and program link registers; block also holds enable/idle helpers
+0x02061bb0  sz=282   calls_in=1   out=8   conf=high    Initialize BT link-manager: alloc control block + 512B buffer, init lists, register framework callbacks
+0x02061cca  sz=44    calls_in=5   out=0   conf=medium  Search link-manager object list for node whose key (+196) matches, return container (node-52)
+0x02061cf6  sz=22    calls_in=2   out=0   conf=medium  Try-claim object: test-and-set bit0 of field +196, return 1 if newly acquired
+0x02061d0c  sz=94    calls_in=2   out=5   conf=medium  Register a named handler/work item (bounded name copy via snprintf) and post it to the queue
+0x02061d6a  sz=98    calls_in=6   out=5   conf=medium  Register/post a named handler variant with different arg layout via 0x5ed7e
+0x02061dcc  sz=46    calls_in=1   out=1   conf=medium  Post a fixed command/message (type 5) with a constant string arg to the subsystem queue
+0x02061dfa  sz=138   calls_in=1   out=5   conf=low     Recompute/apply looked-up connection's channel/security params (8-byte hash, 16-byte key) then post update
+0x02061e84  sz=22    calls_in=4   out=1   conf=medium  Free and clear a buffer pointer stored at object offset +332
+0x02061e9a  sz=166   calls_in=6   out=7   conf=medium  Build and post a host event/notification message (opcode 0x3E) if feature bit enabled
+0x02061f40  sz=82    calls_in=3   out=3   conf=medium  Assemble status params (switch on type 0..3) and post a notification via 0x61e9a
+0x02061f92  sz=136   calls_in=3   out=4   conf=medium  Allocate a deferred work item from pool under spinlock, store two params, enqueue it
+0x0206201a  sz=136   calls_in=3   out=4   conf=medium  Alloc a 16-byte work node, store two callback params, link it into a link object's list under a spinlock
+0x020620a2  sz=62    calls_in=1   out=3   conf=medium  Post a status/notification command PDU for a connection, selecting report code by type (0 or 3)
+0x020620e0  sz=102   calls_in=1   out=3   conf=medium  Log/report a connection event, code chosen via jump table on type; guarded by a global enable flag
+0x02062146  sz=74    calls_in=1   out=3   conf=medium  Log/report a connection event (variant), code chosen via jump table on type
+0x02062190  sz=64    calls_in=4   out=2   conf=medium  Set a link's state byte to 8 (disconnecting), touch controller object, and log the transition
+0x020621d0  sz=390   calls_in=2   out=12  conf=medium  Per-connection procedure-step dispatcher: walk the step table and invoke the matching per-step handler
+0x02062356  sz=158   calls_in=4   out=2   conf=medium  Match an incoming event code against expected step, free the step node, and advance the state machine
+0x020623f4  sz=960   calls_in=4   out=8   conf=medium  Main per-connection procedure engine: decode event, compute connection params/timing, build response PDUs
+0x020627b4  sz=42    calls_in=2   out=1   conf=high    Enqueue an event descriptor into a link's slot array (max 4) and trigger procedure processing
+0x020627de  sz=64    calls_in=1   out=5   conf=high    Restart a per-connection timeout timer (~40s) with its callback, freeing any prior timer
+0x0206281e  sz=634   calls_in=1   out=8   conf=medium  Top-level BLE command handler: dispatch by opcode, copy request params into the link object, enqueue procedures
+0x02062a98  sz=40    calls_in=4   out=3   conf=high    Lazily allocate the 40-byte advertising-manager singleton at 0x1c09c4c
+0x02062ac0  sz=36    calls_in=1   out=1   conf=medium  Store a 15-byte advertising config block into the manager buffer if not already initialized
+0x02062ae4  sz=66    calls_in=1   out=3   conf=medium  Set advertising name/data string #1 (buffer 0x1c0c37e via memmove) and notify listener (code 21)
+0x02062b26  sz=66    calls_in=1   out=3   conf=medium  Set advertising name/data string #2 (buffer 0x1c0c39e via memmove) and notify listener (code 22)
+0x02062b68  sz=102   calls_in=1   out=3   conf=medium  Assemble an advertising/scan-response record from stored config and post it
+0x02062bce  sz=40    calls_in=1   out=0   conf=medium  Fill a record with a 6-byte template selected by type index (0-3) from a data table
+0x02062bf6  sz=26    calls_in=3   out=2   conf=medium  Build a type-templated advertising record and post it (event code 2)
+0x02062c10  sz=328   calls_in=2   out=8   conf=medium  Configure and start BLE advertising: build adv params by mode, assemble records, arm a timer
+0x02062d58  sz=82    calls_in=1   out=5   conf=medium  Initialize the advertising subsystem: create and init the instance object, then start advertising
+0x02062daa  sz=68    calls_in=3   out=3   conf=high    Stop advertising: disconnect its link and free the instance and manager buffers
+0x02062dee  sz=40    calls_in=2   out=3   conf=high    Lazily allocate the 32-byte connection-initiator manager singleton at 0x1c09c44
+0x02062e16  sz=174   calls_in=1   out=6   conf=medium  Initiate a BLE connection: create a link object, copy target address/params, start the connect procedure
+0x02062ec4  sz=72    calls_in=2   out=3   conf=high    Tear down the connection-initiator: disconnect and free all its links and the manager object
+0x02062f0c  sz=52    calls_in=4   out=1   conf=high    Find a stored device node in the bond/whitelist list by matching 6-byte address plus type byte
+0x02062f40  sz=64    calls_in=1   out=0   conf=medium  Count differing bits between two byte arrays over N bits (BLE address validation helper)
+0x02062f80  sz=580   calls_in=1   out=6   conf=medium  Validate a BLE address (bit-count rules), compute connection params, start directed advertising/connection
+0x020631c4  sz=90    calls_in=1   out=4   conf=medium  Initialize the directed-connection manager: alloc 52-byte object, copy 25-byte params, and start it
+0x0206321e  sz=52    calls_in=3   out=2   conf=high    Tear down the directed-connection manager: disconnect link and free its objects
+0x02063252  sz=22    calls_in=2   out=1   conf=high    Free a per-object timer at offset 336 and clear the pointer
+0x02063268  sz=454   calls_in=2   out=5   conf=high    Fully tear down a link object under lock: free all four linked lists, timers, and controller slot
+0x0206342e  sz=84    calls_in=2   out=5   conf=medium  Release/close a link: clear globals, flush its queue, free node, and run full teardown
+0x02063482  sz=134   calls_in=2   out=10  conf=high    Full BLE module deinit: stop advertising/connect/directed, release every link, free controller state
+0x02063508  sz=280   calls_in=1   out=9   conf=medium  Send data on a link: look up by handle, fragment payload into PDUs and enqueue on tx queue under lock
+0x02063620  sz=230   calls_in=2   out=5   conf=medium  Initialize a new link object: allocate a free controller slot, set default connection params, register it
+0x02063706  sz=50    calls_in=2   out=4   conf=high    Create and register a per-connection timer (callback 0x2064014) at object offset 336
+0x02063738  sz=160   calls_in=2   out=2   conf=medium  Format a connection's ID/address as a hex string and enqueue a report/name command PDU (opcode 0x3e)
+0x020637d8  sz=142   calls_in=1   out=8   conf=medium  Connection/link event callback: on connect init link+timer and emit report; on disconnect clean up
+0x02063866  sz=58    calls_in=2   out=0   conf=medium  Compute a connection timing parameter (interval/timeout) from stored fields into offset 22
+0x020638a0  sz=176   calls_in=2   out=5   conf=medium  Construct a new BLE profile/link object (416B): copy params, init list heads, register (enqueue event 6)
+0x02063950  sz=96    calls_in=2   out=3   conf=medium  Release/complete a received app-protocol packet: mutex-unlock, flag-check, recursive free, unpack 3 header bytes into device struct
+0x020639b0  sz=218   calls_in=1   out=8   conf=medium  Register a deferred session work/callback node under per-CPU critical section, plus session-state reset helpers
+0x02063a8a  sz=2212  calls_in=1   out=24  conf=medium  Main session/connection state-machine update: advance state, walk listener lists and invoke callbacks, notify app over data channel
+0x0206432e  sz=424   calls_in=0   out=12  conf=medium  Handle subscribe/register command: manage subscriber list node (alloc/add under lock), ack via protocol send; incoming type dispatch + memcmp match
+0x020644d6  sz=10    calls_in=1   out=0   conf=medium  Getter: return 16-bit session/status field at 0x1C09C48
+0x020644e0  sz=66    calls_in=2   out=0   conf=medium  Marshal message header fields into a control block and write it to the app data-channel device (type 2)
+0x02064554  sz=76    calls_in=2   out=5   conf=medium  Send patch/status notification packets (0x204EA34 format table) over the app protocol channel
+0x020645a0  sz=92    calls_in=2   out=7   conf=medium  Send device-info response: unpack 4-byte identifier and conditionally emit payload packet
+0x020645fc  sz=1210  calls_in=1   out=29  conf=medium  Incoming command dispatcher (command-byte jump table): apply request to synth/patch device via ioctl and send responses
+0x02064ab6  sz=272   calls_in=0   out=11  conf=medium  Access/permission check for note or patch command (ACL mask), sets gate flag global 0x1C0C36C
+0x02064bc6  sz=562   calls_in=0   out=17  conf=medium  Patch operator (re)load handler (marshal on/off + operator fields, notify via ioctl) plus second incoming command dispatcher
+0x02064df8  sz=34    calls_in=1   out=1   conf=medium  Cache a 7-byte record into the session object, allocating/initializing the session if absent
+0x02064e1a  sz=54    calls_in=2   out=1   conf=low     Marshal a 3-byte record through transform helper (0x36a70) into an output buffer for the protocol
+0x02064e50  sz=96    calls_in=1   out=1   conf=low     Build a default 6-entry record from table 0x13B00, set flag bit, and marshal it via 0x64e1a
+0x02064eb0  sz=14    calls_in=1   out=0   conf=medium  Store a 6-byte address/identifier into global 0x1C09C60
+0x02064ebe  sz=574   calls_in=1   out=15  conf=medium  Top-level incoming app-message dispatcher: jump table on message type (0x131/0x132/0x406/ranges), decode and route to sub-handlers
+0x020650fc  sz=42    calls_in=1   out=2   conf=medium  Parse two big-endian fields from a message and dispatch to handler 0x63508
+0x02065126  sz=24    calls_in=1   out=0   conf=medium  Initialize device capability/feature bitmask (2 constants) at 0x1C09C58
+0x0206513e  sz=12    calls_in=1   out=0   conf=medium  Getter: return 16-bit capability field at 0x1C09C58+66
+0x0206514a  sz=12    calls_in=1   out=0   conf=medium  Getter: return byte field at 0x1C09C58+64
+0x02065156  sz=50    calls_in=1   out=0   conf=medium  Select one of two stored 6-byte addresses by config mode (0x1C09D04) and copy to caller, returning mode flag
+0x02065188  sz=14    calls_in=3   out=0   conf=medium  Copy the stored 6-byte address (0x1C09C60) to caller buffer
+0x02065196  sz=50    calls_in=2   out=1   conf=medium  Build and send app-protocol message 0x2012 with 8-argument payload
+0x020651d4  sz=24    calls_in=1   out=1   conf=medium  Send app-protocol message 0x200A with 2-argument payload
+0x020651ec  sz=94    calls_in=1   out=1   conf=medium  Build and send app-protocol message 0x2006 with bit-packed 6-argument payload (uses config byte 0x1C09D04)
+0x0206524a  sz=80    calls_in=1   out=2   conf=medium  Build (memmove-staged) and send app-protocol message 0x2008 with 10-argument payload
+0x0206529a  sz=130   calls_in=1   out=2   conf=medium  Build and send app-protocol message 0x2009 by scattering seven 4-byte fields from a struct
+0x0206531c  sz=34    calls_in=1   out=1   conf=medium  Send app-protocol message 0x200C with 3-argument payload
+0x0206533e  sz=64    calls_in=1   out=1   conf=medium  Assemble a 7-byte record (with config mode byte) and cache it via 0x64df8
+0x0206537e  sz=34    calls_in=2   out=1   conf=medium  Send app-protocol message 0x0406/1030 with 3-argument payload
+0x020653a0  sz=192   calls_in=1   out=1   conf=medium  Build a 25-byte descriptor at 0x1C0C2E8 with bit-packing/byte-swap and send message 0x200C
+0x02065460  sz=36    calls_in=1   out=1   conf=medium  Copy a 25-byte descriptor to 0x1C0C2E8 and send message 0x200C
+0x02065484  sz=22    calls_in=1   out=1   conf=medium  Send app-protocol message 0x200E with 1-argument payload
+0x0206549a  sz=34    calls_in=1   out=1   conf=medium  Send app-protocol message 0xF882 with 3-argument payload
+0x020654bc  sz=34    calls_in=1   out=1   conf=medium  Send app-protocol message 0xF884 with 3-argument payload
+0x020654de  sz=116   calls_in=1   out=1   conf=medium  Gather nine packed 4-byte fields and send app-protocol message 0x2016
+0x02065552  sz=22    calls_in=1   out=1   conf=medium  Send app-protocol message 0x2018 with 1-argument payload
+0x02065568  sz=14    calls_in=1   out=0   conf=medium  Copy 6-byte BD_ADDR into global BT buffer at RAM 0x1C09C66
+0x02065576  sz=24    calls_in=1   out=1   conf=medium  Post 2-byte BT event (msg id 0x201a) to app/task queue via 0x5e110
+0x0206558e  sz=56    calls_in=1   out=1   conf=medium  Pack connection params into global struct (0x1C0C2E8) and post BT event 0x2018
+0x020655c6  sz=76    calls_in=1   out=2   conf=medium  Copy connection fields to stack, post BT event 0x201a, then invoke handler 0x63482
+0x02065612  sz=34    calls_in=1   out=0   conf=medium  Copy 6-byte BD_ADDR into global BT buffer at RAM 0x1C09C66
+0x02065634  sz=18    calls_in=1   out=0   conf=low     Clear flag bit (~0x4) in halfword at global+146 (conn state flag reset)
+0x02065646  sz=64    calls_in=1   out=2   conf=medium  Look up connection by 6-byte address via memcmp, return connection state byte
+0x02065686  sz=38    calls_in=8   out=0   conf=high    Find connection slot by handle (+212) in 2-entry connection table 0x1C0C480
+0x020656ac  sz=34    calls_in=3   out=0   conf=medium  Test whether any connection slot has active data pointer (+228 set)
+0x020656ce  sz=40    calls_in=1   out=2   conf=medium  Return doubled queued-data depth for current active connection
+0x020656f6  sz=154   calls_in=3   out=4   conf=medium  Iterate connection table, tear down and notify entries matching given key
+0x02065790  sz=68    calls_in=1   out=1   conf=medium  Pack 6-byte BD_ADDR and post BT device/report event (msg id 1029)
+0x020657d4  sz=32    calls_in=3   out=0   conf=medium  Compute signed BT-clock difference with 27-bit wraparound adjustment
+0x020657f4  sz=232   calls_in=5   out=5   conf=medium  Under lock, release/free a connection TX resource and unlink from lists
+0x020658dc  sz=34    calls_in=6   out=1   conf=medium  Post connection event/trace record (id 20) with packed parameters
+0x020658fe  sz=88    calls_in=2   out=3   conf=medium  Under lock, complete/flush connection TX buffer and re-arm state
+0x02065956  sz=48    calls_in=2   out=2   conf=medium  Mark connection RX/TX buffer flushed and notify link handler
+0x02065986  sz=58    calls_in=3   out=0   conf=medium  Set flush flag (0x80) on connection buffer and log event
+0x020659c0  sz=42    calls_in=1   out=1   conf=medium  Update connection anchor timestamp (+32) from BT clock read
+0x020659ea  sz=136   calls_in=1   out=3   conf=medium  Under lock, unlink a TX list node and dispatch to free/handler routine
+0x02065a72  sz=244   calls_in=1   out=0   conf=medium  Under lock, sum pending TX byte counts across connection packet lists
+0x02065b66  sz=144   calls_in=2   out=2   conf=medium  Walk TX list, free acknowledged packets up to given sequence number
+0x02065bf6  sz=292   calls_in=3   out=4   conf=medium  Under lock, flush TX packets up to sequence number and free list nodes
+0x02065d1a  sz=368   calls_in=1   out=3   conf=medium  Under lock, fetch next TX packet pointer and length for a connection
+0x02065e8a  sz=24    calls_in=1   out=3   conf=low     Init sequence invoking link-layer setup routines (0x6f058/0x6f0e2/0x6f142)
+0x02065ea2  sz=112   calls_in=1   out=1   conf=medium  Under lock, read connection field (+8) and forward to handler 0x6f148
+0x02065f12  sz=154   calls_in=1   out=2   conf=medium  Under lock, count eligible TX packets in a connection's list
+0x02065fac  sz=246   calls_in=4   out=10  conf=medium  Link/packet transmit-complete and flush handling for a connection
+0x020660a2  sz=192   calls_in=1   out=5   conf=medium  Compute connection scheduling anchor (clock modulo interval) for TX
+0x02066162  sz=372   calls_in=2   out=11  conf=medium  Connection event/state dispatcher: start/stop and flush TX per state
+0x020662d6  sz=248   calls_in=0   out=12  conf=medium  Schedule/retransmit connection packet with timing, update TX queue
+0x020663ce  sz=22    calls_in=2   out=0   conf=medium  Set or clear bit0 of connection flag byte (+22) per argument
+0x020663e4  sz=64    calls_in=1   out=3   conf=medium  Reset connection flags and re-init state (137=0x27), log event
+0x02066424  sz=140   calls_in=2   out=0   conf=high    Under lock, count active connections in 2-entry connection table
+0x020664b0  sz=6     calls_in=2   out=0   conf=low     Extract bit 2 of connection flag argument (uextra p:2,l:1)
+0x020664b6  sz=88    calls_in=2   out=4   conf=medium  Allocate and initialize 40-byte per-connection TX context structure
+0x0206650e  sz=76    calls_in=1   out=3   conf=medium  Compute connection BT-clock phase (clock modulo interval)
+0x0206655a  sz=100   calls_in=2   out=3   conf=medium  Compute wrapped BT-clock offset between two connections
+0x020665be  sz=294   calls_in=2   out=8   conf=medium  Configure periodic/scheduled connection transmission parameters
+0x020666e4  sz=16    calls_in=1   out=1   conf=medium  Wrapper scheduling connection TX with interval 800 (calls 0x665be)
+0x020666f4  sz=182   calls_in=5   out=3   conf=medium  Tear down/close a BT channel object under IRQ lock: free timer id and buffer, reset state byte
+0x020667aa  sz=22    calls_in=3   out=1   conf=low     Thin debug-log wrapper emitting two event values via PDU/log helper
+0x020667c0  sz=24    calls_in=3   out=0   conf=medium  Allocate/advance rolling transaction/sequence id (1..11) from global counter
+0x020667d8  sz=62    calls_in=3   out=4   conf=medium  Lazily malloc and init a 32-byte channel/session object with defaults; panic on OOM
+0x02066816  sz=62    calls_in=2   out=1   conf=medium  Store 3-byte address plus flags into device struct and log the event
+0x020668c6  sz=216   calls_in=1   out=4   conf=medium  Free stream ctx under IRQ lock, else compute media packet timing/BT clock and schedule next event
+0x0206699e  sz=20    calls_in=3   out=1   conf=low     Debug-log wrapper for a BT event (build/send 2-byte message)
+0x020669b2  sz=164   calls_in=3   out=4   conf=medium  Arm/init a link media event: set flag bit, read BT clock, compute scheduled clock into link struct
+0x02066a56  sz=82    calls_in=9   out=3   conf=medium  Set channel error/disconnect state, log reason and post disconnect notification
+0x02066aa8  sz=34    calls_in=4   out=1   conf=low     Debug-log wrapper emitting a device-struct field with a param
+0x02066aca  sz=44    calls_in=1   out=0   conf=medium  Scan device table (8 entries) for an active/connected link; return boolean
+0x02066af6  sz=48    calls_in=4   out=2   conf=low     Log a channel event and reschedule/kick the BT task
+0x02066b26  sz=80    calls_in=2   out=2   conf=medium  Copy address/name (4+12 bytes) into device struct and log the 24-byte record
+0x02066b76  sz=52    calls_in=3   out=3   conf=medium  Lazily allocate and init a 20-byte sub-structure ([+236]) with default id fields; panic on OOM
+0x02066baa  sz=150   calls_in=6   out=2   conf=medium  Free two timer/resource ids in a sub-structure and release it, under IRQ lock
+0x02066c40  sz=186   calls_in=1   out=6   conf=medium  Append 16 bytes to assembly buffer; when full, split/deinterleave halves, validate and byte-reverse
+0x02066cfa  sz=5910  calls_in=3   out=72  conf=high    Main BT protocol/PDU dispatcher: parse opcode via jump tables, manage links/streams, alloc buffers, build responses
+0x02068410  sz=34    calls_in=3   out=1   conf=low     Debug-log wrapper emitting a struct field and a param
+0x02068432  sz=130   calls_in=3   out=5   conf=medium  Begin operation: init sub-struct, read/round BT clock, log and enqueue message
+0x020684b4  sz=168   calls_in=2   out=6   conf=medium  Set up/connect a link: init sub-struct, log device info, read clock, compute rounded id, send PDU
+0x0206855c  sz=38    calls_in=3   out=1   conf=low     Emit a one-shot log message only when a global flag is zero
+0x02068582  sz=28    calls_in=2   out=0   conf=medium  XOR two 16-byte blocks into a third (link-key/security crypto step)
+0x0206859e  sz=122   calls_in=1   out=4   conf=medium  Security key handling: fill/XOR/copy 16-byte key blocks and mark ready flag
+0x02068618  sz=34    calls_in=3   out=1   conf=low     Debug-log wrapper emitting device-struct address/name fields
+0x0206863a  sz=22    calls_in=6   out=1   conf=medium  Free the sub-object referenced at [+232] and clear the pointer
+0x02068650  sz=22    calls_in=3   out=1   conf=low     Debug-log wrapper emitting a device-struct record
+0x02068666  sz=220   calls_in=2   out=7   conf=medium  Connection event/state handler: dispatch states 25/26/35/37, do transitions and resource free
+0x02068742  sz=96    calls_in=2   out=5   conf=medium  Initialize a media/config session: set defaults, fill and byte-reverse two buffer halves
+0x020687a2  sz=102   calls_in=2   out=1   conf=medium  Build/format a bond/pairing info record from device struct and pass to formatter
+0x02068808  sz=52    calls_in=1   out=2   conf=medium  Format and log two device/bond records (via 0x687a2)
+0x0206883c  sz=152   calls_in=2   out=2   conf=medium  Compare a 16-byte link-key/record against input, build formatted struct, return equal flag
+0x020688d4  sz=30    calls_in=3   out=1   conf=low     Debug-log wrapper emitting a 16-bit value
+0x020688f2  sz=100   calls_in=2   out=1   conf=medium  State-transition table for link events (states 39/52/46/44), sets next state/handler
+0x02068956  sz=66    calls_in=3   out=1   conf=medium  Broadcast a value to all other active device-table entries and log each
+0x02068998  sz=26    calls_in=3   out=1   conf=low     Debug-log wrapper emitting a param at fixed level
+0x020689b2  sz=570   calls_in=2   out=12  conf=high    BT link connection state machine: handle connect/config opcodes, alloc link context, log transitions
+0x02068bec  sz=38    calls_in=1   out=4   conf=medium  Teardown/notify helper: flush link, broadcast state to other links and log, then finalize
+0x02068c12  sz=1006  calls_in=2   out=11  conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02069000  sz=230   calls_in=2   out=11  conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x020690e6  sz=104   calls_in=3   out=5   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206914e  sz=2346  calls_in=1   out=36  conf=locality  (subsystem inferred by address locality; not individually analysed)

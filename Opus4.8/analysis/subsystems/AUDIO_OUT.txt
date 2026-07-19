@@ -1,0 +1,41 @@
+0x02005680  sz=124   calls_in=1   out=2   conf=low     Set sound-channel amplitude (reg16) plus RAM shadow, under critical section
+0x020056fc  sz=134   calls_in=2   out=2   conf=low     Set sound-channel value (regs17/18 low/high byte) plus RAM shadow
+0x020057b8  sz=148   calls_in=2   out=2   conf=low     Set channel enable/mute mask (regs7/8) with per-channel bit, or shadow mask at 0x16006
+0x020058d2  sz=128   calls_in=1   out=2   conf=low     Write sound-channel reg19 plus RAM shadow, under critical section
+0x02005952  sz=136   calls_in=2   out=2   conf=low     Write sound-channel regs20/21 (low/high byte) plus RAM shadow (bank A)
+0x020059f0  sz=152   calls_in=2   out=2   conf=low     Set channel enable/mute mask (regs9/10) with per-channel bit, or shadow mask at 0x16008 (bank A)
+0x02005a88  sz=298   calls_in=3   out=11  conf=low     Program a full sound-generator channel: frequency/amplitude/waveform/mute across both register banks
+0x02005bb2  sz=306   calls_in=1   out=6   conf=low     Top-level sound-channel/voice setup from config with recursive enable; includes packet-event parser feeding channels
+0x020067cc  sz=82    calls_in=1   out=0   conf=low     Init audio-stream config struct: sample rate 44100, buffer ptrs, default volume/params
+0x02036f6c  sz=1200  calls_in=2   out=14  conf=low     Large audio/codec+clock init state machine: binds device by name, programs codec regs via ROM, sizes buffers, spawns worker
+0x0203a7d8  sz=730   calls_in=1   out=6   conf=medium  Feed PCM frames from cbuf through HW sample-rate converter (regs @0x14300) into DAC output ring
+0x0203c912  sz=24    calls_in=1   out=0   conf=low     Toggle audio clock/analog bits (0x900/0xF6FF) in register 0x51000 per enable flag
+0x0203c92a  sz=904   calls_in=0   out=8   conf=medium  DAC hardware init: map audio pins/clock (regs 0x5101c), alloc DMA buffer, program DAC descriptor
+0x0203cd70  sz=150   calls_in=1   out=3   conf=medium  DAC deinit/reset: restore DAC registers (0x12b00) to defaults and free DMA buffer
+0x0203d97a  sz=570   calls_in=0   out=3   conf=medium  DAC DMA refill/trigger: compute buffer offsets and invoke per-channel refill callback
+0x0203dbb4  sz=1160  calls_in=1   out=10  conf=medium  Configure multi-channel DAC output: routing bits (0x51030), gains, DMA descriptors, per-channel pin cfg
+0x0203e03c  sz=620   calls_in=2   out=0   conf=high    Program audio clock dividers for a selected sample rate (8k..192k) via clock/analog registers
+0x0203e2a8  sz=206   calls_in=1   out=4   conf=medium  Start/configure audio channels per bitmask: set sample rate, clear buffers, mark descriptors active
+0x0203e376  sz=194   calls_in=1   out=2   conf=medium  Stop/pause audio channels per bitmask: clear descriptor enable bits
+0x0203e438  sz=744   calls_in=1   out=6   conf=medium  Reset/reconfigure audio channels: clear descriptors, free buffer, re-map pins, notify pipeline
+0x0203e962  sz=434   calls_in=0   out=2   conf=medium  DAC channel-service routine (iterates 4 channels dispatching per-channel callbacks) plus two audio DMA IRQ handlers and node-name match
+0x0203eb14  sz=678   calls_in=1   out=8   conf=medium  Allocate 64B audio stream/device node, copy params, insert into priority-sorted device list under spinlock
+0x0203edba  sz=228   calls_in=1   out=5   conf=medium  Unregister/free audio device node from list; ioctl setters and default codec-config selection helpers
+0x0203ee9e  sz=42    calls_in=2   out=1   conf=medium  One-shot DAC power-on settle delay computed from elapsed system time (anti-pop)
+0x0203eec8  sz=38    calls_in=1   out=0   conf=low     Write DAC analog trim/config register field selected by tbb jump table (index 0-3)
+0x0203eeee  sz=104   calls_in=1   out=0   conf=low     DAC calibration measurement loop sampling comparator bit against clock counter, returns compare count
+0x0203ef56  sz=194   calls_in=1   out=2   conf=medium  DAC offset/gain trim calibration via binary search over trim codes using comparator feedback
+0x0203f018  sz=152   calls_in=2   out=0   conf=medium  Set DAC output volume/gain from percentage via volume table into codec digital-gain registers
+0x0203f0b0  sz=1584  calls_in=1   out=16  conf=medium  DAC open/start: configure sample rate, volume, analog path and register playback stream
+0x0203f6e0  sz=80    calls_in=1   out=1   conf=medium  Stop/mute DAC and zero output buffer (memset) when device is active
+0x0203f730  sz=106   calls_in=1   out=0   conf=low     Program DAC clock/channel divider register from sample-rate index lookup table
+0x0203f79a  sz=158   calls_in=1   out=0   conf=low     Enable DAC analog output path/routing registers and apply settle delay
+0x0203f838  sz=2108  calls_in=0   out=18  conf=medium  Audio DAC device ops: stop/close/write-callback/ioctl dispatch plus multi-format output write path
+0x02040074  sz=1082  calls_in=1   out=3   conf=medium  Configure codec analog channel routing matrix from device name and channel bitmask
+0x020404ae  sz=172   calls_in=2   out=1   conf=medium  Set codec analog gain from percentage into per-channel gain registers
+0x0204055a  sz=102   calls_in=2   out=0   conf=low     Configure codec channel enable/routing bitfields (analog config register 0x119c8)
+0x020405c0  sz=66    calls_in=2   out=0   conf=low     Configure codec input enable/mux bits (analog config register 0x119cc)
+0x02040602  sz=1786  calls_in=0   out=13  conf=medium  ADC/line-in codec open: allocate capture buffer, set up input path, gain and routing
+0x02040cfc  sz=50    calls_in=1   out=0   conf=low     Stop ADC/line-in capture: clear input codec registers and advance state machine
+0x02040d2e  sz=194   calls_in=1   out=1   conf=medium  Set ADC input analog gain per channel from percentage into codec gain register
+0x02040df0  sz=1546  calls_in=0   out=13  conf=medium  ADC capture device ops: open/close/start/stop/ioctl with sample-rate table mapping

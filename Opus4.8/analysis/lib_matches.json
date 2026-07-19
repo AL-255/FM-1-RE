@@ -1,0 +1,92 @@
+{
+"0x020023e8": {
+"name": "__udivdi3",
+"src": "libcompiler-rt",
+"ninsn": 7
+},
+"0x02028fdc": {
+"name": "get_number",
+"src": "libg",
+"ninsn": 9
+},
+"0x0202ca16": {
+"name": "remquol",
+"src": "libm",
+"ninsn": 7
+},
+"0x0204260a": {
+"name": "memcmp",
+"src": "libg",
+"ninsn": 21
+},
+"0x02042642": {
+"name": "memmove",
+"src": "libg",
+"ninsn": 74
+},
+"0x02042704": {
+"name": "strcat",
+"src": "libg",
+"ninsn": 11
+},
+"0x0204271c": {
+"name": "strchr",
+"src": "libg",
+"ninsn": 8
+},
+"0x02042730": {
+"name": "strcmp",
+"src": "libg",
+"ninsn": 58
+},
+"0x020427d0": {
+"name": "strcpy",
+"src": "libg",
+"ninsn": 38
+},
+"0x0204283e": {
+"name": "strlen",
+"src": "libg",
+"ninsn": 6
+},
+"0x0204284a": {
+"name": "strncmp",
+"src": "libg",
+"ninsn": 12
+},
+"0x02042864": {
+"name": "strnlen",
+"src": "libg",
+"ninsn": 8
+},
+"0x02042f08": {
+"name": "memset",
+"src": "libg",
+"ninsn": 17
+},
+"0x0205e248": {
+"name": "remquol",
+"src": "libm",
+"ninsn": 7
+},
+"0x0205e280": {
+"name": "remquol",
+"src": "libm",
+"ninsn": 7
+},
+"0x0205e2b4": {
+"name": "remquol",
+"src": "libm",
+"ninsn": 7
+},
+"0x0205e2ee": {
+"name": "fmal",
+"src": "libm",
+"ninsn": 9
+},
+"0x0206db5e": {
+"name": "hsearch",
+"src": "libg",
+"ninsn": 8
+}
+}

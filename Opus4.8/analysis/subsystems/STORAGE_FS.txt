@@ -1,0 +1,175 @@
+0x02002612  sz=150   calls_in=11  out=1   conf=medium  syscfg/param read dispatcher by key; validates MAC-type items via CRC
+0x0200310e  sz=232   calls_in=1   out=4   conf=low     Build device info/identity from syscfg items (MAC, version, "FM-1" magic)
+0x020032b8  sz=60    calls_in=11  out=0   conf=medium  syscfg/param write dispatcher by key via backend callback table
+0x020032f4  sz=174   calls_in=3   out=4   conf=low     Generate and persist BT address/config item with CRC validation
+0x0200372c  sz=136   calls_in=4   out=2   conf=medium  Read from NVRAM/flash storage in 256-byte pages via mask-ROM read
+0x020037b4  sz=20    calls_in=13  out=1   conf=medium  Storage read wrapper returning length or 0 on short read
+0x020037c8  sz=66    calls_in=5   out=0   conf=medium  LFSR data whitening/descramble byte loop for flash content
+0x0200380a  sz=152   calls_in=3   out=4   conf=medium  Write to NVRAM/flash storage with scrambling, or memmove for RAM region
+0x020038a2  sz=20    calls_in=11  out=1   conf=medium  Storage write wrapper returning length or 0 on failure
+0x0201d33a  sz=446   calls_in=10  out=5   conf=low     Device/flash ioctl dispatcher: decodes command codes, touches controller SFR 0x40300, mutex-guarded
+0x0201d4f8  sz=38    calls_in=7   out=1   conf=low     Select flash partition descriptor by index and issue the mapped device ioctl (cmd,mask)
+0x02026f62  sz=34    calls_in=4   out=0   conf=low     Flash storage flush/notify: on dword change (@0x1C20190) invoke channel-13 handler
+0x02026f8e  sz=32    calls_in=2   out=1   conf=low     Validate a 30-byte flash record via CRC16 compare against stored checksum
+0x02026fae  sz=20    calls_in=2   out=0   conf=low     Get active storage double-buffer/mode flag (bit0 of state byte @app+9874)
+0x02026fc2  sz=94    calls_in=4   out=1   conf=medium  Erase flash regions: iterate 4KB/256B pages issuing flash erase op (0x1d4f8)
+0x02027020  sz=28    calls_in=4   out=1   conf=low     Flash storage flush on dword change: call channel-13 op and clear marker
+0x0202703c  sz=64    calls_in=2   out=0   conf=low     Check flash transfer buffer free-space/fullness against computed threshold
+0x0202707c  sz=94    calls_in=2   out=3   conf=medium  Format flash transfer double-buffer: erase regions and write magic markers
+0x020270da  sz=56    calls_in=2   out=2   conf=medium  Flash-to-flash block copy in 256-byte chunks (read then write)
+0x02027112  sz=384   calls_in=1   out=5   conf=medium  Flash log compaction/GC: relocate valid records to a fresh buffer and rewrite index/offset tables
+0x02027292  sz=180   calls_in=2   out=7   conf=medium  Commit/save record to flash storage under mutex: check fullness, trigger erase/flush/swap
+0x02027346  sz=60    calls_in=1   out=2   conf=high    Round address up to flash page/sector unit (256/4096) selected by flash-type byte; assert on invalid type
+0x02027382  sz=60    calls_in=1   out=0   conf=medium  Return active flash region base and remaining length via output pointers, indexed by current-bank bit
+0x020273c6  sz=280   calls_in=3   out=3   conf=medium  Erase/cache-invalidate a flash region across 64K/4K/256B units, pumping comms and yielding between units
+0x020274de  sz=42    calls_in=1   out=1   conf=medium  Erase/flush one flash unit at address (page/sector per flash type) and return the unit size
+0x02027508  sz=720   calls_in=1   out=13  conf=medium  Create/update an OTA firmware record in flash: align, erase, write header with magic+CRC and payload
+0x020277d8  sz=22    calls_in=3   out=1   conf=medium  Query a flash/partition parameter (info id 103) via the device-info dispatcher
+0x020277ee  sz=106   calls_in=1   out=4   conf=medium  Validate a stored flash record header (magic 0x5A0x/0x5440 + CRC16 + name) and output payload length
+0x02027858  sz=326   calls_in=2   out=9   conf=medium  Relocate/commit OTA data blocks in flash, verifying 0x55AAAA54 signature via chunked flash-to-flash copy
+0x02027ee2  sz=514   calls_in=0   out=12  conf=low     sys_event mailbox request to read chip UID/secure region and register OTA/USB update device node ('ota-FM-1')
+0x020280e4  sz=82    calls_in=1   out=2   conf=medium  VFS write: lock device, dispatch driver ops[+28] with (buf,size*count), unlock
+0x02028136  sz=80    calls_in=2   out=2   conf=medium  VFS seek/ioctl: lock device, dispatch driver ops[+40], unlock (-19 if unsupported)
+0x02028186  sz=82    calls_in=2   out=2   conf=medium  VFS read: lock device, dispatch driver ops[+36] with (buf,size*count), unlock
+0x020281d8  sz=72    calls_in=1   out=2   conf=medium  VFS close/sync: lock device, dispatch driver ops[+52], unlock (-19 if unsupported)
+0x02028220  sz=158   calls_in=0   out=3   conf=medium  Allocate/zero a 40-byte fs node and build the root/partition directory node
+0x020282d8  sz=86    calls_in=4   out=4   conf=medium  Parse next path component: skip '/', copy up to 15 chars, uppercase; return pointer past separator
+0x020283b4  sz=28    calls_in=5   out=0   conf=medium  Translate a flash-mapped/relative pointer to an absolute address using base offset globals
+0x020283d0  sz=170   calls_in=2   out=3   conf=medium  Look up a directory/resource entry by name (CRC16 key + wildcard match) across 32-byte entries
+0x0202847a  sz=104   calls_in=2   out=2   conf=medium  Scan up to 32 entries for a name match (CRC16 + fnmatch); return the matched 32-byte entry
+0x020284e2  sz=48    calls_in=3   out=2   conf=medium  Resolve a directory entry and fix up its mapped pointer/offset (lookup 0x2847a + translate)
+0x02028512  sz=26    calls_in=2   out=1   conf=medium  Look up an entry and return its directory attribute bit
+0x0202852c  sz=168   calls_in=1   out=5   conf=medium  Open by path: split components and walk directory entries, resolving to a node
+0x020285d4  sz=104   calls_in=1   out=2   conf=medium  Scan 32-byte entry table (global[308]) for a CRC16 name match; return entry and offset
+0x0202863c  sz=100   calls_in=1   out=3   conf=medium  Directory traversal step: path-split + entry lookup + pointer fixup
+0x020286a0  sz=718   calls_in=0   out=15  conf=medium  Recursive directory traversal plus full file-op table (open/read/seek/tell/getname/close/ioctl/info)
+0x0202896e  sz=42    calls_in=1   out=2   conf=low     Locked dispatch to a device handler for the update/USB device object (0x1C0E128)
+0x02028998  sz=428   calls_in=0   out=9   conf=low     'usb_update_mode' virtual device: name-matched entry lookup/open and I/O over the update node
+0x02028b44  sz=94    calls_in=1   out=1   conf=medium  Find a resource/file entry by name (fnmatch against literal at 0x204EFA0); return mapped address
+0x02028ba2  sz=160   calls_in=1   out=3   conf=low     Block/flash device hardware init: gate clocks, configure GPIOs, init mutex/list, register device instance
+0x02028c7c  sz=162   calls_in=4   out=1   conf=medium  Device-manager open: fnmatch device name across registered table, call driver open, bump refcount atomically
+0x02028d1e  sz=108   calls_in=5   out=0   conf=medium  Device-manager put/close: atomic refcount decrement, invoke destructor when it reaches zero
+0x02028d8a  sz=572   calls_in=1   out=16  conf=low     Device-manager register/open a device node by name ('plnk1'...), allocate/link node and dispatch; plus storage/vfs init
+0x02028ff2  sz=80    calls_in=1   out=1   conf=medium  Validate MBR partition table: check 4x16B entries' boot flag/LBA/size
+0x02029042  sz=430   calls_in=1   out=5   conf=medium  Recursively scan MBR/extended partition table, collect partition LBAs, detect FAT/NTFS
+0x020291f0  sz=32    calls_in=4   out=1   conf=medium  Decrement volume/handle refcount; on zero unlink from device list and free
+0x02029210  sz=170   calls_in=2   out=5   conf=medium  Allocate & init disk/volume descriptor, query capacity via ioctl, register in device list
+0x020292ba  sz=66    calls_in=18  out=0   conf=high    Flush dirty 512B sector cache to device via write callback under lock
+0x020292fc  sz=86    calls_in=23  out=1   conf=high    Load requested sector into cache (flushing old dirty sector) via read callback
+0x02029352  sz=952   calls_in=1   out=13  conf=high    Parse FAT32 boot sector/BPB and FSInfo (RRaA/rrAa) to mount volume; walk partitions
+0x02029762  sz=1990  calls_in=0   out=16  conf=medium  Format volume: build FAT boot sector/FAT tables/cluster sizing by capacity (mkfs.fat)
+0x02029f28  sz=58    calls_in=21  out=1   conf=medium  Initialize directory/cluster-chain iterator state for a file handle
+0x02029f6c  sz=114   calls_in=6   out=1   conf=medium  Map logical position to cluster/sector using fragmentation flag bits
+0x02029fde  sz=188   calls_in=2   out=1   conf=medium  Toggle FAT allocation bitmap bits (allocate/free clusters), mark cache dirty
+0x0202a09a  sz=318   calls_in=7   out=4   conf=high    Read/write a FAT table entry with FAT12/16/32 bit packing
+0x0202a1d8  sz=50    calls_in=3   out=1   conf=medium  Walk/clear a FAT cluster chain via repeated FAT-entry access
+0x0202a20a  sz=606   calls_in=3   out=5   conf=medium  Search FAT bitmap for free clusters and link a new cluster chain
+0x0202a468  sz=134   calls_in=2   out=3   conf=medium  Scan FAT to build free-cluster count/bitmap
+0x0202a4ee  sz=264   calls_in=12  out=7   conf=medium  Cluster-chain read/extend dispatcher (state machine over FAT)
+0x0202a5f6  sz=102   calls_in=1   out=2   conf=high    Parse FAT short (8.3) directory entry: name, attrs, cluster, size, dates
+0x0202a6a8  sz=1192  calls_in=10  out=7   conf=high    Directory enumeration (readdir) reconstructing FAT long filenames (LFN)
+0x0202ab50  sz=170   calls_in=4   out=3   conf=medium  Find/match a file within a directory by scanning cluster-chain entries
+0x0202abfa  sz=138   calls_in=7   out=3   conf=high    Write back FAT32 FSInfo/boot signatures (RRaA/rrAa, 0x55AA) and free count
+0x0202ac84  sz=312   calls_in=0   out=13  conf=high    Open file by name: alloc handle, scan directory with LFN, compare short name
+0x0202adbc  sz=316   calls_in=0   out=3   conf=medium  Compute volume used/free cluster count via recursive directory/cluster scan
+0x0202aef8  sz=14    calls_in=4   out=1   conf=medium  Allocate 812-byte filesystem handle/context buffer
+0x0202af06  sz=10    calls_in=5   out=1   conf=medium  Free filesystem object buffer
+0x0202af10  sz=508   calls_in=2   out=1   conf=medium  Parse/tokenize path string (\U escape, '/', '.', '&') into name components
+0x0202b136  sz=34    calls_in=2   out=1   conf=medium  Count filename characters that are not the '*' wildcard
+0x0202b158  sz=198   calls_in=8   out=8   conf=medium  Case-insensitively compare two filenames (dup, uppercase, compare)
+0x0202b232  sz=316   calls_in=1   out=12  conf=medium  Generate 8.3 short filename with numeric ~N tail avoiding collisions
+0x0202b36e  sz=104   calls_in=1   out=1   conf=medium  Reset directory/filesystem handle context, preserving saved state fields
+0x0202b3d6  sz=194   calls_in=5   out=4   conf=high    Read 512B directory block and extract FAT long-filename (LFN) name chunks
+0x0202b498  sz=56    calls_in=3   out=0   conf=high    Trim UTF-16LE long-filename buffer at 0x0000/0xFFFF terminator, null-terminate, return byte length
+0x0202b4d0  sz=106   calls_in=2   out=2   conf=medium  Wildcard match of two normalized 8.3 filenames (handles '*' and '?'), returns match flag
+0x0202b53a  sz=146   calls_in=2   out=6   conf=medium  Search directory for entry matching name: assemble long name and wildcard-compare, return status code
+0x0202b5cc  sz=26    calls_in=2   out=0   conf=medium  Return string length up to first space (trim trailing spaces of padded 8.3 name)
+0x0202b5e6  sz=88    calls_in=2   out=0   conf=high    Convert filename to space-padded uppercase 8.3 form (handles '.', stops at '/')
+0x0202b63e  sz=20    calls_in=1   out=0   conf=low     Copy 3-word record from source (or zero-init 11-word block) into file-handle context fields
+0x0202b652  sz=162   calls_in=4   out=4   conf=medium  Walk one path component: normalize name to 8.3 and search directory entry, dispatch via vtable
+0x0202b6f4  sz=24    calls_in=4   out=1   conf=high    Write FAT cluster number into directory entry (low16 at +26, high16 at +20)
+0x0202b70c  sz=112   calls_in=3   out=3   conf=medium  Build packed FAT DOS date/time word from RTC/time source (get_time helpers)
+0x0202b77c  sz=52    calls_in=2   out=1   conf=medium  Allocate first/next FAT cluster for a directory entry via FAT set-next
+0x0202b7b0  sz=24    calls_in=2   out=1   conf=low     Copy file position/context struct (3 words + 8 bytes) and register it
+0x0202b7c8  sz=42    calls_in=2   out=0   conf=medium  Compute rolling 16-bit rotate-add checksum over long-name directory entries
+0x0202b7f2  sz=248   calls_in=2   out=4   conf=medium  Read/verify multi-part long directory record (0x85/0xC0/0xC1 markers) against checksum
+0x0202b8ea  sz=130   calls_in=4   out=5   conf=medium  Write multi-part long-name directory entries with computed checksum
+0x0202b96c  sz=282   calls_in=1   out=2   conf=low     Encode filename into custom long-name entry format using char lookup/compression table
+0x0202ba86  sz=568   calls_in=3   out=10  conf=medium  Create new directory entry: build name, DOS timestamp, allocate cluster, write records
+0x0202bcbe  sz=32    calls_in=3   out=0   conf=high    Compute 8-bit LFN checksum over 11-byte 8.3 name (rotate-right-1 add per byte)
+0x0202bcde  sz=330   calls_in=3   out=4   conf=medium  Write/update directory records (26-byte stride, attribute and name-part bytes)
+0x0202be28  sz=158   calls_in=4   out=3   conf=medium  Free/deallocate FAT cluster chain starting from a given cluster
+0x0202bec6  sz=684   calls_in=2   out=15  conf=medium  Create file/dir: resolve parent path, build default 8.3 fields, write directory records
+0x0202c172  sz=40    calls_in=2   out=1   conf=medium  Read and combine cluster/size field(s) from a directory entry (hi/lo halfwords)
+0x0202c19a  sz=934   calls_in=1   out=17  conf=medium  Create/populate directory entry for one path component (open/create helper)
+0x0202c540  sz=1238  calls_in=2   out=22  conf=high    Open/create file by pathname: parse path, expand wildcards, resolve/create each component
+0x0202ca16  sz=16    calls_in=2   out=1   conf=high   [remquol]  Thin wrapper forwarding an extra arg to path open/create (c540); spurious remquol libtag
+0x0202ca26  sz=122   calls_in=3   out=4   conf=high    fopen: allocate file struct, parse mode string ('r'/'w'/'b'), open file; +808 refcount inc
+0x0202caa0  sz=166   calls_in=7   out=1   conf=high    Map logical file cluster index to physical FAT cluster with cached range lookup
+0x0202cb46  sz=508   calls_in=2   out=7   conf=high    Buffered file write: map clusters, fill 512-byte sector buffers, handle partial sectors
+0x0202cd42  sz=468   calls_in=2   out=12  conf=medium  Flush/commit file metadata to directory entry (size, cluster, DOS timestamp)
+0x0202cf16  sz=684   calls_in=1   out=8   conf=high    Append/write to file extending cluster chain, buffered 512-byte sector writes
+0x0202d1c2  sz=604   calls_in=3   out=4   conf=high    Buffered file read: map clusters, read 512-byte sectors (plus size/position getters)
+0x0202d41e  sz=306   calls_in=4   out=3   conf=medium  Readdir core: assemble long filename from multi-part directory entries
+0x0202d550  sz=430   calls_in=0   out=8   conf=medium  Read next directory entry name; decode/escape to output string ('\U' escapes for non-ASCII)
+0x0202d6fe  sz=658   calls_in=0   out=14  conf=medium  Reconstruct full pathname by walking parent directory chain (getcwd/realpath)
+0x0202d990  sz=704   calls_in=1   out=17  conf=medium  Create directory / auto-named entry with timestamped 8.3 name via path resolve
+0x0202dc50  sz=224   calls_in=1   out=7   conf=medium  Close/truncate file: flush metadata, free trailing cluster chain and buffer
+0x0202dd30  sz=34    calls_in=1   out=4   conf=medium  fclose: close file (flush/free clusters) then free file handle, with scheduler hook
+0x0202dd52  sz=232   calls_in=1   out=1   conf=medium  Release cached block buffer: decrement refcount, unlink from cache lists (+list-link helper)
+0x0202de3a  sz=100   calls_in=2   out=3   conf=high    Mark directory entries deleted (0xE5), iterating associated long-name parts
+0x0202de9e  sz=604   calls_in=0   out=12  conf=medium  Unlink/remove file: free FAT cluster chain and mark directory entries deleted
+0x0202e0fa  sz=14    calls_in=1   out=1   conf=medium  Allocate 760-byte filesystem context/handle structure via malloc
+0x0202e108  sz=14    calls_in=1   out=1   conf=low     Wrapper allocating a ~2.8KB (2808-byte) fs/volume context buffer via the heap allocator
+0x0202e116  sz=122   calls_in=3   out=6   conf=medium  Parse a path string (strip leading '/'), alloc 804-byte path node, tokenize and copy into fs lookup struct
+0x0202e190  sz=82    calls_in=2   out=2   conf=medium  Walk '/'-separated path components, matching each against directory entries (path-component matcher)
+0x0202e1e2  sz=772   calls_in=4   out=8   conf=medium  Directory tree scan/resolve: iterate readdir entries, compare names, build up matched path (core lookup)
+0x0202e4e6  sz=232   calls_in=1   out=2   conf=medium  Initialize fs handle: build 2KB directory hash-table with 16-byte-node free lists, then parse+resolve path
+0x0202e5ce  sz=422   calls_in=0   out=6   conf=medium  Open/close fs handle group: alloc+init handle, recursive release/free on error path
+0x0202e774  sz=154   calls_in=1   out=0   conf=medium  Compact a directory sector: iterate 32-byte FAT entries, pack live name records, drop deleted/free slots
+0x0202e80e  sz=180   calls_in=2   out=4   conf=medium  Read/refresh directory block(s) via device callback, memmove 512-byte sector buffers and re-pack entries
+0x0202e8c2  sz=66    calls_in=2   out=0   conf=medium  Initialize directory read cursor: validate position vs size and set up scan bounds
+0x0202e904  sz=74    calls_in=2   out=2   conf=medium  Clone a directory/file handle (memmove 108/396/140-byte regions) and reinit its read cursor
+0x0202e94e  sz=112   calls_in=1   out=3   conf=medium  Iterate directory entries with filter flags, calling readdir helper to advance the scan
+0x0202e9be  sz=120   calls_in=3   out=7   conf=medium  Duplicate an fs context (696-byte memmove) and re-run directory iteration on the copy
+0x0202ea36  sz=184   calls_in=1   out=6   conf=medium  Open/seek within directory: resolve entry, refresh block, clone handle, rebind cursor
+0x0202eaee  sz=134   calls_in=4   out=3   conf=medium  Re-link directory-entry cache list and re-resolve current entry after a seek/refresh
+0x0202eb74  sz=42    calls_in=1   out=1   conf=medium  Seek-forward helper: if cached index mismatches, re-run directory re-link (0x2eaee)
+0x0202eb9e  sz=36    calls_in=2   out=1   conf=medium  Seek-backward helper: adjust cursor flags and re-run directory re-link
+0x0202ebc2  sz=34    calls_in=2   out=1   conf=medium  Directory cursor helper: fetch prev node or re-link list when cache index stale
+0x0202ebe4  sz=34    calls_in=1   out=1   conf=medium  Directory cursor helper: fetch next node or re-link list when cache index stale
+0x0202ec06  sz=100   calls_in=1   out=2   conf=medium  Locate directory entry by index/target, walking the cached entry list forward via seek helpers
+0x0202ec6a  sz=1302  calls_in=0   out=16  conf=medium  Core directory seek/traversal state machine (readdir/seekdir) with jump-table dispatch over seek modes
+0x0202f180  sz=112   calls_in=0   out=1   conf=high    Decode FAT directory date/time word into fields (year=+1980, month/day/hour/min/sec) and fill stat struct
+0x0202f1f0  sz=404   calls_in=1   out=5   conf=medium  Read directory into buffer: scan 512-byte sectors of 32-byte entries, filter and copy matching records
+0x0202f384  sz=348   calls_in=0   out=10  conf=medium  Split path into dir/base (find last '/' or '.'), open parent dir and enumerate/build child entries
+0x0202f4e0  sz=182   calls_in=1   out=5   conf=medium  Scan a directory counting/matching entries (memcmp against name marker), tallying file vs dir counts
+0x0202f596  sz=150   calls_in=1   out=5   conf=medium  Scan directory (variant of 0x2f4e0) counting matched entries after decrementing a slot index
+0x0202f62c  sz=124   calls_in=1   out=4   conf=medium  Fill a directory-entry/stat record: read entry, copy long name via strlen/memmove, set name length
+0x0202f6a8  sz=330   calls_in=1   out=6   conf=medium  Enumerate a directory into an array of 0x20C-byte entry structs (readdir listing with skip/count)
+0x0202f7f2  sz=448   calls_in=1   out=12  conf=medium  Match/resolve a filename in a directory (handles '.'/extension), compare candidate names via memcmp
+0x0202f9b2  sz=160   calls_in=1   out=4   conf=medium  Scan entries parsing numeric name fields (x1000/100/10 digits) tracking max value (highest-numbered file)
+0x0202fa52  sz=160   calls_in=1   out=2   conf=medium  Build file cluster/block map: compute clusters-per-read, fill sector list from FAT chain traversal
+0x0202faf2  sz=188   calls_in=2   out=7   conf=medium  Write/create a directory entry: fill 32-byte slot, stamp FAT date/time, flush via device write callback
+0x0202fbae  sz=220   calls_in=1   out=6   conf=medium  File write/extend path: allocate clusters, update chain, flush dirty blocks and write new dir entry
+0x0202fc8a  sz=212   calls_in=1   out=7   conf=medium  Buffered file write: sync partial sector, allocate clusters, and emit dir-entry updates
+0x0202fd5e  sz=208   calls_in=3   out=1   conf=medium  Cluster/sector lookup using cached FAT-chain ranges (arrays at +732/+752), extending mapping as needed
+0x0202fe2e  sz=1678  calls_in=1   out=33  conf=medium  Main fs operation dispatcher (open/read/write/readdir/stat/etc.) via 22-case jump table, plus fopen impl
+0x020304bc  sz=408   calls_in=1   out=11  conf=medium  Mount/register a filesystem: match fs type by name, alloc volume ctx, init mutexes, spawn worker, query capacity
+0x02030654  sz=114   calls_in=1   out=4   conf=medium  Unmount/deinit a filesystem volume: stop worker, release device handle, clear volume state
+0x020306c6  sz=548   calls_in=5   out=18  conf=medium  Storage device event/message handler: dispatch disk insert/remove/mount/unmount and status notifications
+0x020308ea  sz=50    calls_in=2   out=0   conf=low     Poll registered device list, invoking each device's status callback and returning the minimum result
+0x0203091c  sz=38    calls_in=2   out=0   conf=low     Iterate device/handler table, AND-ing each entry's status callback result (all-ready/all-idle check)
+0x02032140  sz=848   calls_in=0   out=20  conf=medium  Flash VM param-store area scan/format: validate magic 0xDDEEAA54/0x55AAAA54, memset page, build item index, CRC
+0x02032490  sz=12    calls_in=1   out=0   conf=low     Bounds check: return (id < 256) for VM item validity
+0x0203249c  sz=1112  calls_in=0   out=20  conf=medium  Flash VM item lookup/read: find item by id, read length/offset, CRC-verify, copy out
+0x020328f4  sz=14    calls_in=3   out=1   conf=medium  Get flash/VM device handle by name string (0x20557a2)
+0x02032902  sz=228   calls_in=2   out=5   conf=medium  Open flash region and parse/validate header (size limits, CRC) into ctx 0x1c0e4b0
+0x020329e6  sz=34    calls_in=2   out=0   conf=medium  Lookup entry in 6-byte-stride resource/section table (0x204df94) by halfword id
+0x02032a08  sz=96    calls_in=1   out=1   conf=medium  Scan flash record region for entry matching id: big-endian header parse + CRC validate
+0x02032a68  sz=40    calls_in=2   out=1   conf=medium  Search both VM regions (ctx 0x1c0e4b0) for a matching item via record scan
+0x02032a90  sz=118   calls_in=1   out=2   conf=medium  VM item read with width/size bounds validation and copy
+0x02032b06  sz=158   calls_in=0   out=5   conf=medium  VM item read wrappers: locate item and memmove payload into caller buffer
+0x02032ba4  sz=62    calls_in=1   out=3   conf=medium  Open second VM region and store handle at 0x1c0e4c8
+0x02032be2  sz=46    calls_in=1   out=0   conf=medium  Section-table lookup (0x2043832, 2-byte stride): map id to flash offset/size
+0x02032c10  sz=1188  calls_in=0   out=21  conf=medium  Flash VM write/delete/enumerate (build record+CRC, program flash); block also holds a HW-timer start/stop and its ISR

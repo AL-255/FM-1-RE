@@ -1,0 +1,121 @@
+0x02008216  sz=206   calls_in=10  out=5   conf=medium  Remove signal/observer connections matching (object,signal) from global list; free & set dirty flag
+0x020082e4  sz=344   calls_in=3   out=4   conf=medium  Search/disconnect event handlers by (object,signal,param) walking parent chain; unlink & free
+0x02008502  sz=10    calls_in=9   out=0   conf=medium  Null-safe element link accessor: return obj?[obj+4]:0 (next element)
+0x02008518  sz=16    calls_in=5   out=0   conf=medium  Walk +4 sibling chain to the last/root element and return it
+0x02008528  sz=68    calls_in=9   out=1   conf=medium  Find the container/window owning an element by scanning window list children arrays
+0x0200856c  sz=22    calls_in=3   out=0   conf=low     Accessor: return field +16 of element or default manager (global[176])
+0x02008582  sz=22    calls_in=3   out=0   conf=low     Accessor: return field +28 of element or default manager (global[176])
+0x02008598  sz=22    calls_in=2   out=0   conf=low     Accessor: return field +32 of element or default manager (global[176])
+0x020089ea  sz=64    calls_in=5   out=2   conf=medium  Allocate & zero-init 28-byte element extra/state struct and set default flag bits
+0x02008a2a  sz=88    calls_in=2   out=3   conf=medium  Set element property id 19; on change alloc extra struct, redraw, and store new value
+0x02008ac4  sz=232   calls_in=5   out=7   conf=medium  Element state-change dispatcher (show/hide/move/invalidate per 0x400-0x2000 flags); query props, trigger redraw/relayout
+0x02008bac  sz=470   calls_in=4   out=4   conf=medium  Rebuild element's signal/binding entry table on parent change; grow array via realloc
+0x02008d82  sz=10    calls_in=2   out=0   conf=medium  Null-safe accessor: return obj?[obj+8]:0 (element child/list head)
+0x02008d8c  sz=10    calls_in=1   out=0   conf=medium  Null-safe accessor: return obj?[obj+4]:0 (element link)
+0x02008d96  sz=920   calls_in=3   out=10  conf=medium  Core widget-tree event/focus propagation & element teardown (recursive dispatch, unlink, free)
+0x020092e6  sz=166   calls_in=2   out=4   conf=medium  Find-or-add 8-byte entry in element's dynamic binding array, growing via realloc
+0x0200938c  sz=220   calls_in=5   out=2   conf=medium  Insert/update keyed entry in element's attribute/property array (malloc/realloc grow)
+0x02009494  sz=46    calls_in=3   out=1   conf=medium  Initialize widget/animation descriptor defaults (500ms, 100, base ptr, flags)
+0x0200965c  sz=156   calls_in=3   out=6   conf=medium  Create/register a new element/widget in the manager: copy descriptor, link into list, run init callbacks
+0x020096f8  sz=300   calls_in=1   out=7   conf=medium  Create/enqueue a UI transition/animation node: read element attrs, alloc node, install callback vtable
+0x0200993c  sz=988   calls_in=1   out=8   conf=medium  On property change, rebuild affected animation list (alloc 640B, key-match), dispatch relayout/redraw
+0x02009d18  sz=20    calls_in=2   out=0   conf=low     Accessor: return elem[+48] if object vtable type matches, else 0
+0x02009d2c  sz=214   calls_in=5   out=4   conf=medium  Compute element horizontal content extent/left offset from margin attrs and children
+0x02009e02  sz=16    calls_in=3   out=0   conf=medium  Get parent container vertical scroll offset (-parent[+18]), 0 if no parent
+0x02009e12  sz=10    calls_in=4   out=0   conf=low     Rect-span helper: return (r1 - r0 + 1) as 16-bit (dimension from two edges)
+0x02009e1c  sz=26    calls_in=1   out=0   conf=medium  Inset/expand a rectangle: left-=dx,right+=dx,top-=dy,bottom+=dy
+0x02009e36  sz=154   calls_in=5   out=2   conf=medium  Build element's margin-adjusted outer rectangle from geometry + margin attrs
+0x02009ed0  sz=194   calls_in=4   out=4   conf=medium  Compute element vertical content extent/height from margin attrs and children
+0x02009f92  sz=26    calls_in=1   out=0   conf=low     Accessor: return elem[+68]&0xF (4-bit field) if vtable type matches, else 0
+0x02009fac  sz=28    calls_in=2   out=0   conf=low     Get global UI config value (default cell/line metric), fallback 60
+0x02009fc8  sz=1428  calls_in=3   out=10  conf=medium  Core element layout: read pos/size/margin attrs, compute two result rects incl percent/auto sizing
+0x0200a55c  sz=28    calls_in=5   out=0   conf=high    Compute rectangle area = (right+1-left)*(bottom+1-top)
+0x0200a5ae  sz=52    calls_in=3   out=3   conf=medium  Recompute element layout and invalidate old/new region when rect changed
+0x0200a5e2  sz=26    calls_in=2   out=0   conf=low     Compute animation duration ~ ceil(|delta|*1000 / speed)
+0x0200a5fc  sz=136   calls_in=3   out=2   conf=medium  Recursively translate element subtree rectangles by (dx,dy) offset
+0x0200a684  sz=332   calls_in=3   out=10  conf=medium  Scroll/move element by delta (timed-animated or immediate), offset children, post events
+0x0200a7d0  sz=162   calls_in=2   out=5   conf=medium  Scroll element to bring its content into view on both axes (clamped)
+0x0200a872  sz=16    calls_in=3   out=0   conf=medium  Get parent container horizontal scroll offset (-parent[+16]), 0 if no parent
+0x0200a882  sz=298   calls_in=1   out=9   conf=medium  Reflow element and its first child; update rect and notify listeners
+0x0200a9ac  sz=762   calls_in=1   out=3   conf=medium  Layout element with percent sizing and alignment modes (jump-table on alignment)
+0x0200aca6  sz=42    calls_in=2   out=2   conf=medium  Scroll element horizontally to target x (thin wrapper over scroll-by)
+0x0200acd0  sz=2166  calls_in=1   out=15  conf=medium  Container relayout: position children (align/percent), compute scroll extents, apply scrolling
+0x0200b546  sz=86    calls_in=2   out=5   conf=medium  Recursively relayout dirty element subtree (clears dirty flag, runs layout)
+0x0200b59c  sz=58    calls_in=3   out=2   conf=medium  Top-level layout-update pass with reentrancy guard; iterate until tree is clean
+0x0200b5d6  sz=254   calls_in=3   out=6   conf=medium  Scroll element by (dx,dy) clamped to content bounds
+0x0200b6d4  sz=42    calls_in=2   out=2   conf=medium  Scroll element vertically to target y (thin wrapper over scroll-by)
+0x0200b6fe  sz=16    calls_in=1   out=0   conf=low     Accessor: return nibble field of elem[+25] if element present
+0x0200b70e  sz=12    calls_in=1   out=0   conf=low     Accessor: dereference elem vtable header ([elem][0][0]); returns 0
+0x0200b71a  sz=262   calls_in=1   out=1   conf=medium  Compute bounding-box expansion needed for element shadow/border/glow style effects
+0x0200b820  sz=18    calls_in=2   out=0   conf=low     Type-gated accessor: return elem[+16] data ptr if element type in range [20..25]
+0x0200b832  sz=74    calls_in=6   out=1   conf=medium  Initialize widget/element struct (56B) with default style values
+0x0200b87c  sz=26    calls_in=5   out=0   conf=medium  Classify leading text byte -> encoding/type code (ASCII/multibyte/empty)
+0x0200b896  sz=846   calls_in=1   out=3   conf=medium  Parse widget style/attributes from resource into runtime struct; scale fields by opacity
+0x0200bbe4  sz=16    calls_in=1   out=1   conf=low     Construct/zero a 72-byte object and store type/parent ptr at offset 0
+0x0200c18a  sz=172   calls_in=5   out=0   conf=low     Allocate first free slot in a 16-entry (key,val) registration table; return index or -1
+0x020174b2  sz=58    calls_in=2   out=2   conf=medium  Query a widget capability/state attribute flag (key 0x1069)
+0x020175ac  sz=96    calls_in=3   out=4   conf=medium  Configure widget auto-layout/resize state from resource attributes (keys 0x1000/0x1004)
+0x0201800a  sz=46    calls_in=1   out=0   conf=low     Walk child list and dispatch to the first element with an installed handler callback
+0x02018ab4  sz=52    calls_in=3   out=1   conf=medium  Get a widget property value by tag from its property list
+0x02018ae8  sz=198   calls_in=28  out=6   conf=high    Set/add a widget property: grow the property array, store the value and notify
+0x02018bae  sz=12    calls_in=2   out=1   conf=medium  Wrapper: set widget attribute key 0x1000
+0x02018bba  sz=40    calls_in=7   out=2   conf=medium  Set widget attribute key 0x1000 only if the value changed
+0x02018be2  sz=14    calls_in=7   out=1   conf=medium  Wrapper: set widget attribute key 0x1459
+0x02018bf0  sz=14    calls_in=3   out=1   conf=medium  Wrapper: set widget attribute key 0x1009
+0x02018bfe  sz=80    calls_in=3   out=2   conf=medium  Set widget position attributes (keys 0x1007/0x1008) when changed
+0x02018c4e  sz=20    calls_in=11  out=2   conf=medium  Set widget geometry (position and size) attributes
+0x02018c62  sz=34    calls_in=3   out=3   conf=medium  Build/configure the sys_power UI widget: set resource, text content and geometry
+0x02018c84  sz=24    calls_in=5   out=2   conf=medium  UI element setter: reset sub-object then write its content pointer + 8-byte data/length attribute
+0x02018c9c  sz=52    calls_in=9   out=3   conf=medium  Mark UI element dirty (set redraw flag [+28]) inside lock, re-check owning task
+0x02018cd0  sz=18    calls_in=4   out=2   conf=medium  UI element refresh dispatcher: either invalidate/redraw or mark-dirty depending on flag
+0x020197d2  sz=202   calls_in=3   out=6   conf=medium  Allocate+init UI element and register it into parent/child element tree of window manager
+0x0201989c  sz=20    calls_in=1   out=1   conf=medium  Recursively walk element observer list and invoke each node's callback
+0x020198b0  sz=30    calls_in=1   out=1   conf=medium  Recursively relink element list node and invoke its relink callback
+0x020198ce  sz=132   calls_in=3   out=10  conf=medium  Tear down / deactivate UI element: unregister from manager, notify and free resources
+0x02019952  sz=22    calls_in=6   out=2   conf=medium  Create UI element of class 0x2043850 (construct + attach) and return handle
+0x02019968  sz=14    calls_in=3   out=1   conf=medium  Set UI element attribute id 6162
+0x02019976  sz=14    calls_in=3   out=1   conf=medium  Set UI element attribute id 6163
+0x02019984  sz=14    calls_in=3   out=1   conf=medium  Set UI element attribute id 6160 with given value
+0x02019992  sz=14    calls_in=3   out=1   conf=medium  Set UI element attribute id 6161
+0x020199a0  sz=12    calls_in=7   out=1   conf=medium  Set UI element attribute id 32 (16-bit value, e.g. color)
+0x020199ac  sz=12    calls_in=8   out=1   conf=medium  Set UI element attribute id 33 with given value
+0x020199b8  sz=78    calls_in=8   out=3   conf=medium  Set UI element position attributes (ids 0x1000/0x1004) only when changed
+0x02019a06  sz=14    calls_in=5   out=1   conf=medium  Set UI element attribute id 0x1032
+0x02019a14  sz=66    calls_in=5   out=10  conf=medium  Build/configure a composite UI control: create element then set its style/attributes
+0x02019a56  sz=12    calls_in=4   out=1   conf=medium  Set UI element attribute id 96
+0x02019a62  sz=14    calls_in=3   out=1   conf=medium  Set UI element attribute id 0x840 = 10
+0x02019a70  sz=14    calls_in=3   out=1   conf=medium  Set UI element attribute id 0x841 with given value
+0x02019a7e  sz=14    calls_in=3   out=1   conf=medium  Set UI element attribute id 0x842 with given value
+0x02019a8c  sz=14    calls_in=3   out=1   conf=medium  Set UI element attribute id 0x843 = -1
+0x02019a9a  sz=14    calls_in=3   out=1   conf=medium  Set UI element attribute id 0x845 = 204
+0x02019aa8  sz=24    calls_in=5   out=2   conf=medium  Create UI element of class 0x2045ee8 (construct + attach) and return handle
+0x02019ac0  sz=14    calls_in=5   out=1   conf=medium  Set UI element attribute id 0x145c
+0x02019ace  sz=230   calls_in=4   out=20  conf=medium  Build a parameter/channel UI strip: alloc struct, create labeled element, set colors/fonts/pos
+0x02019bb4  sz=174   calls_in=1   out=1   conf=medium  Detach removed child: clear its references from parent element slots (+40/+44/+52)
+0x02019c62  sz=368   calls_in=1   out=8   conf=medium  Recursively remove/destroy UI element from parent child-arrays and manager registry
+0x02019dd2  sz=152   calls_in=5   out=6   conf=medium  Destroy UI element: tear down sub-object, remove from manager lists, clear callbacks
+0x02019e6a  sz=52    calls_in=4   out=3   conf=medium  Recursively destroy a UI element subtree (children at +4/+8/+12/+16) and free memory
+0x0201e58e  sz=406   calls_in=3   out=9   conf=low     Set formatted label text on a widget (asprintf into obj field) driving transpose/octave parameter edit
+0x02021704  sz=24    calls_in=2   out=2   conf=medium  GUI widget factory: instantiate/init a widget object from a resource class
+0x0202171c  sz=22    calls_in=4   out=2   conf=medium  Attach data/handler fields to a GUI widget and notify/refresh
+0x02021732  sz=14    calls_in=2   out=1   conf=medium  Set GUI widget attribute id=2121 (thin property-setter wrapper)
+0x02021740  sz=12    calls_in=2   out=1   conf=medium  Set GUI widget attribute id=77 (thin property-setter wrapper)
+0x0202174c  sz=12    calls_in=1   out=1   conf=medium  Set GUI widget attribute id=32 (thin property-setter wrapper)
+0x02021758  sz=12    calls_in=2   out=1   conf=medium  Set GUI widget attribute id=59 (thin property-setter wrapper)
+0x02021764  sz=162   calls_in=1   out=4   conf=medium  Insert a child/binding entry into a GUI container's packed element array
+0x02021806  sz=14    calls_in=1   out=1   conf=medium  Set GUI widget attribute id=1111 (thin property-setter wrapper)
+0x02021814  sz=12    calls_in=1   out=1   conf=medium  Set GUI widget attribute id=48 (thin property-setter wrapper)
+0x02021820  sz=12    calls_in=2   out=1   conf=medium  Set GUI widget attribute id=49 (thin property-setter wrapper)
+0x0202182c  sz=2036  calls_in=1   out=42  conf=high    Build the 6-operator FM parameter editor screen (creates labels/sliders/value widgets)
+0x02022020  sz=230   calls_in=1   out=21  conf=medium  Build a menu/list page with a row of items and text label
+0x020223ba  sz=2240  calls_in=2   out=9   conf=medium  GUI widget layout/alignment engine: anchor a widget relative to parent using style attributes
+0x02022c7a  sz=112   calls_in=1   out=2   conf=medium  Update list-widget selection: clear old item's props and set new highlighted item's props (list @app+360)
+0x02022cea  sz=20    calls_in=1   out=0   conf=low     Clear widget visible/enable flag (bit 0x20) and trigger redraw/notify
+0x02022cfe  sz=4514  calls_in=0   out=54  conf=medium  GUI/app main task: system+display+timer init, then event-queue dispatch loop routing events to per-page handlers and note display
+0x02024878  sz=2198  calls_in=0   out=42  conf=medium  FM operator edit UI pages (merged): page-handler dispatch, encoder/button event handling, operator param clamp/update, draw
+0x0202510e  sz=684   calls_in=1   out=22  conf=medium  UI param page build (operator value fields) plus packed-value to RGB color-set helper
+0x020253ba  sz=254   calls_in=1   out=5   conf=medium  Param metadata table lookup helper plus operator on/off toggle edit handler
+0x020254b8  sz=210   calls_in=1   out=6   conf=medium  Render a parameter value as text (string-table lookup / number format) into a widget label
+0x0202558a  sz=416   calls_in=1   out=7   conf=medium  Parameter label table lookup plus 4-field label page update/redraw
+0x0202572a  sz=102   calls_in=1   out=5   conf=medium  GUI page constructor/destructor: create root+child widgets, free on close
+0x02025790  sz=3044  calls_in=0   out=37  conf=medium  Main voice/patch parameter editor (merged): large tbb event dispatch, param edit + synth reload, page build/draw

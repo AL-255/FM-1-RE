@@ -1,0 +1,57 @@
+0x02001f7a  sz=46    calls_in=1   out=0   conf=medium  Integer bit/log2 helper: finds range/bit index of a value
+0x020020a0  sz=62    calls_in=4   out=0   conf=medium  64-bit multiply/divide time conversion (count vs microseconds) using calibrated rate
+0x020025da  sz=56    calls_in=25  out=2   conf=medium  Hardware CRC16 over buffer via SFR engine, mutex-guarded
+0x0200e1d4  sz=84    calls_in=3   out=0   conf=high    Sin/cos lookup by degree (mod 360) using quadrant table at 0x2045E32
+0x020188be  sz=14    calls_in=4   out=0   conf=low     Clamp value to [min,max] after adding an offset
+0x02018912  sz=70    calls_in=4   out=0   conf=medium  Scale a value by a signed per-index coefficient from a lookup table
+0x0201bd44  sz=594   calls_in=1   out=0   conf=medium  Float transcendental (pow/exp2-style) via table interpolation with pi/sqrt2 constants; used to compute effect coefficients
+0x0201d328  sz=18    calls_in=2   out=0   conf=high    Round up to next power of two (returns smallest 2^n >= input)
+0x02028fc6  sz=12    calls_in=3   out=0   conf=high    Compute bit-length/log2 of a value by counting right-shifts to zero
+0x02029f62  sz=10    calls_in=6   out=0   conf=high    Compute bitmask (1<<n)-1
+0x0202b21e  sz=20    calls_in=2   out=0   conf=high    Compute 10^n
+0x02038ed0  sz=18    calls_in=3   out=0   conf=high    Compute ceil(log2(n)) / bit-order of a value
+0x02042564  sz=166   calls_in=1   out=0   conf=high    IEEE-754 double modf: split value into integer part (stored via pointer) and fraction
+0x020429c4  sz=30    calls_in=2   out=0   conf=high    Count-leading-zeros of a 64-bit value (softfloat normalization helper)
+0x020429e2  sz=34    calls_in=1   out=1   conf=medium  Normalize double mantissa via clz for softfloat operations
+0x02042a04  sz=1132  calls_in=4   out=2   conf=medium  IEEE-754 double add/subtract (exponent align + mantissa add/round) plus double comparison cores
+0x02042e70  sz=2     calls_in=2   out=0   conf=medium  Softfloat double-compare alias thunk (branch to compare core 1)
+0x02042e72  sz=2     calls_in=2   out=0   conf=medium  Softfloat double-compare alias thunk (branch to compare core 1)
+0x02042e74  sz=2     calls_in=1   out=0   conf=medium  Softfloat double-compare alias thunk (branch to compare core 1)
+0x02042e76  sz=2     calls_in=2   out=0   conf=medium  Softfloat double-compare alias thunk (branch to compare core 2)
+0x02042e78  sz=6     calls_in=2   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02042e7e  sz=138   calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205de4a  sz=74    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205de94  sz=56    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205decc  sz=38    calls_in=1   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205def2  sz=100   calls_in=1   out=7   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205df56  sz=194   calls_in=2   out=4   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e018  sz=30    calls_in=7   out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e036  sz=198   calls_in=11  out=4   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e0fc  sz=20    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e110  sz=186   calls_in=27  out=4   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e1ca  sz=26    calls_in=3   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e1e4  sz=68    calls_in=27  out=4   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e228  sz=32    calls_in=1   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e248  sz=18    calls_in=2   out=1   conf=high   [remquol]  library: remquol
+0x0205e25a  sz=10    calls_in=4   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e264  sz=28    calls_in=1   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e280  sz=18    calls_in=2   out=1   conf=high   [remquol]  library: remquol
+0x0205e292  sz=10    calls_in=2   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e29c  sz=24    calls_in=1   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e2b4  sz=18    calls_in=2   out=1   conf=high   [remquol]  library: remquol
+0x0205e2c6  sz=10    calls_in=2   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e2d0  sz=30    calls_in=2   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e2ee  sz=22    calls_in=2   out=1   conf=high   [fmal]  library: fmal
+0x0205e304  sz=14    calls_in=1   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e312  sz=14    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e320  sz=90    calls_in=1   out=6   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e37a  sz=538   calls_in=1   out=30  conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e594  sz=112   calls_in=11  out=3   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e604  sz=282   calls_in=1   out=6   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e71e  sz=24    calls_in=5   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e736  sz=34    calls_in=7   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e758  sz=308   calls_in=1   out=5   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e88c  sz=38    calls_in=4   out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e8b2  sz=176   calls_in=5   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205e962  sz=264   calls_in=1   out=4   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0205ea6a  sz=338   calls_in=3   out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)

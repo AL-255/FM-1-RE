@@ -1,0 +1,5 @@
+[
+  {"addr":"0x020847aa","subsystem":"PERIPH","name":"spi0_wait_ok","purpose":"poll SPI0 PND with timeout, clear pending, return status","conf":"high"},
+  {"addr":"0x020847da","subsystem":"PERIPH","name":"spi0_send_byte","purpose":"set SPI0 send direction, write BUF byte, wait done","conf":"high"},
+  {"addr":"0x020847f2","subsystem":"STORAGE_FS","name":"norflash_enter_4byte_addr","purpose":"send flash EN4B 0xB7 once when addr >=16MB on >16MB flash","conf":"high"}
+]

@@ -1,0 +1,237 @@
+{
+ "0x020023e8": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: __udivdi3"
+ },
+ "0x020030f8": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: _diprintf_r"
+ },
+ "0x0201d51e": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: _getwchar_r"
+ },
+ "0x0201db5e": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: _getwchar_r"
+ },
+ "0x0201db72": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: _getwchar_r"
+ },
+ "0x02028fdc": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: get_number"
+ },
+ "0x0202ca16": {
+  "subsystem": "MATHLIB",
+  "conf": "high",
+  "why": "exact lib sig: remquol"
+ },
+ "0x0204260a": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: memcmp"
+ },
+ "0x02042642": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: memmove"
+ },
+ "0x02042704": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: strcat"
+ },
+ "0x0204271c": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: strchr"
+ },
+ "0x02042730": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: strcmp"
+ },
+ "0x020427d0": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: strcpy"
+ },
+ "0x0204283e": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: strlen"
+ },
+ "0x0204284a": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: strncmp"
+ },
+ "0x02042864": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: strnlen"
+ },
+ "0x020429c4": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: rep_clz"
+ },
+ "0x020429e2": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: normalize"
+ },
+ "0x02042f08": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: memset"
+ },
+ "0x02042f34": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: normalize"
+ },
+ "0x02042f6a": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: __divdf3"
+ },
+ "0x0204327a": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: __fixdfsi"
+ },
+ "0x020432ce": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: __floatsidf"
+ },
+ "0x0204331a": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: __floatunsidf"
+ },
+ "0x0204334e": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: normalize"
+ },
+ "0x0205e248": {
+  "subsystem": "MATHLIB",
+  "conf": "high",
+  "why": "exact lib sig: remquol"
+ },
+ "0x0205e280": {
+  "subsystem": "MATHLIB",
+  "conf": "high",
+  "why": "exact lib sig: remquol"
+ },
+ "0x0205e2b4": {
+  "subsystem": "MATHLIB",
+  "conf": "high",
+  "why": "exact lib sig: remquol"
+ },
+ "0x0205e2ee": {
+  "subsystem": "MATHLIB",
+  "conf": "high",
+  "why": "exact lib sig: fmal"
+ },
+ "0x02065484": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x02065552": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x020666e4": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x0206699e": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x02069b24": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x0206be80": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x0206bfe6": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x0206c052": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x0206c0f8": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x0206c3ee": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x0206c4d4": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x0206c4ea": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ },
+ "0x0206db5e": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: hsearch"
+ },
+ "0x0207605e": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: cfree"
+ },
+ "0x020770d6": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: asctime"
+ },
+ "0x020779ee": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: cfree"
+ },
+ "0x0207d756": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: asctime"
+ },
+ "0x0207df56": {
+  "subsystem": "MEMLIB",
+  "conf": "high",
+  "why": "exact lib sig: setlinebuf"
+ }
+}

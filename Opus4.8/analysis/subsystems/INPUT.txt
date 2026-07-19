@@ -1,0 +1,1 @@
+0x0202423c  sz=1596  calls_in=1   out=3   conf=medium  Periodic device poll (merged): averaged ADC read, battery/charge level, key debounce and encoder scan posting UI events

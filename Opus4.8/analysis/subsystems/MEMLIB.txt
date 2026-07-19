@@ -1,0 +1,154 @@
+0x020006ae  sz=250   calls_in=3   out=1   conf=high    Thread-safe circular buffer write (cbuf_write) with per-core spinlock and memmove wraparound
+0x020007a8  sz=26    calls_in=4   out=0   conf=high    Circular buffer init (cbuf_init): sets base/read/write pointers and length
+0x020007c2  sz=120   calls_in=2   out=0   conf=high    Circular buffer clear/reset (cbuf_clear) under per-core spinlock
+0x02002154  sz=12    calls_in=2   out=0   conf=medium  Doubly-linked-list insert-after primitive (used by timer list)
+0x020026a8  sz=38    calls_in=1   out=0   conf=high    Parse decimal integer from string and advance pointer (printf width/prec)
+0x020026ce  sz=108   calls_in=1   out=1   conf=high    printf string-field emit with width/precision space padding (uses strnlen)
+0x0200273a  sz=1134  calls_in=1   out=0   conf=high    Integer-to-ASCII conversion (base 10/16/8) for printf number formatting
+0x02002ba8  sz=1360  calls_in=1   out=4   conf=high    Core printf/vsnprintf format engine with specifier/flag jump-table dispatch
+0x020030f8  sz=22    calls_in=3   out=1   conf=high    snprintf/vsnprintf wrapper over the format engine
+0x020031f6  sz=26    calls_in=1   out=0   conf=medium  Insert node into a global manager doubly-linked list
+0x02008016  sz=150   calls_in=5   out=1   conf=high    Aligned block fill (memset wrapper handling head/tail unaligned bytes)
+0x020080ac  sz=40    calls_in=17  out=2   conf=medium  Allocate (or fall back to static) a zero-initialized 28-byte object
+0x020080d4  sz=22    calls_in=21  out=1   conf=medium  Free object unless it is the shared static default (0x1c07d68)
+0x020081bc  sz=6     calls_in=12  out=0   conf=medium  Return link pointer [base+offset+4]; intrusive-list next-node accessor
+0x020081c2  sz=84    calls_in=6   out=0   conf=high    Unlink a node from an offset-based doubly-linked (intrusive) list
+0x0200843c  sz=128   calls_in=29  out=1   conf=high    Aligned zero-fill: memset region to 0 handling head/32B/4B/tail alignment
+0x020084bc  sz=70    calls_in=8   out=4   conf=high    Realloc wrapper: grow/shrink/free buffer via malloc/free/realloc, zero-init on new alloc
+0x020092dc  sz=10    calls_in=3   out=1   conf=high    Zero 8 bytes (thin wrapper over aligned memset with size 8)
+0x02009468  sz=44    calls_in=5   out=1   conf=medium  Allocate a chunk (size+8 header) and append it to an intrusive list (head/tail/size)
+0x020094ca  sz=402   calls_in=7   out=0   conf=high    memcpy: unaligned head fixup + 32-byte and 4-byte unrolled copy + byte tail
+0x0201001a  sz=48    calls_in=2   out=1   conf=medium  Strip path separators/extension to return resource basename pointer
+0x02012c84  sz=128   calls_in=3   out=1   conf=high    Aligned buffer fill with 0xFF via chunked memset calls
+0x02017000  sz=8     calls_in=1   out=0   conf=medium  u16 comparator returning h[r0]-h[r1] (binary-search callback for font cmap)
+0x02017554  sz=46    calls_in=3   out=0   conf=high    Return UTF-8 encoded length (1-4) from a lead byte
+0x02017582  sz=42    calls_in=3   out=1   conf=high    Count UTF-8 code points within the first N bytes of a string
+0x02018ce2  sz=38    calls_in=1   out=0   conf=high    printf skip_atoi: parse run of decimal digits from *str into int (width/precision)
+0x02018d08  sz=12    calls_in=4   out=0   conf=high    printf putc-to-buffer: store byte at **dst and advance the destination pointer
+0x02018d14  sz=102   calls_in=3   out=1   conf=high    printf field output: emit string/field with fill char and left/right padding
+0x02018d7a  sz=158   calls_in=1   out=2   conf=high    printf integer-to-ASCII: format 32-bit signed/unsigned value in given base with sign
+0x02018e18  sz=174   calls_in=1   out=2   conf=high    printf 64-bit integer-to-ASCII: format 64-bit value via 64-bit divide with sign
+0x02018ec6  sz=472   calls_in=2   out=9   conf=medium  double-to-decimal-digits core (dtoa): float compares/mul/div to produce digit string
+0x0201909e  sz=24    calls_in=1   out=1   conf=medium  Thin wrapper around dtoa digit core (0x18ec6) with fixed rounding flag=1
+0x020190b6  sz=438   calls_in=1   out=4   conf=medium  Format double for %e/%f/%g: build mantissa/exponent text via dtoa core + memmove
+0x0201926c  sz=412   calls_in=1   out=4   conf=medium  printf float conversion driver: %f/%e/%g with sign, precision, width and padding
+0x02019408  sz=970   calls_in=6   out=11  conf=high    printf/vsnprintf format-string parser core: flags/width/precision/length + d/u/x/e/f/g/s/c
+0x0201a258  sz=72    calls_in=5   out=1   conf=high    Bump/pool allocator: 4-byte aligns the heap pointer, bounds-checks against limit, zero-fills and returns the block
+0x0201db86  sz=388   calls_in=1   out=1   conf=high    printf integer/number formatter: field width, zero/space padding, sign, emits chars via callback
+0x0201dd0a  sz=2152  calls_in=1   out=2   conf=high    vsnprintf / format-string core engine (parses conversions, recurses for width/precision)
+0x0201e572  sz=28    calls_in=1   out=1   conf=high    snprintf into a fixed buffer, wrapping the format-string core
+0x0201eb28  sz=6     calls_in=2   out=0   conf=medium  Doubly-linked list node link helper (set next/prev pointers)
+0x0201eb2e  sz=304   calls_in=6   out=1   conf=high    Heap malloc: SMP-locked free-list search, best-fit with alignment, block split and guard-magic init
+0x0201ec5e  sz=386   calls_in=6   out=3   conf=medium  Format-string-driven binary serializer: packs args to a byte buffer per type codes (S/b/c/l/v...)
+0x0201ede0  sz=182   calls_in=2   out=1   conf=medium  Parse a format descriptor string into a flag/type struct (companion to the binary serializer)
+0x0201ee96  sz=68    calls_in=4   out=2   conf=high    Heap block guard/magic validation (0x12345678/0x87654320); panics on corruption
+0x0201eeda  sz=6     calls_in=1   out=0   conf=medium  Linked-list node link helper (set next/prev)
+0x0201eee0  sz=12    calls_in=2   out=0   conf=medium  Linked-list node insert-after helper
+0x0201eeec  sz=376   calls_in=8   out=4   conf=high    Heap free: guard-magic check, coalesce adjacent free blocks, SMP-locked free-list maintenance
+0x0201f064  sz=12    calls_in=2   out=0   conf=medium  Linked-list node insert-after helper
+0x0201f070  sz=14    calls_in=2   out=0   conf=medium  Linked-list node unlink + self-init (empty-list) helper
+0x02026374  sz=260   calls_in=4   out=2   conf=medium  Spinlocked circular-buffer read: memmove available bytes, zero-fill remainder on underrun
+0x020264b8  sz=12    calls_in=3   out=0   conf=high    Doubly-linked list: insert node before a given node
+0x020264c4  sz=56    calls_in=2   out=1   conf=medium  Build a free-list: split a memory region into fixed-size chunks linked together
+0x020264fc  sz=14    calls_in=2   out=0   conf=high    Doubly-linked list: unlink a node and self-init it
+0x0202650a  sz=116   calls_in=2   out=2   conf=medium  Spinlocked splice: unlink node from one list and insert into another under lock
+0x0202681e  sz=6     calls_in=5   out=0   conf=high    Linked-list link primitive: set node.next and neighbor.prev pointers
+0x02026870  sz=22    calls_in=2   out=0   conf=low     Check whether a global linked list (@0x1C08FF0+40) is empty
+0x02026886  sz=14    calls_in=2   out=0   conf=high    Doubly-linked list: unlink a node and self-init it
+0x02026894  sz=20    calls_in=2   out=0   conf=high    Insert a node at the tail of a global linked list (@0x1C08FF0+40)
+0x020282be  sz=26    calls_in=2   out=0   conf=high    Uppercase ASCII bytes in place over a given length
+0x0202832e  sz=134   calls_in=6   out=1   conf=medium  Wildcard/glob string match ('*','?','.') returning match result
+0x02028c42  sz=58    calls_in=2   out=0   conf=medium  Wildcard string compare ('*','?') returning the first mismatch index
+0x02028fd2  sz=10    calls_in=9   out=0   conf=high    Combine two byte args into a little-endian u16 (deserialize helper)
+0x02028fdc  sz=22    calls_in=11  out=0   conf=high   [get_number]  get_number: read 32-bit little-endian value from byte buffer
+0x0202970a  sz=16    calls_in=8   out=0   conf=high    Store 32-bit value little-endian into byte buffer
+0x0202971a  sz=64    calls_in=3   out=0   conf=high    Store 64-bit value little-endian into byte buffer
+0x0202975a  sz=8     calls_in=7   out=0   conf=high    Store 16-bit value little-endian into byte buffer
+0x0202a65c  sz=38    calls_in=1   out=0   conf=high    Lowercase ASCII A-Z within buffer (scan from end)
+0x0202a682  sz=38    calls_in=6   out=0   conf=high    Uppercase ASCII a-z within buffer (scan from end)
+0x0202b10c  sz=42    calls_in=2   out=0   conf=high    Format integer as 3 decimal ASCII digits into buffer
+0x02031ad0  sz=6     calls_in=2   out=0   conf=high    Doubly-linked list node insert (list_add)
+0x02036478  sz=104   calls_in=2   out=1   conf=medium  Initializes heap block/pool header with guard magic 0x98765432, alignment fixup, links free node
+0x0203657a  sz=12    calls_in=3   out=0   conf=high    Doubly-linked list insert-after helper (splice node between head and next)
+0x02036586  sz=66    calls_in=2   out=3   conf=medium  Initializes a heap free-list region: aligns base, sets self-referential list heads and size tag
+0x020365c8  sz=86    calls_in=1   out=2   conf=medium  Computes string hash/CRC of a name via mutex-guarded hardware engine (0x13500), returns packed id
+0x02036678  sz=224   calls_in=3   out=0   conf=low     Parses format/template string into integer (decimal digits, A-L jump table, varargs); removes ASCII bias
+0x02036758  sz=6     calls_in=2   out=0   conf=high    Two-word linked-list link helper ([r0+4]=r1; [r1]=r0)
+0x0203675e  sz=190   calls_in=3   out=1   conf=high    Heap malloc core: best-fit walk of free list, splits block, under irq-lock
+0x0203681c  sz=38    calls_in=2   out=3   conf=medium  malloc-from-specific-pool wrapper, gated on global pool availability (0x1C0E670)
+0x02036842  sz=102   calls_in=3   out=0   conf=medium  Irq-locked doubly-linked list insert-after
+0x02036906  sz=198   calls_in=5   out=2   conf=high    Heap free core with adjacent-block coalescing, under irq-lock
+0x020369cc  sz=6     calls_in=7   out=1   conf=high    free() wrapper forwarding to heap free core 0x36906
+0x020369d2  sz=14    calls_in=2   out=0   conf=high    Linked-list unlink node and reinit to empty/self-referential
+0x020369e0  sz=144   calls_in=2   out=1   conf=medium  Irq-locked list-remove of node if list non-empty
+0x02036bf8  sz=112   calls_in=2   out=1   conf=medium  Releases a slab/pool element to free list under irq-lock (refcount byte at [-1])
+0x02036c68  sz=118   calls_in=5   out=0   conf=medium  Increments saturating refcount of a buffer object and invokes its vtable method [+20]
+0x02036cde  sz=44    calls_in=2   out=4   conf=high    zalloc: allocate buffer then memset it to zero
+0x02036d0a  sz=20    calls_in=11  out=3   conf=high    zalloc-or-panic wrapper (asserts on NULL allocation)
+0x02036d1e  sz=12    calls_in=5   out=0   conf=high    Doubly-linked list insert-after helper
+0x02036dc4  sz=122   calls_in=2   out=3   conf=medium  Unlinks node from list under irq-lock then frees it
+0x02036e3e  sz=26    calls_in=1   out=2   conf=medium  Frees every node in a list (unlink + free loop)
+0x02036e58  sz=10    calls_in=2   out=1   conf=medium  free wrapper forwarding to 0x5789a
+0x02036e62  sz=6     calls_in=7   out=1   conf=medium  free wrapper forwarding to 0x36e58
+0x02036e68  sz=14    calls_in=2   out=0   conf=high    Linked-list unlink node and reinit self-referential
+0x02036e76  sz=14    calls_in=2   out=0   conf=high    Linked-list unlink node and reinit self-referential
+0x02036e84  sz=38    calls_in=1   out=0   conf=medium  Unlinks node and, if owning list now empty, invokes list callback [+12]
+0x02036eaa  sz=112   calls_in=2   out=1   conf=medium  Frees all 16-byte-stride nodes in a list under irq-lock
+0x0203741c  sz=28    calls_in=1   out=0   conf=high    Converts a 4-bit nibble to its ASCII hex character ('0'-'9','A'-'F', else '?')
+0x0203862a  sz=12    calls_in=3   out=0   conf=high    Doubly-linked list node insert
+0x0203869a  sz=14    calls_in=4   out=0   conf=high    Doubly-linked list node remove and reinitialize
+0x02038d22  sz=82    calls_in=3   out=0   conf=high    Case-insensitive bounded string compare (strncasecmp-like)
+0x0203b39e  sz=12    calls_in=1   out=0   conf=medium  Doubly-linked list insert-before helper
+0x0203b3aa  sz=12    calls_in=3   out=0   conf=medium  Doubly-linked list insert-before helper (duplicate)
+0x0203b3b6  sz=236   calls_in=1   out=2   conf=medium  Pool lookup: find guarded block by tag bit, clear it, validate 0x12345678/0x87654320 magics, return payload +24
+0x0203b4a2  sz=236   calls_in=2   out=2   conf=medium  Pool lookup: find guarded block by tag bit, clear it, validate magics, return payload +28
+0x0203b58e  sz=6     calls_in=1   out=0   conf=medium  Linked-list link helper: set node prev/next pointers
+0x0203b594  sz=352   calls_in=1   out=6   conf=medium  Pool free with guard-magic check, refcount decrement, and adjacent-block coalescing
+0x0203b6f4  sz=2490  calls_in=0   out=19  conf=low     Compute pool free-list stats (count, total free, largest); header of the stream buffer-manager dispatcher
+0x0204260a  sz=56    calls_in=53  out=0   conf=high   [memcmp]  memcmp (word-optimized byte compare)
+0x02042642  sz=194   calls_in=115 out=0   conf=high   [memmove]  memmove (overlap-aware forward/backward copy)
+0x02042704  sz=24    calls_in=1   out=0   conf=high   [strcat]  strcat
+0x0204271c  sz=20    calls_in=4   out=0   conf=high   [strchr]  strchr
+0x02042730  sz=160   calls_in=36  out=0   conf=high   [strcmp]  strcmp (word-optimized)
+0x020427d0  sz=110   calls_in=5   out=0   conf=high   [strcpy]  strcpy (word-optimized)
+0x0204283e  sz=12    calls_in=31  out=0   conf=high   [strlen]  strlen
+0x0204284a  sz=26    calls_in=3   out=0   conf=high   [strncmp]  strncmp
+0x02042864  sz=20    calls_in=1   out=0   conf=high   [strnlen]  strnlen
+0x02042878  sz=332   calls_in=2   out=1   conf=medium  String parsing helpers: strpbrk, substring match, and strtol/strtoul core+wrapper using ctype table
+0x02042f08  sz=44    calls_in=107 out=0   conf=high   [memset]  library: memset
+0x02042f34  sz=54    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02042f6a  sz=784   calls_in=3   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0204327a  sz=84    calls_in=4   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x020432ce  sz=76    calls_in=3   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0204331a  sz=52    calls_in=3   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0204334e  sz=54    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x02043384  sz=1432  calls_in=4   out=3   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x020651c8  sz=12    calls_in=1   out=1   conf=medium  Free a message buffer: back up 16 bytes to the allocation header and call free (0x369cc)
+0x02066854  sz=70    calls_in=3   out=1   conf=medium  Fill destination buffer with repeated 4-byte pattern from a global (memset32-style)
+0x0206689a  sz=8     calls_in=8   out=1   conf=medium  Fill a 16-byte buffer with constant pattern (wrapper over 0x66854)
+0x020668a2  sz=36    calls_in=7   out=0   conf=high    Reverse the bytes of a buffer in place
+0x0206d574  sz=674   calls_in=0   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206d816  sz=34    calls_in=2   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206d838  sz=42    calls_in=2   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206d862  sz=6     calls_in=1   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206d868  sz=14    calls_in=2   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206d876  sz=48    calls_in=13  out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206d8a6  sz=58    calls_in=2   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206d8e0  sz=438   calls_in=2   out=3   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206da96  sz=126   calls_in=1   out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206db14  sz=18    calls_in=14  out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206db26  sz=56    calls_in=6   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206db5e  sz=16    calls_in=10  out=1   conf=high   [hsearch]  library: hsearch
+0x0206db6e  sz=60    calls_in=9   out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206dbaa  sz=48    calls_in=3   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206dbda  sz=22    calls_in=11  out=2   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206dbf0  sz=180   calls_in=2   out=7   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206dca4  sz=70    calls_in=2   out=3   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206dcea  sz=20    calls_in=3   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206dcfe  sz=924   calls_in=3   out=9   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206e09a  sz=348   calls_in=5   out=4   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206e1f6  sz=24    calls_in=3   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206e20e  sz=16    calls_in=1   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206e21e  sz=26    calls_in=7   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206e238  sz=64    calls_in=3   out=0   conf=locality  (subsystem inferred by address locality; not individually analysed)
+0x0206e278  sz=266   calls_in=6   out=1   conf=locality  (subsystem inferred by address locality; not individually analysed)

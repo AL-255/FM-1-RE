@@ -1,0 +1,5 @@
+0x0201d532  sz=286   calls_in=2   out=3   conf=medium  Pack a DX7 single voice (155-byte VCED -> packed VMEM) and write it to flash
+0x0201d69c  sz=768   calls_in=4   out=7   conf=medium  Load and unpack DX7 voice(s) from flash bank into the working VCED buffer, updating edit state
+0x0201dab8  sz=166   calls_in=2   out=9   conf=medium  Select/load a patch: unpack voice, apply params+name+LFO, then persist current patch index to flash
+0x020279a8  sz=332   calls_in=1   out=2   conf=low     Scan config/voice parameter descriptor table for changed records and pack them into a delta buffer for persistence
+0x02027af4  sz=732   calls_in=0   out=8   conf=low     Settings/patch persistence task: message loop dispatching SysEx handling and flash save/commit; plus commit-descriptor registration stub

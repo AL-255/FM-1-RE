@@ -1,0 +1,2 @@
+0x0201e724  sz=64    calls_in=5   out=0   conf=medium  GPIO/power pin bit set/clear helper indexed by power-state descriptor table
+0x0201e764  sz=576   calls_in=3   out=2   conf=high    sys_power state machine: configures pins/flags for each power state and dispatches state callbacks

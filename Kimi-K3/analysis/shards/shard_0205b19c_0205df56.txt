@@ -1,0 +1,4048 @@
+===== FUNC 0x0205b19c size=52B ninsn=19 callers=0 callees=0 =====
+    0205b19c: [--sp] = {rets, r4}
+    0205b19e: r2 = r1
+    0205b1a0: r1 = rets
+    0205b1a4: r1 = icfg
+    0205b1a8: r4 = 3
+    0205b1aa: if ((r1 & 0xFF) != 0) goto 28 <_fw+0x5B1CC : 5b1cc >
+    0205b1b0: if (r2 == 0) goto 8 <_fw+0x5B1BA : 5b1ba >
+    0205b1b2: if (r2 == -1) {
+    0205b1b6: r2 = 0
+    0205b1b8: goto 2 <_fw+0x5B1BC : 5b1bc >
+    0205b1ba: r2 = -1
+    0205b1bc: r1 = 0
+    0205b1be: r3 = 0
+    0205b1c0: r4 = 0
+    0205b1c2: call -2212 <_fw+0x5A922 : 5a922 >
+    0205b1c6: if (r0 != 1) {
+    0205b1ca: r4 = 11
+    0205b1cc: r0 = r4
+    0205b1ce: {pc, r4} = [sp++]
+
+===== FUNC 0x0205b1d0 size=682B ninsn=224 callers=0 callees=1 =====
+  data-refs: 0x01c09534, 0x01c0953c, 0x01c09740, 0x01c20b74
+    0205b1d0: [--sp] = {rets, r15-r4}
+    0205b1d2: sp += -12
+    0205b1d4: r8 = r3
+    0205b1d6: r14 = r2
+    0205b1d8: r10 = r1
+    0205b1da: r15 = r0
+    0205b1dc: if (r0 == 0) goto 42 <_fw+0x5B208 : 5b208 >
+    0205b1de: call -100774 <_fw+0x4283E : 4283e >
+    0205b1e4: r7 = -1
+    0205b1e6: if (r0 > 63) goto 648 <_fw+0x5B474 : 5b474 >
+    0205b1ec: r0 = r15
+    0205b1ee: call -366464 <_fw+0x1A74 : 1a74 >
+    0205b1f4: r9 = r0
+    0205b1f6: if (r0 == 0) goto 16 <_fw+0x5B208 : 5b208 >
+    0205b1f8: r5 = [r0+12]
+    0205b1fa: r8 = h[r0+8] (u)
+    0205b1fe: r14 = h[r0+6] (u)
+    0205b202: r10 = b[r0+4] (u)
+    0205b206: goto 4 <_fw+0x5B20C : 5b20c >
+    0205b208: r9 = 0
+    0205b20a: r5 = 0
+    0205b20c: r12 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205b212: r6 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205b218: r13 = 29398848 <_fw+0x1C09740 : 1c09740 >
+    0205b21e: if (r14 != 0) goto 102 <_fw+0x5B288 : 5b288 >
+    0205b222: call -10176 <_fw+0x58A66 : 58a66 >
+    0205b226: r4 = r0
+    0205b228: if (r4 != 0) goto 84 <_fw+0x5B27E : 5b27e >
+    0205b22a: cli
+    0205b22c: r0 = cnum
+    0205b230: r0 = r0 << 2
+    0205b232: r0 += r12
+    0205b234: [r0+0] += 1
+    0205b238: csync
+    0205b23a: r0 = cnum
+    0205b23e: r1 = [r6+r0<<2]
+    0205b242: r2 = r1 + 1
+    0205b244: [r6+r0<<2] = r2
+    0205b248: if (r1 != 0) goto 2 <_fw+0x5B24C : 5b24c >
+    0205b24a: lockset
+    0205b24c: csync
+    0205b24e: r0 = cnum
+    0205b252: r4 = [r13+r0<<2]
+    0205b256: csync
+    0205b258: r0 = cnum
+    0205b25c: r1 = [r6+r0<<2]
+    0205b260: r1 += -1
+    0205b262: [r6+r0<<2] = r1
+    0205b266: if (r1 != 0) goto 2 <_fw+0x5B26A : 5b26a >
+    0205b268: lockclr
+    0205b26a: r0 = cnum
+    0205b26e: r1 = [r12+r0<<2]
+    0205b272: r1 += -1
+    0205b274: [r12+r0<<2] = r1
+    0205b278: if (r1 != 0) goto 4 <_fw+0x5B27E : 5b27e >
+    0205b27a: csync
+    0205b27c: sti
+    0205b27e: if (r4 != 0) goto 4 <_fw+0x5B284 : 5b284 >
+    0205b280: call -10164 <_fw+0x58AD0 : 58ad0 >
+    0205b284: r14 = [r4+8]
+    0205b288: if (r10 != 0) goto 102 <_fw+0x5B2F2 : 5b2f2 >
+    0205b28c: call -10282 <_fw+0x58A66 : 58a66 >
+    0205b290: r7 = r0
+    0205b292: if (r7 != 0) goto 84 <_fw+0x5B2E8 : 5b2e8 >
+    0205b294: cli
+    0205b296: r0 = cnum
+    0205b29a: r0 = r0 << 2
+    0205b29c: r0 += r12
+    0205b29e: [r0+0] += 1
+    0205b2a2: csync
+    0205b2a4: r0 = cnum
+    0205b2a8: r1 = [r6+r0<<2]
+    0205b2ac: r2 = r1 + 1
+    0205b2ae: [r6+r0<<2] = r2
+    0205b2b2: if (r1 != 0) goto 2 <_fw+0x5B2B6 : 5b2b6 >
+    0205b2b4: lockset
+    0205b2b6: csync
+    0205b2b8: r0 = cnum
+    0205b2bc: r7 = [r13+r0<<2]
+    0205b2c0: csync
+    0205b2c2: r0 = cnum
+    0205b2c6: r1 = [r6+r0<<2]
+    0205b2ca: r1 += -1
+    0205b2cc: [r6+r0<<2] = r1
+    0205b2d0: if (r1 != 0) goto 2 <_fw+0x5B2D4 : 5b2d4 >
+    0205b2d2: lockclr
+    0205b2d4: r0 = cnum
+    0205b2d8: r1 = [r12+r0<<2]
+    0205b2dc: r1 += -1
+    0205b2de: [r12+r0<<2] = r1
+    0205b2e2: if (r1 != 0) goto 4 <_fw+0x5B2E8 : 5b2e8 >
+    0205b2e4: csync
+    0205b2e6: sti
+    0205b2e8: if (r7 != 0) goto 4 <_fw+0x5B2EE : 5b2ee >
+    0205b2ea: call -10270 <_fw+0x58AD0 : 58ad0 >
+    0205b2ee: r10 = [r7+116]
+    0205b2f2: r0 = 1
+    0205b2f4: if (r5 != 0) goto 30 <_fw+0x5B314 : 5b314 >
+    0205b2f6: r0 = r8 + 336
+    0205b2fa: if (r8 == 0) {
+    0205b2fe: r0 = 244
+    0205b300: r1 = r14 << 2
+    0205b304: r0 += r1
+    0205b306: call -19422 <_fw+0x5672E : 5672e >
+    0205b30c: r5 = r0
+    0205b30e: if (r5 == 0) goto 352 <_fw+0x5B472 : 5b472 >
+    0205b312: r0 = 0
+    0205b314: r4 = [sp+72]
+    0205b316: r6 = [sp+68]
+    0205b318: r13 = [sp+64]
+    0205b31c: b[r5+0] = r0
+    0205b31e: r7 = r5 + 1
+    0205b320: if (r15 != 0) goto 52 <_fw+0x5B358 : 5b358 >
+    0205b324: call 4846 <_fw+0x5C618 : 5c618 >
+    0205b32a: r1 = 29494132 <_fw+0x1C20B74 : 1c20b74 >
+    0205b330: r2 = b[r1+0] (u)
+    0205b332: r2 += 1
+    0205b334: b[r1+0] = r2
+    0205b336: r1 = 80640 <_fw+0x13B00 : 13b00 >
+    0205b33c: r3 = r0  #
+    0205b33e:  r1 = [r1+0]
+    0205b340: r0 = r2.b0 (u)
+    0205b342: r0 += r1
+    0205b344: r2 = 33933005 <_fw+0x205C6CC : 205c6cc >
+    0205b34a: r1 = 63
+    0205b34c: r0 = r7  #
+    0205b34e:  [sp] = r0
+    0205b350: call -361054 <_fw+0x30F8 : 30f8 >
+    0205b356: r15 = r7
+    0205b358: r0 = 0
+    0205b35a: r11 = r5 + 224
+    0205b35e: [r11+12] = r0
+    0205b362: [r11+8] = r0
+    0205b366: [r11+16] = r0
+    0205b36a: [r11+4] = r6
+    0205b36e: r0 = r7
+    0205b370: r1 = r15
+    0205b372: call -101288 <_fw+0x427D0 : 427d0 >
+    0205b378: [r11+0] = r4
+    0205b37c: [r5+72] = r13
+    0205b380: r6 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205b386: if (r8 == 0) goto 36 <_fw+0x5B3AE : 5b3ae >
+    0205b38a: cli
+    0205b38c: r0 = cnum
+    0205b390: r0 = r0 << 2
+    0205b392: r0 += r12
+    0205b394: [r0+0] += 1
+    0205b398: csync
+    0205b39a: r0 = cnum
+    0205b39e: r1 = [r6+r0<<2]
+    0205b3a2: r2 = r1 + 1
+    0205b3a4: [r6+r0<<2] = r2
+    0205b3a8: if (r1 != 0) goto 2 <_fw+0x5B3AC : 5b3ac >
+    0205b3aa: lockset
+    0205b3ac: csync
+    0205b3ae: r0 = r5 + 244
+    0205b3b2: r1 = r5 + 68
+    0205b3b6: if (r9 != 0) {
+    0205b3ba: r15 = [r9+0]
+    0205b3be: d[sp+4] = r1_r0
+    0205b3c2: r0 = 33932498 <_fw+0x205C4D2 : 205c4d2 >
+    0205b3c8: [sp] = r10
+    0205b3cc: r1 = r15
+    0205b3ce: r2 = r14
+    0205b3d0: r3 = r5
+    0205b3d2: call -4070 <_fw+0x5A3F0 : 5a3f0 >
+    0205b3d6: if (r0 == 0) goto 94 <_fw+0x5B436 : 5b436 >
+    0205b3d8: if (r13 != 0) {
+    0205b3dc: [r13+0] = r5
+    0205b3e0: r7 = 0
+    0205b3e2: if (r8 == 0) goto 142 <_fw+0x5B474 : 5b474 >
+    0205b3e6: r1 = r14 << 2
+    0205b3ea: r1 += r5
+    0205b3ec: r4 = r1 + 244
+    0205b3f0: r2 = r4 + 92  #
+    0205b3f4:  [r4+8] = r0
+    0205b3f6: r5 = 5
+    0205b3f8: r3 = r4 + 12
+    0205b3fa: r0 = r8 >> 2  #
+    0205b3fe:  [sp] = r5
+    0205b400: r1 = 4
+    0205b402: call -6484 <_fw+0x59AB2 : 59ab2 >
+    0205b406: r0 = r4
+    0205b408: call -4044 <_fw+0x5A440 : 5a440 >
+    0205b40c: csync
+    0205b40e: r0 = cnum
+    0205b412: r1 = [r6+r0<<2]
+    0205b416: r1 += -1
+    0205b418: [r6+r0<<2] = r1
+    0205b41c: if (r1 != 0) goto 2 <_fw+0x5B420 : 5b420 >
+    0205b41e: lockclr
+    0205b420: r0 = cnum
+    0205b424: r1 = [r12+r0<<2]
+    0205b428: r1 += -1
+    0205b42a: [r12+r0<<2] = r1
+    0205b42e: if (r1 != 0) goto 68 <_fw+0x5B474 : 5b474 >
+    0205b430: csync
+    0205b432: sti
+    0205b434: goto 62 <_fw+0x5B474 : 5b474 >
+    0205b436: if (r8 == 0) goto 40 <_fw+0x5B462 : 5b462 >
+    0205b43a: csync
+    0205b43c: r0 = cnum
+    0205b440: r1 = [r6+r0<<2]
+    0205b444: r1 += -1
+    0205b446: [r6+r0<<2] = r1
+    0205b44a: if (r1 != 0) goto 2 <_fw+0x5B44E : 5b44e >
+    0205b44c: lockclr
+    0205b44e: r0 = cnum
+    0205b452: r1 = [r12+r0<<2]
+    0205b456: r1 += -1
+    0205b458: [r12+r0<<2] = r1
+    0205b45c: if (r1 != 0) goto 4 <_fw+0x5B462 : 5b462 >
+    0205b45e: csync
+    0205b460: sti
+    0205b462: r0 = b[r5+0] (u)
+    0205b464: r7 = -1
+    0205b466: if (r0 != 0) goto 12 <_fw+0x5B474 : 5b474 >
+    0205b468: r0 = r5
+    0205b46a: call -15318 <_fw+0x5789A : 5789a >
+    0205b470: goto 2 <_fw+0x5B474 : 5b474 >
+    0205b472: r7 = -1
+    0205b474: r0 = r7
+    0205b476: sp += 12
+    0205b478: {pc, r15-r4} = [sp++]
+
+===== FUNC 0x0205b47a size=102B ninsn=35 callers=0 callees=0 =====
+  data-refs: 0x01c09534, 0x01c0953c
+    0205b47a: [--sp] = {rets, r5, r4}
+    0205b47c: if (r0 == 0) goto 92 <_fw+0x5B4DA : 5b4da >
+    0205b47e: cli
+    0205b480: r1 = cnum
+    0205b484: r2 = r1 << 2
+    0205b486: r1 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205b48c: r2 += r1
+    0205b48e: [r2+0] += 1
+    0205b492: csync
+    0205b494: r2 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205b49a: r3 = cnum
+    0205b49e: r4 = [r2+r3<<2]
+    0205b4a2: r5 = r4 + 1
+    0205b4a4: [r2+r3<<2] = r5
+    0205b4a8: if (r4 != 0) goto 2 <_fw+0x5B4AC : 5b4ac >
+    0205b4aa: lockset
+    0205b4ac: csync
+    0205b4ae: r0 = [r0+56]
+    0205b4b0: csync
+    0205b4b2: r3 = cnum
+    0205b4b6: r4 = [r2+r3<<2]
+    0205b4ba: r4 += -1
+    0205b4bc: [r2+r3<<2] = r4
+    0205b4c0: if (r4 != 0) goto 2 <_fw+0x5B4C4 : 5b4c4 >
+    0205b4c2: lockclr
+    0205b4c4: r2 = cnum
+    0205b4c8: r3 = [r1+r2<<2]
+    0205b4cc: r3 += -1
+    0205b4ce: [r1+r2<<2] = r3
+    0205b4d2: if (r3 != 0) goto 4 <_fw+0x5B4D8 : 5b4d8 >
+    0205b4d4: csync
+    0205b4d6: sti
+    0205b4d8: {pc, r5, r4} = [sp++]
+    0205b4da: call -8908 <_fw+0x59212 : 59212 >
+    0205b4de: goto -2 <_fw+0x5B4DE : 5b4de >
+
+===== FUNC 0x0205b4e0 size=64B ninsn=25 callers=0 callees=0 =====
+    0205b4e0: [--sp] = {rets, r7-r4}
+    0205b4e2: r4 = r0
+    0205b4e4: if (r4 == 0) goto 52 <_fw+0x5B51A : 5b51a >
+    0205b4e6: r5 = r4 + 64
+    0205b4ea: if (r1 != 0) goto 4 <_fw+0x5B4F0 : 5b4f0 >
+    0205b4ec: r0 = [r5+0]
+    0205b4ee: if (r0 != 0) goto 42 <_fw+0x5B51A : 5b51a >
+    0205b4f0: r7 = [r4+56]
+    0205b4f2: if (r7 == 0) goto 22 <_fw+0x5B50A : 5b50a >
+    0205b4f4: r0 = r4  #
+    0205b4f6:  r6 = b[r5+4] (u)
+    0205b4f8: call -3170 <_fw+0x5A89A : 5a89a >
+    0205b4fc: r0 = r7 + -1
+    0205b500: [r4+56] = r0
+    0205b502: if (r6 == 255) goto 6 <_fw+0x5B50C : 5b50c >
+    0205b506: r0 = r6 + 1
+    0205b508: b[r5+4] = r0
+    0205b50a: {pc, r7-r4} = [sp++]
+    0205b50c: r0 = [++r4=16]
+    0205b510: if (r0 == 0) goto -8 <_fw+0x5B50A : 5b50a >
+    0205b512: r0 = r4
+    0205b514: call -8556 <_fw+0x593AC : 593ac >
+    0205b518: {pc, r7-r4} = [sp++]
+    0205b51a: call -8972 <_fw+0x59212 : 59212 >
+    0205b51e: goto -2 <_fw+0x5B51E : 5b51e >
+
+===== FUNC 0x0205b520 size=368B ninsn=133 callers=0 callees=0 =====
+  data-refs: 0x01c09534, 0x01c0953c
+    0205b520: [--sp] = {rets, r12-r4}
+    0205b522: sp += -4
+    0205b524: r10 = r1
+    0205b526: r5 = r0
+    0205b528: call -10950 <_fw+0x58A66 : 58a66 >
+    0205b52c: r7 = r0
+    0205b52e: goto 6 <_fw+0x5B536 : 5b536 >
+    0205b530: r0 = 2
+    0205b532: call -6868 <_fw+0x59A62 : 59a62 >
+    0205b536: r0 = r7
+    0205b538: call -9160 <_fw+0x59174 : 59174 >
+    0205b53c: r6 = r0
+    0205b53e: if (r6 == 0) goto -16 <_fw+0x5B530 : 5b530 >
+    0205b540: r9 = r5 + 4
+    0205b544: r8 = r5 + 16
+    0205b548: r11 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205b54e: r12 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205b554: goto 288 <_fw+0x5B676 : 5b676 >
+    0205b556: cli
+    0205b558: r0 = cnum
+    0205b55c: r0 = r0 << 2
+    0205b55e: r0 += r11
+    0205b560: [r0+0] += 1
+    0205b564: csync
+    0205b566: r0 = cnum
+    0205b56a: r1 = [r12+r0<<2]
+    0205b56e: r2 = r1 + 1
+    0205b570: [r12+r0<<2] = r2
+    0205b574: if (r1 != 0) goto 2 <_fw+0x5B578 : 5b578 >
+    0205b576: lockset
+    0205b578: csync
+    0205b57a: r0 = r6
+    0205b57c: call -262 <_fw+0x5B47A : 5b47a >
+    0205b580: if (r0 == 0) goto 140 <_fw+0x5B60E : 5b60e >
+    0205b582: r1 = sp + 0
+    0205b584: r0 = r6
+    0205b586: call -168 <_fw+0x5B4E0 : 5b4e0 >
+    0205b588: r7 = r9  #
+    0205b58a:  r0 = [sp]
+    0205b58c: r1 = r0 >> 8
+    0205b58e: [r5+0] = r1
+    0205b590: r4 = 0
+    0205b592: goto 12 <_fw+0x5B5A0 : 5b5a0 >
+    0205b594: r1_r0 = r7_r6
+    0205b596: call -184 <_fw+0x5B4E0 : 5b4e0 >
+    0205b598: r0 = b[sp] (u)
+    0205b59c: r7 += 4
+    0205b59e: r4 += 1
+    0205b5a0: r0 = r0.b0 (u)
+    0205b5a2: ifs (r4 < r0) goto -18 <_fw+0x5B594 : 5b594 >
+    0205b5a6: csync
+    0205b5a8: r0 = cnum
+    0205b5ac: r1 = [r12+r0<<2]
+    0205b5b0: r1 += -1
+    0205b5b2: [r12+r0<<2] = r1
+    0205b5b6: if (r1 != 0) goto 2 <_fw+0x5B5BA : 5b5ba >
+    0205b5b8: lockclr
+    0205b5ba: r0 = cnum
+    0205b5be: r1 = [r11+r0<<2]
+    0205b5c2: r1 += -1
+    0205b5c4: [r11+r0<<2] = r1
+    0205b5c8: if (r1 != 0) goto 4 <_fw+0x5B5CE : 5b5ce >
+    0205b5ca: csync
+    0205b5cc: sti
+    0205b5ce: r0 = [r5+0]
+    0205b5d0: r0 = r0 & 0xF00000
+    0205b5d4: if (r0 != 3145728) goto 176 <_fw+0x5B68A : 5b68a >
+    0205b5da: r0 = [r5+8]
+    0205b5dc: r4 = r0.b0 (u)
+    0205b5de: r7 = r4 + 1
+    0205b5e0: r1 = r4
+    0205b5e2: if ((r0 & 0x100) != 0) {
+    0205b5e6: r1 = r7
+    0205b5e8: r2 = b[sp] (u)
+    0205b5ec: r3 = uextra(r0, p:9, l:1)
+    0205b5f0: r3 |= 2
+    0205b5f2: r1 += r3
+    0205b5f4: r2 += 1
+    0205b5f6: if (r1 >= r2) goto 124 <_fw+0x5B676 : 5b676 >
+    0205b5fa: r1 = r0.b0 (u)
+    0205b5fc: if (r1 == 2) goto 56 <_fw+0x5B638 : 5b638 >
+    0205b600: if (r1 != 1) goto 68 <_fw+0x5B648 : 5b648 >
+    0205b604: r0 = [r5+12]
+    0205b606: r1 = [r9+0]
+    0205b60a: call r1
+    0205b60c: goto 72 <_fw+0x5B656 : 5b656 >
+    0205b60e: csync
+    0205b610: r0 = cnum
+    0205b614: r1 = [r12+r0<<2]
+    0205b618: r1 += -1
+    0205b61a: [r12+r0<<2] = r1
+    0205b61e: if (r1 != 0) goto 2 <_fw+0x5B622 : 5b622 >
+    0205b620: lockclr
+    0205b622: r0 = cnum
+    0205b626: r1 = [r11+r0<<2]
+    0205b62a: r1 += -1
+    0205b62c: [r11+r0<<2] = r1
+    0205b630: if (r1 != 0) goto 68 <_fw+0x5B676 : 5b676 >
+    0205b632: csync
+    0205b634: sti
+    0205b636: goto 62 <_fw+0x5B676 : 5b676 >
+    0205b638: if ((r0 & 1024) != 0) goto 12 <_fw+0x5B648 : 5b648 >
+    0205b63c: r1_r0 = d[r5+12]
+    0205b640: r2 = [r9+0]
+    0205b644: call r2
+    0205b646: goto 14 <_fw+0x5B656 : 5b656 >
+    0205b648: r1 = r4 + -1  #
+    0205b64c:  r0 = [r5+12]
+    0205b64e: r3 = [r9+0]
+    0205b652: r2 = r8
+    0205b654: call r3
+    0205b656: r1 = [r5+8]
+    0205b658: if ((r1 & 0x100) != 0) {
+    0205b65c: r1 = r5 + 12
+    0205b65e: r1 = [r1+r4<<2]
+    0205b662: [r1+0] = r0
+    0205b664: r1 = [r5+8]
+    0205b666: r7 = r4
+    0205b668: if ((r1 & 512) == 0) goto 10 <_fw+0x5B676 : 5b676 >
+    0205b66c: r0 = r5 + 12
+    0205b66e: r0 = [r0+r7<<2]
+    0205b672: call -3734 <_fw+0x5A7E0 : 5a7e0 >
+    0205b676: r1 = sp + 0
+    0205b678: r3 = 1
+    0205b67a: r0 = r6
+    0205b67c: r2 = r10
+    0205b67e: call -3424 <_fw+0x5A922 : 5a922 >
+    0205b682: if (r0 != 0) goto -304 <_fw+0x5B556 : 5b556 >
+    0205b686: r0 = 22
+    0205b688: goto 2 <_fw+0x5B68C : 5b68c >
+    0205b68a: r0 = 13
+    0205b68c: sp += 4
+    0205b68e: {pc, r12-r4} = [sp++]
+
+===== FUNC 0x0205b690 size=14B ninsn=5 callers=0 callees=0 =====
+    0205b690: [--sp] = rets
+    0205b692: r1 = rets
+    0205b696: r1 = -1
+    0205b698: call -380 <_fw+0x5B520 : 5b520 >
+    0205b69c: pc = [sp++]
+
+===== FUNC 0x0205b69e size=316B ninsn=110 callers=0 callees=0 =====
+  data-refs: 0x01c09534, 0x01c0953c
+    0205b69e: [--sp] = {rets, r13-r4}
+    0205b6a0: sp += -68
+    0205b6a2: r13 = r1
+    0205b6a4: call -9644 <_fw+0x590FC : 590fc >
+    0205b6a8: if (r0 == 0) goto 298 <_fw+0x5B7D6 : 5b7d6 >
+    0205b6ac: cli
+    0205b6ae: r1 = cnum
+    0205b6b2: r1 = r1 << 2
+    0205b6b4: r8 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205b6ba: r1 += r8
+    0205b6bc: [r1+0] += 1
+    0205b6c0: csync
+    0205b6c2: r9 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205b6c8: r1 = cnum
+    0205b6cc: r2 = [r9+r1<<2]
+    0205b6d0: r3 = r2 + 1
+    0205b6d2: [r9+r1<<2] = r3
+    0205b6d6: if (r2 != 0) goto 2 <_fw+0x5B6DA : 5b6da >
+    0205b6d8: lockset
+    0205b6da: csync
+    0205b6dc: call -9580 <_fw+0x59174 : 59174 >
+    0205b6e0: r5 = r0
+    0205b6e2: if (r5 == 0) goto 202 <_fw+0x5B7AE : 5b7ae >
+    0205b6e4: call -622 <_fw+0x5B47A : 5b47a >
+    0205b6e8: r6 = r0
+    0205b6ea: r10 = r13 & 0xF00000
+    0205b6ee: r11 = sp + 4
+    0205b6f2: r12 = -14 <_fw+0xFFFFFFFFFFFFFFF2 : fffffffffffffff2 >
+    0205b6f6: goto 140 <_fw+0x5B784 : 5b784 >
+    0205b6f8: r1 = sp + 0
+    0205b6fa: r3_r2 = 0
+    0205b6fc: r4 = 0
+    0205b6fe: r0 = r5
+    0205b700: call -3554 <_fw+0x5A922 : 5a922 >
+    0205b704: r7 = sp + 4
+    0205b706: goto 14 <_fw+0x5B716 : 5b716 >
+    0205b708: r3_r2 = 0
+    0205b70a: r0 = r5
+    0205b70c: r1 = r7
+    0205b70e: call -3568 <_fw+0x5A922 : 5a922 >
+    0205b712: r7 += 4
+    0205b714: r4 += 1
+    0205b716: r0 = [sp]
+    0205b718: r1 = r0.b0 (u)
+    0205b71a: if (r4 > 15) goto 4 <_fw+0x5B722 : 5b722 >
+    0205b71e: ifs (r4 < r1) goto -26 <_fw+0x5B708 : 5b708 >
+    0205b722: r2 = r6 + -1
+    0205b726: r0 = r0 >> 8
+    0205b728: r6 = r2 - r1
+    0205b72a: if (r0 == r13) goto 36 <_fw+0x5B752 : 5b752 >
+    0205b72e: r1 = sp + 0
+    0205b730: r0 = r5
+    0205b732: call -6336 <_fw+0x59E76 : 59e76 >
+    0205b736: r4 = 0
+    0205b738: r7 = sp + 4
+    0205b73a: goto 12 <_fw+0x5B748 : 5b748 >
+    0205b73c: r0 = r5
+    0205b73e: r1 = r7
+    0205b740: call -6350 <_fw+0x59E76 : 59e76 >
+    0205b744: r7 += 4
+    0205b746: r4 += 1
+    0205b748: r0 = b[sp] (u)
+    0205b74c: ifs (r4 < r0) goto -20 <_fw+0x5B73C : 5b73c >
+    0205b750: goto 50 <_fw+0x5B784 : 5b784 >
+    0205b752: if (r10 != 3145728) goto 44 <_fw+0x5B784 : 5b784 >
+    0205b758: r1 = [r11+4]
+    0205b75c: r0 = r1.b0 (u)
+    0205b75e: if ((r1 & 256) == 0) goto 18 <_fw+0x5B774 : 5b774 >
+    0205b762: r1 = sp + 4
+    0205b764: r1 += 8
+    0205b766: r1 = [r1+r0<<2]
+    0205b76a: [r1+0] = r12
+    0205b76e: r1 = [r11+4]
+    0205b772: r0 += 1
+    0205b774: if ((r1 & 512) == 0) goto 12 <_fw+0x5B784 : 5b784 >
+    0205b778: r1 = sp + 4
+    0205b77a: r1 += 8
+    0205b77c: r0 = [r1+r0<<2]
+    0205b780: call -4004 <_fw+0x5A7E0 : 5a7e0 >
+    0205b784: if (r6 != 0) goto -142 <_fw+0x5B6F8 : 5b6f8 >
+    0205b786: csync
+    0205b788: r0 = cnum
+    0205b78c: r1 = [r9+r0<<2]
+    0205b790: r1 += -1
+    0205b792: [r9+r0<<2] = r1
+    0205b796: if (r1 != 0) goto 2 <_fw+0x5B79A : 5b79a >
+    0205b798: lockclr
+    0205b79a: r0 = cnum
+    0205b79e: r1 = [r8+r0<<2]
+    0205b7a2: r1 += -1
+    0205b7a4: [r8+r0<<2] = r1
+    0205b7a8: if (r1 != 0) goto 44 <_fw+0x5B7D6 : 5b7d6 >
+    0205b7aa: csync
+    0205b7ac: goto 38 <_fw+0x5B7D4 : 5b7d4 >
+    0205b7ae: csync
+    0205b7b0: r0 = cnum
+    0205b7b4: r1 = [r9+r0<<2]
+    0205b7b8: r1 += -1
+    0205b7ba: [r9+r0<<2] = r1
+    0205b7be: if (r1 != 0) goto 2 <_fw+0x5B7C2 : 5b7c2 >
+    0205b7c0: lockclr
+    0205b7c2: r0 = cnum
+    0205b7c6: r1 = [r8+r0<<2]
+    0205b7ca: r1 += -1
+    0205b7cc: [r8+r0<<2] = r1
+    0205b7d0: if (r1 != 0) goto 4 <_fw+0x5B7D6 : 5b7d6 >
+    0205b7d2: csync
+    0205b7d4: sti
+    0205b7d6: sp += 68
+    0205b7d8: {pc, r13-r4} = [sp++]
+
+===== FUNC 0x0205b7da size=8B ninsn=3 callers=0 callees=0 =====
+    0205b7da: [--sp] = rets
+    0205b7dc: call -322 <_fw+0x5B69E : 5b69e >
+    0205b7e0: pc = [sp++]
+
+===== FUNC 0x0205b7e2 size=36B ninsn=14 callers=1 callees=0 =====
+    0205b7e2: [--sp] = rets
+    0205b7e4: r1 = 10
+    0205b7e6: r1 = r0 / r1 (u)
+    0205b7ea: r2 = r1 * 0xA
+    0205b7ee: r3 = r0 - r2
+    0205b7f0: r0 = 1
+    0205b7f2: r2 = 1
+    0205b7f4: if (r3 <= 5) {
+    0205b7f8: r2 = 0
+    0205b7fa: r1 += r2
+    0205b7fc: if (r1 == 0) goto 2 <_fw+0x5B800 : 5b800 >
+    0205b7fe: r0 = r1
+    0205b800: call -7586 <_fw+0x59A62 : 59a62 >
+    0205b804: pc = [sp++]
+
+===== FUNC 0x0205b806 size=104B ninsn=35 callers=0 callees=0 =====
+  data-refs: 0x01c09534, 0x01c0953c
+    0205b806: [--sp] = {rets, r5, r4}
+    0205b808: if (r0 == 0) goto 94 <_fw+0x5B868 : 5b868 >
+    0205b80a: cli
+    0205b80c: r1 = cnum
+    0205b810: r2 = r1 << 2
+    0205b812: r1 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205b818: r2 += r1
+    0205b81a: [r2+0] += 1
+    0205b81e: csync
+    0205b820: r2 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205b826: r3 = cnum
+    0205b82a: r4 = [r2+r3<<2]
+    0205b82e: r5 = r4 + 1
+    0205b830: [r2+r3<<2] = r5
+    0205b834: if (r4 != 0) goto 2 <_fw+0x5B838 : 5b838 >
+    0205b836: lockset
+    0205b838: csync
+    0205b83a: [r0+56] = 0x0
+    0205b83e: csync
+    0205b840: r0 = cnum
+    0205b844: r3 = [r2+r0<<2]
+    0205b848: r3 += -1
+    0205b84a: [r2+r0<<2] = r3
+    0205b84e: if (r3 != 0) goto 2 <_fw+0x5B852 : 5b852 >
+    0205b850: lockclr
+    0205b852: r0 = cnum
+    0205b856: r2 = [r1+r0<<2]
+    0205b85a: r2 += -1
+    0205b85c: [r1+r0<<2] = r2
+    0205b860: if (r2 != 0) goto 4 <_fw+0x5B866 : 5b866 >
+    0205b862: csync
+    0205b864: sti
+    0205b866: {pc, r5, r4} = [sp++]
+    0205b868: call -9818 <_fw+0x59212 : 59212 >
+    0205b86c: goto -2 <_fw+0x5B86C : 5b86c >
+
+===== FUNC 0x0205b86e size=44B ninsn=13 callers=0 callees=0 =====
+    0205b86e: [--sp] = {rets, r4}
+    0205b870: r4 = r0
+    0205b872: r0 = b[r4+148] (u)
+    0205b876: if (r0 == 2) goto 30 <_fw+0x5B898 : 5b898 >
+    0205b87a: if (r0 == 1) goto 12 <_fw+0x5B88A : 5b88a >
+    0205b87e: if (r0 != 0) goto 20 <_fw+0x5B894 : 5b894 >
+    0205b880: r0 = [r4+120]
+    0205b884: call -14580 <_fw+0x57F96 : 57f96 >
+    0205b88a: r0 = r4
+    0205b88c: call -14588 <_fw+0x57F96 : 57f96 >
+    0205b892: {pc, r4} = [sp++]
+    0205b894: call -11720 <_fw+0x58AD0 : 58ad0 >
+    0205b898: {pc, r4} = [sp++]
+
+===== FUNC 0x0205b89a size=62B ninsn=21 callers=0 callees=0 =====
+  data-refs: 0x01c20b78
+    0205b89a: [--sp] = rets
+    0205b89c: if (r0 == 0) goto 52 <_fw+0x5B8D2 : 5b8d2 >
+    0205b89e: r2 = 0
+    0205b8a0: b[r0+76] = r2
+    0205b8a4: r1 = 29494136 <_fw+0x1C20B78 : 1c20b78 >
+    0205b8aa: goto 10 <_fw+0x5B8B6 : 5b8b6 >
+    0205b8ac: r3 = [r1+4]
+    0205b8ae: if (r3 == r0) goto 10 <_fw+0x5B8BC : 5b8bc >
+    0205b8b2: r1 += 8
+    0205b8b4: r2 += 1
+    0205b8b6: if (r2 <= 19) goto -14 <_fw+0x5B8AC : 5b8ac >
+    0205b8ba: goto 8 <_fw+0x5B8C4 : 5b8c4 >
+    0205b8bc: r2 = 0
+    0205b8be: r3 = 0
+    0205b8c0: d[r1+0] = r3_r2
+    0205b8c4: r1 = b[r0+70] (u)
+    0205b8c8: if (r1 != 0) goto 6 <_fw+0x5B8D0 : 5b8d0 >
+    0205b8ca: call -14650 <_fw+0x57F96 : 57f96 >
+    0205b8d0: pc = [sp++]
+    0205b8d2: call -9924 <_fw+0x59212 : 59212 >
+    0205b8d6: goto -2 <_fw+0x5B8D6 : 5b8d6 >
+
+===== FUNC 0x0205b8d8 size=1222B ninsn=403 callers=0 callees=0 =====
+  data-refs: 0x01c08ff0, 0x01c09000, 0x01c09534, 0x01c0953c, 0x01c0973c, 0x01c09740, 0x01c09744, 0x01c09748, 0x01c0974c, 0x01c09750, 0x01c09754, 0x01c09758
+    0205b8d8: [--sp] = {rets, r13-r4}
+    0205b8da: r13 = r0
+    0205b8dc: call -10212 <_fw+0x590FC : 590fc >
+    0205b8e0: r4 = r0
+    0205b8e2: if (r4 == 0) goto 1100 <_fw+0x5BD34 : 5bd34 >
+    0205b8e8: r8 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205b8ee: r9 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205b8f4: if (r13 == 0) goto 558 <_fw+0x5BB28 : 5bb28 >
+    0205b8fa: r6 = 29419120 <_fw+0x1C0E670 : 1c0e670 >
+    0205b900: r10 = 1 <_fw : 0 >
+    0205b904: r12 = 29396992 <_fw+0x1C09000 : 1c09000 >
+    0205b90a: r11 = 0
+    0205b90c: goto 6 <_fw+0x5B914 : 5b914 >
+    0205b90e: call -249712 <_fw+0x1E9A4 : 1e9a4 >
+    0205b914: cli
+    0205b916: r0 = cnum
+    0205b91a: r0 = r0 << 2
+    0205b91c: r0 += r8
+    0205b91e: [r0+0] += 1
+    0205b922: csync
+    0205b924: r0 = cnum
+    0205b928: r1 = [r9+r0<<2]
+    0205b92c: r2 = r1 + 1
+    0205b92e: [r9+r0<<2] = r2
+    0205b932: if (r1 != 0) goto 2 <_fw+0x5B936 : 5b936 >
+    0205b934: lockset
+    0205b936: csync
+    0205b938: r0 = b[r6+50] (u)
+    0205b93c: if (r0 != 0) goto -6 <_fw+0x5B938 : 5b938 >
+    0205b93e: b[r6+50] = r10
+    0205b942: r7 = r12
+    0205b944: r7 = [r7+0]
+    0205b946: if (r7 == r12) goto 72 <_fw+0x5B992 : 5b992 >
+    0205b94a: r0 = b[r7+27] (u)
+    0205b94e: if ((r0 & 1) != 0) goto -14 <_fw+0x5B944 : 5b944 >
+    0205b952: r0 = [r7+16]
+    0205b954: if (r0 == 0) goto -18 <_fw+0x5B944 : 5b944 >
+    0205b956: r1 = r13
+    0205b958: call -102958 <_fw+0x42730 : 42730 >
+    0205b95e: if (r0 != 0) goto -28 <_fw+0x5B944 : 5b944 >
+    0205b960: r0 = h[r7+28] (u)
+    0205b962: b[r6+50] = r11
+    0205b966: csync
+    0205b968: r1 = cnum
+    0205b96c: r2 = [r9+r1<<2]
+    0205b970: r2 += -1
+    0205b972: [r9+r1<<2] = r2
+    0205b976: if (r2 != 0) goto 2 <_fw+0x5B97A : 5b97a >
+    0205b978: lockclr
+    0205b97a: r1 = cnum
+    0205b97e: r2 = [r8+r1<<2]
+    0205b982: r2 += -1
+    0205b984: [r8+r1<<2] = r2
+    0205b988: if (r2 != 0) goto 4 <_fw+0x5B98E : 5b98e >
+    0205b98a: csync
+    0205b98c: sti
+    0205b98e: if (r0 != 0) goto -130 <_fw+0x5B90E : 5b90e >
+    0205b990: goto 46 <_fw+0x5B9C0 : 5b9c0 >
+    0205b992: r0 = 0
+    0205b994: b[r6+50] = r0
+    0205b998: csync
+    0205b99a: r0 = cnum
+    0205b99e: r1 = [r9+r0<<2]
+    0205b9a2: r1 += -1
+    0205b9a4: [r9+r0<<2] = r1
+    0205b9a8: if (r1 != 0) goto 2 <_fw+0x5B9AC : 5b9ac >
+    0205b9aa: lockclr
+    0205b9ac: r0 = cnum
+    0205b9b0: r1 = [r8+r0<<2]
+    0205b9b4: r1 += -1
+    0205b9b6: [r8+r0<<2] = r1
+    0205b9ba: if (r1 == 0) goto 886 <_fw+0x5BD36 : 5bd36 >
+    0205b9c0: cli
+    0205b9c2: r0 = cnum
+    0205b9c6: r0 = r0 << 2
+    0205b9c8: r0 += r8
+    0205b9ca: [r0+0] += 1
+    0205b9ce: csync
+    0205b9d0: r0 = cnum
+    0205b9d4: r1 = [r9+r0<<2]
+    0205b9d8: r2 = r1 + 1
+    0205b9da: [r9+r0<<2] = r2
+    0205b9de: if (r1 != 0) goto 2 <_fw+0x5B9E2 : 5b9e2 >
+    0205b9e0: lockset
+    0205b9e2: csync
+    0205b9e4: r0 = b[r6+51] (u)
+    0205b9e8: if (r0 != 0) goto -6 <_fw+0x5B9E4 : 5b9e4 >
+    0205b9ea: r0 = 1
+    0205b9ec: r5 = r12 + 16
+    0205b9f0: b[r6+51] = r0
+    0205b9f4: r7 = r5
+    0205b9f6: r7 = [r7+0]
+    0205b9f8: if (r7 == r5) goto 254 <_fw+0x5BAFA : 5bafa >
+    0205b9fc: r0 = b[r7+28] (u)
+    0205ba00: if (r0 != 0) goto -12 <_fw+0x5B9F6 : 5b9f6 >
+    0205ba02: r0 = [r7+24]
+    0205ba04: if (r0 == 0) goto -16 <_fw+0x5B9F6 : 5b9f6 >
+    0205ba06: r1 = r13
+    0205ba08: call -103134 <_fw+0x42730 : 42730 >
+    0205ba0e: if (r0 != 0) goto -26 <_fw+0x5B9F6 : 5b9f6 >
+    0205ba10: r1 = h[r7+30] (u)
+    0205ba12: r0 = 0
+    0205ba14: b[r6+51] = r0
+    0205ba18: csync
+    0205ba1a: r0 = cnum
+    0205ba1e: r2 = [r9+r0<<2]
+    0205ba22: r2 += -1
+    0205ba24: [r9+r0<<2] = r2
+    0205ba28: if (r2 != 0) goto 2 <_fw+0x5BA2C : 5ba2c >
+    0205ba2a: lockclr
+    0205ba2c: r0 = cnum
+    0205ba30: r2 = [r8+r0<<2]
+    0205ba34: r2 += -1
+    0205ba36: [r8+r0<<2] = r2
+    0205ba3a: if (r2 != 0) goto 4 <_fw+0x5BA40 : 5ba40 >
+    0205ba3c: csync
+    0205ba3e: sti
+    0205ba40: if (r1 == 0) goto 230 <_fw+0x5BB28 : 5bb28 >
+    0205ba42: cli
+    0205ba44: r0 = cnum
+    0205ba48: r0 = r0 << 2
+    0205ba4a: r0 += r8
+    0205ba4c: [r0+0] += 1
+    0205ba50: csync
+    0205ba52: r0 = cnum
+    0205ba56: r2 = [r9+r0<<2]
+    0205ba5a: r3 = r2 + 1
+    0205ba5c: [r9+r0<<2] = r3
+    0205ba60: if (r2 != 0) goto 2 <_fw+0x5BA64 : 5ba64 >
+    0205ba62: lockset
+    0205ba64: csync
+    0205ba66: r0 = b[r6+51] (u)
+    0205ba6a: if (r0 != 0) goto -6 <_fw+0x5BA66 : 5ba66 >
+    0205ba6c: r2 = 1
+    0205ba6e: r0 = r12 + 16
+    0205ba72: b[r6+51] = r2
+    0205ba76: r2 = r0
+    0205ba78: r2 = [r2+0]
+    0205ba7a: if (r2 == r0) goto 76 <_fw+0x5BACA : 5baca >
+    0205ba7e: r3 = r2 + 24
+    0205ba80: r5 = h[r3+6] (u)
+    0205ba82: if (r5 != r1) goto -14 <_fw+0x5BA78 : 5ba78 >
+    0205ba86: r0 = [r3+0]
+    0205ba88: r2 = 1
+    0205ba8a: b[r3+4] = r2
+    0205ba8c: r2 = b[r3+5] (u)
+    0205ba8e: if (r2 != 0) goto -4 <_fw+0x5BA8C : 5ba8c >
+    0205ba90: r2 = 0
+    0205ba92: b[r6+51] = r2
+    0205ba96: csync
+    0205ba98: r2 = cnum
+    0205ba9c: r3 = [r9+r2<<2]
+    0205baa0: r3 += -1
+    0205baa2: [r9+r2<<2] = r3
+    0205baa6: if (r3 != 0) goto 2 <_fw+0x5BAAA : 5baaa >
+    0205baa8: lockclr
+    0205baaa: r2 = cnum
+    0205baae: r3 = [r8+r2<<2]
+    0205bab2: r3 += -1
+    0205bab4: [r8+r2<<2] = r3
+    0205bab8: if (r3 != 0) goto 4 <_fw+0x5BABE : 5babe >
+    0205baba: csync
+    0205babc: sti
+    0205babe: if (r0 == 0) goto -256 <_fw+0x5B9C0 : 5b9c0 >
+    0205bac0: r1 = r1 | 0x300000
+    0205bac4: call -750 <_fw+0x5B7DA : 5b7da >
+    0205bac8: goto -266 <_fw+0x5B9C0 : 5b9c0 >
+    0205baca: r0 = 0
+    0205bacc: b[r6+51] = r0
+    0205bad0: csync
+    0205bad2: r0 = cnum
+    0205bad6: r1 = [r9+r0<<2]
+    0205bada: r1 += -1
+    0205badc: [r9+r0<<2] = r1
+    0205bae0: if (r1 != 0) goto 2 <_fw+0x5BAE4 : 5bae4 >
+    0205bae2: lockclr
+    0205bae4: r0 = cnum
+    0205bae8: r1 = [r8+r0<<2]
+    0205baec: r1 += -1
+    0205baee: [r8+r0<<2] = r1
+    0205baf2: if (r1 != 0) goto -310 <_fw+0x5B9C0 : 5b9c0 >
+    0205baf6: csync
+    0205baf8: goto 574 <_fw+0x5BD38 : 5bd38 >
+    0205bafa: r0 = 0
+    0205bafc: b[r6+51] = r0
+    0205bb00: csync
+    0205bb02: r0 = cnum
+    0205bb06: r1 = [r9+r0<<2]
+    0205bb0a: r1 += -1
+    0205bb0c: [r9+r0<<2] = r1
+    0205bb10: if (r1 != 0) goto 2 <_fw+0x5BB14 : 5bb14 >
+    0205bb12: lockclr
+    0205bb14: r0 = cnum
+    0205bb18: r1 = [r8+r0<<2]
+    0205bb1c: r1 += -1
+    0205bb1e: [r8+r0<<2] = r1
+    0205bb22: if (r1 != 0) goto 4 <_fw+0x5BB28 : 5bb28 >
+    0205bb24: csync
+    0205bb26: sti
+    0205bb28: r0 = r4
+    0205bb2a: call -10682 <_fw+0x59174 : 59174 >
+    0205bb2e: cli
+    0205bb30: r1 = cnum
+    0205bb34: r1 = r1 << 2
+    0205bb36: r1 += r8
+    0205bb38: [r1+0] += 1
+    0205bb3c: csync
+    0205bb3e: r1 = cnum
+    0205bb42: r2 = [r9+r1<<2]
+    0205bb46: r5 = r0
+    0205bb48: r0 = r2 + 1
+    0205bb4a: [r9+r1<<2] = r0
+    0205bb4e: if (r2 != 0) goto 2 <_fw+0x5BB52 : 5bb52 >
+    0205bb50: lockset
+    0205bb52: csync
+    0205bb54: r7 = 29398848 <_fw+0x1C09740 : 1c09740 >
+    0205bb5a: r6 = 29398864 <_fw+0x1C09750 : 1c09750 >
+    0205bb60: r0 = 0
+    0205bb62: ifs (r0 > 0) goto 102 <_fw+0x5BBCC : 5bbcc >
+    0205bb66: r1 = [r6+r0<<2]
+    0205bb6a: if (r1 == r4) goto 10 <_fw+0x5BB78 : 5bb78 >
+    0205bb6e: r1 = [r7+r0<<2]
+    0205bb72: r0 += 1
+    0205bb74: if (r1 != r4) goto -22 <_fw+0x5BB62 : 5bb62 >
+    0205bb78: csync
+    0205bb7a: r0 = cnum
+    0205bb7e: r1 = [r9+r0<<2]
+    0205bb82: r1 += -1
+    0205bb84: [r9+r0<<2] = r1
+    0205bb88: if (r1 != 0) goto 2 <_fw+0x5BB8C : 5bb8c >
+    0205bb8a: lockclr
+    0205bb8c: r0 = cnum
+    0205bb90: r1 = [r8+r0<<2]
+    0205bb94: r1 += -1
+    0205bb96: [r8+r0<<2] = r1
+    0205bb9a: if (r1 != 0) goto 4 <_fw+0x5BBA0 : 5bba0 >
+    0205bb9c: csync
+    0205bb9e: sti
+    0205bba0: r0 = 1
+    0205bba2: call -8546 <_fw+0x59A44 : 59a44 >
+    0205bba6: cli
+    0205bba8: r0 = cnum
+    0205bbac: r0 = r0 << 2
+    0205bbae: r0 += r8
+    0205bbb0: [r0+0] += 1
+    0205bbb4: csync
+    0205bbb6: r0 = cnum
+    0205bbba: r1 = [r9+r0<<2]
+    0205bbbe: r2 = r1 + 1
+    0205bbc0: [r9+r0<<2] = r2
+    0205bbc4: if (r1 != 0) goto 2 <_fw+0x5BBC8 : 5bbc8 >
+    0205bbc6: lockset
+    0205bbc8: csync
+    0205bbca: goto -108 <_fw+0x5BB60 : 5bb60 >
+    0205bbcc: r6 = r4 + 76
+    0205bbd0: r0 = r6
+    0205bbd2: call -12232 <_fw+0x58C0E : 58c0e >
+    0205bbd6: if (r0 != 0) goto 30 <_fw+0x5BBF6 : 5bbf6 >
+    0205bbd8: r0 = [r4+116]
+    0205bbdc: r1 = r0 * 0x14
+    0205bbe0: r2 = 29491992 <_fw+0x1C20318 : 1c20318 >
+    0205bbe6: r1 = [r1+r2]
+    0205bbea: if (r1 != 0) goto 10 <_fw+0x5BBF6 : 5bbf6 >
+    0205bbec: r1 = 29398860 <_fw+0x1C0974C : 1c0974c >
+    0205bbf2: [r1+0] &= ~(1 << r0)
+    0205bbf6: r0 = [r4+112]
+    0205bbfa: if (r0 == 0) goto 8 <_fw+0x5BC04 : 5bc04 >
+    0205bbfc: r0 = r4 + 96
+    0205bc00: call -12278 <_fw+0x58C0E : 58c0e >
+    0205bc04: r0 = 29398856 <_fw+0x1C09748 : 1c09748 >
+    0205bc0a: [r0+0] += 1
+    0205bc0e: r0 = [r7+0]
+    0205bc10: if (r4 == r0) goto 22 <_fw+0x5BC2A : 5bc2a >
+    0205bc14: r0 = 29398844 <_fw+0x1C0973C : 1c0973c >
+    0205bc1a: [r0+0] += -1
+    0205bc1e: r0 = r4
+    0205bc20: call -950 <_fw+0x5B86E : 5b86e >
+    0205bc24: call -12170 <_fw+0x58C9E : 58c9e >
+    0205bc28: goto 22 <_fw+0x5BC40 : 5bc40 >
+    0205bc2a: r0 = 29492672 <_fw+0x1C205C0 : 1c205c0 >
+    0205bc30: r1 = r6
+    0205bc32: call -12206 <_fw+0x58C88 : 58c88 >
+    0205bc36: r0 = 29398868 <_fw+0x1C09754 : 1c09754 >
+    0205bc3c: [r0+0] += 1
+    0205bc40: r0 = 29398852 <_fw+0x1C09744 : 1c09744 >
+    0205bc46: r0 = [r0+0]
+    0205bc48: if (r0 == 0) goto 24 <_fw+0x5BC62 : 5bc62 >
+    0205bc4a: r0 = [r7+0]
+    0205bc4c: if (r4 != r0) goto 18 <_fw+0x5BC62 : 5bc62 >
+    0205bc50: r0 = 29398872 <_fw+0x1C09758 : 1c09758 >
+    0205bc56: r0 = [r0+0]
+    0205bc58: if (r0 == 0) goto 4 <_fw+0x5BC5E : 5bc5e >
+    0205bc5a: call -12686 <_fw+0x58AD0 : 58ad0 >
+    0205bc5e: call -11580 <_fw+0x58F26 : 58f26 >
+    0205bc62: csync
+    0205bc64: r0 = cnum
+    0205bc68: r1 = [r9+r0<<2]
+    0205bc6c: r1 += -1
+    0205bc6e: [r9+r0<<2] = r1
+    0205bc72: if (r1 != 0) goto 2 <_fw+0x5BC76 : 5bc76 >
+    0205bc74: lockclr
+    0205bc76: r0 = cnum
+    0205bc7a: r1 = [r8+r0<<2]
+    0205bc7e: r1 += -1
+    0205bc80: [r8+r0<<2] = r1
+    0205bc84: if (r1 != 0) goto 4 <_fw+0x5BC8A : 5bc8a >
+    0205bc86: csync
+    0205bc88: sti
+    0205bc8a: if (r5 == 0) goto 168 <_fw+0x5BD34 : 5bd34 >
+    0205bc8c: cli
+    0205bc8e: r0 = cnum
+    0205bc92: r0 = r0 << 2
+    0205bc94: r0 += r8
+    0205bc96: [r0+0] += 1
+    0205bc9a: csync
+    0205bc9c: r0 = cnum
+    0205bca0: r1 = [r9+r0<<2]
+    0205bca4: r2 = r1 + 1
+    0205bca6: [r9+r0<<2] = r2
+    0205bcaa: if (r1 != 0) goto 2 <_fw+0x5BCAE : 5bcae >
+    0205bcac: lockset
+    0205bcae: r1 = 29494124 <_fw+0x1C20B6C : 1c20b6c >
+    0205bcb4: csync
+    0205bcb6: r0 = r1
+    0205bcb8: r0 = [r0+0]
+    0205bcba: if (r0 == r1) goto 72 <_fw+0x5BD06 : 5bd06 >
+    0205bcbe: r2 = [r0+8]
+    0205bcc0: if (r2 != r4) goto -12 <_fw+0x5BCB8 : 5bcb8 >
+    0205bcc4: {r2, r1} = [r0+]
+    0205bcc8: [r1+4] = r2
+    0205bcca: [r2+0] = r1
+    0205bccc: [r0+0] = r0
+    0205bcce: [r0+4] = r0
+    0205bcd0: csync
+    0205bcd2: r1 = cnum
+    0205bcd6: r2 = [r9+r1<<2]
+    0205bcda: r2 += -1
+    0205bcdc: [r9+r1<<2] = r2
+    0205bce0: if (r2 != 0) goto 2 <_fw+0x5BCE4 : 5bce4 >
+    0205bce2: lockclr
+    0205bce4: r1 = cnum
+    0205bce8: r2 = [r8+r1<<2]
+    0205bcec: r2 += -1
+    0205bcee: [r8+r1<<2] = r2
+    0205bcf2: if (r2 != 0) goto 4 <_fw+0x5BCF8 : 5bcf8 >
+    0205bcf4: csync
+    0205bcf6: sti
+    0205bcf8: r1 = [r0+72]
+    0205bcfc: if (r1 == 0) goto 48 <_fw+0x5BD2E : 5bd2e >
+    0205bcfe: call -17514 <_fw+0x5789A : 5789a >
+    0205bd04: goto 40 <_fw+0x5BD2E : 5bd2e >
+    0205bd06: csync
+    0205bd08: r0 = cnum
+    0205bd0c: r1 = [r9+r0<<2]
+    0205bd10: r1 += -1
+    0205bd12: [r9+r0<<2] = r1
+    0205bd16: if (r1 != 0) goto 2 <_fw+0x5BD1A : 5bd1a >
+    0205bd18: lockclr
+    0205bd1a: r0 = cnum
+    0205bd1e: r1 = [r8+r0<<2]
+    0205bd22: r1 += -1
+    0205bd24: [r8+r0<<2] = r1
+    0205bd28: if (r1 != 0) goto 4 <_fw+0x5BD2E : 5bd2e >
+    0205bd2a: csync
+    0205bd2c: sti
+    0205bd2e: r0 = r5
+    0205bd30: call -1178 <_fw+0x5B89A : 5b89a >
+    0205bd34: {pc, r13-r4} = [sp++]
+    0205bd36: csync
+    0205bd38: sti
+    0205bd3a: goto -892 <_fw+0x5B9C0 : 5b9c0 >
+    0205bd3c: r0 = 32436460 <_fw+0x1EEF0EC : 1eef0ec >
+    0205bd42: r1 = 0
+    0205bd44: b[r0+0] = r1
+    0205bd46: rts
+    0205bd48: [--sp] = {rets, r4}
+    0205bd4a: r4 = 32436460 <_fw+0x1EEF0EC : 1eef0ec >
+    0205bd50: [r4+4] = 0x0
+    0205bd54: r0 = 33932972 <_fw+0x205C6AC : 205c6ac >
+    0205bd5a: call -369634 <_fw+0x197E : 197e >
+    0205bd60: r1 = 100
+    0205bd62: r0 = r0 / r1 (s)
+    0205bd66: [r4+8] = r0
+    0205bd68: r0 = 64
+    0205bd6a: b[r4+0] = r0
+    0205bd6c: r0 = 1
+    0205bd6e: b[r4+0] = r0
+    0205bd70: {pc, r4} = [sp++]
+    0205bd72: [--sp] = {psr, rets, reti}
+    0205bd74: [--sp] = {r3-r0}
+    0205bd76: r0 = 32436460 <_fw+0x1EEF0EC : 1eef0ec >
+    0205bd7c: r1 = b[r0+0] (u)
+    0205bd7e: r1 |= 64
+    0205bd80: b[r0+0] = r1
+    0205bd82: r0 = 29396976 <_fw+0x1C08FF0 : 1c08ff0 >
+    0205bd88: [r0+4] += 1
+    0205bd8c: call -12494 <_fw+0x58CC2 : 58cc2 >
+    0205bd90: if (r0 == 0) goto 4 <_fw+0x5BD96 : 5bd96 >
+    0205bd92: call -11888 <_fw+0x58F26 : 58f26 >
+    0205bd96: {r3-r0} = [sp++]
+    0205bd98: {psr, rets, reti} = [sp++]
+    0205bd9a: csync
+    0205bd9c: rti
+
+===== FUNC 0x0205bd9e size=116B ninsn=31 callers=0 callees=0 =====
+  data-refs: 0x01c09740, 0x01c09750
+    0205bd9e: r0 = cnum
+    0205bda2: r1 = 29398864 <_fw+0x1C09750 : 1c09750 >
+    0205bda8: r0 = [r1+r0<<2]
+    0205bdac: r2 = 29398848 <_fw+0x1C09740 : 1c09740 >
+    0205bdb2: r3 = cnum
+    0205bdb6: [r2+r3<<2] = r0
+    0205bdba: r0 = cnum
+    0205bdbe: r0 = 0x7 - r0
+    0205bdc2: r2 = 1
+    0205bdc4: r0 = r2 << r0
+    0205bdc8: r2 = 32436644 <_fw+0x1EEF1A4 : 1eef1a4 >
+    0205bdce: [r2+0] = r0
+    0205bdd0: r0 = cnum
+    0205bdd4: r0 = [r1+r0<<2]
+    0205bdd8: r0 = [r0+120]
+    0205bddc: r2 = cnum
+    0205bde0: r2 = r2 << 9
+    0205bde2: r3 = 8109113 <_fw+0x7BBC38 : 7bbc38 >
+    0205bde8: [r2+r3<<2] = r0
+    0205bdec: r0 = cnum
+    0205bdf0: r0 = [r1+r0<<2]
+    0205bdf4: r0 = [r0+8]
+    0205bdf6: r1 = cnum
+    0205bdfa: r1 = r1 << 9
+    0205bdfc: r1 = [r1+r3<<2]
+    0205be00: r0 += r1
+    0205be02: r1 = cnum
+    0205be06: r1 = r1 << 9
+    0205be08: r2 = r3 + -1
+    0205be0c: [r1+r2<<2] = r0
+    0205be10: rts
+
+===== FUNC 0x0205be12 size=1536B ninsn=485 callers=0 callees=0 =====
+  data-refs: 0x01c09534, 0x01c0953c, 0x01c09548, 0x01c0973c, 0x01c09740, 0x01c0974c, 0x01c09754, 0x01c0975c, 0x01c09768, 0x01c09774, 0x01c0e670, 0x01c1ff0c
+    0205be12: [--sp] = {rets, r5, r4}
+    0205be14: r0 = 29398860 <_fw+0x1C0974C : 1c0974c >
+    0205be1a: r0 = [r0+0]
+    0205be1c: cli
+    0205be1e: r1 = cnum
+    0205be22: r2 = r1 << 2
+    0205be24: r1 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205be2a: r2 += r1
+    0205be2c: [r2+0] += 1
+    0205be30: csync
+    0205be32: r3 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205be38: r2 = cnum
+    0205be3c: r4 = [r3+r2<<2]
+    0205be40: r5 = r4 + 1
+    0205be42: [r3+r2<<2] = r5
+    0205be46: if (r4 != 0) goto 2 <_fw+0x5BE4A : 5be4a >
+    0205be48: lockset
+    0205be4a: csync
+    0205be4c: r2 = 29398848 <_fw+0x1C09740 : 1c09740 >
+    0205be52: r4 = cnum
+    0205be56: r2 = [r2+r4<<2]
+    0205be5a: csync
+    0205be5c: r4 = cnum
+    0205be60: r5 = [r3+r4<<2]
+    0205be64: r5 += -1
+    0205be66: [r3+r4<<2] = r5
+    0205be6a: if (r5 != 0) goto 2 <_fw+0x5BE6E : 5be6e >
+    0205be6c: lockclr
+    0205be6e: r3 = cnum
+    0205be72: r4 = [r1+r3<<2]
+    0205be76: r4 += -1
+    0205be78: [r1+r3<<2] = r4
+    0205be7c: if (r4 != 0) goto 4 <_fw+0x5BE82 : 5be82 >
+    0205be7e: csync
+    0205be80: sti
+    0205be82: r1 = 29491992 <_fw+0x1C20318 : 1c20318 >
+    0205be88: r1 = [r1+0]
+    0205be8a: r2 = [r2+116]
+    0205be8e: r0 |= r1
+    0205be90: r0 &= 4294967294
+    0205be92: r1 = r0 | r2
+    0205be96: r0 = 0
+    0205be98: if (r1 != 0) goto 18 <_fw+0x5BEAC : 5beac >
+    0205be9a: r0 = 29398876 <_fw+0x1C0975C : 1c0975c >
+    0205bea0: r0 = [r0+0]
+    0205bea2: r1 = 29398888 <_fw+0x1C09768 : 1c09768 >
+    0205bea8: r1 = [r1+0]
+    0205beaa: r0 = r0 - r1
+    0205beac: {pc, r5, r4} = [sp++]
+    0205beae: sp += -12
+    0205beb0: r7 = 29398868 <_fw+0x1C09754 : 1c09754 >
+    0205beb6: r6 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205bebc: r5 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205bec2: r11 = 29491992 <_fw+0x1C20318 : 1c20318 >
+    0205bec8: r12 = 29398900 <_fw+0x1C09774 : 1c09774 >
+    0205bece: r13 = 29398876 <_fw+0x1C0975C : 1c0975c >
+    0205bed4: r14 = 29398888 <_fw+0x1C09768 : 1c09768 >
+    0205beda: r8 = 29398344 <_fw+0x1C09548 : 1c09548 >
+    0205bee0: r9 = 29492672 <_fw+0x1C205C0 : 1c205c0 >
+    0205bee6: r15 = 29398844 <_fw+0x1C0973C : 1c0973c >
+    0205beec: r0 = [r7+0]
+    0205beee: if (r0 == 0) goto 120 <_fw+0x5BF68 : 5bf68 >
+    0205bef0: call -13170 <_fw+0x58B82 : 58b82 >
+    0205bef4: r0 = [r9+0]
+    0205bef8: if (r0 == 0) goto 104 <_fw+0x5BF62 : 5bf62 >
+    0205befa: cli
+    0205befc: r0 = cnum
+    0205bf00: r0 = r0 << 2
+    0205bf02: r0 += r6
+    0205bf04: [r0+0] += 1
+    0205bf08: csync
+    0205bf0a: r0 = cnum
+    0205bf0e: r1 = [r5+r0<<2]
+    0205bf12: r2 = r1 + 1
+    0205bf14: [r5+r0<<2] = r2
+    0205bf18: if (r1 != 0) goto 2 <_fw+0x5BF1C : 5bf1c >
+    0205bf1a: lockset
+    0205bf1c: csync
+    0205bf1e: r0 = [r9+12]
+    0205bf22: r4 = [r0+12]
+    0205bf24: r0 = r4 + 76
+    0205bf28: call -13086 <_fw+0x58C0E : 58c0e >
+    0205bf2c: [r15+0] += -1
+    0205bf30: [r7+0] += -1
+    0205bf34: csync
+    0205bf36: r0 = cnum
+    0205bf3a: r1 = [r5+r0<<2]
+    0205bf3e: r1 += -1
+    0205bf40: [r5+r0<<2] = r1
+    0205bf44: if (r1 != 0) goto 2 <_fw+0x5BF48 : 5bf48 >
+    0205bf46: lockclr
+    0205bf48: r0 = cnum
+    0205bf4c: r1 = [r6+r0<<2]
+    0205bf50: r1 += -1
+    0205bf52: [r6+r0<<2] = r1
+    0205bf56: if (r1 != 0) goto 4 <_fw+0x5BF5C : 5bf5c >
+    0205bf58: csync
+    0205bf5a: sti
+    0205bf5c: r0 = r4
+    0205bf5e: call -1780 <_fw+0x5B86E : 5b86e >
+    0205bf62: call -12122 <_fw+0x5900C : 5900c >
+    0205bf66: goto -124 <_fw+0x5BEEC : 5beec >
+    0205bf68: r0 = [r11+0]
+    0205bf6c: if (r0 >= 2) {
+    0205bf70: call -12366
+    0205bf74: idle
+    0205bf76: call -374566 <_fw+0x856 : 856 >
+    0205bf7c: r0 = b[r12+0] (u)
+    0205bf80: if (r0 == 0) goto -150 <_fw+0x5BEEC : 5beec >
+    0205bf82: call -372 <_fw+0x5BE12 : 5be12 >
+    0205bf86: if (r0 < 2) goto -158 <_fw+0x5BEEC : 5beec >
+    0205bf8a: r0 = [r13+0]
+    0205bf8e: r1 = [r14+0]
+    0205bf92: if (r0 < r1) goto -170 <_fw+0x5BEEC : 5beec >
+    0205bf96: call -13336 <_fw+0x58B82 : 58b82 >
+    0205bf9a: call -396 <_fw+0x5BE12 : 5be12 >
+    0205bf9e: if (r0 < 2) goto -64 <_fw+0x5BF62 : 5bf62 >
+    0205bfa2: r0 = [r13+0]
+    0205bfa6: r1 = [r14+0]
+    0205bfaa: if (r0 < r1) goto -76 <_fw+0x5BF62 : 5bf62 >
+    0205bfae: r0 = 29419120 <_fw+0x1C0E670 : 1c0e670 >
+    0205bfb4: r0 = b[r0+52] (u)
+    0205bfb8: if (r0 != 0) goto -88 <_fw+0x5BF62 : 5bf62 >
+    0205bfba: r2 = 29491552 <_fw+0x1C20160 : 1c20160 >
+    0205bfc0: r1 = b[r2+0] (u)
+    0205bfc2: r0 = [r8+76]
+    0205bfc6: if ((r1 & 0x1) != 0) {
+    0205bfca: r1 = [r2+36]
+    0205bfcc: r0 += r1
+    0205bfce: r0 = r0 + 6000
+    0205bfd2: r0 = r0 + 4000
+    0205bfd6: [sp+8] = r0
+    0205bfd8: r0 = b[r8+93] (u)
+    0205bfdc: r2 = b[r8+91] (u)
+    0205bfe0: r1 = r0 & 0xFFFFFF06
+    0205bfe4: if (r2 != 0) goto -132 <_fw+0x5BF62 : 5bf62 >
+    0205bfe6: r0 = [r8+24]
+    0205bfea: if (r1 != 6) goto -140 <_fw+0x5BF62 : 5bf62 >
+    0205bfee: r4 = r8 + 24
+    0205bff2: if (r0 == r4) goto -148 <_fw+0x5BF62 : 5bf62 >
+    0205bff6: r0 = r4
+    0205bff8: call -177940 <_fw+0x308EA : 308ea >
+    0205bffe: r10 = r0
+    0205c000: if (r0 == 0) goto -160 <_fw+0x5BF62 : 5bf62 >
+    0205c002: call -177900 <_fw+0x3091C : 3091c >
+    0205c008: if (r0 == 0) goto -168 <_fw+0x5BF62 : 5bf62 >
+    0205c00a: r1 = b[r8+93] (u)
+    0205c00e: cli
+    0205c010: r0 = cnum
+    0205c014: r0 = r0 << 2
+    0205c016: r0 += r6
+    0205c018: [r0+0] += 1
+    0205c01c: csync
+    0205c01e: r0 = cnum
+    0205c022: if ((r1 & 16) != 0) goto 30 <_fw+0x5C044 : 5c044 >
+    0205c026: r2 = b[r8+46] (u)
+    0205c02a: r0 = r0.b0 (u)
+    0205c02c: r1 = r0 + 1
+    0205c02e: if (r2 != r1) goto 92 <_fw+0x5C08E : 5c08e >
+    0205c032: r1 = r8
+    0205c034: r0 = b[++r1=45] (u)
+    0205c038: if (r0 != 0) goto 114 <_fw+0x5C0AC : 5c0ac >
+    0205c03a: r3 = r8 + 44
+    0205c03e: r0 = r8 + 36
+    0205c042: goto 164 <_fw+0x5C0E8 : 5c0e8 >
+    0205c044: r1 = [r5+r0<<2]
+    0205c048: r2 = r1 + 1
+    0205c04a: [r5+r0<<2] = r2
+    0205c04e: if (r1 != 0) goto 2 <_fw+0x5C052 : 5c052 >
+    0205c050: lockset
+    0205c052: csync
+    0205c054: r0 = [r8+0]
+    0205c058: if (r0 == r8) goto 94 <_fw+0x5C0BA : 5c0ba >
+    0205c05c: r0 = 0
+    0205c05e: b[r12+0] = r0
+    0205c062: csync
+    0205c064: r0 = cnum
+    0205c068: r1 = [r5+r0<<2]
+    0205c06c: r1 += -1
+    0205c06e: [r5+r0<<2] = r1
+    0205c072: if (r1 != 0) goto 2 <_fw+0x5C076 : 5c076 >
+    0205c074: lockclr
+    0205c076: r0 = cnum
+    0205c07a: r1 = [r6+r0<<2]
+    0205c07e: r1 += -1
+    0205c080: [r6+r0<<2] = r1
+    0205c084: if (r1 != 0) goto -294 <_fw+0x5BF62 : 5bf62 >
+    0205c088: csync
+    0205c08a: sti
+    0205c08c: goto -300 <_fw+0x5BF62 : 5bf62 >
+    0205c08e: r0 = r8 + 36
+    0205c092: b[r0+10] = r1
+    0205c094: r2 = b[r0+8] (u)
+    0205c096: r1 = b[r0+9] (u)
+    0205c098: r2 |= r1
+    0205c09a: if ((r2 & 0xFF) == 0) goto 68 <_fw+0x5C0E4 : 5c0e4 >
+    0205c0a0: if (r1 == 0) goto 10 <_fw+0x5C0AC : 5c0ac >
+    0205c0a2: r1 = r8 + 45
+    0205c0a6: r3 = r8 + 44
+    0205c0aa: goto 60 <_fw+0x5C0E8 : 5c0e8 >
+    0205c0ac: r1 = r8 + 44
+    0205c0b0: r3 = r8 + 45
+    0205c0b4: r0 = r8 + 40
+    0205c0b8: goto 46 <_fw+0x5C0E8 : 5c0e8 >
+    0205c0ba: csync
+    0205c0bc: r0 = cnum
+    0205c0c0: r1 = [r5+r0<<2]
+    0205c0c4: r1 += -1
+    0205c0c6: [r5+r0<<2] = r1
+    0205c0ca: if (r1 != 0) goto 2 <_fw+0x5C0CE : 5c0ce >
+    0205c0cc: lockclr
+    0205c0ce: r0 = cnum
+    0205c0d2: r1 = [r6+r0<<2]
+    0205c0d6: r1 += -1
+    0205c0d8: [r6+r0<<2] = r1
+    0205c0dc: if (r1 != 0) goto 56 <_fw+0x5C116 : 5c116 >
+    0205c0de: csync
+    0205c0e0: sti
+    0205c0e2: goto 50 <_fw+0x5C116 : 5c116 >
+    0205c0e4: r1 = r0 + 9
+    0205c0e6: r3 = r0 + 8
+    0205c0e8: [r0+0] = r10
+    0205c0ec: r2 = 1
+    0205c0ee: r10 = r3  #
+    0205c0f0:  b[r3+0] = r2
+    0205c0f2: r3 = cnum
+    0205c0f6: r2 = [r6+r3<<2]
+    0205c0fa: r2 += -1
+    0205c0fc: [r6+r3<<2] = r2
+    0205c100: if (r2 != 0) goto 4 <_fw+0x5C106 : 5c106 >
+    0205c102: csync
+    0205c104: sti
+    0205c106: r2 = b[r1+0] (u)
+    0205c108: if (r2 == 0) goto 130 <_fw+0x5C18C : 5c18c >
+    0205c10a: r0 = [r8+40]
+    0205c10e: r1 = [r8+36]
+    0205c112: r10 = umin(r1, r0)
+    0205c116: call -178138 <_fw+0x30942 : 30942 >
+    0205c11c: call -178030 <_fw+0x309B4 : 309b4 >
+    0205c122: cli
+    0205c124: r1 = cnum
+    0205c128: r1 = r1 << 2
+    0205c12a: r1 += r6
+    0205c12c: [r1+0] += 1
+    0205c130: csync
+    0205c132: r1 = cnum
+    0205c136: r2 = [r5+r1<<2]
+    0205c13a: r3 = r2 + 1
+    0205c13c: [r5+r1<<2] = r3
+    0205c140: if (r2 != 0) goto 2 <_fw+0x5C144 : 5c144 >
+    0205c142: lockset
+    0205c144: csync
+    0205c146: [sp+4] = r0
+    0205c148: if (r0 == 0) goto 128 <_fw+0x5C1CA : 5c1ca >
+    0205c14a: r0 = r8 + 32
+    0205c14e: r1 = 0
+    0205c150: rep 2 15 {
+    0205c152: b[r0++=1] = r1
+    0205c154: call -173890 <_fw+0x31A18 : 31a18 >
+    0205c15a: csync
+    0205c15c: r0 = cnum
+    0205c160: r1 = [r5+r0<<2]
+    0205c164: r1 += -1
+    0205c166: [r5+r0<<2] = r1
+    0205c16a: if (r1 != 0) goto 2 <_fw+0x5C16E : 5c16e >
+    0205c16c: lockclr
+    0205c16e: r0 = cnum
+    0205c172: r1 = [r6+r0<<2]
+    0205c176: r1 += -1
+    0205c178: [r6+r0<<2] = r1
+    0205c17c: r0 = [sp+4]
+    0205c17e: if (r1 != 0) goto 4 <_fw+0x5C184 : 5c184 >
+    0205c180: csync
+    0205c182: sti
+    0205c184: call -173824 <_fw+0x31A8A : 31a8a >
+    0205c18a: goto -554 <_fw+0x5BF62 : 5bf62 >
+    0205c18c: r3 = [r0+0]
+    0205c18e: goto 44 <_fw+0x5C1BC : 5c1bc >
+    0205c190: r2 = 262656 <_fw+0x40200 : 40200 >
+    0205c196: r2 = [r2+0]
+    0205c198: r4 = 4000000 <_fw+0x3D0900 : 3d0900 >
+    0205c19e: if ((r2 & 0x1) != 0) {
+    0205c1a2: r4 = 8000000
+    0205c1a8: r2 = 29490956 <_fw+0x1C1FF0C : 1c1ff0c >
+    0205c1ae: r2 = [r2+8]
+    0205c1b0: r4 = r2 / r4 (s)
+    0205c1b4: goto 4 <_fw+0x5C1BA : 5c1ba >
+    0205c1b6: nop
+    0205c1b8: r4 += -1
+    0205c1ba: if (r4 != 0) goto -6 <_fw+0x5C1B6 : 5c1b6 >
+    0205c1bc: r3 += -1
+    0205c1be: ifs (r3 < 1) goto 90 <_fw+0x5C21C : 5c21c >
+    0205c1c2: r2 = b[r1+0] (u)
+    0205c1c4: if (r2 == 0) goto -54 <_fw+0x5C190 : 5c190 >
+    0205c1c6: [r0+0] = r3
+    0205c1c8: goto -616 <_fw+0x5BF62 : 5bf62 >
+    0205c1ca: call -178356 <_fw+0x3091C : 3091c >
+    0205c1d0: if (r0 == 0) goto -136 <_fw+0x5C14A : 5c14a >
+    0205c1d2: r0 = 0
+    0205c1d4: call -4551796 <_fw+0xFFFFFFFFFFC04D66 : ffffffffffc04d66 >
+    0205c1da: if (r0 == 0) goto 78 <_fw+0x5C22A : 5c22a >
+    0205c1dc: call -4551778 <_fw+0xFFFFFFFFFFC04D80 : ffffffffffc04d80 >
+    0205c1e2: [sp] = r0
+    0205c1e4: r0 = 0
+    0205c1e6: call -4551814 <_fw+0xFFFFFFFFFFC04D66 : ffffffffffc04d66 >
+    0205c1ec: r1 = [r8+56]
+    0205c1f0: if (r0 == 0) goto -168 <_fw+0x5C14A : 5c14a >
+    0205c1f2: r0 = [sp]
+    0205c1f4: if (r0 <= r1) goto -174 <_fw+0x5C14A : 5c14a >
+    0205c1f8: r0 = r10
+    0205c1fa: call -368992 <_fw+0x20A0 : 20a0 >
+    0205c200: r1 = [sp]
+    0205c202: if (r1 <= r0) goto -188 <_fw+0x5C14A : 5c14a >
+    0205c206: r0 = [r8+464]
+    0205c20a: r1 = 1000000 <_fw+0xF4240 : f4240 >
+    0205c210: r2 = [sp]
+    0205c212: r3_r2 = r2 * r1 (u)
+    0205c216: r1_r0 = r3_r2 / r0 (u)
+    0205c21a: goto 26 <_fw+0x5C236 : 5c236 >
+    0205c21c: r1 = 0
+    0205c21e: [r0+0] = r1
+    0205c220: b[r8+46] = r1
+    0205c224: b[r10+0] = r1
+    0205c228: goto -712 <_fw+0x5BF62 : 5bf62 >
+    0205c22a: r2 = [r8+0]
+    0205c22e: r0 = 1
+    0205c230: if (r2 != r8) {
+    0205c234: r0 = 0
+    0205c236: if (r0 == 0) goto -238 <_fw+0x5C14A : 5c14a >
+    0205c238: r2 = 20000  # <_fw+0x4E20 : 4e20 >
+    0205c23c:  r3 = [sp+8]
+    0205c23e: r2 += r3
+    0205c240: r3 = 0
+    0205c242: if (r0 != 1) goto 12 <_fw+0x5C252 : 5c252 >
+    0205c246: r0 = [r8+68]
+    0205c24a: if (r0 == 0) goto 2 <_fw+0x5C24E : 5c24e >
+    0205c24c: r10 = r0
+    0205c24e: r3 = 1
+    0205c250: r0 = r10
+    0205c252: r0 = umin(r10, r0)
+    0205c256: if (r0 < r2) goto -272 <_fw+0x5C14A : 5c14a >
+    0205c25a: r0 = r0 - r2
+    0205c25c: if (r0 < 2000) goto -280 <_fw+0x5C14A : 5c14a >
+    0205c262: r10 = r3
+    0205c264: call -4551560 <_fw+0xFFFFFFFFFFC04EE2 : ffffffffffc04ee2 >
+    0205c26a: r1 = r10
+    0205c26c: if (r0 == 0) goto -294 <_fw+0x5C14A : 5c14a >
+    0205c270: r0 = 76
+    0205c272: [sp+8] = r1
+    0205c274: call -178304 <_fw+0x309FA : 309fa >
+    0205c27a: r10 = r0
+    0205c27c: [r8+32] = r0
+    0205c280: r0 = r4
+    0205c282: r1 = r10
+    0205c284: call -178190 <_fw+0x30A7C : 30a7c >
+    0205c28a: r0 = [sp+8]
+    0205c28c: if (r0 == 0) goto 66 <_fw+0x5C2D0 : 5c2d0 >
+    0205c28e: r0 = 81932 <_fw+0x1400C : 1400c >
+    0205c294: [r0+0] &= 0xFFFFFFFD
+    0205c298: [r0+0] |= 0x1
+    0205c29c: [r0+0] |= 0x4
+    0205c2a0: r0 += 80
+    0205c2a2: r1 = r0
+    0205c2a4: r4 = r8  #
+    0205c2a6:  r0 = [r1+0]
+    0205c2a8: [++r4=104] = r0
+    0205c2ac: r0 = 0
+    0205c2ae: r0 = r10  #
+    0205c2b0:  [r1+0] = r0
+    0205c2b2: call -4548612 <_fw+0xFFFFFFFFFFC05AB4 : ffffffffffc05ab4 >
+    0205c2b8: r0 = [r4+0]
+    0205c2ba: r1 = 82012 <_fw+0x1405C : 1405c >
+    0205c2c0: [r1+0] = r0
+    0205c2c2: r0 = 0
+    0205c2c4: r0 = r1 + -80  #
+    0205c2c8:  [r4+0] = r0
+    0205c2ca: [r0+0] |= 0x4
+    0205c2ce: goto -390 <_fw+0x5C14A : 5c14a >
+    0205c2d0: r0 = r10
+    0205c2d2: call -4548644 <_fw+0xFFFFFFFFFFC05AB4 : ffffffffffc05ab4 >
+    0205c2d8: goto -400 <_fw+0x5C14A : 5c14a >
+    0205c2da: [--sp] = {rets, r4}
+    0205c2dc: sp += -12
+    0205c2de: r0 = 29492720 <_fw+0x1C205F0 : 1c205f0 >
+    0205c2e4: call -8780 <_fw+0x5A09C : 5a09c >
+    0205c2e8: r4 = 5
+    0205c2ea: r2 = 29492800 <_fw+0x1C20640 : 1c20640 >
+    0205c2f0: r3 = 29492864 <_fw+0x1C20680 : 1c20680 >
+    0205c2f6: r0 = 16
+    0205c2f8: r1 = 4
+    0205c2fa: [sp] = r4
+    0205c2fc: call -10318 <_fw+0x59AB2 : 59ab2 >
+    0205c300: r4 = 33932988 <_fw+0x205C6BC : 205c6bc >
+    0205c306: r0 = r4
+    0205c308: call -370842 <_fw+0x1A74 : 1a74 >
+    0205c30e: if (r0 != 0) {
+    0205c312: r1 = b[r0+4] (u)
+    0205c314: r1 = 31
+    0205c316: r0 = 29493968 <_fw+0x1C20AD0 : 1c20ad0 >
+    0205c31c: r2 = 256  # <_fw+0x100 : 100 >
+    0205c320:  [sp+8] = r0
+    0205c322: r0 = 29492944 <_fw+0x1C206D0 : 1c206d0 >
+    0205c328: [sp+4] = r0
+    0205c32a: r0 = 33932384 <_fw+0x205C460 : 205c460 >
+    0205c330: r3 = 0
+    0205c332: r1 = r4  #
+    0205c334:  [sp] = r1
+    0205c336: call -8010 <_fw+0x5A3F0 : 5a3f0 >
+    0205c33a: r0 = 0
+    0205c33c: sp += 12
+    0205c33e: {pc, r4} = [sp++]
+    0205c340: sp += -4
+    0205c342: r4 = 29492864 <_fw+0x1C20680 : 1c20680 >
+    0205c348: r6 = 0
+    0205c34a: r5 = 29492720 <_fw+0x1C205F0 : 1c205f0 >
+    0205c350: r0 = icfg
+    0205c354: if ((r0 & 0xFF) != 0) goto -10 <_fw+0x5C350 : 5c350 >
+    0205c35a: r1 = sp + 0
+    0205c35c: r2 = -1
+    0205c35e: r3 = 0
+    0205c360: r0 = r4
+    0205c362: call -6724 <_fw+0x5A922 : 5a922 >
+    0205c366: if (r0 != 1) goto -26 <_fw+0x5C350 : 5c350 >
+    0205c36a: r0 = r5
+    0205c36c: call -5336 <_fw+0x5AE98 : 5ae98 >
+    0205c370: r0 = [sp]
+    0205c372: r1 = [r0+72]
+    0205c376: if (r1 == 0) goto 2 <_fw+0x5C37A : 5c37a >
+    0205c378: [r1+0] = r6
+    0205c37a: r0 += 68
+    0205c37c: call -12812 <_fw+0x59174 : 59174 >
+    0205c380: if (r0 == 0) goto 2 <_fw+0x5C384 : 5c384 >
+    0205c382: [r0+60] = r6
+    0205c384: r1 = [sp]
+    0205c386: r2 = b[r1+1] (u)
+    0205c388: r0 = r1 + 1
+    0205c38a: if (r2 != 35) goto 12 <_fw+0x5C39A : 5c39a >
+    0205c38e: r2 = b[r1+2] (u)
+    0205c390: r1 += 4
+    0205c392: if (r2 != 67) {
+    0205c396: r1 = r0
+    0205c398: r0 = r1
+    0205c39a: call -2758 <_fw+0x5B8D8 : 5b8d8 >
+    0205c39e: r0 = [sp]
+    0205c3a0: r1 = b[r0+0] (u)
+    0205c3a2: if (r1 != 0) goto 6 <_fw+0x5C3AA : 5c3aa >
+    0205c3a4: call -19216 <_fw+0x5789A : 5789a >
+    0205c3aa: r0 = r5
+    0205c3ac: call -4986 <_fw+0x5B036 : 5b036 >
+    0205c3b0: goto -98 <_fw+0x5C350 : 5c350 >
+    0205c3b2: sp += -8
+    0205c3b4: r4 = r0
+    0205c3b6: r5 = r4 + 224
+    0205c3ba: r1 = [r5+12]
+    0205c3bc: if (r1 != 0) goto 10 <_fw+0x5C3C8 : 5c3c8 >
+    0205c3be: goto 12 <_fw+0x5C3CC : 5c3cc >
+    0205c3c0: r0 = 50
+    0205c3c2: call -10596 <_fw+0x59A62 : 59a62 >
+    0205c3c6: r1 = [r5+12]
+    0205c3c8: call r1
+    0205c3ca: if (r0 == 0) goto -12 <_fw+0x5C3C0 : 5c3c0 >
+    0205c3cc: r1_r0 = d[r5+0]
+    0205c3d0: call r1
+    0205c3d2: r1 = [r5+8]
+    0205c3d4: if (r1 == 0) goto 4 <_fw+0x5C3DA : 5c3da >
+    0205c3d6: r0 = [r5+16]
+    0205c3d8: call r1
+    0205c3da: [sp+4] = r4
+    0205c3dc: r1 = icfg
+    0205c3e0: r0 = 29492864 <_fw+0x1C20680 : 1c20680 >
+    0205c3e6: if ((r1 & 0xFF) == 0) goto 22 <_fw+0x5C402 : 5c402 >
+    0205c3ec: r1 = 0
+    0205c3ee: [sp] = r1
+    0205c3f0: r1 = sp + 4
+    0205c3f2: r2 = sp + 0
+    0205c3f4: call -12066 <_fw+0x594D6 : 594d6 >
+    0205c3f8: r0 = [sp]
+    0205c3fa: if (r0 == 0) goto 12 <_fw+0x5C408 : 5c408 >
+    0205c3fc: call -13530 <_fw+0x58F26 : 58f26 >
+    0205c400: goto 6 <_fw+0x5C408 : 5c408 >
+    0205c402: r1 = sp + 4
+    0205c404: call -9618 <_fw+0x59E76 : 59e76 >
+    0205c408: r0 = 1000 <_fw+0x3E8 : 3e8 >
+    0205c40c: call -10670 <_fw+0x59A62 : 59a62 >
+    0205c410: goto -10 <_fw+0x5C408 : 5c408 >
+
+===== FUNC 0x0205c412 size=54B ninsn=17 callers=0 callees=0 =====
+  data-refs: 0x01c0973c, 0x01c09760, 0x01c205ac, 0x01c205d4
+    0205c412: r0 = 29492652 <_fw+0x1C205AC : 1c205ac >
+    0205c418: r0 = [r0+0]
+    0205c41a: if (r0 != 0) goto 10 <_fw+0x5C426 : 5c426 >
+    0205c41c: r0 = 29398880 <_fw+0x1C09760 : 1c09760 >
+    0205c422: r0 = [r0+0]
+    0205c424: if (r0 == 0) goto 4 <_fw+0x5C42A : 5c42a >
+    0205c426: r0 = 0
+    0205c428: rts
+    0205c42a: r0 = 29492692 <_fw+0x1C205D4 : 1c205d4 >
+    0205c430: r1 = [r0+0]
+    0205c432: r0 = 29398844 <_fw+0x1C0973C : 1c0973c >
+    0205c438: r0 = [r0+0]
+    0205c43a: r2 = r0 + -1
+    0205c43e: r0 = 2
+    0205c440: if (r1 != r2) {
+    0205c444: r0 = 1
+    0205c446: rts
+
+===== FUNC 0x0205c448 size=12B ninsn=3 callers=0 callees=0 =====
+  data-refs: 0x01c09768
+    0205c448: r1 = 29398888 <_fw+0x1C09768 : 1c09768 >
+    0205c44e: [r1+0] += r0
+    0205c452: rts
+
+===== FUNC 0x0205c454 size=10B ninsn=4 callers=0 callees=0 =====
+    0205c454: [--sp] = rets
+    0205c456: r1 = -1
+    0205c458: call -3900 <_fw+0x5B520 : 5b520 >
+    0205c45c: pc = [sp++]
+
+===== FUNC 0x0205c45e size=8B ninsn=3 callers=0 callees=0 =====
+    0205c45e: [--sp] = rets
+    0205c460: call -3018 <_fw+0x5B89A : 5b89a >
+    0205c464: pc = [sp++]
+
+===== FUNC 0x0205c466 size=10B ninsn=4 callers=0 callees=0 =====
+    0205c466: [--sp] = rets
+    0205c468: r1 = 0
+    0205c46a: call -3918 <_fw+0x5B520 : 5b520 >
+    0205c46e: pc = [sp++]
+
+===== FUNC 0x0205c470 size=276B ninsn=93 callers=0 callees=0 =====
+  data-refs: 0x01c09534, 0x01c0953c, 0x01c09740, 0x01c205f0
+    0205c470: [--sp] = {rets, r7-r4}
+    0205c472: r4 = r0
+    0205c474: r0 = rets
+    0205c478: if (r4 == 0) goto 262 <_fw+0x5C582 : 5c582 >
+    0205c47c: r0 = [r4+0]
+    0205c47e: if (r0 == 0) goto 256 <_fw+0x5C582 : 5c582 >
+    0205c482: call -14880 <_fw+0x58A66 : 58a66 >
+    0205c486: r5 = 29492720 <_fw+0x1C205F0 : 1c205f0 >
+    0205c48c: r0 = r5  #
+    0205c48e:  r6 = [r0+4]
+    0205c490: call -5628 <_fw+0x5AE98 : 5ae98 >
+    0205c494: r0 = [r4+0]
+    0205c496: if (r6 == r4) goto 216 <_fw+0x5C572 : 5c572 >
+    0205c49a: if (r0 == 0) goto 194 <_fw+0x5C55E : 5c55e >
+    0205c49c: r0 = [r4+0]
+    0205c49e: r0 += 1
+    0205c4a0: call -13224 <_fw+0x590FC : 590fc >
+    0205c4a4: r1 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205c4aa: r2 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205c4b0: if (r0 != 0) goto 90 <_fw+0x5C50C : 5c50c >
+    0205c4b2: cli
+    0205c4b4: r0 = cnum
+    0205c4b8: r0 = r0 << 2
+    0205c4ba: r0 += r1
+    0205c4bc: [r0+0] += 1
+    0205c4c0: csync
+    0205c4c2: r0 = cnum
+    0205c4c6: r3 = [r2+r0<<2]
+    0205c4ca: r6 = r3 + 1
+    0205c4cc: [r2+r0<<2] = r6
+    0205c4d0: if (r3 != 0) goto 2 <_fw+0x5C4D4 : 5c4d4 >
+    0205c4d2: lockset
+    0205c4d4: csync
+    0205c4d6: r0 = 29398848 <_fw+0x1C09740 : 1c09740 >
+    0205c4dc: r3 = cnum
+    0205c4e0: r0 = [r0+r3<<2]
+    0205c4e4: csync
+    0205c4e6: r3 = cnum
+    0205c4ea: r6 = [r2+r3<<2]
+    0205c4ee: r6 += -1
+    0205c4f0: [r2+r3<<2] = r6
+    0205c4f4: if (r6 != 0) goto 2 <_fw+0x5C4F8 : 5c4f8 >
+    0205c4f6: lockclr
+    0205c4f8: r3 = cnum
+    0205c4fc: r6 = [r1+r3<<2]
+    0205c500: r6 += -1
+    0205c502: [r1+r3<<2] = r6
+    0205c506: if (r6 != 0) goto 4 <_fw+0x5C50C : 5c50c >
+    0205c508: csync
+    0205c50a: sti
+    0205c50c: cli
+    0205c50e: r3 = cnum
+    0205c512: r3 = r3 << 2
+    0205c514: r3 += r1
+    0205c516: [r3+0] += 1
+    0205c51a: csync
+    0205c51c: r3 = cnum
+    0205c520: r6 = [r2+r3<<2]
+    0205c524: r7 = r6 + 1
+    0205c526: [r2+r3<<2] = r7
+    0205c52a: if (r6 != 0) goto 2 <_fw+0x5C52E : 5c52e >
+    0205c52c: lockset
+    0205c52e: csync
+    0205c530: r3 = 1
+    0205c532: [r0+140] = r3
+    0205c536: csync
+    0205c538: r0 = cnum
+    0205c53c: r3 = [r2+r0<<2]
+    0205c540: r3 += -1
+    0205c542: [r2+r0<<2] = r3
+    0205c546: if (r3 != 0) goto 2 <_fw+0x5C54A : 5c54a >
+    0205c548: lockclr
+    0205c54a: r0 = cnum
+    0205c54e: r2 = [r1+r0<<2]
+    0205c552: r2 += -1
+    0205c554: [r1+r0<<2] = r2
+    0205c558: if (r2 != 0) goto 4 <_fw+0x5C55E : 5c55e >
+    0205c55a: csync
+    0205c55c: sti
+    0205c55e: r0 = r5
+    0205c560: call -5422 <_fw+0x5B036 : 5b036 >
+    0205c564: goto 6 <_fw+0x5C56C : 5c56c >
+    0205c566: r0 = 2
+    0205c568: call -11018 <_fw+0x59A62 : 59a62 >
+    0205c56c: r0 = [r4+0]
+    0205c56e: if (r0 != 0) goto -10 <_fw+0x5C566 : 5c566 >
+    0205c570: {pc, r7-r4} = [sp++]
+    0205c572: if (r0 == 0) goto 4 <_fw+0x5C578 : 5c578 >
+    0205c574: [r0+72] = 0x0
+    0205c578: [r4+0] = 0x0
+    0205c57c: r0 = r5
+    0205c57e: call -5452 <_fw+0x5B036 : 5b036 >
+    0205c582: {pc, r7-r4} = [sp++]
+
+===== FUNC 0x0205c584 size=52B ninsn=21 callers=0 callees=0 =====
+    0205c584: [--sp] = rets
+    0205c586: call -3312 <_fw+0x5B89A : 5b89a >
+    0205c58a: pc = [sp++]
+    0205c58c: r3 = [r7+-28]
+    0205c590: r1 = b[r4+4] (u)
+    0205c592: r4 = b[r4+5] (u)
+    0205c596: r1 = b[r4+4] (u)
+    0205c598: r4 = b[r4+5] (u)
+    0205c59c: r4 = [r7+32]
+    0205c59e: r2 = [r7+20]
+    0205c5a0: r1 = [r6+16]
+    0205c5a2: r7 = h[r5+12] (u)
+    0205c5a4: r7 = h[r6+-28] (u)
+    0205c5a6: r3 = b[r6+-1] (u)
+    0205c5a8: r3 = h[r6+18] (u)
+    0205c5aa: r4 = h[r6+24] (u)
+    0205c5ac: if (r0 == 0) goto 62 <_fw+0x5C5EC : 5c5ec >
+    0205c5ae: r2 = [r7+-64]
+    0205c5b0: if (r3 == 0) goto -66 <_fw+0x5C570 : 5c570 >
+    0205c5b2: r5 = [r2+-52]
+    0205c5b4: r7 = 101
+
+===== FUNC 0x0205c5b8 size=88B ninsn=29 callers=0 callees=0 =====
+  data-refs: 0x01c08ff0, 0x01c09738
+    0205c5b8: [--sp] = {rets, r7-r4}
+    0205c5ba: r2 = 29396976 <_fw+0x1C08FF0 : 1c08ff0 >
+    0205c5c0: r0 = [r2+4]
+    0205c5c2: r1 = 32436464 <_fw+0x1EEF0F0 : 1eef0f0 >
+    0205c5c8: r3 = [r1+0]
+    0205c5ca: r3 = r3 * 0x14  #
+    0205c5ce:  r1 = [r1+4]
+    0205c5d0: r1 = r3 / r1 (u)
+    0205c5d4: r3 = 29398840 <_fw+0x1C09738 : 1c09738 >
+    0205c5da: r4 = r0 & 0x7FFFFFF  #
+    0205c5de:  r0 = [r3+0]
+    0205c5e0: r4 = r4 * 0x14
+    0205c5e4: r5 = r1 + r4
+    0205c5e6: r6 = 1
+    0205c5e8: r7 = 1
+    0205c5ea: ifs (r5 >= r0) {
+    0205c5ee: r7 = 0
+    0205c5f0: if (r5 >= r0) {
+    0205c5f4: r6 = 0
+    0205c5f6: r6 &= r7
+    0205c5f8: if (r6 != 1) goto 14 <_fw+0x5C60A : 5c60a >
+    0205c5fc: r5 += 20
+    0205c5fe: ifs (r5 >= r0) goto 6 <_fw+0x5C608 : 5c608 >
+    0205c602: [r2+4] += 1
+    0205c606: {pc, r7-r4} = [sp++]
+    0205c608: r4 += 20
+    0205c60a: r0 = r4 + r1
+    0205c60c: [r3+0] = r0
+    0205c60e: {pc, r7-r4} = [sp++]
+
+===== FUNC 0x0205c610 size=8B ninsn=4 callers=0 callees=0 =====
+    0205c610: [--sp] = rets
+    0205c612: call -92 <_fw+0x5C5B8 : 5c5b8 >
+    0205c614: r0 = r0 >> 1
+    0205c616: pc = [sp++]
+
+===== FUNC 0x0205c618 size=1172B ninsn=539 callers=0 callees=0 =====
+  data-refs: 0x01c09534, 0x01c0953c
+    0205c618: [--sp] = {rets, r7-r4}
+    0205c61a: cli
+    0205c61c: r0 = cnum
+    0205c620: r0 = r0 << 2
+    0205c622: r5 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205c628: r0 += r5
+    0205c62a: [r0+0] += 1
+    0205c62e: csync
+    0205c630: r6 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205c636: r0 = cnum
+    0205c63a: r1 = [r6+r0<<2]
+    0205c63e: r2 = r1 + 1
+    0205c640: [r6+r0<<2] = r2
+    0205c644: if (r1 != 0) goto 2 <_fw+0x5C648 : 5c648 >
+    0205c646: lockset
+    0205c648: csync
+    0205c64a: call -15172 <_fw+0x58B0C : 58b0c >
+    0205c650: r4 = r0
+    0205c652: r7 = 33873524 <_fw+0x204DE74 : 204de74 >
+    0205c658: r0 = [r7++=16]
+    0205c65c: if (r0 == 0) goto 54 <_fw+0x5C694 : 5c694 >
+    0205c65e: r1 = r4
+    0205c660: call -106294 <_fw+0x42730 : 42730 >
+    0205c666: if (r0 != 0) goto -16 <_fw+0x5C658 : 5c658 >
+    0205c668: csync
+    0205c66a: r0 = cnum
+    0205c66e: r1 = [r6+r0<<2]
+    0205c672: r1 += -1
+    0205c674: [r6+r0<<2] = r1
+    0205c678: if (r1 != 0) goto 2 <_fw+0x5C67C : 5c67c >
+    0205c67a: lockclr
+    0205c67c: r0 = cnum
+    0205c680: r1 = [r5+r0<<2]
+    0205c684: r1 += -1
+    0205c686: [r5+r0<<2] = r1
+    0205c68a: if (r1 != 0) goto 4 <_fw+0x5C690 : 5c690 >
+    0205c68c: csync
+    0205c68e: sti
+    0205c690: r4 = [r7+-16]
+    0205c692: goto 40 <_fw+0x5C6BC : 5c6bc >
+    0205c694: csync
+    0205c696: r0 = cnum
+    0205c69a: r1 = [r6+r0<<2]
+    0205c69e: r1 += -1
+    0205c6a0: [r6+r0<<2] = r1
+    0205c6a4: if (r1 != 0) goto 2 <_fw+0x5C6A8 : 5c6a8 >
+    0205c6a6: lockclr
+    0205c6a8: r0 = cnum
+    0205c6ac: r1 = [r5+r0<<2]
+    0205c6b0: r1 += -1
+    0205c6b2: [r5+r0<<2] = r1
+    0205c6b6: if (r1 != 0) goto 4 <_fw+0x5C6BC : 5c6bc >
+    0205c6b8: csync
+    0205c6ba: sti
+    0205c6bc: r0 = r4
+    0205c6be: {pc, r7-r4} = [sp++]
+    0205c6c0: r1 = b[r4+14] (u)
+    0205c6c2: if (r3 == 0) goto -232 <_fw+0x5C5DC : 5c5dc >
+    0205c6c4: if (r5 == 0) goto -184 <_fw+0x5C60E : 5c60e >
+    0205c6c6: if (r5 == 0) goto -194 <_fw+0x5C606 : 5c606 >
+    0205c6c8: if (r2 == 0) goto -216 <_fw+0x5C5F2 : 5c5f2 >
+    0205c6ca: if (r3 == 0) goto -216 <_fw+0x5C5F4 : 5c5f4 >
+    0205c6cc: if (r2 == 0) goto -168 <_fw+0x5C626 : 5c626 >
+    0205c6ce: if (r5 == 0) goto -220 <_fw+0x5C5F4 : 5c5f4 >
+    0205c6d0: r13 = [sp+144]
+    0205c6d2: r1 |= 8388608
+    0205c6d4: r5 = 151
+    0205c6d6: r7 |= 8388608
+    0205c6da: r1 = b[r4+14] (u)
+    0205c6dc: if (r3 == 0) goto -232 <_fw+0x5C5F6 : 5c5f6 >
+    0205c6de: if (r5 == 0) goto -184 <_fw+0x5C628 : 5c628 >
+    0205c6e0: if (r5 == 0) goto -194 <_fw+0x5C620 : 5c620 >
+    0205c6e2: if (r2 == 0) goto -216 <_fw+0x5C60C : 5c60c >
+    0205c6e4: if (r3 == 0) goto -152 <_fw+0x5C64E : 5c64e >
+    0205c6e6: if (r1 == 0) goto -250 <_fw+0x5C5EE : 5c5ee >
+    0205c6e8: r3 = 45
+    0205c6ea: r4 = [r2+4]
+    0205c6ec: r3 = 147
+    0205c6ee: r5 = [r6+8]
+    0205c6f0: r1 = [r6+24]
+    0205c6f2: if (r0 == 0) goto 18 <_fw+0x5C706 : 5c706 >
+    0205c6f4: r6 = b[r4+3] (u)
+    0205c6f6: r4 = b[r4+-11] (u)
+    0205c6f8: if (r4 == 0) goto -246 <_fw+0x5C604 : 5c604 >
+    0205c6fa: r7 = b[r5+4] (u)
+    0205c6fc: if (r2 == 0) goto -174 <_fw+0x5C650 : 5c650 >
+    0205c6fe: if (r6 == 0) goto -182 <_fw+0x5C64A : 5c64a >
+    0205c700: r2 = 77
+    0205c702: r4 = [r2+4]
+    0205c704: r6 = [r6+24]
+    0205c706: r4 = 152
+    0205c708: r3 = 149
+    0205c70a: if (r0 == 0) goto 18 <_fw+0x5C71E : 5c71e >
+    0205c70c: r6 = b[r4+3] (u)
+    0205c70e: r4 = b[r4+-11] (u)
+    0205c710: if (r4 == 0) goto -246 <_fw+0x5C61C : 5c61c >
+    0205c712: r7 = b[r5+13] (u)
+    0205c714: if (r5 == 0) goto -248 <_fw+0x5C61E : 5c61e >
+    0205c716: r1 = b[r4+1] (u)
+    0205c718: r13 = [sp+144]
+    0205c71a: r6 = 151
+    0205c71c: r1 |= 65536
+    0205c71e: r1 = h[r3+12] (u)
+    0205c722: r1 = b[r4+14] (u)
+    0205c724: if (r3 == 0) goto -232 <_fw+0x5C63E : 5c63e >
+    0205c726: if (r5 == 0) goto -184 <_fw+0x5C670 : 5c670 >
+    0205c728: if (r5 == 0) goto -194 <_fw+0x5C668 : 5c668 >
+    0205c72a: r6 = b[r4+5] (u)
+    0205c72c: r4 = 77
+    0205c72e: r4 = [sp+216]
+    0205c730: r1 = [r6+16]
+    0205c732: r4 = [r6+4]
+    0205c734: r5 = [r6+12]
+    0205c736: if (r0 == 0) goto 18 <_fw+0x5C74A : 5c74a >
+    0205c738: r6 = b[r4+3] (u)
+    0205c73a: r4 = b[r4+-11] (u)
+    0205c73c: if (r4 == 0) goto -246 <_fw+0x5C648 : 5c648 >
+    0205c73e: r7 = b[r5+-13] (u)
+    0205c740: if (r5 == 0) goto -220 <_fw+0x5C666 : 5c666 >
+    0205c742: if (r6 == 0) goto -182 <_fw+0x5C68E : 5c68e >
+    0205c744: r2 = 77
+    0205c746: r4 = [sp+208]
+    0205c748: r1 |= 33554432
+    0205c74a: r1 ^= 65536
+    0205c74c: r6 |= 65536
+    0205c74e: if (r0 == 0) goto 18 <_fw+0x5C762 : 5c762 >
+    0205c750: r6 = b[r4+3] (u)
+    0205c752: r4 = b[r4+-11] (u)
+    0205c754: if (r4 == 0) goto -246 <_fw+0x5C660 : 5c660 >
+    0205c756: r7 = b[r5+-13] (u)
+    0205c758: r1 = b[r5+-13] (u)
+    0205c75a: if (r4 == 0) goto -182 <_fw+0x5C6A6 : 5c6a6 >
+    0205c75c: r5 = 45
+    0205c75e: r4 = [sp+200]
+    0205c760: r4 |= 131072
+    0205c762: r4 = [r6+24]
+    0205c764: r2 = 144
+    0205c766: if (r0 == 0) goto 18 <_fw+0x5C77A : 5c77a >
+    0205c768: r6 = b[r4+3] (u)
+    0205c76a: r4 = b[r4+-11] (u)
+    0205c76c: if (r4 == 0) goto -246 <_fw+0x5C678 : 5c678 >
+    0205c76e: r7 = b[r5+-11] (u)
+    0205c770: if (r0 == 0) goto -184 <_fw+0x5C6BA : 5c6ba >
+    0205c772: if (r1 == 0) goto -216 <_fw+0x5C69C : 5c69c >
+    0205c774: r5 = 13
+    0205c776: r4 = [sp+192]
+    0205c778: r3 = 145
+    0205c77a: r6 |= 4194304
+    0205c77c: r3 = [r3+20]
+    0205c77e: if (r0 == 0) goto 18 <_fw+0x5C792 : 5c792 >
+    0205c780: r6 = b[r4+3] (u)
+    0205c782: r4 = b[r4+-11] (u)
+    0205c784: if (r4 == 0) goto -246 <_fw+0x5C690 : 5c690 >
+    0205c786: r7 = b[r5+-11] (u)
+    0205c788: if (r4 == 0) goto -174 <_fw+0x5C6DC : 5c6dc >
+    0205c78a: r4 = b[r4+-13] (u)
+    0205c78c: r13 = [sp+144]
+    0205c78e: r7 |= 8388608
+    0205c790: r6 = 147
+    0205c792: r0 = h[r3+8] (u)
+    0205c796: if (r3 == 0) goto -142 <_fw+0x5C70A : 5c70a >
+    0205c798: if (r3 == 0) goto -152 <_fw+0x5C702 : 5c702 >
+    0205c79a: if (r5 == 0) goto -230 <_fw+0x5C6B6 : 5c6b6 >
+    0205c79c: r13 = [sp+168]
+    0205c79e: r5 = h[r6+30] (u)
+    0205c7a0: r4 = [r6+36]
+    0205c7a2: r6 = [r6+36]
+    0205c7a4: r5 = [r6+16]
+    0205c7a6: r0 = [sp+140]
+    0205c7a8: r4 = [r6+20]
+    0205c7aa: r6 = [r6+36]
+    0205c7ac: r6 = h[r6+10] (u)
+    0205c7ae: if (r0 == 0) goto 134 <_fw+0x5C836 : 5c836 >
+    0205c7b0: if (r0 == 0) goto -150 <_fw+0x5C71C : 5c71c >
+    0205c7b2: r7 = b[r5+3] (u)
+    0205c7b4: r7 = b[r4+-14] (u)
+    0205c7b6: if (r5 == 0) goto -194 <_fw+0x5C6F6 : 5c6f6 >
+    0205c7b8: r6 = b[r4+-11] (u)
+    0205c7ba: r5 = 32
+    0205c7bc: r0 = [sp+128]
+    0205c7be: r0 = [sp+128]
+    0205c7c0: r1 |= 1
+    0205c7c2: r10 = [sp+180]
+    0205c7c4: r6 = [r6+20]
+    0205c7c6: r6 = h[r6+14] (u)
+    0205c7c8: r3 = [r7+32]
+    0205c7ca: r5 = [r7+56]
+    0205c7cc: r2 = h[r6+18] (u)
+    0205c7ce: r1 = [r6+56]
+    0205c7d0: r5 = b[r2+0] (u)
+    0205c7d2: r2 |= 65536
+    0205c7d4: r2 |= 262144
+    0205c7d6: r0 |= 33554432
+    0205c7d8: r2 |= 65536
+    0205c7da: r13 = [sp+144]
+    0205c7dc: r6 = [r6+16]
+    0205c7de: r3 = 146
+    0205c7e0: r1 = [r3+12]
+    0205c7e4: if (r4 == 0) goto -220 <_fw+0x5C70A : 5c70a >
+    0205c7e6: r1 = b[r4+-10] (u)
+    0205c7e8: if (r5 == 0) goto -220 <_fw+0x5C70E : 5c70e >
+    0205c7ea: r13 = [sp+168]
+    0205c7ec: r5 = h[r6+30] (u)
+    0205c7ee: r4 = [r6+36]
+    0205c7f0: r6 = [r6+36]
+    0205c7f2: r5 = [r6+16]
+    0205c7f4: r10 = [sp+180]
+    0205c7f6: r4 = h[r6+18] (u)
+    0205c7f8: r1 = [r6+56]
+    0205c7fa: r7 = [r6+-28]
+    0205c7fc: r7 = h[r6+28] (u)
+    0205c7fe: r7 = [r6+-32]
+    0205c800: r1 = h[r6+28] (u)
+    0205c802: r5 = b[r2+0] (u)
+    0205c804: r2 |= 65536
+    0205c806: r2 |= 524288
+    0205c808: r1 |= 131072
+    0205c80a: r0 |= 33554432
+    0205c80c: r13 = [sp+144]
+    0205c80e: r1 = h[r3+2] (u)
+    0205c810: r1 = [r6+24]
+    0205c812: r4 = [r3+20]
+    0205c816: if (r2 == 0) goto -216 <_fw+0x5C740 : 5c740 >
+    0205c818: if (r3 == 0) goto -216 <_fw+0x5C742 : 5c742 >
+    0205c81a: if (r2 == 0) goto -168 <_fw+0x5C774 : 5c774 >
+    0205c81c: if (r5 == 0) goto -220 <_fw+0x5C742 : 5c742 >
+    0205c81e: r13 = [sp+144]
+    0205c820: r6 = [r3+4]
+    0205c822: r6 |= 4194304
+    0205c824: r1 = 145
+    0205c828: if (r2 == 0) goto -216 <_fw+0x5C752 : 5c752 >
+    0205c82a: if (r3 == 0) goto -152 <_fw+0x5C794 : 5c794 >
+    0205c82c: if (r1 == 0) goto -250 <_fw+0x5C734 : 5c734 >
+    0205c82e: r3 = 45
+    0205c830: r4 = [sp+192]
+    0205c832: r4 = [r3+16]
+    0205c834: r5 = 152
+    0205c836: r1 |= 2097152
+    0205c838: if (r0 == 0) goto 42 <_fw+0x5C864 : 5c864 >
+    0205c83a: if (r0 == 0) goto -184 <_fw+0x5C784 : 5c784 >
+    0205c83c: if (r1 == 0) goto -216 <_fw+0x5C766 : 5c766 >
+    0205c83e: r5 = 13
+    0205c840: r2 = h[r2+26] (u)
+    0205c842: r7 = h[r6+8] (u)
+    0205c844: r1 = h[r6+12] (u)
+    0205c846: r1 = h[r6+10] (u)
+    0205c848: r4 = 138
+    0205c84a: r5 = h[r2+-24] (u)
+    0205c84c: r1 = [r6+56]
+    0205c84e: r3 = [r6+32]
+    0205c850: r1 = h[r6+-30] (u)
+    0205c852: r5 = [r7+4]
+    0205c854: r6 = 173
+    0205c856: r0 = 18
+    0205c858: r0 |= 262144
+    0205c85a: r3 |= 65536
+    0205c85c: r0 ^= 131072
+    0205c85e: r7 |= 8192
+    0205c860: r4 = [sp+200]
+    0205c862: r3 |= 8388608
+    0205c864: r4 |= 33554432
+    0205c866: r3 |= 16777216
+    0205c868: nop
+    0205c86a: nop
+    0205c86c: sti r15
+    0205c86e: nop
+    0205c870: nop
+    0205c872: nop
+    0205c874: r0 = b[r0++=1] (u)
+    0205c876: nop
+    0205c878: nop
+    0205c87a: nop
+    0205c87c: if (r0 == 127) goto -2 <_fw+0x5C87E : 5c87e >
+    0205c882: nop
+    0205c884: [--sp] = rets
+    0205c886: r1 = b[r4++=r8] (u)
+    0205c888: if (r4 == 0) goto 2 <_fw+0x5C88C : 5c88c >
+    0205c88a: nop
+    0205c88c: [--sp] = rets
+    0205c88e: r1 = b[r4++=r8] (u)
+    0205c890: if (r4 == 0) goto 2 <_fw+0x5C894 : 5c894 >
+    0205c892: nop
+    0205c894: r1 = r0 >>> 18
+    0205c896: rep 8 14 {
+    0205c898: if (r3 != 0) goto -64 <_fw+0x5C85A : 5c85a >
+    0205c89a: nop
+    0205c89c: [sp+64] = r1
+    0205c89e: rep 4 6
+    0205c8a0: r1 = 192
+    0205c8a2: nop
+    0205c8a6: ifs (r7 <= -128) goto 30 <_fw+0x5C8C8 : 5c8c8 >
+    0205c8aa: nop
+    0205c8ac: if (r2 != 0) goto -40 <_fw+0x5C886 : 5c886 >
+    0205c8b2: nop
+    0205c8b6: ifs (r6 <= 1803) {
+    0205c8ba: nop
+    0205c8bc: r5 = r5.b0 (s)  #
+    0205c8be:   if (r5 == 0) goto -6 <_fw+0x5C8BA : 5c8ba >
+    0205c8c0: [r5+-44] = r7
+    0205c8c2: nop
+    0205c8c4: r5 = r5.b0 (s)  #
+    0205c8c6:  if (r5 == 0) goto -6 <_fw+0x5C8C2 : 5c8c2 >
+    0205c8c8: [r5+-44] = r7
+    0205c8ca: nop
+    0205c8cc: r5 = r5.b0 (s)  #
+    0205c8ce:  if (r5 == 0) goto -6 <_fw+0x5C8CA : 5c8ca >
+    0205c8d0: [r5+-44] = r7
+    0205c8d2: nop
+    0205c8d4: r6 = r4.b0 (u)  #
+    0205c8d6:  if (r5 == 0) goto -6 <_fw+0x5C8D2 : 5c8d2 >
+    0205c8d8: [r5+-44] = r7
+    0205c8da: nop
+    0205c8dc: if (r5 == 0) goto -222 <_fw+0x5C800 : 5c800 >
+    0205c8de: if (r4 == 0) goto 74 <_fw+0x5C92A : 5c92a >
+    0205c8e0: r1 += r5
+    0205c8e2: nop
+    0205c8e4: if (r4 == 0) goto 2 <_fw+0x5C8E8 : 5c8e8 >
+    0205c8e6: [--sp] = rets
+    0205c8e8: sp = ssp
+    0205c8ea: nop
+    0205c8ec: [sp] = r1
+    0205c8ee: rep 2 r8 {
+    0205c8f0: r1 = b[r4++=r8] (u)
+    0205c8f2: nop
+    0205c8f4: nop
+    0205c8f6: if (r0 == 0) goto 0 <_fw+0x5C8F8 : 5c8f8 >
+    0205c8f8: [--sp] = rets
+    0205c8fa: nop
+    0205c8fc: r5 = r5.b0 (s)  #
+    0205c8fe:  if (r5 == 0) goto -6 <_fw+0x5C8FA : 5c8fa >
+    0205c900: [r5+-44] = r7
+    0205c902: nop
+    0205c904: r5 = r5.b0 (s)  #
+    0205c906:  if (r5 == 0) goto -6 <_fw+0x5C902 : 5c902 >
+    0205c908: [r5+-44] = r7
+    0205c90a: nop
+    0205c90c: r5 = r5.b0 (s)  #
+    0205c90e:  if (r5 == 0) goto -6 <_fw+0x5C90A : 5c90a >
+    0205c910: [r5+-44] = r7
+    0205c912: nop
+    0205c914: r7 = r4.b0 (u)  #
+    0205c916:  if (r5 == 0) goto -6 <_fw+0x5C912 : 5c912 >
+    0205c918: [r5+-44] = r7
+    0205c91a: nop
+    0205c91c: [sp+64] = r2
+    0205c91e: rep 4 6 {
+    0205c920: r1 += r7
+    0205c922: nop
+    0205c924: nop
+    0205c926: goto 4 <_fw+0x5C92C : 5c92c >
+    0205c928: r0 = [r3++=r8]
+    0205c92a: nop
+    0205c92c: nop
+    0205c92e: nop
+    0205c930: nop
+    0205c932: nop
+    0205c934: nop
+    0205c936: nop
+    0205c938: nop
+    0205c93a: nop
+    0205c93c: r5 = r5.b0 (s)  #
+    0205c93e:  if (r5 == 0) goto -6 <_fw+0x5C93A : 5c93a >
+    0205c940: [r5+-44] = r7
+    0205c942: nop
+    0205c944: r5 = r5.b0 (s)  #
+    0205c946:  if (r5 == 0) goto -6 <_fw+0x5C942 : 5c942 >
+    0205c948: [r5+-44] = r7
+    0205c94a: nop
+    0205c94c: r5 = r5.b0 (s)  #
+    0205c94e:  if (r5 == 0) goto -6 <_fw+0x5C94A : 5c94a >
+    0205c950: [r5+-44] = r7
+    0205c952: nop
+    0205c954: r2 = r4.b0 (s)  #
+    0205c956:  if (r5 == 0) goto -6 <_fw+0x5C952 : 5c952 >
+    0205c958: [r5+-44] = r7
+    0205c95a: nop
+    0205c95c: r2 = r0 >>> 2
+    0205c95e: r0 = r2 + 10
+    0205c960: [sp+160] = r2
+    0205c962: nop
+    0205c964: r0 = r4 <<< 2
+    0205c966: r0 = r2 + 10
+    0205c968: [sp+160] = r2
+    0205c96a: nop
+    0205c96c: r0 = r0 + 18
+    0205c96e: r0 = b[r2+9] (u)
+    0205c970: r1 = r6 + r0
+    0205c972: nop
+    0205c974: [sp+64] = r1
+    0205c976: if (r0 == 0) goto 74 <_fw+0x5C9C2 : 5c9c2 >
+    0205c978: r1 = r6 + r0
+    0205c97a: nop
+    0205c97c: if (r0 != 0) goto 238 <_fw+0x5CA6C : 5ca6c >
+    0205c97e: rts
+    0205c980: sti r0
+    0205c982: nop
+    0205c984: if (r0 != 0) goto 238 <_fw+0x5CA74 : 5ca74 >
+    0205c986: rts
+    0205c988: sti r0
+    0205c98a: nop
+    0205c98c: if (r0 != 0) goto 238 <_fw+0x5CA7C : 5ca7c >
+    0205c98e: rts
+    0205c990: sti r0
+    0205c992: nop
+    0205c994: if (r0 != 0) goto 238 <_fw+0x5CA84 : 5ca84 >
+    0205c996: rts
+    0205c998: sti r0
+    0205c99a: nop
+    0205c99c: if (r0 != 0) goto 238 <_fw+0x5CA8C : 5ca8c >
+    0205c99e: rts
+    0205c9a0: sti r0
+    0205c9a2: nop
+    0205c9a4: if (r0 != 0) goto 238 <_fw+0x5CA94 : 5ca94 >
+    0205c9a6: rts
+    0205c9a8: sti r0
+    0205c9aa: nop
+    0205c9ac: if (r0 != 0) goto 238 <_fw+0x5CA9C : 5ca9c >
+    0205c9ae: rts
+    0205c9b0: sti r0
+    0205c9b2: nop
+    0205c9b4: if (r0 != 0) goto 238 <_fw+0x5CAA4 : 5caa4 >
+    0205c9b6: rts
+    0205c9b8: sti r0
+    0205c9ba: nop
+    0205c9bc: if (r0 != 0) goto 238 <_fw+0x5CAAC : 5caac >
+    0205c9be: rts
+    0205c9c0: sti r0
+    0205c9c2: nop
+    0205c9c4: if (r0 != 0) goto 238 <_fw+0x5CAB4 : 5cab4 >
+    0205c9c6: rts
+    0205c9c8: sti r0
+    0205c9ca: nop
+    0205c9cc: if (r0 != 0) goto 238 <_fw+0x5CABC : 5cabc >
+    0205c9ce: rts
+    0205c9d0: sti r0
+    0205c9d2: nop
+    0205c9d4: if (r0 != 0) goto 238 <_fw+0x5CAC4 : 5cac4 >
+    0205c9d6: rts
+    0205c9d8: sti r0
+    0205c9da: nop
+    0205c9dc: if (r0 != 0) goto 238 <_fw+0x5CACC : 5cacc >
+    0205c9de: rts
+    0205c9e0: sti r0
+    0205c9e2: nop
+    0205c9e4: if (r0 != 0) goto 238 <_fw+0x5CAD4 : 5cad4 >
+    0205c9e6: rts
+    0205c9e8: sti r0
+    0205c9ea: nop
+    0205c9ec: if (r0 != 0) goto 238 <_fw+0x5CADC : 5cadc >
+    0205c9ee: rts
+    0205c9f0: sti r0
+    0205c9f2: nop
+    0205c9f4: if (r0 != 0) goto 238 <_fw+0x5CAE4 : 5cae4 >
+    0205c9f6: rts
+    0205c9f8: sti r0
+    0205c9fa: nop
+    0205c9fc: if (r0 != 0) goto 238 <_fw+0x5CAEC : 5caec >
+    0205c9fe: rts
+    0205ca00: sti r0
+    0205ca02: nop
+    0205ca04: if (r0 != 0) goto 238 <_fw+0x5CAF4 : 5caf4 >
+    0205ca06: rts
+    0205ca08: sti r0
+    0205ca0a: nop
+    0205ca0c: if (r0 != 0) goto 238 <_fw+0x5CAFC : 5cafc >
+    0205ca0e: rts
+    0205ca10: sti r0
+    0205ca12: nop
+    0205ca14: if (r0 != 0) goto 238 <_fw+0x5CB04 : 5cb04 >
+    0205ca16: rts
+    0205ca18: sti r0
+    0205ca1a: nop
+    0205ca1c: if (r0 != 0) goto 222 <_fw+0x5CAFC : 5cafc >
+    0205ca1e: rts
+    0205ca20: sti r0
+    0205ca22: nop
+    0205ca24: if (r0 != 0) goto 206 <_fw+0x5CAF4 : 5caf4 >
+    0205ca26: rts
+    0205ca28: sti r0
+    0205ca2a: nop
+    0205ca2e: rts
+    0205ca30: sti r0
+    0205ca32: nop
+    0205ca36: rts
+    0205ca38: sti r0
+    0205ca3a: nop
+    0205ca3e: rts
+    0205ca40: sti r0
+    0205ca42: nop
+    0205ca46: rts
+    0205ca48: sti r0
+    0205ca4a: nop
+    0205ca4c: r3 *= r11
+    0205ca4e: rts
+    0205ca50: sti r0
+    0205ca52: nop
+    0205ca54: r4 = b[r3++=r13] (u)
+    0205ca56: rts
+    0205ca58: sti r0
+    0205ca5a: nop
+    0205ca5c: r5 = [r3++=r11]
+    0205ca5e: rts
+    0205ca60: sti r0
+    0205ca62: nop
+    0205ca64: testset b[r6]
+    0205ca66: rts
+    0205ca68: sti r0
+    0205ca6a: nop
+    0205ca6c: h[r0++=r10] = r4
+    0205ca6e: h[r0++=r14] = r6
+    0205ca70: r0 = b[r1++=r10] (u)
+    0205ca72: r2 = b[r1++=r14] (u)
+    0205ca76: r6 = r1.b0 (u)
+    0205ca78: r0 ^= r1
+    0205ca7a: r10 *= r1
+    0205ca7c: r4 = r1 + r5
+    0205ca7e: r6 = r1 - r5
+    0205ca80: r0 = [sp+132]
+    0205ca82: r2 = [sp+140]
+    0205ca84: r4 = [sp+148]
+    0205ca86: r6 = [sp+156]
+    0205ca88: r8 = [sp+164]
+    0205ca8a: r10 = [sp+172]
+    0205ca8c: r12 = [sp+180]
+    0205ca8e: r14 = [sp+188]
+    0205ca90: r0 |= 131072
+    0205ca92: r2 |= 524288
+    0205ca94: r4 |= 2097152
+    0205ca96: r6 |= 8388608
+    0205ca98: r0 ^= 33554432
+    0205ca9a: r2 ^= 134217728
+    0205ca9c: r4 ^= 536870912
+    0205ca9e: r6 ^= 2147483648
+    0205caa0: if (r0 == 0) goto -254 <_fw+0x5C9A4 : 5c9a4 >
+    0205caa2: if (r2 == 0) goto -250 <_fw+0x5C9AA : 5c9aa >
+    0205caa4: if (r4 == 0) goto -246 <_fw+0x5C9B0 : 5c9b0 >
+    0205caa6: if (r6 == 0) goto -242 <_fw+0x5C9B6 : 5c9b6 >
+    0205caa8: r0 = b[r4+9] (u)
+    0205caaa: r2 = b[r4+11] (u)
+
+===== FUNC 0x0205caac size=22B ninsn=6 callers=0 callees=0 =====
+  data-refs: 0x01c0977c
+    0205caac: r0 = r0 & 0xFFFFFF0F
+    0205cab0: r0 <= insert(r1, p:12, l:8)
+    0205cab4: r0 = r0 | 0x660
+    0205cab8: r1 = 29398908 <_fw+0x1C0977C : 1c0977c >
+    0205cabe: h[r1+0] = r0
+    0205cac0: rts
+
+===== FUNC 0x0205cac2 size=124B ninsn=43 callers=0 callees=1 =====
+  data-refs: 0x01c09534, 0x01c0953c, 0x01c09b80
+    0205cac2: [--sp] = {rets, r6-r4}
+    0205cac4: cli
+    0205cac6: r2 = cnum
+    0205caca: r2 = r2 << 2
+    0205cacc: r4 = 29398332 <_fw+0x1C0953C : 1c0953c >
+    0205cad2: r2 += r4
+    0205cad4: [r2+0] += 1
+    0205cad8: csync
+    0205cada: r5 = 29398324 <_fw+0x1C09534 : 1c09534 >
+    0205cae0: r2 = cnum
+    0205cae4: r6 = [r5+r2<<2]
+    0205cae8: r3 = r1
+    0205caea: r1 = r6 + 1
+    0205caec: [r5+r2<<2] = r1
+    0205caf0: if (r6 != 0) goto 2 <_fw+0x5CAF4 : 5caf4 >
+    0205caf2: lockset
+    0205caf4: csync
+    0205caf6: r6 = 29399936 <_fw+0x1C09B80 : 1c09b80 >
+    0205cafc: r1 = b[r6+0] (u)
+    0205cafe: if (r1 == 0) goto 8 <_fw+0x5CB08 : 5cb08 >
+    0205cb00: if (r3 != 0) goto 18 <_fw+0x5CB14 : 5cb14 >
+    0205cb02: r1 = 0
+    0205cb04: r3 = 0
+    0205cb06: goto 4 <_fw+0x5CB0C : 5cb0c >
+    0205cb08: if (r3 == 0) goto 10 <_fw+0x5CB14 : 5cb14 >
+    0205cb0a: r1 = r3.b0 (u)
+    0205cb0c: call 71420 <_fw+0x6E20E : 6e20e >
+    0205cb12: b[r6+0] = r3
+    0205cb14: csync
+    0205cb16: r0 = cnum
+    0205cb1a: r1 = [r5+r0<<2]
+    0205cb1e: r1 += -1
+    0205cb20: [r5+r0<<2] = r1
+    0205cb24: if (r1 != 0) goto 2 <_fw+0x5CB28 : 5cb28 >
+    0205cb26: lockclr
+    0205cb28: r0 = cnum
+    0205cb2c: r1 = [r4+r0<<2]
+    0205cb30: r1 += -1
+    0205cb32: [r4+r0<<2] = r1
+    0205cb36: if (r1 != 0) goto 4 <_fw+0x5CB3C : 5cb3c >
+    0205cb38: csync
+    0205cb3a: sti
+    0205cb3c: {pc, r6-r4} = [sp++]
+
+===== FUNC 0x0205cb3e size=10B ninsn=4 callers=0 callees=0 =====
+    0205cb3e: if (r0 >= 11) {
+    0205cb42: r0 = 11
+    0205cb44: r0 |= 16
+    0205cb46: rts
+
+===== FUNC 0x0205cb48 size=10B ninsn=4 callers=0 callees=0 =====
+    0205cb48: if (r0 >= 11) {
+    0205cb4c: r0 = 11
+    0205cb4e: r0 |= 16
+    0205cb50: rts
+
+===== FUNC 0x0205cb52 size=12B ninsn=3 callers=0 callees=0 =====
+  data-refs: 0x01c0977c
+    0205cb52: r0 = 29398908 <_fw+0x1C0977C : 1c0977c >
+    0205cb58: r0 = b[r0+16] (u)
+    0205cb5c: rts
+
+===== FUNC 0x0205cb5e size=62B ninsn=20 callers=0 callees=0 =====
+  data-refs: 0x01c0977c
+    0205cb5e: [--sp] = {rets, r4}
+    0205cb60: sp += -8
+    0205cb62: r0 = 29398908 <_fw+0x1C0977C : 1c0977c >
+    0205cb68: r1 = b[r0+16] (u)
+    0205cb6c: if (r1 != 0) goto 42 <_fw+0x5CB98 : 5cb98 >
+    0205cb6e: r1 = h[r0+14] (s)
+    0205cb72: r4 = sp + 0
+    0205cb74: r0 = r4 | 0x2
+    0205cb78: r2 = r1 >> 16
+    0205cb7a: h[r0+2] = r2
+    0205cb7c: h[sp+2] = r1
+    0205cb80: r1 = 4
+    0205cb82: call -370094 <_fw+0x25DA : 25da >
+    0205cb88: h[sp] = r0
+    0205cb8c: r0 = 110
+    0205cb8e: r2 = 6
+    0205cb90: r1 = r4
+    0205cb92: call -366816 <_fw+0x32B8 : 32b8 >
+    0205cb98: sp += 8
+    0205cb9a: {pc, r4} = [sp++]
+
+===== FUNC 0x0205cb9c size=12B ninsn=3 callers=0 callees=0 =====
+  data-refs: 0x01c0977c
+    0205cb9c: r0 = 29398908 <_fw+0x1C0977C : 1c0977c >
+    0205cba2: r0 = h[r0+14] (s)
+    0205cba6: rts
+
+===== FUNC 0x0205cba8 size=20B ninsn=7 callers=0 callees=0 =====
+  data-refs: 0x01c0977c
+    0205cba8: r1 = 29398908 <_fw+0x1C0977C : 1c0977c >
+    0205cbae: r2 = b[r1+16] (u)
+    0205cbb2: if (r2 != 0) goto 6 <_fw+0x5CBBA : 5cbba >
+    0205cbb4: r2 = h[r1+14] (u)
+    0205cbb6: r0 += r2
+    0205cbb8: h[r1+14] = r0
+    0205cbba: rts
+
+===== FUNC 0x0205cbbc size=178B ninsn=50 callers=0 callees=0 =====
+  data-refs: 0x01c09548, 0x01c0e670
+    0205cbbc: [--sp] = {rets, r9-r4}
+    0205cbbe: r1 = 29398344 <_fw+0x1C09548 : 1c09548 >
+    0205cbc4: r1 = b[r1+99] (u)
+    0205cbc8: r4 = r0
+    0205cbca: r0 = 0
+    0205cbcc: r5 = 29419120 <_fw+0x1C0E670 : 1c0e670 >
+    0205cbd2: if (r1 != 2) goto 136 <_fw+0x5CC5E : 5cc5e >
+    0205cbd6: r1 = 468 <_fw+0x1D4 : 1d4 >
+    0205cbda: r1 = b[r5+r1] (u)
+    0205cbde: if (r1 == 0) goto 126 <_fw+0x5CC5E : 5cc5e >
+    0205cbe0: r0 = r5
+    0205cbe2: r1 = [++r0=464]
+    0205cbe6: r3_r2 = r1 * r4 (u)  #
+    0205cbea:  r6 = b[r0+8] (u)
+    0205cbec: r7 = 32000 <_fw+0x7D00 : 7d00 >
+    0205cbf0: r7 <<= r6
+    0205cbf2: r3_r2 = r3_r2 / r7 (u)
+    0205cbf6: r7 = 1000 <_fw+0x3E8 : 3e8 >
+    0205cbfa: r3_r2 = r3_r2 / r7 (u)
+    0205cbfe: r8 = 32 <_fw+0x20 : 20 >
+    0205cc02: r9 = 0
+    0205cc04: r9_r8 <<= r6
+    0205cc08: r6 = 480000000 <_fw+0x1C9C3800 : 1c9c3800 >
+    0205cc0e: r7 = r9 * r6
+    0205cc12: r9_r8 = r8 * r6 (u)
+    0205cc16: r9 += r7
+    0205cc18: r7_r6 = r9_r8 / r1 (u)  #
+    0205cc1c:  r0 = [r0+20]
+    0205cc1e: r0 = r0 - r6
+    0205cc20: r0 *= r2
+    0205cc22: r1 = 480 <_fw+0x1E0 : 1e0 >
+    0205cc26: r0 = r0 / r1 (s)
+    0205cc2a: call -104802 <_fw+0x432CE : 432ce >
+    0205cc30: r7_r6 = r1_r0
+    0205cc32: r0 = 12500 <_fw+0x30D4 : 30d4 >
+    0205cc36: r0 = r4 / r0 (u)
+    0205cc3a: call -104742 <_fw+0x4331A : 4331a >
+    0205cc40: r3 = 3221487616 <_fw+0xC0040000 : c0040000 >
+    0205cc46: r2 = 0
+    0205cc48: call -107082 <_fw+0x42A04 : 42a04 >
+    0205cc4e: r3_r2 = r1_r0
+    0205cc50: r1_r0 = r7_r6
+    0205cc52: call -105952 <_fw+0x42E78 : 42e78 >
+    0205cc58: call -104932 <_fw+0x4327A : 4327a >
+    0205cc5e: r1 = [r5+636]
+    0205cc62: r0 += r4
+    0205cc64: r2 = 48
+    0205cc66: r1 = r1 / r2 (u)
+    0205cc6a: r0 += r1
+    0205cc6c: {pc, r9-r4} = [sp++]
+
+===== FUNC 0x0205cc6e size=4572B ninsn=1386 callers=0 callees=46 =====
+  data-refs: 0x01c07f8c, 0x01c0977c, 0x01c0e670, 0x01c1ff0c
+    0205cc6e: [--sp] = {rets, r15-r4}
+    0205cc70: sp += -8
+    0205cc72: r0 = 504 <_fw+0x1F8 : 1f8 >
+    0205cc76: r15 = 29419120 <_fw+0x1C0E670 : 1c0e670 >
+    0205cc7c: r1 = b[r15+r0] (u)
+    0205cc80: r4 = 1
+    0205cc82: r10 = 33876480 <_fw+0x204EA00 : 204ea00 >
+    0205cc88: r5 = 65552 <_fw+0x10010 : 10010 >
+    0205cc8e: r8 = 0x14000
+    0205cc92: if (r1 != 0) goto 3700 <_fw+0x5DB0C : 5db0c >
+    0205cc98: r1 = 1
+    0205cc9a: b[r15+r0] = r1
+    0205cc9e: [r5+0] &= 0xFFFF3FFF
+    0205cca2: r0 = 0
+    0205cca4: r2 = r8 + 64
+    0205cca8: [r2+0] = r0
+    0205ccaa: [r2+4] = r0
+    0205ccac: [r2+8] = r0
+    0205ccae: [r2+12] = r0
+    0205ccb0: [r2+16] = r0
+    0205ccb2: [r8+64] |= 0x100
+    0205ccb6: [r8+64] |= 0x40
+    0205ccba: [r8+64] |= 0x1
+    0205ccbe: r3 = 262656 <_fw+0x40200 : 40200 >
+    0205ccc4: r0 = [r3+0]
+    0205ccc6: if ((r0 & 0x1) != 0) {
+    0205ccca: r0 = 8000000
+    0205ccd0: r0 = 4000000
+    0205ccd6: r7 = 29490956 <_fw+0x1C1FF0C : 1c1ff0c >
+    0205ccdc: r1 = [r7+8]
+    0205ccde: r0 = r1 / r0 (s)
+    0205cce2: goto 4 <_fw+0x5CCE8 : 5cce8 >
+    0205cce4: nop
+    0205cce6: r0 += -1
+    0205cce8: if (r0 != 0) goto -6 <_fw+0x5CCE4 : 5cce4 >
+    0205ccea: [r8+64] |= 0x4
+    0205ccee: r0 = [r3+0]
+    0205ccf0: if ((r0 & 0x1) != 0) {
+    0205ccf4: r0 = 8000000
+    0205ccfa: r0 = 4000000
+    0205cd00: r1 = [r7+8]
+    0205cd02: r0 = r1 / r0 (s)
+    0205cd06: goto 4 <_fw+0x5CD0C : 5cd0c >
+    0205cd08: nop
+    0205cd0a: r0 += -1
+    0205cd0c: if (r0 != 0) goto -6 <_fw+0x5CD08 : 5cd08 >
+    0205cd0e: [r8+64] |= 0x8
+    0205cd12: r0 = [r3+0]
+    0205cd14: if ((r0 & 0x1) != 0) {
+    0205cd18: r0 = 8000000
+    0205cd1e: r0 = 4000000
+    0205cd24: r1 = [r7+8]
+    0205cd26: r0 = r1 / r0 (s)
+    0205cd2a: goto 4 <_fw+0x5CD30 : 5cd30 >
+    0205cd2c: nop
+    0205cd2e: r0 += -1
+    0205cd30: if (r0 != 0) goto -6 <_fw+0x5CD2C : 5cd2c >
+    0205cd32: [r8+64] |= 0x2
+    0205cd36: r0 = [r3+0]
+    0205cd38: if ((r0 & 0x1) != 0) {
+    0205cd3c: r0 = 8000000
+    0205cd42: r0 = 4000000
+    0205cd48: r1 = [r7+8]
+    0205cd4a: r0 = r1 / r0 (s)
+    0205cd4e: r1 = -50 <_fw+0xFFFFFFFFFFFFFFCE : ffffffffffffffce >
+    0205cd52: r0 *= r1
+    0205cd54: goto 4 <_fw+0x5CD5A : 5cd5a >
+    0205cd56: nop
+    0205cd58: r0 += 1
+    0205cd5a: if (r0 != 0) goto -6 <_fw+0x5CD56 : 5cd56 >
+    0205cd5c: r0 = [r2+28]
+    0205cd5e: r0 = r0 & 0xFFFFFF00
+    0205cd62: r0 = r0 | 0x5
+    0205cd66: [r2+28] = r0
+    0205cd68: [r8+92] &= 0xFFFF00FF
+    0205cd6c: [r8+92] &= 0xFF00FFFF
+    0205cd70: [r8+92] |= 0x7000000
+    0205cd74: [r8+92] |= 0x40000000
+    0205cd78: [r8+92] &= 0x7FFFFFFF
+    0205cd7c: [r8+76] |= 0x1000000
+    0205cd80: r0 = 200448 <_fw+0x30F00 : 30f00 >
+    0205cd86: [r0+4] |= 0x800
+    0205cd8a: [r0+4] |= 0x400
+    0205cd8e: [r0+4] |= 0x200
+    0205cd92: [r0+4] |= 0x20
+    0205cd96: [r0+4] |= 0x10
+    0205cd9a: [r0+4] &= 0xFFFFFFF7
+    0205cd9e: [r0+4] |= 0x4
+    0205cda2: [r0+4] |= 0x2
+    0205cda6: [r0+4] |= 0x1
+    0205cdaa: [r0+0] |= 0x400
+    0205cdae: [r0+0] &= 0xFFFFFDFF
+    0205cdb2: [r0+0] &= 0xFFFFFEFF
+    0205cdb6: r1 = [r0+0]
+    0205cdb8: r1 = r1 & 0xFFFFFF1F
+    0205cdbc: r1 = r1 | 0x60
+    0205cdc0: [r0+0] = r1
+    0205cdc2: [r0+0] &= 0xFFFFFFEF
+    0205cdc6: [r0+0] |= 0x8
+    0205cdca: [r0+0] |= 0x4
+    0205cdce: [r0+0] |= 0x2
+    0205cdd2: [r0+0] |= 0x1
+    0205cdd6: call -162838 <_fw+0x351C6 : 351c6 >
+    0205cddc: call -162798 <_fw+0x351F4 : 351f4 >
+    0205cde2: r1 = 37895 <_fw+0x9406 : 9406 >
+    0205cde8: r0 = 776 <_fw+0x308 : 308 >
+    0205cdec: call 158936 <_fw+0x83ACA : 83aca >
+    0205cdf2: call -162866 <_fw+0x351C6 : 351c6 >
+    0205cdf8: r0 = 0
+    0205cdfa: call -162728 <_fw+0x35258 : 35258 >
+    0205ce00: call -161750 <_fw+0x35630 : 35630 >
+    0205ce06: r0 = r10 + 198
+    0205ce0a: call -373906 <_fw+0x197E : 197e >
+    0205ce10: r9 = r0
+    0205ce12: r0 = 11
+    0205ce14: b[sp+6] = r0
+    0205ce18: b[sp+7] = r0
+    0205ce1c: r1 = sp + 6
+    0205ce1e: r0 = 106
+    0205ce20: r2 = 2
+    0205ce22: call -370710 <_fw+0x2612 : 2612 >
+    0205ce28: if (r0 != 2) {
+    0205ce2c: r1 = sp + 6
+    0205ce2e: r0 = 106
+    0205ce30: r2 = 2
+    0205ce32: call -367488
+    0205ce38: r6 = r5 + 6384
+    0205ce3c: [r6+48] |= 0x1
+    0205ce40: [r6+48] |= 0x2
+    0205ce44: [r6+48] |= 0x4
+    0205ce48: [r6+48] |= 0x8
+    0205ce4c: [r6+48] |= 0x10
+    0205ce50: r0 = [r6+48]
+    0205ce52: r0 = r0 & 0xFFFFFF9F
+    0205ce56: r0 |= 64
+    0205ce58: [r6+48] = r0
+    0205ce5a: [r6+48] &= 0xFFFFFF7F
+    0205ce5e: r0 = [r6+48]
+    0205ce60: r0 = r0 & 0xFFFFFCFF
+    0205ce64: r0 |= 512
+    0205ce66: [r6+48] = r0
+    0205ce68: [r6+48] &= 0xFFFFFBFF
+    0205ce6c: [r6+48] &= 0xFFFFF7FF
+    0205ce70: [r6+48] &= 0xFFFFEFFF
+    0205ce74: [r6+48] &= 0xFFFDFFFF
+    0205ce78: [r6+48] &= 0xFFFBFFFF
+    0205ce7c: r0 = [r6+48]
+    0205ce7e: r1 = b[sp+6] (u)
+    0205ce82: r0 = r0 & 0xFFFE1FFF
+    0205ce86: r1 = r1 & 0xFFFFFF0F
+    0205ce8a: r0 <= insert(r1, p:13, l:4)
+    0205ce8e: [r6+48] = r0
+    0205ce90: r0 = [r6+48]
+    0205ce92: r1 = b[sp+7] (u)
+    0205ce96: r0 = r0 & 0xFF87FFFF
+    0205ce9a: r1 = r1 & 0xFFFFFF0F
+    0205ce9e: r0 <= insert(r1, p:19, l:4)
+    0205cea2: r0 = 0xD000000  #
+    0205cea6:  [r6+48] = r0
+    0205cea8: r11 = 40000000 <_fw+0x2625A00 : 2625a00 >
+    0205ceae: if (r9 != r11) {
+    0205ceb2: r0 = 0x5800000
+    0205ceb6: r1 = [r6+48]
+    0205ceb8: r1 = r1 & 0xF07FFFFF
+    0205cebc: r0 |= r1
+    0205cebe: r12 = r5 + 6448  #
+    0205cec2:  [r6+48] = r0
+    0205cec4: r0 = 0
+    0205cec6: [r12+16] = r0
+    0205ceca: [r6+0] |= 0x1
+    0205cece: r0 = [r6+0]
+    0205ced0: r0 = r0 & 0xFFFFFFE1
+    0205ced4: r0 |= 4
+    0205ced6: [r6+0] = r0
+    0205ced8: [r6+0] &= 0xFFFFFFDF
+    0205cedc: [r6+0] &= 0xFFFFFF3F
+    0205cee0: [r6+0] &= 0xFFFFFEFF
+    0205cee4: [r6+0] &= 0xFFFFFDFF
+    0205cee8: [r6+0] &= 0xFFFFFBFF
+    0205ceec: [r6+0] &= 0xFFFFC7FF
+    0205cef0: [r6+0] &= 0xFFFBFFFF
+    0205cef4: r0 = [r6+0]
+    0205cef6: r0 = r0 & 0xFFC7FFFF
+    0205cefa: r0 |= 2097152
+    0205cefc: [r6+0] = r0
+    0205cefe: [r6+4] &= 0x7FFFFFFF
+    0205cf02: [r6+0] &= 0xFFBFFFFF
+    0205cf06: [r6+0] &= 0xFF7FFFFF
+    0205cf0a: r0 = [r6+0]
+    0205cf0c: r0 = r0 & 0xFCFFFFFF
+    0205cf10: r0 |= 33554432
+    0205cf12: [r6+0] = r0
+    0205cf14: [r6+0] &= 0xFBFFFFFF
+    0205cf18: [r6+0] |= 0x8000000
+    0205cf1c: [r6+0] &= 0xEFFFFFFF
+    0205cf20: r0 = [r6+4]
+    0205cf22: r0 = r0 & 0xFFFFFF00
+    0205cf26: r0 |= 128
+    0205cf28: [r6+4] = r0
+    0205cf2a: [r6+0] |= 0x20000000
+    0205cf2e: [r6+0] |= 0x40000000
+    0205cf32: [r6+0] |= 0x80000000
+    0205cf36: r0 = [r6+4]
+    0205cf38: r0 = r0 & 0xFFFFF0FF
+    0205cf3c: r0 |= 2048
+    0205cf3e: [r6+4] = r0
+    0205cf40: r0 = [r6+4]
+    0205cf42: r0 = r0 & 0xFFFF8FFF
+    0205cf46: r0 = r0 | 0x5000
+    0205cf4a: [r6+4] = r0
+    0205cf4c: [r6+4] &= 0xFFFF7FFF
+    0205cf50: [r6+4] |= 0x30000
+    0205cf54: [r6+4] &= 0xFFC3FFFF
+    0205cf58: r0 = [r6+4]
+    0205cf5a: r0 = r0 & 0xFC3FFFFF
+    0205cf5e: r0 = r0 | 0x1C00000
+    0205cf62: [r6+4] = r0
+    0205cf64: [r6+4] &= 0xC3FFFFFF
+    0205cf68: [r6+4] &= 0xBFFFFFFF
+    0205cf6c: [r6+8] &= 0xFFFFFFF8
+    0205cf70: r0 = [r6+8]
+    0205cf72: r0 = r0 & 0xFFFFFFE7
+    0205cf76: r0 |= 16
+    0205cf78: [r6+8] = r0
+    0205cf7a: [r6+8] &= 0xFFFFFFDF
+    0205cf7e: [r6+8] &= 0xFFFFFFBF
+    0205cf82: r0 = 4294901887 <_fw+0xFFFF007E : ffff007e >
+    0205cf88: [r6+8] &= r0
+    0205cf8c: [r6+8] |= 0x10000
+    0205cf90: r0 = 4227989503 <_fw+0xFC01FFFE : fc01fffe >
+    0205cf96: [r6+8] &= r0
+    0205cf9a: [r6+8] |= 0x4000000
+    0205cf9e: [r6+8] |= 0x8000000
+    0205cfa2: [r6+8] |= 0x10000000
+    0205cfa6: [r6+8] &= 0xDFFFFFFF
+    0205cfaa: r0 = [r6+8]
+    0205cfac: r0 = r0 & 0x3FFFFFFF
+    0205cfb0: r0 |= 2147483648
+    0205cfb2: [r6+8] = r0
+    0205cfb4: r0 = [r6+12]
+    0205cfb6: r0 = r0 & 0xFFFFFFFC
+    0205cfba: r0 |= 1
+    0205cfbc: [r6+12] = r0
+    0205cfbe: r0 = [r6+12]
+    0205cfc0: r0 = r0 & 0xFFFFFFF3
+    0205cfc4: r0 |= 8
+    0205cfc6: [r6+12] = r0
+    0205cfc8: [r6+12] &= 0xFFFFFFEF
+    0205cfcc: [r6+12] &= 0xFFFFFFDF
+    0205cfd0: r0 = [r6+12]
+    0205cfd2: r0 = r0 & 0xFFFFFF3F
+    0205cfd6: r0 |= 64
+    0205cfd8: [r6+12] = r0
+    0205cfda: r0 = [r6+12]
+    0205cfdc: r0 = r0 & 0xFFFFF8FF
+    0205cfe0: r0 = r0 | 0x300
+    0205cfe4: [r6+12] = r0
+    0205cfe6: r0 = [r6+12]
+    0205cfe8: r0 = r0 & 0xFFFFE7FF
+    0205cfec: r0 |= 4096
+    0205cfee: [r6+12] = r0
+    0205cff0: [r6+12] &= 0xFFFFDFFF
+    0205cff4: r0 = [r6+12]
+    0205cff6: r0 = r0 & 0xFFFF3FFF
+    0205cffa: r0 |= 32768
+    0205cffc: [r6+12] = r0
+    0205cffe: r0 = [r6+12]
+    0205d000: r0 = r0 & 0xFFF8FFFF
+    0205d004: r0 = r0 | 0x30000
+    0205d008: [r6+12] = r0
+    0205d00a: [r6+12] |= 0x80000
+    0205d00e: [r6+12] &= 0xFFEFFFFF
+    0205d012: r0 = [r6+12]
+    0205d014: r0 = r0 & 0xFF9FFFFF
+    0205d018: r0 |= 2097152
+    0205d01a: [r6+12] = r0
+    0205d01c: [r6+12] &= 0xFF7FFFFF
+    0205d020: [r6+12] |= 0x1000000
+    0205d024: r0 = [r6+12]
+    0205d026: r0 = r0 & 0xF1FFFFFF
+    0205d02a: r0 = r0 | 0x6000000
+    0205d02e: [r6+12] = r0
+    0205d030: r0 = [r6+16]
+    0205d032: r0 = r0 & 0xFFFFFF80
+    0205d036: r0 = r0 | 0xE
+    0205d03a: [r6+16] = r0
+    0205d03c: [r6+16] |= 0x80
+    0205d040: r0 = [r6+16]
+    0205d042: r0 = r0 & 0xFFFFF0FF
+    0205d046: r0 = r0 | 0x900
+    0205d04a: [r6+16] = r0
+    0205d04c: [r6+12] &= 0xEFFFFFFF
+    0205d050: r0 = [r6+12]
+    0205d052: r0 = r0 & 0x1FFFFFFF
+    0205d056: r0 = r0 | 0x60000000
+    0205d05a: [r6+12] = r0
+    0205d05c: [r6+16] &= 0xFFFFEFFF
+    0205d060: [r6+16] &= 0xFFFFDFFF
+    0205d064: r0 = [r6+16]
+    0205d066: r0 = r0 & 0xFFC03FFF
+    0205d06a: r0 |= 524288
+    0205d06c: [r6+16] = r0
+    0205d06e: [r6+16] &= 0xFFBFFFFF
+    0205d072: [r6+16] &= 0xFF7FFFFF
+    0205d076: [r6+16] |= 0x1000000
+    0205d07a: [r6+16] &= 0xFDFFFFFF
+    0205d07e: [r6+16] |= 0x4000000
+    0205d082: [r6+16] &= 0xF7FFFFFF
+    0205d086: [r6+16] &= 0xEFFFFFFF
+    0205d08a: [r6+16] &= 0xDFFFFFFF
+    0205d08e: r0 = [r6+20]
+    0205d090: r0 = r0 & 0xFFFFFFF8
+    0205d094: r0 |= 1
+    0205d096: [r6+20] = r0
+    0205d098: [r6+20] |= 0x8
+    0205d09c: [r6+20] |= 0x10
+    0205d0a0: [r6+20] &= 0xFFFFFF1F
+    0205d0a4: r0 = [r6+20]
+    0205d0a6: r0 = r0 & 0xFFFFF8FF
+    0205d0aa: r0 = r0 | 0x300
+    0205d0ae: [r6+20] = r0
+    0205d0b0: [r6+20] &= 0xFFFFF7FF
+    0205d0b4: [r6+20] &= 0xFFFFEFFF
+    0205d0b8: [r6+20] &= 0xFFFFDFFF
+    0205d0bc: [r6+20] |= 0x4000
+    0205d0c0: r0 = [r6+20]
+    0205d0c2: r0 = r0 & 0xFFFC7FFF
+    0205d0c6: r0 |= 32768
+    0205d0c8: [r6+20] = r0
+    0205d0ca: [r6+20] &= 0xFFFBFFFF
+    0205d0ce: [r6+20] |= 0x180000
+    0205d0d2: [r6+24] &= 0xFFFFFFFE
+    0205d0d6: [r6+24] &= 0xFFFFFFFD
+    0205d0da: [r6+20] |= 0x200000
+    0205d0de: r0 = [r6+20]
+    0205d0e0: r0 = r0 & 0xFE3FFFFF
+    0205d0e4: r0 |= 4194304
+    0205d0e6: [r6+20] = r0
+    0205d0e8: [r6+20] &= 0xFDFFFFFF
+    0205d0ec: [r6+20] &= 0xFBFFFFFF
+    0205d0f0: [r6+20] &= 0xE7FFFFFF
+    0205d0f4: r0 = [r6+20]
+    0205d0f6: r0 = r0 & 0x9FFFFFFF
+    0205d0fa: r0 |= 1073741824
+    0205d0fc: [r6+20] = r0
+    0205d0fe: [r6+24] |= 0x4
+    0205d102: r0 = [r6+24]
+    0205d104: r0 = r0 & 0xFFFFFFC7
+    0205d108: r0 |= 32
+    0205d10a: [r6+24] = r0
+    0205d10c: [r6+24] &= 0xFFFFFFBF
+    0205d110: [r6+24] &= 0xFFFFFF7F
+    0205d114: r0 = [r6+24]
+    0205d116: r0 = r0 & 0xFFFFFCFF
+    0205d11a: r0 |= 512
+    0205d11c: [r6+24] = r0
+    0205d11e: r0 = [r6+24]
+    0205d120: r0 = r0 & 0xFFFFE3FF
+    0205d124: r0 |= 2048
+    0205d126: [r6+24] = r0
+    0205d128: [r6+24] |= 0x2000
+    0205d12c: r0 = [r6+24]
+    0205d12e: r0 = r0 & 0xFFFF3FFF
+    0205d132: r0 |= 16384
+    0205d134: [r6+24] = r0
+    0205d136: [r6+24] |= 0x70000
+    0205d13a: [r6+24] &= 0xFFF7FFFF
+    0205d13e: [r6+28] &= 0xFFFFFFFE
+    0205d142: r0 = [r6+28]
+    0205d144: r0 = r0 & 0xFFFFFFF1
+    0205d148: r0 = r0 | 0x6
+    0205d14c: [r6+28] = r0
+    0205d14e: [r6+28] &= 0xFFFFFFEF
+    0205d152: r0 = [r6+28]
+    0205d154: r0 = r0 & 0xFFFFFF1F
+    0205d158: r0 = r0 | 0x60
+    0205d15c: [r6+28] = r0
+    0205d15e: r0 = [r6+28]
+    0205d160: r0 = r0 & 0xFFFF80FF
+    0205d164: r0 |= 16384
+    0205d166: [r6+28] = r0
+    0205d168: [r6+28] |= 0x8000
+    0205d16c: [r6+28] |= 0x10000
+    0205d170: r0 = [r6+28]
+    0205d172: r0 = r0 & 0xFFF1FFFF
+    0205d176: r0 |= 262144
+    0205d178: [r6+28] = r0
+    0205d17a: [r6+28] |= 0x100000
+    0205d17e: [r6+28] &= 0xFF9FFFFF
+    0205d182: [r6+28] &= 0xFF7FFFFF
+    0205d186: [r6+28] |= 0x1000000
+    0205d18a: [r6+28] &= 0xFDFFFFFF
+    0205d18e: r0 = [r6+32]
+    0205d190: r0 = r0 & 0xFFFFFF80
+    0205d194: r0 |= 64
+    0205d196: [r6+32] = r0
+    0205d198: [r6+32] |= 0x80
+    0205d19c: [r6+32] |= 0x100
+    0205d1a0: r0 = [r6+28]
+    0205d1a2: r0 = r0 & 0xE3FFFFFF
+    0205d1a6: r0 |= 134217728
+    0205d1a8: [r6+28] = r0
+    0205d1aa: [r6+28] |= 0x20000000
+    0205d1ae: [r6+28] &= 0x3FFFFFFF
+    0205d1b2: [r6+32] &= 0xFFFFFDFF
+    0205d1b6: r0 = [r6+32]
+    0205d1b8: r0 = r0 & 0xFFFC03FF
+    0205d1bc: r0 = r0 | 0x24000
+    0205d1c0: [r6+32] = r0
+    0205d1c2: [r6+32] |= 0x40000
+    0205d1c6: [r6+32] &= 0xFFF7FFFF
+    0205d1ca: [r6+32] &= 0xFFEFFFFF
+    0205d1ce: [r6+32] |= 0x200000
+    0205d1d2: [r6+32] &= 0xFFBFFFFF
+    0205d1d6: [r6+32] |= 0x800000
+    0205d1da: [r6+32] &= 0xF8FFFFFF
+    0205d1de: [r6+32] &= 0xC7FFFFFF
+    0205d1e2: [r6+36] |= 0x7
+    0205d1e6: r0 = [r6+36]
+    0205d1e8: r0 = r0 & 0xFFFFFFE7
+    0205d1ec: r0 |= 16
+    0205d1ee: [r6+36] = r0
+    0205d1f0: [r6+36] &= 0xFFFFFFDF
+    0205d1f4: [r6+36] |= 0x40
+    0205d1f8: [r6+36] &= 0xFFFFFF7F
+    0205d1fc: [r6+36] &= 0xFFFFFEFF
+    0205d200: [r6+36] &= 0xFFFFF9FF
+    0205d204: [r6+36] &= 0xFFFFF7FF
+    0205d208: [r6+36] &= 0xFFFFEFFF
+    0205d20c: [r6+36] &= 0xFFFFDFFF
+    0205d210: [r6+36] &= 0xFFFFBFFF
+    0205d214: [r6+36] &= 0xFFFF7FFF
+    0205d218: [r6+36] &= 0xFFFEFFFF
+    0205d21c: [r6+36] &= 0xFFFDFFFF
+    0205d220: r0 = [r6+36]
+    0205d222: r0 = r0 & 0xFFF3FFFF
+    0205d226: r0 |= 524288
+    0205d228: [r6+36] = r0
+    0205d22a: [r6+36] |= 0x300000
+    0205d22e: [r6+36] &= 0xFFBFFFFF
+    0205d232: [r6+36] |= 0x800000
+    0205d236: r0 = [r6+36]
+    0205d238: r0 = r0 & 0xF8FFFFFF
+    0205d23c: r0 = r0 | 0x5000000
+    0205d240: [r6+36] = r0
+    0205d242: [r6+36] &= 0xF7FFFFFF
+    0205d246: r0 = [r6+36]
+    0205d248: r0 = r0 & 0x8FFFFFFF
+    0205d24c: r0 = r0 | 0x60000000
+    0205d250: [r6+36] = r0
+    0205d252: [r6+40] |= 0x7
+    0205d256: [r6+40] &= 0xFFFFFFF7
+    0205d25a: r0 = [r6+40]
+    0205d25c: r0 = r0 & 0xFFFFFFCF
+    0205d260: r0 |= 32
+    0205d262: [r6+40] = r0
+    0205d264: [r6+40] |= 0x1C0
+    0205d268: r0 = [r6+40]
+    0205d26a: r0 = r0 & 0xFFFFF1FF
+    0205d26e: r0 = r0 | 0x600
+    0205d272: [r6+40] = r0
+    0205d274: [r6+40] &= 0xFFFFEFFF
+    0205d278: [r6+40] |= 0x6000
+    0205d27c: r0 = [r6+40]
+    0205d27e: r0 = r0 & 0xFFFC7FFF
+    0205d282: r0 = r0 | 0x28000
+    0205d286: [r6+40] = r0
+    0205d288: [r6+40] &= 0xFFFBFFFF
+    0205d28c: [r6+40] |= 0x80000
+    0205d290: [r6+40] |= 0x300000
+    0205d294: r0 = [r6+40]
+    0205d296: r0 = r0 & 0xFC3FFFFF
+    0205d29a: r0 = r0 | 0x2C00000
+    0205d29e: [r6+40] = r0
+    0205d2a0: [r6+40] &= 0xFBFFFFFF
+    0205d2a4: [r6+40] |= 0x18000000
+    0205d2a8: [r6+44] &= 0xFFFFFFF8
+    0205d2ac: [r6+44] &= 0xFFFFFFF7
+    0205d2b0: [r6+44] |= 0x10
+    0205d2b4: [r6+44] |= 0x60
+    0205d2b8: [r6+44] &= 0xFFFFFE7F
+    0205d2bc: [r6+44] &= 0xFFFFF9FF
+    0205d2c0: [r6+44] &= 0xFFFFF7FF
+    0205d2c4: r0 = [r6+44]
+    0205d2c6: r0 = r0 & 0xFFFFCFFF
+    0205d2ca: r0 |= 8192
+    0205d2cc: [r6+44] = r0
+    0205d2ce: [r6+44] &= 0xFFFFBFFF
+    0205d2d2: [r6+44] |= 0x8000
+    0205d2d6: r0 = [r6+44]
+    0205d2d8: r0 = r0 & 0xFFFCFFFF
+    0205d2dc: r0 |= 131072
+    0205d2de: [r6+44] = r0
+    0205d2e0: [r6+44] &= 0xFFFBFFFF
+    0205d2e4: r0 = [r6+44]
+    0205d2e6: r0 = r0 & 0xFFE7FFFF
+    0205d2ea: r0 |= 1048576
+    0205d2ec: [r6+44] = r0
+    0205d2ee: r0 = [r6+44]
+    0205d2f0: r0 = r0 & 0xFF9FFFFF
+    0205d2f4: r0 |= 4194304
+    0205d2f6: [r6+44] = r0
+    0205d2f8: [r6+52] &= 0xFF000000
+    0205d2fc: r13 = -4096  # <_fw+0xFFFFFFFFFFFFF000 : fffffffffffff000 >
+    0205d300:  r0 = [r6+56]
+    0205d302: r0 = r0 & r13
+    0205d306: r0 = r0 | 0x33
+    0205d30a: [r6+56] = r0
+    0205d30c: [r6+52] |= 0x1000000
+    0205d310: [r6+52] &= 0xFDFFFFFF
+    0205d314: [r6+52] &= 0xF3FFFFFF
+    0205d318: [r6+52] &= 0xCFFFFFFF
+    0205d31c: r0 = [r6+56]
+    0205d31e: r0 = r0 & 0xFFFF0FFF
+    0205d322: r0 = r0 | 0xD000
+    0205d326: [r6+56] = r0
+    0205d328: [r6+56] |= 0x10000
+    0205d32c: [r6+56] |= 0x20000
+    0205d330: [r6+56] &= 0xFFFBFFFF
+    0205d334: r0 = [r6+56]
+    0205d336: r0 = r0 & 0xFC07FFFF
+    0205d33a: r0 = r0 | 0x1980000
+    0205d33e: [r6+56] = r0
+    0205d340: [r6+56] &= 0xFBFFFFFF
+    0205d344: [r6+56] &= 0xF7FFFFFF
+    0205d348: [r6+56] &= 0xEFFFFFFF
+    0205d34c: [r6+56] &= 0xDFFFFFFF
+    0205d350: [r6+56] &= 0xBFFFFFFF
+    0205d354: [r6+56] |= 0x80000000
+    0205d358: r0 = [r6+60]
+    0205d35a: r0 = r0 & 0xFFFFFFFC
+    0205d35e: r0 |= 2
+    0205d360: [r6+60] = r0
+    0205d362: r0 = [r6+60]
+    0205d364: r0 = r0 & 0xFFFFFFE3
+    0205d368: r0 |= 16
+    0205d36a: [r6+60] = r0
+    0205d36c: r0 = [r6+60]
+    0205d36e: r0 = r0 & 0xFFFFE01F
+    0205d372: r0 = r0 | 0xEE0
+    0205d376: [r6+60] = r0
+    0205d378: [r6+60] &= 0xFFFC1FFF
+    0205d37c: r0 = [r6+60]
+    0205d37e: r0 = r0 & 0xFFC3FFFF
+    0205d382: r0 = r0 | 0x380000
+    0205d386: [r6+60] = r0
+    0205d388: r0 = [r6+60]
+    0205d38a: r0 = r0 & 0xFF3FFFFF
+    0205d38e: r0 |= 4194304
+    0205d390: [r6+60] = r0
+    0205d392: [r6+60] &= 0xFEFFFFFF
+    0205d396: r0 = [r6+60]
+    0205d398: r0 = r0 & 0xF9FFFFFF
+    0205d39c: r0 |= 33554432
+    0205d39e: [r6+60] = r0
+    0205d3a0: [r6+60] |= 0x38000000
+    0205d3a4: [r6+60] &= 0xBFFFFFFF
+    0205d3a8: [r6+64] &= 0xFFFFFFFE
+    0205d3ac: [r6+64] &= 0xFFFFFFFD
+    0205d3b0: r0 = [r12+0]
+    0205d3b4: r0 = r0 & 0xFFFFFFE3
+    0205d3b8: r0 |= 16
+    0205d3ba: [r12+0] = r0
+    0205d3be: [r6+64] &= 0xFFFFFFDF
+    0205d3c2: r0 = [r12+0]
+    0205d3c6: r0 = r0 & 0xFFFFFF3F
+    0205d3ca: r0 |= 128
+    0205d3cc: [r12+0] = r0
+    0205d3d0: [r6+64] &= 0xFFFFFEFF
+    0205d3d4: r0 = 9216 <_fw+0x2400 : 2400 >
+    0205d3d8: if (r9 != r11) {
+    0205d3dc: r0 = 5120
+    0205d3e0: r5 = r15
+    0205d3e2: r1 = [r12+0]
+    0205d3e6: r1 = r1 & 0xFFFFC1FF
+    0205d3ea: r0 |= r1
+    0205d3ec: [r12+0] = r0
+    0205d3f0: [r6+64] &= 0xFFFFBFFF
+    0205d3f4: [r6+64] &= 0xFFFC7FFF
+    0205d3f8: [r6+64] |= 0x40000
+    0205d3fc: r0 = [r12+0]
+    0205d400: r0 = r0 & 0xFFE7FFFF
+    0205d404: r0 |= 1048576
+    0205d406: [r12+0] = r0
+    0205d40a: r0 = [r12+0]
+    0205d40e: r0 = r0 & 0xFF9FFFFF
+    0205d412: r0 |= 2097152
+    0205d414: [r12+0] = r0
+    0205d418: [r6+64] |= 0x800000
+    0205d41c: [r6+64] &= 0xFEFFFFFF
+    0205d420: [r6+64] &= 0xFDFFFFFF
+    0205d424: [r6+64] &= 0xFBFFFFFF
+    0205d428: r0 = [r12+0]
+    0205d42c: r0 = r0 & 0xC7FFFFFF
+    0205d430: r0 |= 134217728
+    0205d432: [r12+0] = r0
+    0205d436: [r6+68] &= 0xFFFFFFFC
+    0205d43a: [r6+68] &= 0xFFFFFFF3
+    0205d43e: [r6+68] &= 0xFFFFFFEF
+    0205d442: [r6+68] &= 0xFFFFFFDF
+    0205d446: [r6+68] &= 0xFFFFFFBF
+    0205d44a: r0 = [r12+4]
+    0205d44e: r0 = r0 & 0xFFFFFE7F
+    0205d452: r0 |= 128
+    0205d454: [r12+4] = r0
+    0205d458: r0 = [r12+4]
+    0205d45c: r0 = r0 & 0xFFFFF9FF
+    0205d460: r0 |= 512
+    0205d462: [r12+4] = r0
+    0205d466: r0 = [r12+4]
+    0205d46a: r0 = r0 & 0xFFFFE7FF
+    0205d46e: r0 |= 2048
+    0205d470: [r12+4] = r0
+    0205d474: [r6+68] &= 0xFFFE1FFF
+    0205d478: [r6+68] &= 0xFFF9FFFF
+    0205d47c: [r6+68] &= 0xFFF7FFFF
+    0205d480: r0 = [r12+36]
+    0205d484: r0 = r0 & 0xFFFCFFFF
+    0205d488: r0 |= 65536
+    0205d48a: [r12+36] = r0
+    0205d48e: r0 = 5
+    0205d490: call 156822 <_fw+0x8392C : 8392c >
+    0205d496: call -166474 <_fw+0x34A52 : 34a52 >
+    0205d49c: r0 = 121
+    0205d49e: call -166264 <_fw+0x34B2C : 34b2c >
+    0205d4a4: [r6+52] &= 0xFDFFFFFF
+    0205d4a8: [r6+52] &= 0xF3FFFFFF
+    0205d4ac: r4 = 120
+    0205d4ae: if (r9 != r11) {
+    0205d4b2: r4 = 48
+    0205d4b4: r0 = r4
+    0205d4b6: call -106990 <_fw+0x432CE : 432ce >
+    0205d4bc: r3_r2 = r1_r0
+    0205d4be: r1 = 1085477888 <_fw+0x40B31400 : 40b31400 >
+    0205d4c4: r0 = 0
+    0205d4c6: call -107874 <_fw+0x42F6A : 42f6a >
+    0205d4cc: r15_r14 = r1_r0
+    0205d4ce: r0 = 4884 <_fw+0x1314 : 1314 >
+    0205d4d2: r4 = r0 / r4 (u)
+    0205d4d6: r0 = r4
+    0205d4d8: call -106948 <_fw+0x4331A : 4331a >
+    0205d4de: r3_r2 = r1_r0
+    0205d4e0: r1_r0 = r15_r14
+    0205d4e2: call -108144 <_fw+0x42E78 : 42e78 >
+    0205d4e8: r3 = 1097859072 <_fw+0x41700000 : 41700000 >
+    0205d4ee: r2 = 0
+    0205d4f0: call -106866 <_fw+0x43384 : 43384 >
+    0205d4f6: call -107138 <_fw+0x4327A : 4327a >
+    0205d4fc: r1 = [r6+52]
+    0205d4fe: r1 = r1 >> 24
+    0205d500: r0 <= insert(r1, p:24, l:8)
+    0205d504: [r6+52] = r0
+    0205d506: r0 = [r6+56]
+    0205d508: r0 = r0 & r13
+    0205d50c: r0 |= r4
+    0205d50e: [r6+56] = r0
+    0205d510: [r6+64] |= 0x1
+    0205d514: r0 = [r12+0]
+    0205d518: r1 = r0 & 0xFFFFFF3F
+    0205d51c: if (r9 == r11) {
+    0205d520: r1 |= 64
+    0205d522: r0 = 664832 <_fw+0xA2500 : a2500 >
+    0205d528: r2 = 0x200000
+    0205d52c: r0 = 42083616 <_fw+0x2822520 : 2822520 >
+    0205d532: r2 = 0x240000
+    0205d536: r15 = r5
+    0205d538: [r12+0] = r1
+    0205d53c: r1 = [r6+60]
+    0205d53e: r1 = r1 & 0xFFC3FFFF
+    0205d542: r1 |= r2
+    0205d544: [r6+60] = r1
+    0205d546: r1 = [r6+60]
+    0205d548: r1 = r1 & 0xC7FFFFFF
+    0205d54c: r1 |= 268435456
+    0205d54e: [r6+60] = r1
+    0205d550: [r12+20] = r0
+    0205d554: call -166664 <_fw+0x34A52 : 34a52 >
+    0205d55a: [r6+56] &= 0xFFFBFFFF
+    0205d55e: r0 = 262656 <_fw+0x40200 : 40200 >
+    0205d564: r0 = [r0+0]
+    0205d566: if ((r0 & 0x1) != 0) {
+    0205d56a: r0 = 8000000
+    0205d570: r0 = 4000000
+    0205d576: r1 = [r7+8]
+    0205d578: r0 = r1 / r0 (s)
+    0205d57c: r1 = -80 <_fw+0xFFFFFFFFFFFFFFB0 : ffffffffffffffb0 >
+    0205d580: r0 *= r1
+    0205d582: goto 4 <_fw+0x5D588 : 5d588 >
+    0205d584: nop
+    0205d586: r0 += 1
+    0205d588: if (r0 != 0) goto -6 <_fw+0x5D584 : 5d584 >
+    0205d58a: [r6+56] |= 0x40000
+    0205d58e: r4 = [r5+548]
+    0205d592: if (r4 != 0) goto 16 <_fw+0x5D5A4 : 5d5a4 >
+    0205d594: r0 = 68
+    0205d596: call -22014 <_fw+0x57F9E : 57f9e >
+    0205d59c: r4 = r0
+    0205d59e: [r5+548] = r4
+    0205d5a2: if (r4 == 0) goto 58 <_fw+0x5D5DE : 5d5de >
+    0205d5a4: r0 = r4
+    0205d5a6: call -160794 <_fw+0x36192 : 36192 >
+    0205d5ac: r4 = [r5+548]
+    0205d5b0: r1 = r0
+    0205d5b2: r0 = 0
+    0205d5b4: if (r1 != 0) goto 42 <_fw+0x5D5E0 : 5d5e0 >
+    0205d5b6: r1 = 64
+    0205d5b8: r0 = r4
+    0205d5ba: call -372710 <_fw+0x25DA : 25da >
+    0205d5c0: r4 = [r5+548]
+    0205d5c4: r1 = [r4+64]
+    0205d5c8: if (r1 == 0) goto 22 <_fw+0x5D5E0 : 5d5e0 >
+    0205d5ca: if (r1 != r0) goto 18 <_fw+0x5D5E0 : 5d5e0 >
+    0205d5ce: r1 = r5 + 1008
+    0205d5d2: r2 = r4 + 48
+    0205d5d6: rep 4 8 {
+    0205d5d8: r3 = h[r2++=2] (u)
+    0205d5da: h[r1++=2] = r3
+    0205d5dc: goto 2 <_fw+0x5D5E0 : 5d5e0 >
+    0205d5de: r0 = 0
+    0205d5e0: r1 = [r4+64]
+    0205d5e4: if (r1 != r0) goto 308 <_fw+0x5D71C : 5d71c >
+    0205d5e8: if (r1 == 0) goto 304 <_fw+0x5D71C : 5d71c >
+    0205d5ec: if (r4 != 0) goto 16 <_fw+0x5D5FE : 5d5fe >
+    0205d5ee: r0 = 68
+    0205d5f0: call -22104 <_fw+0x57F9E : 57f9e >
+    0205d5f6: r4 = r0
+    0205d5f8: [r5+548] = r4
+    0205d5fc: if (r4 == 0) goto 58 <_fw+0x5D638 : 5d638 >
+    0205d5fe: r0 = r4
+    0205d600: call -160884 <_fw+0x36192 : 36192 >
+    0205d606: r4 = [r5+548]
+    0205d60a: r1 = r0
+    0205d60c: r0 = 0
+    0205d60e: if (r1 != 0) goto 42 <_fw+0x5D63A : 5d63a >
+    0205d610: r1 = 64
+    0205d612: r0 = r4
+    0205d614: call -372800 <_fw+0x25DA : 25da >
+    0205d61a: r4 = [r5+548]
+    0205d61e: r1 = [r4+64]
+    0205d622: if (r1 == 0) goto 22 <_fw+0x5D63A : 5d63a >
+    0205d624: if (r1 != r0) goto 18 <_fw+0x5D63A : 5d63a >
+    0205d628: r1 = r5 + 1008
+    0205d62c: r2 = r4 + 48
+    0205d630: rep 4 8 {
+    0205d632: r3 = h[r2++=2] (u)
+    0205d634: h[r1++=2] = r3
+    0205d636: goto 2 <_fw+0x5D63A : 5d63a >
+    0205d638: r0 = 0
+    0205d63a: r3 = r4 + 24
+    0205d63c: r1 = [r3+40]
+    0205d63e: r7 = -1
+    0205d640: if (r1 == 0) goto 200 <_fw+0x5D70A : 5d70a >
+    0205d642: if (r1 != r0) goto 196 <_fw+0x5D70A : 5d70a >
+    0205d646: r0 = b[r3+0] (u)
+    0205d648: call 157756 <_fw+0x83E8A : 83e8a >
+    0205d64e: r0 = b[r3+1] (u)
+    0205d650: call 157770 <_fw+0x83EA0 : 83ea0 >
+    0205d656: r0 = [r4+0]
+    0205d658: call 157518 <_fw+0x83DAC : 83dac >
+    0205d65e: r4 = r15
+    0205d660: r0 = [++r4=548]
+    0205d664: r0 = [r0+4]
+    0205d666: call 157578 <_fw+0x83DF6 : 83df6 >
+    0205d66c: r0 = [r4+0]
+    0205d66e: r0 = [r0+8]
+    0205d670: call 157530 <_fw+0x83DD0 : 83dd0 >
+    0205d676: r0 = [r4+0]
+    0205d678: r0 = [r0+12]
+    0205d67a: call 157596 <_fw+0x83E1C : 83e1c >
+    0205d680: r0 = [r4+0]
+    0205d682: r0 = [r0+16]
+    0205d684: call 157622 <_fw+0x83E40 : 83e40 >
+    0205d68a: r0 = [r4+0]
+    0205d68c: r0 = [r0+20]
+    0205d68e: call 157648 <_fw+0x83E64 : 83e64 >
+    0205d694: r0 = [r4+0]
+    0205d696: r0 = h[r0+32] (s)
+    0205d69a: call 158894 <_fw+0x8434E : 8434e >
+    0205d6a0: r0 = [r4+0]
+    0205d6a2: r0 = h[r0+36] (s)
+    0205d6a6: call 158928 <_fw+0x8437C : 8437c >
+    0205d6ac: r4 = [r4+0]
+    0205d6ae: r0 = b[r4+26] (u)
+    0205d6b2: call 159404 <_fw+0x84564 : 84564 >
+    0205d6b8: r0 = b[r4+27] (u)
+    0205d6bc: call 159406 <_fw+0x84570 : 84570 >
+    0205d6c2: r0 = b[r4+28] (s)
+    0205d6c6: call 159408 <_fw+0x8457C : 8457c >
+    0205d6cc: r0 = b[r4+29] (s)
+    0205d6d0: call 159410 <_fw+0x84588 : 84588 >
+    0205d6d6: r0 = [r4+40]
+    0205d6d8: [r12+28] = r0
+    0205d6dc: r0 = [r4+44]
+    0205d6de: [r12+32] = r0
+    0205d6e2: r0 = [r6+4]
+    0205d6e4: r0 = r0 & 0xFFFFF0FF
+    0205d6e8: r0 |= 2048
+    0205d6ea: [r6+4] = r0
+    0205d6ec: r0 = [r6+32]
+    0205d6ee: r1 = [r12+28]
+    0205d6f2: r1 = r1 >> 16
+    0205d6f4: r0 <= insert(r1, p:10, l:8)
+    0205d6f8: [r6+32] = r0
+    0205d6fa: r0 = [r6+16]
+    0205d6fc: r1 = [r12+28]
+    0205d700: r1 = r1 >> 16
+    0205d702: r0 <= insert(r1, p:14, l:8)
+    0205d706: [r6+16] = r0
+    0205d708: r7 = 0
+    0205d70a: if (r4 == 0) goto 14 <_fw+0x5D71A : 5d71a >
+    0205d70c: r0 = r4
+    0205d70e: call -24186 <_fw+0x5789A : 5789a >
+    0205d714: r0 = 0
+    0205d716: [r5+548] = r0
+    0205d71a: if (r7 == 0) goto 6 <_fw+0x5D722 : 5d722 >
+    0205d71c: call -4553252 <_fw+0xFFFFFFFFFFC05CFE : ffffffffffc05cfe >
+    0205d722: r0 = 0
+    0205d724: r7 = 0
+    0205d726: call 156160 <_fw+0x8392C : 8392c >
+    0205d72c: r14 = 29392780 <_fw+0x1C07F8C : 1c07f8c >
+    0205d732: r0 = r10 + 2738
+    0205d736: r1 = r14
+    0205d738: rep 4 7 {
+    0205d73a: r2 = b[r0++=1] (u)
+    0205d73c: b[r1++=1] = r2
+    0205d73e: r0 = 107
+    0205d740: r2 = 7
+    0205d742: r1 = r14
+    0205d744: call -373048 <_fw+0x2612 : 2612 >
+    0205d74a: if (r0 != 7) {
+    0205d74e: r0 = 107
+    0205d750: r2 = 7
+    0205d752: r1 = r14
+    0205d754: call -369826
+    0205d75a: r9 = r6 + 36
+    0205d75e: r13 = r6 + 40
+    0205d762: r11 = r6 + 44
+    0205d766: r3 = 0
+    0205d768: r1 = r3.b0 (u)
+    0205d76a: if (r1 > 5) goto 94 <_fw+0x5D7CC : 5d7cc >
+    0205d76e: r0 = b[r7+r14] (u)
+    0205d772: tbb [r1]
+    0205d774: r3 = [r0++=r12]
+    0205d77a: r5 = r9  #
+    0205d77c:  r1 = [r6+36]
+    0205d77e: r2 = r1 & 0xF8FFFFFF
+    0205d782: r1 = 24
+    0205d784: r4 = 7
+    0205d786: goto 60 <_fw+0x5D7C4 : 5d7c4 >
+    0205d788: r1 = [r6+40]
+    0205d78a: r2 = r1 & 0xFFFFFFF8
+    0205d78e: r1 = 0
+    0205d790: goto 18 <_fw+0x5D7A4 : 5d7a4 >
+    0205d792: r1 = [r6+40]
+    0205d794: r2 = r1 & 0xFFFFF1FF
+    0205d798: r1 = 9
+    0205d79a: goto 8 <_fw+0x5D7A4 : 5d7a4 >
+    0205d79c: r1 = [r6+40]
+    0205d79e: r2 = r1 & 0xFFFC7FFF
+    0205d7a2: r1 = 15
+    0205d7a4: r4 = 7
+    0205d7a6: r5 = r13
+    0205d7a8: goto 26 <_fw+0x5D7C4 : 5d7c4 >
+    0205d7aa: r5 = r13  #
+    0205d7ac:  r1 = [r6+40]
+    0205d7ae: r2 = r1 & 0xFC3FFFFF
+    0205d7b2: r1 = 22
+    0205d7b4: r4 = 15
+    0205d7b6: goto 12 <_fw+0x5D7C4 : 5d7c4 >
+    0205d7b8: r5 = r11  #
+    0205d7ba:  r1 = [r6+44]
+    0205d7bc: r2 = r1 & 0xFFFFFFF8
+    0205d7c0: r1 = 0
+    0205d7c2: r4 = 7
+    0205d7c4: r0 &= r4
+    0205d7c6: r0 <<= r1
+    0205d7c8: r0 |= r2
+    0205d7ca: [r5+0] = r0
+    0205d7cc: r7 += 1
+    0205d7ce: r3 += 1
+    0205d7d0: if (r7 != 7) goto -108 <_fw+0x5D768 : 5d768 >
+    0205d7d4: r0 = 4
+    0205d7d6: r9 = 4 <_fw+0x4 : 4 >
+    0205d7da: call 157108 <_fw+0x83D94 : 83d94 >
+    0205d7e0: r1 = r0
+    0205d7e2: r0 = 97
+    0205d7e4: r4 = r1 << 24
+    0205d7e6: call 157096 <_fw+0x83D94 : 83d94 >
+    0205d7ec: r0 = r0 & 0xFFFFFF03
+    0205d7f0: r4 <= insert(r0, p:22, l:2)
+    0205d7f4: r7 = r15
+    0205d7f6: [++r7=508] = r4
+    0205d7fa: r0 = 5
+    0205d7fc: call 157074 <_fw+0x83D94 : 83d94 >
+    0205d802: r4 = r0
+    0205d804: r0 = 97
+    0205d806: call 157064 <_fw+0x83D94 : 83d94 >
+    0205d80c: r0 = r0 << 20
+    0205d80e: r0 = r0 & 0xC00000
+    0205d812: r0 <= insert(r4, p:24, l:8)
+    0205d816: [r7+4] = r0
+    0205d818: r0 = 6
+    0205d81a: call 157044 <_fw+0x83D94 : 83d94 >
+    0205d820: r4 = r0
+    0205d822: r0 = 97
+    0205d824: call 157034 <_fw+0x83D94 : 83d94 >
+    0205d82a: r0 = r0 << 18
+    0205d82c: r0 = r0 & 0xC00000
+    0205d830: r0 <= insert(r4, p:24, l:8)
+    0205d834: [r7+8] = r0
+    0205d836: r0 = 7
+    0205d838: call 157014 <_fw+0x83D94 : 83d94 >
+    0205d83e: r1 = r0
+    0205d840: r0 = 97
+    0205d842: r4 = r1 << 24
+    0205d844: call 157002 <_fw+0x83D94 : 83d94 >
+    0205d84a: r0 = r0 >> 6
+    0205d84c: r4 <= insert(r0, p:22, l:2)
+    0205d850: r11 = 8  # <_fw+0x8 : 8 >
+    0205d854:  [r7+12] = r4
+    0205d856: r0 = 8
+    0205d858: call 156982 <_fw+0x83D94 : 83d94 >
+    0205d85e: r1 = r0
+    0205d860: r0 = 98
+    0205d862: r4 = r1 << 24
+    0205d864: call 156970 <_fw+0x83D94 : 83d94 >
+    0205d86a: r0 = r0 & 0xFFFFFF03
+    0205d86e: r4 <= insert(r0, p:22, l:2)
+    0205d872: [r7+16] = r4
+    0205d874: r0 = 9
+    0205d876: call 156952 <_fw+0x83D94 : 83d94 >
+    0205d87c: r13 = r0
+    0205d87e: r0 = 98
+    0205d880: call 156942 <_fw+0x83D94 : 83d94 >
+    0205d886: r1 = [r7+0]
+    0205d888: r2 = r1 >> 22
+    0205d88a: [r7+0] = r2
+    0205d88c: r2 = [r7+4]
+    0205d88e: r2 = r2 >>> 22
+    0205d890: [r7+4] = r2
+    0205d892: r3 = [r7+8]
+    0205d894: r5 = r3 >> 22
+    0205d896: [r7+8] = r5
+    0205d898: r5 = [r7+12]
+    0205d89a: r5 = r5 >>> 22
+    0205d89c: [r7+12] = r5
+    0205d89e: r4 = [r7+16]
+    0205d8a0: r4 = r4 >>> 22
+    0205d8a2: [r7+16] = r4
+    0205d8a4: r1 = r1 >> 25
+    0205d8a6: [r7+20] = r1
+    0205d8a8: r1 = r3 >> 25
+    0205d8aa: r1 = r5 + r2  #
+    0205d8ac:  [r7+24] = r1
+    0205d8ae: r1 = r1 / r11 (s)
+    0205d8b2: r1 = r4 / r9 (s)  #
+    0205d8b6:  [r7+28] = r1
+    0205d8b8: r0 = r0 << 20
+    0205d8ba: r0 = r0 & 0xC00000  #
+    0205d8be:  [r7+32] = r1
+    0205d8c0: r0 <= insert(r13, p:24, l:8)
+    0205d8c4: r0 = r0 >>> 22
+    0205d8c6: r0 = r0 / r9 (s)
+    0205d8ca: [r7+36] = r0
+    0205d8cc: r0 = [r7+40]
+    0205d8ce: if (r0 == 0) goto 394 <_fw+0x5DA5C : 5da5c >
+    0205d8d2: r1 = [r6+28]
+    0205d8d4: r1 = uextra(r1, p:8, l:7)
+    0205d8d8: b[r0+24] = r1
+    0205d8dc: r1 = [r6+32]
+    0205d8de: r1 = r1 & 0x7F
+    0205d8e2: b[r0+25] = r1
+    0205d8e6: r0 = 4
+    0205d8e8: call 156838 <_fw+0x83D94 : 83d94 >
+    0205d8ee: r1 = r0
+    0205d8f0: r0 = 97
+    0205d8f2: r4 = r1 << 24
+    0205d8f4: call 156826 <_fw+0x83D94 : 83d94 >
+    0205d8fa: r7 = r15
+    0205d8fc: r1 = [++r7=548]
+    0205d900: r0 = r0 & 0xFFFFFF03
+    0205d904: r4 <= insert(r0, p:22, l:2)
+    0205d908: [r1+0] = r4
+    0205d90a: r0 = 5
+    0205d90c: call 156802 <_fw+0x83D94 : 83d94 >
+    0205d912: r4 = r0
+    0205d914: r0 = 97
+    0205d916: call 156792 <_fw+0x83D94 : 83d94 >
+    0205d91c: r0 = r0 << 20
+    0205d91e: r0 = r0 & 0xC00000  #
+    0205d922:  r1 = [r7+0]
+    0205d924: r0 <= insert(r4, p:24, l:8)
+    0205d928: [r1+4] = r0
+    0205d92a: r0 = 6
+    0205d92c: call 156770 <_fw+0x83D94 : 83d94 >
+    0205d932: r4 = r0
+    0205d934: r0 = 97
+    0205d936: call 156760 <_fw+0x83D94 : 83d94 >
+    0205d93c: r0 = r0 << 18
+    0205d93e: r0 = r0 & 0xC00000  #
+    0205d942:  r1 = [r7+0]
+    0205d944: r0 <= insert(r4, p:24, l:8)
+    0205d948: [r1+8] = r0
+    0205d94a: r0 = 7
+    0205d94c: call 156738 <_fw+0x83D94 : 83d94 >
+    0205d952: r1 = r0
+    0205d954: r0 = 97
+    0205d956: r4 = r1 << 24
+    0205d958: call 156726 <_fw+0x83D94 : 83d94 >
+    0205d95e: r0 = r0 >> 6
+    0205d960: r4 <= insert(r0, p:22, l:2)  #
+    0205d964:  r1 = [r7+0]
+    0205d966: [r1+12] = r4
+    0205d968: r0 = 8
+    0205d96a: call 156708 <_fw+0x83D94 : 83d94 >
+    0205d970: r1 = r0
+    0205d972: r0 = 98
+    0205d974: r4 = r1 << 24
+    0205d976: call 156696 <_fw+0x83D94 : 83d94 >
+    0205d97c: r0 = r0 & 0xFFFFFF03  #
+    0205d980:  r1 = [r7+0]
+    0205d982: r4 <= insert(r0, p:22, l:2)
+    0205d986: [r1+16] = r4
+    0205d988: r0 = 9
+    0205d98a: call 156676 <_fw+0x83D94 : 83d94 >
+    0205d990: r4 = r0
+    0205d992: r0 = 98
+    0205d994: call 156666 <_fw+0x83D94 : 83d94 >
+    0205d99a: r1 = [r7+0]
+    0205d99c: [r1+0] >>= 22
+    0205d9a0: [r1+4] >>>= 22
+    0205d9a4: [r1+8] >>= 22
+    0205d9a8: [r1+12] >>>= 22
+    0205d9ac: [r1+16] >>>= 22
+    0205d9b0: r0 = r0 << 20
+    0205d9b2: r0 = r0 & 0xC00000
+    0205d9b6: r0 <= insert(r4, p:24, l:8)
+    0205d9ba: r0 = r0 >>> 22
+    0205d9bc: [r1+20] = r0
+    0205d9be: if (r1 == 0) goto 156 <_fw+0x5DA5C : 5da5c >
+    0205d9c0: r0 = 9
+    0205d9c2: call 157056 <_fw+0x83F48 : 83f48 >
+    0205d9c8: r4 = r15
+    0205d9ca: r1 = [++r4=548]
+    0205d9ce: b[r1+26] = r0
+    0205d9d2: r0 = 11
+    0205d9d4: call 157038 <_fw+0x83F48 : 83f48 >
+    0205d9da: r1 = [r4+0]
+    0205d9dc: b[r1+27] = r0
+    0205d9e0: r0 = 10
+    0205d9e2: call 157024 <_fw+0x83F48 : 83f48 >
+    0205d9e8: r1 = [r4+0]
+    0205d9ea: b[r1+28] = r0
+    0205d9ee: r0 = 12
+    0205d9f0: call 157010 <_fw+0x83F48 : 83f48 >
+    0205d9f6: r2 = [r4+0]
+    0205d9f8: b[r2+29] = r0
+    0205d9fc: r3 = [r6+8]
+    0205d9fe: r0 = [r6+8]
+    0205da00: r1 = uextra(r0, p:7, l:9)
+    0205da04: r0 = 0x0 - r1
+    0205da08: if ((r3 & 0x10000) != 0) {
+    0205da0c: r0 = r1
+    0205da0e: [r2+32] = r0
+    0205da10: r3 = [r6+8]
+    0205da12: r0 = [r6+8]
+    0205da14: r1 = uextra(r0, p:17, l:9)
+    0205da18: r0 = 0x0 - r1
+    0205da1c: if ((r3 & 0x4000000) != 0) {
+    0205da20: r0 = r1
+    0205da22: [r2+36] = r0
+    0205da24: if (r2 == 0) goto 54 <_fw+0x5DA5C : 5da5c >
+    0205da26: r0 = [r12+28]
+    0205da2a: [r2+40] = r0
+    0205da2c: r0 = [r12+32]
+    0205da30: r0 = r2  #
+    0205da32:  [r2+44] = r0
+    0205da34: r1 = 64
+    0205da36: call -373858 <_fw+0x25DA : 25da >
+    0205da3c: r4 = r15
+    0205da3e: r1 = [++r4=548]
+    0205da42: [r1+64] = r0
+    0205da46: r0 = 187
+    0205da48: r2 = 68
+    0205da4a: call -370584 <_fw+0x32B8 : 32b8 >
+    0205da50: r0 = [r4+0]
+    0205da52: call -25022 <_fw+0x5789A : 5789a >
+    0205da58: [r4+0] = 0x0
+    0205da5c: [r6+4] |= 0x30000
+    0205da60: r0 = [r6+4]
+    0205da62: r0 = r0 & 0xFFFF8FFF
+    0205da66: r0 |= 16384
+    0205da68: [r6+4] = r0
+    0205da6a: [r6+8] &= 0xFFFFFFF8
+    0205da6e: r0 = [r6+12]
+    0205da70: r0 = r0 & 0xFFFFFF3F
+    0205da74: r0 |= 64
+    0205da76: [r6+12] = r0
+    0205da78: r0 = [r6+16]
+    0205da7a: r0 = r0 & 0xFFFFF0FF
+    0205da7e: r0 = r0 | 0x900
+    0205da82: [r6+16] = r0
+    0205da84: r0 = [r6+16]
+    0205da86: r0 = r0 & 0xFFFFFF80
+    0205da8a: r0 = r0 | 0xE
+    0205da8e: [r6+16] = r0
+    0205da90: r0 = 0
+    0205da92: r4 = 0
+    0205da94: call 156696 <_fw+0x83EB2 : 83eb2 >
+    0205da9a: call -164976 <_fw+0x35630 : 35630 >
+    0205daa0: r0 = 1
+    0205daa2: call -165968 <_fw+0x35258 : 35258 >
+    0205daa8: call -162016 <_fw+0x361CE : 361ce >
+    0205daae: r0 = 0
+    0205dab0: call -167502 <_fw+0x34C68 : 34c68 >
+    0205dab6: call -167098 <_fw+0x34E02 : 34e02 >
+    0205dabc: r0 = r6 + 0x2740
+    0205dac0: r1 = r0
+    0205dac2: r0 = [r1+28]
+    0205dac4: r0 = r0 & 0xFF00FFFF
+    0205dac8: r0 = r0 | 0x60000
+    0205dacc: [r1+28] = r0
+    0205dace: r0 = [r1+28]
+    0205dad0: r0 = r0 & 0xFFFFFF00
+    0205dad4: r0 = r0 | 0x6B
+    0205dad8: [r1+28] = r0
+    0205dada: call -161656 <_fw+0x36368 : 36368 >
+    0205dae0: r0 = [r6+28]
+    0205dae2: r5 = r6 + -6384  #
+    0205dae6:  r0 = [r6+32]
+    0205dae8: r0 = h[r15+106] (u)
+    0205daec: if (r0 != 0) goto 30 <_fw+0x5DB0C : 5db0c >
+    0205daee: b[r15+56] = r4
+    0205daf2: r0 = r10 + 1093
+    0205daf6: r2 = 33771668 <_fw+0x2035094 : 2035094 >
+    0205dafc: r1 = 0
+    0205dafe: r3 = 3000 <_fw+0xBB8 : bb8 >
+    0205db02: call -374560 <_fw+0x23E8 : 23e8 >
+    0205db08: h[r15+106] = r0
+    0205db0c: [sp] = r4
+    0205db0e: call 2046 <_fw+0x5E312 : 5e312 >
+    0205db14: r2 = 29398908 <_fw+0x1C0977C : 1c0977c >
+    0205db1a: r0 = 24
+    0205db1c: b[r2+10] = r0
+    0205db1e: r0 = 10
+    0205db20: b[r2+11] = r0
+    0205db22: [r5+0] &= 0xFFFF3FFF
+    0205db26: r0 = -240 <_fw+0xFFFFFFFFFFFFFF10 : ffffffffffffff10 >
+    0205db2a: goto 4 <_fw+0x5DB30 : 5db30 >
+    0205db2c: nop
+    0205db2e: r0 += 1
+    0205db30: if (r0 != 0) goto -6 <_fw+0x5DB2C : 5db2c >
+    0205db32: [r8+0] |= 0x80
+    0205db36: r0 = [r8+0]
+    0205db3a: r0 = r0 & 0xFFE0FFFF
+    0205db3e: r0 = r0 | 0xC0000
+    0205db42: [r8+0] = r0
+    0205db46: r0 = b[r2+10] (u)
+    0205db48: r1 = -10
+    0205db4a: r0 *= r1
+    0205db4c: goto 4 <_fw+0x5DB52 : 5db52 >
+    0205db4e: nop
+    0205db50: r0 += 1
+    0205db52: if (r0 != 0) goto -6 <_fw+0x5DB4E : 5db4e >
+    0205db54: [r8+0] |= 0x1
+    0205db58: r0 = b[r2+10] (u)
+    0205db5a: r0 *= r1
+    0205db5c: goto 4 <_fw+0x5DB62 : 5db62 >
+    0205db5e: nop
+    0205db60: r0 += 1
+    0205db62: if (r0 != 0) goto -6 <_fw+0x5DB5E : 5db5e >
+    0205db64: r1 = 0x2FC00
+    0205db68: [r1+64] |= 0x400
+    0205db6c: r0 = 0x20000
+    0205db70: [r0+0] |= 0xC0000000
+    0205db74: r0 = b[r2+10] (u)
+    0205db76: r3 = -10
+    0205db78: r0 *= r3
+    0205db7a: goto 4 <_fw+0x5DB80 : 5db80 >
+    0205db7c: nop
+    0205db7e: r0 += 1
+    0205db80: if (r0 != 0) goto -6 <_fw+0x5DB7C : 5db7c >
+    0205db82: r3 = r5 + -17
+    0205db86: r0 = r1 + 64
+    0205db8a: r3 = -771  # <_fw+0xFFFFFFFFFFFFFCFC : fffffffffffffcfc >
+    0205db8e:  [r0+0] = r3
+    0205db90: [r1+64] &= r3
+    0205db94: [r0+56] = 0xF
+    0205db98: [r1+120] |= 0x3F0
+    0205db9c: r3 = 0
+    0205db9e: b[r2+16] = r3
+    0205dba2: r4 = r2 + 56
+    0205dba6: r5 = r0 + 72
+    0205dbaa: [r5+0] = r4
+    0205dbac: r4 = 0
+    0205dbae: goto 20 <_fw+0x5DBC4 : 5dbc4 >
+    0205dbb0: r5 = r4 * 0xC
+    0205dbb4: r5 += r2
+    0205dbb6: r6 = r4 << 8
+    0205dbb8: r6 |= r4
+    0205dbba: [r5+56] = r6
+    0205dbbc: [r5+60] = r3
+    0205dbbe: [r5+64] = r3
+    0205dbc2: r4 += 1
+    0205dbc4: r4 = r4.l (u)
+    0205dbc6: if (r4 <= 80) goto -26 <_fw+0x5DBB0 : 5dbb0 >
+    0205dbca: r2 = r0 + 320
+    0205dbce: [r2+24] = 0x0
+    0205dbd2: r3 = 504 <_fw+0x1F8 : 1f8 >
+    0205dbd6: r4 = 33933708 <_fw+0x205C98C : 205c98c >
+    0205dbdc: goto 14 <_fw+0x5DBEC : 5dbec >
+    0205dbde: r5 = r3 + r4
+    0205dbe0: r6 = [r3+r4]
+    0205dbe4: r5 = [r5+4]
+    0205dbe6: [r2+28] = r6
+    0205dbe8: [r2+28] = r5
+    0205dbea: r3 += -8
+    0205dbec: if (r3 != -8) goto -18 <_fw+0x5DBDE : 5dbde >
+    0205dbf0: [r1+32] &= 0x3FFFFFFF
+    0205dbf4: [r2+0] = 0xF0000
+    0205dbf8: r3 = 410173204 <_fw+0x1872BF14 : 1872bf14 >
+    0205dbfe: [r2+4] = r3
+    0205dc00: r3 += 65
+    0205dc02: [r2+8] = r3
+    0205dc04: r3 += -85
+    0205dc06: [r2+12] = r3
+    0205dc08: r3 = 0
+    0205dc0a: [r2+16] = r3
+    0205dc0c: [r2+20] = r3
+    0205dc0e: r3 += -100
+    0205dc10: goto 4 <_fw+0x5DC16 : 5dc16 >
+    0205dc12: nop
+    0205dc14: r3 += 1
+    0205dc16: if (r3 != 0) goto -6 <_fw+0x5DC12 : 5dc12 >
+    0205dc18: [r2+0] |= 0x1
+    0205dc1c: [r2+0] &= 0xFFEFFFFF
+    0205dc20: [r1+124] |= 0x1
+    0205dc24: [r0+8] = 0xB9
+    0205dc28: r2 = 16765252 <_fw+0xFFD144 : ffd144 >
+    0205dc2e: [r1+0] = r2
+    0205dc30: r2 = 1309949151 <_fw+0x4E143CDE : 4e143cde >
+    0205dc36: [r1+4] = r2
+    0205dc38: [r1+8] = 0x3100000
+    0205dc3c: [r1+12] = 0x80808080
+    0205dc40: r2 = 2147516544 <_fw+0x80008080 : 80008080 >
+    0205dc46: [r1+16] = r2
+    0205dc48: [r1+20] = 0x80
+    0205dc4c: r2 = 0
+    0205dc4e: [r1+24] = r2
+    0205dc50: [r1+28] = r2
+    0205dc52: r2 = 911562039 <_fw+0x36555536 : 36555536 >
+    0205dc58: [r1+32] = r2
+    0205dc5a: r2 = 213057 <_fw+0x34040 : 34040 >
+    0205dc60: [r1+36] = r2
+    0205dc62: [r1+40] = 0x5C000
+    0205dc66: r3 = r15 + 528  #
+    0205dc6a:  r2 = [r1+16]
+    0205dc6c: r2 = r2 & 0xFFFFFF00  #
+    0205dc70:  r4 = b[r3+0] (u)
+    0205dc72: r2 |= r4
+    0205dc74: [r1+16] = r2
+    0205dc76: r2 = [r1+16]
+    0205dc78: r2 = r2 & 0xFFFF00FF  #
+    0205dc7c:  r4 = b[r3+4] (u)
+    0205dc7e: r2 <= insert(r4, p:8, l:8)
+    0205dc82: [r1+16] = r2
+    0205dc84: r4 = b[r3+8] (u)
+    0205dc86: r4 = 0x0 - r4  #
+    0205dc8a:  r2 = [r1+16]
+    0205dc8c: r2 <= insert(r4, p:16, l:8)
+    0205dc90: [r1+16] = r2
+    0205dc92: r2 = [r1+8]
+    0205dc94: r4 = h[r3+12] (u)
+    0205dc96: r2 <= insert(r4, p:0, l:10)
+    0205dc9a: [r1+8] = r2
+    0205dc9c: r2 = [r1+8]
+    0205dc9e: r4 = 4293919743 <_fw+0xFFF003FE : fff003fe >
+    0205dca4: r2 &= r4  #
+    0205dca6:  r3 = h[r3+16] (u)
+    0205dca8: r3 = r3 & 0xFFFF03FF
+    0205dcac: r2 <= insert(r3, p:10, l:10)
+    0205dcb0: [r1+8] = r2
+    0205dcb2: [r0+92] &= 0xFFFFFFF0
+    0205dcb6: [r0+92] |= 0x8
+    0205dcba: [r0+88] &= 0xFFFFFF00
+    0205dcbe: [r0+88] |= 0x36
+    0205dcc2: [r0+88] &= 0xFF00FFFF
+    0205dcc6: [r0+88] |= 0x360000
+    0205dcca: [r0+88] &= 0xFFFF00FF
+    0205dcce: [r0+88] |= 0x200
+    0205dcd2: [r0+88] &= 0xFFFFFF
+    0205dcd6: [r0+88] |= 0x2000000
+    0205dcda: [r0+92] &= 0xFF00FFFF
+    0205dcde: [r0+92] |= 0x360000
+    0205dce2: [r0+92] &= 0xFFFFFF
+    0205dce6: [r0+92] |= 0x36000000
+    0205dcea: r1 = -10
+    0205dcec: goto 4 <_fw+0x5DCF2 : 5dcf2 >
+    0205dcee: nop
+    0205dcf0: r1 += 1
+    0205dcf2: if (r1 != 0) goto -6 <_fw+0x5DCEE : 5dcee >
+    0205dcf4: [r0+96] &= 0xFFFFFF00
+    0205dcf8: [r0+96] |= 0x36
+    0205dcfc: [r0+96] &= 0xFFFF00FF
+    0205dd00: [r0+96] |= 0x3600
+    0205dd04: r0 = [sp]
+    0205dd06: if (r0 == 0) goto 316 <_fw+0x5DE46 : 5de46 >
+    0205dd0a: [r8+0] |= 0x3
+    0205dd0e: r0 = 32571393 <_fw+0x1F10000 : 1f10000 >
+    0205dd14: [r8+4] = r0
+    0205dd18: r0 = 33554449 <_fw+0x2000010 : 2000010 >
+    0205dd1e: [r8+4] = r0
+    0205dd22: r0 = 983073 <_fw+0xF0020 : f0020 >
+    0205dd28: [r8+4] = r0
+    0205dd2c: r0 = 169410609 <_fw+0xA190030 : a190030 >
+    0205dd32: [r8+4] = r0
+    0205dd36: r0 = 17432641 <_fw+0x10A0040 : 10a0040 >
+    0205dd3c: [r8+4] = r0
+    0205dd40: r4 = 0
+    0205dd42: r6 = 5352 <_fw+0x14E8 : 14e8 >
+    0205dd46: goto 40 <_fw+0x5DD70 : 5dd70 >
+    0205dd48: r7 = 0
+    0205dd4a: r5 = 0
+    0205dd4c: goto 28 <_fw+0x5DD6A : 5dd6a >
+    0205dd4e: r2 = 1
+    0205dd50: if (r4 != 4) {
+    0205dd54: r0 = r7 + r4
+    0205dd56: r0 += r10
+    0205dd58: r2 = b[r0+r6] (u)
+    0205dd5c: r0 = r4.b0 (u)
+    0205dd5e: r1 = r5.b0 (u)
+    0205dd60: call -162058 <_fw+0x3645C : 3645c >
+    0205dd66: r7 += 4
+    0205dd68: r5 += 1
+    0205dd6a: if (r7 != 184) goto -32 <_fw+0x5DD4E : 5dd4e >
+    0205dd6e: r4 += 1
+    0205dd70: if (r4 != 5) goto -44 <_fw+0x5DD48 : 5dd48 >
+    0205dd74: r4 = 0
+    0205dd76: r5 = 3176 <_fw+0xC68 : c68 >
+    0205dd7a: r6 = 0
+    0205dd7c: goto 22 <_fw+0x5DD94 : 5dd94 >
+    0205dd7e: r0 = r6 + r10
+    0205dd82: r2 = b[r0+r5] (u)
+    0205dd86: r1 = r4.b0 (u)
+    0205dd88: r0 = 5
+    0205dd8a: call -162100 <_fw+0x3645C : 3645c >
+    0205dd90: r4 += 1
+    0205dd92: r6 += 1
+    0205dd94: if (r6 != 41) goto -26 <_fw+0x5DD7E : 5dd7e >
+    0205dd98: r0 = 2147483761 <_fw+0x80000070 : 80000070 >
+    0205dd9e: [r8+4] = r0
+    0205dda2: r0 = 602341505 <_fw+0x23E70080 : 23e70080 >
+    0205dda8: [r8+4] = r0
+    0205ddac: r1 = 131217 <_fw+0x20090 : 20090 >
+    0205ddb2: [r8+4] = r1
+    0205ddb6: r1 = 983201 <_fw+0xF00A0 : f00a0 >
+    0205ddbc: [r8+4] = r1
+    0205ddc0: r1 = 262321 <_fw+0x400B0 : 400b0 >
+    0205ddc6: [r8+4] = r1
+    0205ddca: r1 = 245760193 <_fw+0xEA600C0 : ea600c0 >
+    0205ddd0: [r8+4] = r1
+    0205ddd4: r1 = 738197713 <_fw+0x2C0000D0 : 2c0000d0 >
+    0205ddda: [r8+4] = r1
+    0205ddde: r1 = 671940833 <_fw+0x280D00E0 : 280d00e0 >
+    0205dde4: [r8+4] = r1
+    0205dde8: r1 = 525336817 <_fw+0x1F5000F0 : 1f5000f0 >
+    0205ddee: [r8+4] = r1
+    0205ddf2: r1 = 2521039105 <_fw+0x96440100 : 96440100 >
+    0205ddf8: [r8+4] = r1
+    0205ddfc: r1 = 5243153 <_fw+0x500110 : 500110 >
+    0205de02: [r8+4] = r1
+    0205de06: r1 = 19661089 <_fw+0x12C0120 : 12c0120 >
+    0205de0c: [r8+4] = r1
+    0205de10: r1 = 33751345 <_fw+0x2030130 : 2030130 >
+    0205de16: [r8+4] = r1
+    0205de1a: r1 = 587137345 <_fw+0x22FF0140 : 22ff0140 >
+    0205de20: [r8+4] = r1
+    0205de24: r1 = 3277137 <_fw+0x320150 : 320150 >
+    0205de2a: [r8+4] = r1
+    0205de2e: r1 = 327680353 <_fw+0x13880160 : 13880160 >
+    0205de34: [r8+4] = r1
+    0205de38: r1 = 602210433 <_fw+0x23E50080 : 23e50080 >
+    0205de3e: [r8+4] = r1
+    0205de42: [r8+4] = r0
+    0205de46: sp += 8
+    0205de48: {pc, r15-r4} = [sp++]
+
+===== FUNC 0x0205de4a size=74B ninsn=26 callers=0 callees=0 =====
+  data-refs: 0x01c0977c
+    0205de4a: r0 = 29398908 <_fw+0x1C0977C : 1c0977c >
+    0205de50: r1 = b[r0+13] (u)
+    0205de52: if (r1 == 0) goto 62 <_fw+0x5DE92 : 5de92 >
+    0205de54: r1 = 0
+    0205de56: r0 = 0x14000  #
+    0205de5a:  b[r0+13] = r1
+    0205de5c: [r0+0] &= 0xFFFFFFE0
+    0205de60: r1 = -1000 <_fw+0xFFFFFFFFFFFFFC18 : fffffffffffffc18 >
+    0205de64: goto 4 <_fw+0x5DE6A : 5de6a >
+    0205de66: nop
+    0205de68: r1 += 1
+    0205de6a: if (r1 != 0) goto -6 <_fw+0x5DE66 : 5de66 >
+    0205de6c: [r0+0] = 0x0
+    0205de70: r0 = -1000 <_fw+0xFFFFFFFFFFFFFC18 : fffffffffffffc18 >
+    0205de74: goto 4 <_fw+0x5DE7A : 5de7a >
+    0205de76: nop
+    0205de78: r0 += 1
+    0205de7a: if (r0 != 0) goto -6 <_fw+0x5DE76 : 5de76 >
+    0205de7c: r0 = 65552 <_fw+0x10010 : 10010 >
+    0205de82: [r0+0] |= 0xC000
+    0205de86: r0 = -1000 <_fw+0xFFFFFFFFFFFFFC18 : fffffffffffffc18 >
+    0205de8a: goto 4 <_fw+0x5DE90 : 5de90 >
+    0205de8c: nop
+    0205de8e: r0 += 1
+    0205de90: if (r0 != 0) goto -6 <_fw+0x5DE8C : 5de8c >
+    0205de92: rts
+
+===== FUNC 0x0205de94 size=56B ninsn=19 callers=0 callees=0 =====
+  data-refs: 0x01c0977c
+    0205de94: r0 = 29398908 <_fw+0x1C0977C : 1c0977c >
+    0205de9a: r1 = 0
+    0205de9c: b[r0+16] = r1
+    0205dea0: rts
+    0205dea2: nop
+    0205dea4: if (r0 != 0) goto 50 <_fw+0x5DED8 : 5ded8 >
+    0205dea6: pfetch [r5]
+    0205deaa: pfetch [r5]
+    0205deae: pfetch [r5]
+    0205deb2: pfetch [r5]
+    0205deb6: pfetch [r5]
+    0205deba: pfetch [r5]
+    0205debe: pfetch [r5]
+    0205dec0: nop
+    0205dec2: nop
+    0205dec4: nop
+    0205dec6: nop
+    0205dec8: nop
+    0205deca: nop
+
+===== FUNC 0x0205decc size=38B ninsn=9 callers=0 callees=0 =====
+  data-refs: 0x01c0c2e0
+    0205decc: [--sp] = rets
+    0205dece: r0 = 29410016 <_fw+0x1C0C2E0 : 1c0c2e0 >
+    0205ded4: r1 = 33939396 <_fw+0x205DFC4 : 205dfc4 >
+    0205deda: [r0+0] = r1
+    0205dedc: r0 = 33940726 <_fw+0x205E4F6 : 205e4f6 >
+    0205dee2: r2 = 33904873 <_fw+0x20558E8 : 20558e8 >
+    0205dee8: r1 = 0
+    0205deea: call -377920 <_fw+0x1AB0 : 1ab0 >
+    0205def0: pc = [sp++]
+
+===== FUNC 0x0205def2 size=100B ninsn=30 callers=0 callees=0 =====
+    0205def2: [--sp] = {rets, r4}
+    0205def4: sp += -4
+    0205def6: r0 = 80
+    0205def8: call -30672 <_fw+0x5672E : 5672e >
+    0205defe: [sp] = r0
+    0205df00: if (r0 == 0) goto 70 <_fw+0x5DF48 : 5df48 >
+    0205df02: call -14150 <_fw+0x5A7C2 : 5a7c2 >
+    0205df08: r0 = 33904873 <_fw+0x20558E8 : 20558e8 >
+    0205df0e: r1 = 4194316 <_fw+0x40000C : 40000c >
+    0205df14: r3 = sp + 0
+    0205df16: r2 = 1
+    0205df18: r4 = 1
+    0205df1a: call -18484 <_fw+0x596EC : 596ec >
+    0205df20: r2 = [sp]
+    0205df22: if (r0 == 0) goto 12 <_fw+0x5DF30 : 5df30 >
+    0205df24: r0 = r2
+    0205df26: call -26258 <_fw+0x5789A : 5789a >
+    0205df2c: r4 = 0
+    0205df2e: goto 18 <_fw+0x5DF42 : 5df42 >
+    0205df30: r1 = 0
+    0205df32: r0 = r2
+    0205df34: call -11678 <_fw+0x5B19C : 5b19c >
+    0205df3a: r0 = [sp]
+    0205df3c: call -26280 <_fw+0x5789A : 5789a >
+    0205df42: r0 = r4
+    0205df44: sp += 4
+    0205df46: {pc, r4} = [sp++]
+    0205df48: call -21570 <_fw+0x58B0C : 58b0c >
+    0205df4e: call -384194 <_fw+0x292 : 292 >
+    0205df54: goto -2 <_fw+0x5DF54 : 5df54 >
+
+===== FUNC 0x0205df56 size=194B ninsn=61 callers=0 callees=0 =====
+    0205df56: [--sp] = {rets, r7-r4}
+    0205df58: sp += -36
+    0205df5a: [sp+32] = r2
+    0205df5c: if (r0 == 0) goto 166 <_fw+0x5E004 : 5e004 >
+    0205df5e: r4 = r1 + 1
+    0205df60: if (r4 >= 8) goto 166 <_fw+0x5E00A : 5e00a >
+    0205df64: [sp] = r0
+    0205df66: r0 = sp + 0
+    0205df68: r0 += 4
+    0205df6a: r2 = 0
+    0205df6c: goto 14 <_fw+0x5DF7C : 5df7c >
+    0205df6e: r3 = [sp+32]
+    0205df70: r5 = r3 + 4
+    0205df72: [sp+32] = r5
+    0205df74: r3 = [r3+0]
+    0205df76: [r0+r2<<2] = r3
+    0205df7a: r2 += 1
+    0205df7c: ifs (r2 < r1) goto -18 <_fw+0x5DF6E : 5df6e >
+    0205df80: r5 = 33904873 <_fw+0x20558E8 : 20558e8 >
+    0205df86: r6 = 4194307 <_fw+0x400002 : 400002 >
+    0205df8c: r7 = 8109162 <_fw+0x7BBC6A : 7bbc6a >
+    0205df92: goto 92 <_fw+0x5DFF0 : 5dff0 >
+    0205df94: r1 = icfg
+    0205df98: r0 = 21
+    0205df9a: if ((r1 & 0xFF) != 0) goto 102 <_fw+0x5E006 : 5e006 >
+    0205dfa0: r1 = icfg
+    0205dfa4: r3 = r1 & 0x300
+    0205dfa8: r1 = 1
+    0205dfaa: r2 = 1
+    0205dfac: if (r3 != 768) goto 18 <_fw+0x5DFC4 : 5dfc4 >
+    0205dfb2: r2 = cnum
+    0205dfb6: r2 = r2 << 9
+    0205dfb8: r3 = [r2+r7<<2]
+    0205dfbc: r2 = 1
+    0205dfbe: if (r3 != 7) {
+    0205dfc2: r2 = 0
+    0205dfc4: r3 = icfg
+    0205dfc8: r3 = r3 & 0x300
+    0205dfcc: if (r3 != 768) goto 18 <_fw+0x5DFE4 : 5dfe4 >
+    0205dfd2: r1 = cnum
+    0205dfd6: r1 = r1 << 9
+    0205dfd8: r3 = [r1+r7<<2]
+    0205dfdc: r1 = 1
+    0205dfde: if (r3 != 7) {
+    0205dfe2: r1 = 0
+    0205dfe4: if ((r2 & r1) != 0) goto 30 <_fw+0x5E006 : 5e006 >
+    0205dfe8: r0 = 2
+    0205dfea: call -17806 <_fw+0x59A62 : 59a62 >
+    0205dff0: r3 = sp + 0
+    0205dff2: r0 = r5
+    0205dff4: r1 = r6
+    0205dff6: r2 = r4
+    0205dff8: call -18706 <_fw+0x596EC : 596ec >
+    0205dffe: if (r0 == 21) goto -110 <_fw+0x5DF94 : 5df94 >
+    0205e002: goto 2 <_fw+0x5E006 : 5e006 >
+    0205e004: r0 = -22
+    0205e006: sp += 36
+    0205e008: {pc, r7-r4} = [sp++]
+    0205e00a: call -21764 <_fw+0x58B0C : 58b0c >
+    0205e010: call -384388 <_fw+0x292 : 292 >
+    0205e016: goto -2 <_fw+0x5E016 : 5e016 >

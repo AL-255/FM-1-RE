@@ -1,0 +1,7 @@
+0x020000c6  sz=50    calls_in=0   out=1   conf=medium  Copies chip/boot parameter fields from a struct into global config at 0x1c7fd50
+0x020000f8  sz=410   calls_in=0   out=1   conf=high    PLL/system clock configuration: computes MHz dividers, programs clock SFRs (0x16A00) with delay loops
+0x0200197e  sz=226   calls_in=13  out=1   conf=medium  clk_get_rate: returns clock frequency for a named source (uart/pll/etc.) via strcmp and clock struct
+0x02001a74  sz=60    calls_in=3   out=1   conf=medium  clk_find: looks up clock/device node by name in table (handles '#C' prefix) via strcmp
+0x02001ab0  sz=1194  calls_in=8   out=16  conf=high    Main clock/system init: sets up PLL/clock tree, GPIOs and subsystem init; also clk_set_rate front-end
+0x0200417e  sz=1020  calls_in=1   out=18  conf=medium  Board/device init: load+default 118-byte settings block, config GPIO/MIDI pins, set up DAC/audio output node and defaults
+0x0200457a  sz=3684  calls_in=0   out=48  conf=medium  App entry: run initcall arrays, clock/PLL + temp-trim init, create 'plnk1' task, device-node message loop; also per-channel MIDI/LED enable

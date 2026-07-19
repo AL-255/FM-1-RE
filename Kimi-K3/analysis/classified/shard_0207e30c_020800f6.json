@@ -1,0 +1,282 @@
+[
+ {
+  "addr": "0x0207e30c",
+  "subsystem": "BT",
+  "name": "sm_address_resolution_idle",
+  "purpose": "return 1 when no address resolution in progress",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e320",
+  "subsystem": "BT",
+  "name": "sm_event_packet_build",
+  "purpose": "build sm_just_event_t header (type,size,handle,addr)",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e346",
+  "subsystem": "BT",
+  "name": "sm_event_dispatch",
+  "purpose": "invoke registered SM packet handlers with event",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e386",
+  "subsystem": "BT",
+  "name": "sm_event_send_simple",
+  "purpose": "build 16-byte SM event, dispatch to handlers",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e3a8",
+  "subsystem": "BT",
+  "name": "sm_address_resolution_start",
+  "purpose": "stage peer addr, notify identity-resolving started (0xD8)",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e3d8",
+  "subsystem": "MEMLIB",
+  "name": "is_buffer_all_zero",
+  "purpose": "return 1 if all buffer bytes zero",
+  "conf": "high"
+ },
+ {
+  "addr": "0x0207e3ee",
+  "subsystem": "BT",
+  "name": "sm_key_is_zero",
+  "purpose": "check 16-byte SMP key all zero",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e3f6",
+  "subsystem": "BT",
+  "name": "sm_event_send_with_device",
+  "purpose": "build SM event including device-db lookup and peer address",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207e446",
+  "subsystem": "BT",
+  "name": "sm_address_resolution_done",
+  "purpose": "finish identity resolving, notify success (0xDA) or failure",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e510",
+  "subsystem": "BT",
+  "name": "sm_event_send_for_conn",
+  "purpose": "emit connection SM event (pairing started 0xDF) to handlers",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e540",
+  "subsystem": "BT",
+  "name": "sm_pairing_ctx_reset",
+  "purpose": "reset pairing context bytes before LTK/encryption work",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207e55c",
+  "subsystem": "BT",
+  "name": "sm_get_pairing_auth_req",
+  "purpose": "compute auth_req byte for SMP pairing PDU",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e57c",
+  "subsystem": "BT",
+  "name": "sm_prepare_pairing_pdus",
+  "purpose": "assemble SMP pairing request/response PDU fields (iocap,oob,authreq,keydist)",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e63a",
+  "subsystem": "BT",
+  "name": "sm_io_cap_encode",
+  "purpose": "encode IO capability bits into method-matrix index",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207e65a",
+  "subsystem": "BT",
+  "name": "sm_set_io_capabilities",
+  "purpose": "store local IO capability encoding for pairing",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e672",
+  "subsystem": "BT",
+  "name": "sm_select_stk_method",
+  "purpose": "pick pairing method via 5x5 IO-capability matrix table",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e73e",
+  "subsystem": "BT",
+  "name": "sm_pairing_timer_stop",
+  "purpose": "remove active pairing timeout timer",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e75a",
+  "subsystem": "BT",
+  "name": "sm_pairing_timer_start",
+  "purpose": "arm 30s pairing timeout with callback and connection",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e788",
+  "subsystem": "BT",
+  "name": "sm_pairing_timer_clear_handle",
+  "purpose": "stop pairing timer if handle matches active pairing",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e7aa",
+  "subsystem": "BT",
+  "name": "sm_conn_timeout_restart",
+  "purpose": "restart per-connection 300ms response timer",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207e7e4",
+  "subsystem": "BT",
+  "name": "sm_pairing_timer_restart",
+  "purpose": "wrapper re-arming the pairing timeout timer",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207e7ea",
+  "subsystem": "BT",
+  "name": "sm_event_send_ext",
+  "purpose": "build 16-byte SM event with extra stack arg, dispatch",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207e818",
+  "subsystem": "BT",
+  "name": "sm_pairing_execute_method",
+  "purpose": "dispatch pairing user-interaction events per selected method",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207e8bc",
+  "subsystem": "BT",
+  "name": "sm_state_advance",
+  "purpose": "increment connection pairing state field",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207e8c2",
+  "subsystem": "BT",
+  "name": "sm_c1_xor_p1",
+  "purpose": "SMP c1: XOR block with pairing req/rsp p1 value",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207e90c",
+  "subsystem": "BT",
+  "name": "sm_peer_io_cap_matches",
+  "purpose": "compare peer IO capability encoding against local",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207e938",
+  "subsystem": "BT",
+  "name": "sm_bonding_store_peer_keys",
+  "purpose": "store peer LTK/keys in bonding db, notify identity created",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207ea7e",
+  "subsystem": "BT",
+  "name": "sm_run",
+  "purpose": "btstack SM main pairing/encryption/resolution state machine",
+  "conf": "high"
+ },
+ {
+  "addr": "0x0207f482",
+  "subsystem": "BT",
+  "name": "sm_load_peer_ltk_from_db",
+  "purpose": "fetch bonded LTK/EDIV/RAND into pairing context",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207f4fe",
+  "subsystem": "BT",
+  "name": "sm_encryption_start_continue",
+  "purpose": "advance deferred encryption-start state then run SM",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207f588",
+  "subsystem": "BT",
+  "name": "sm_deinit",
+  "purpose": "free SM global state block",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207f5a6",
+  "subsystem": "BT",
+  "name": "sm_encryption_key_size",
+  "purpose": "return negotiated encryption key size for handle",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207f5c0",
+  "subsystem": "BT",
+  "name": "sm_authenticated",
+  "purpose": "return authenticated flag for connection handle",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207f5d8",
+  "subsystem": "BT",
+  "name": "sm_security_level",
+  "purpose": "return security level for connection handle",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207f5f6",
+  "subsystem": "BT",
+  "name": "sm_disconnect",
+  "purpose": "disconnect BLE link with reason 0x13, stop pairing timer",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207f668",
+  "subsystem": "BT",
+  "name": "sm_zero_pad",
+  "purpose": "zero key buffer tail from offset to byte 15",
+  "conf": "med"
+ },
+ {
+  "addr": "0x0207f67c",
+  "subsystem": "BT",
+  "name": "sm_hci_event_handler",
+  "purpose": "SM HCI events (connect/disconnect/encrypt/LE-rand) plus rand/encrypt results",
+  "conf": "high"
+ },
+ {
+  "addr": "0x0207fcfa",
+  "subsystem": "BT",
+  "name": "sm_pairing_state_reset",
+  "purpose": "reset connection pairing state to initial phase",
+  "conf": "low"
+ },
+ {
+  "addr": "0x0207fd0e",
+  "subsystem": "BT",
+  "name": "sm_pdu_handler",
+  "purpose": "receive/validate SMP PDUs via code-length table, drive pairing",
+  "conf": "high"
+ },
+ {
+  "addr": "0x020800f6",
+  "subsystem": "UNKNOWN",
+  "name": "sub_020800f6",
+  "purpose": "zero 16-word RAM block at 0x01c0d6f4",
+  "conf": "low"
+ }
+]
