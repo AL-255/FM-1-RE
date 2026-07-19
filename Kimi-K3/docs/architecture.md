@@ -79,7 +79,7 @@ The FM-1 is a Yamaha-DX7-compatible 6-operator FM synthesizer on a
 | `0x04000` | app area (JLFS, chipkey-encrypted): directory + `app.bin` at `0x4120` (0x8E59C) + `cfg_tool.bin` at `0x926BC` (0x17F) + `cfg` at `0x9283B` (0xB79) |
 | `0x94000` | VM region (config KV store, 0x55000) |
 | `0xE9000` | BTIF region (0x1000) |
-| `0xEA000` | **USR region** (user patch storage, 0x12000) — *demo blob home* |
+| `0xEA000` | USR region (user patch storage, 0x12000) |
 | `0xFC000+` | free / `key_mac` at `0xFF000` |
 
 The firmware container is a **UFW** update package (chip "AC791N") holding
@@ -212,8 +212,7 @@ The demo uses a small **basic polyphonic synthesizer** (`firmware/src/synth.cpp`
 shared verbatim with the host build): 8 voices, polyblep saw/square/sine
 oscillators + sub-osc, linear ADSR, Chamberlin state-variable lowpass, and 4
 presets (SAW LEAD / SQ BASS / SYNC PAD / PLUCK) selected by program change.
-~13 KB — small enough to sit in the USR flash region (`0xEA000`, XIP
-`0x020E5EE0`).
+~13 KB, appended to the end of `app.bin` (XIP `0x0208E600`).
 
 ### On-device display
 
@@ -242,16 +241,17 @@ make image                     # -> Kimi-K3/build/{fm1_demo_flash.bin,demo_blob.
 patches, re-encrypts, and verifies. The DAC hook needs no flash patch (RAM
 pointer at runtime).
 
-### Flash
+### Upload (official JieLi method)
 
 ```bash
-tools/flash.sh dump            # full 1 MiB backup first (mandatory)
-tools/flash.sh write           # app area at 0x0 + demo blob at 0xEA000
-tools/flash.sh restore FILE    # back to stock
+tools/upload.sh                # build + upload with JieLi isd_download
 ```
 
-Uses `3rd-party/jl-uboot-tool` (supports BR22); the FM-1 must be in UBOOT
-update mode (see `tools/README.md` for the strap + recovery).
+`tools/build_official.py` stages the patched `app.bin` (+demo blob at
+`0x8E600`) and support files; JieLi `isd_download` re-packs, encrypts and
+flashes the JLFS image over USB (produces `build/official/jl_isd.fw`). A
+raw alternative (`tools/flash.sh`, jl-uboot-tool) writes the same image at
+flash `0x0` after a mandatory full-flash backup. See `tools/README.md`.
 
 ### Host native mode
 

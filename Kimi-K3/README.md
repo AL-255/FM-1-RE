@@ -47,11 +47,15 @@ Kimi-K3/
 │   ├── src/                   ← demo runtime, hooks, shared voices
 │   ├── host/                  ← ALSA app, LV2 plugin, test tools
 │   └── Makefile               ← `make` (blob), `make host`, `make image`
-├── build/                     ← flasher outputs (fm1_demo_flash.bin, demo_blob.bin)
+├── build/                     ← flasher outputs (official/jl_isd.fw)
 ├── tools/
-│   ├── build_image.py         ← UFW decode → patch hooks → re-encrypt
+│   ├── build_official.py      ← stage patched app.bin + blob for isd_download
+│   ├── build_image.py         ← UFW decode → patch hooks → re-encrypt (reference)
 │   ├── symbols.py             ← export blob entry addresses
-│   ├── flash.sh               ← dump-first flashing via jl-uboot-tool
+│   ├── make_font.py           ← 8×16 LCD font generator (Pillow)
+│   ├── isd_config.ini         ← FM-1 (AC693N) download config
+│   ├── upload.sh              ← OFFICIAL upload via JieLi isd_download
+│   ├── flash.sh               ← raw alternative (jl-uboot-tool, dump-first)
 │   └── README.md              ← flashing/recovery instructions
 └── reference/                 ← (git-ignored) SDK clones
 ```
@@ -84,9 +88,14 @@ The 51-shard LLM classification was run over `analysis/shards/` with
 
 ## Flashing (real hardware)
 
-See `tools/README.md`. In short: put the FM-1 in UBOOT update mode, dump the
-flash first (`tools/flash.sh --dump`), then write the demo image
-(`tools/flash.sh --write`). Recovery = write the dumped stock image back.
+See `tools/README.md`. Primary method is JieLi's official `isd_download`:
+
+```bash
+tools/upload.sh            # build + upload (official JieLi method)
+```
+
+A raw alternative (`tools/flash.sh`, jl-uboot-tool) writes the same image
+after a mandatory full-flash backup. Recovery = restore the backup.
 
 ## The demo
 
@@ -125,7 +134,7 @@ cd firmware && make host
 - all 2062 functions classified (0.5 % unknown) → `docs/function-index.md`
 - msfa/Dexed engine proven byte-exact (tables) and mapped line-by-line
 - pi32v2 demo blob builds with the JieLi toolchain (13 KB), links at XIP
-  `0x020E5EE0` (flash `0xEA000`)
+  `0x0208E600` (appended to `app.bin` end)
 - image builder re-encrypts the app area with chip key `0x980F`; hook
   patches verified by re-decryption (`tools/build_image.py`)
 - host: synth render, MIDI input path, preset switching, and the LV2 plugin

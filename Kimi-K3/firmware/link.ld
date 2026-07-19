@@ -13,7 +13,7 @@ OUTPUT_FORMAT("elf32-pi32v2")
 OUTPUT_ARCH(pi32v2)
 ENTRY(demo_install)
 
-DEMO_XIP_BASE = 0x020E5EE0;   /* fw 0xEA000 (USR region), XIP-linear-mapped */
+DEMO_XIP_BASE = 0x0208E600;   /* appended to app.bin end; XIP = app offset + base */
 DEMO_RAM_BASE = 0x01C30000;
 
 MEMORY {
