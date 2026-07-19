@@ -1,6 +1,6 @@
-// FM-1 synth — LV2 instrument plugin (Dexed/msfa engine, demo patches).
-// MIDI in -> mono audio out. A float "patch" control selects E.PIANO/BASS/
-// BRASS/LEAD (0-3). Built for Linux DAWs (Ardour, Carla, Zrythm...).
+// FM-1 synth — LV2 instrument plugin (basic poly synth, same code as the
+// on-device demo). MIDI in -> mono audio out. A float "patch" control selects
+// SAW LEAD/SQ BASS/SYNC PAD/PLUCK (0-3). Built for Linux DAWs.
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,8 +9,7 @@
 #include "lv2/atom/atom.h"
 #include "lv2/urid/urid.h"
 #include "lv2/midi/midi.h"
-#include "dexed.h"
-#include "voices.h"
+#include "synth.h"
 
 #define PLUGIN_URI "https://github.com/fm1-re/fm1-dexed-lv2"
 
@@ -23,13 +22,10 @@ typedef struct {
   const LV2_Atom_Sequence* midi_in;
   float* audio_out;
   const float* patch_ctl;
-  Dexed* synth;
   uint32_t rate;
   int cur_patch;
-  float* render_buf;
+  int16_t* scratch;
 } FM1Synth;
-
-uint32_t dexed_platform_millis(void) { static uint32_t t; return t += 2; }
 
 static LV2_Handle instantiate(const LV2_Descriptor* d, double rate,
                               const char* path, const LV2_Feature* const* features) {
@@ -45,9 +41,8 @@ static LV2_Handle instantiate(const LV2_Descriptor* d, double rate,
   if (!s->map) { free(s); return nullptr; }
   s->midi_event = s->map->map(s->map->handle, LV2_MIDI__MidiEvent);
   s->atom_sequence = s->map->map(s->map->handle, LV2_ATOM__Sequence);
-  s->synth = new Dexed(8, s->rate);
-  { uint8_t init156[156]; s->synth->loadInitVoice(); s->synth->getVoiceData(init156); voices_capture_init(init156); }
-  s->render_buf = (float*)malloc(4096 * sizeof(float));
+  synth_init((float)rate);
+  s->scratch = (int16_t*)malloc(4096 * sizeof(int16_t));
   s->cur_patch = -1;
   return (LV2_Handle)s;
 }
@@ -62,12 +57,9 @@ static void connect_port(LV2_Handle h, uint32_t port, void* data) {
 }
 
 static void apply_patch(FM1Synth* s, int p) {
-  uint8_t v[156];
-  p = p < 0 ? 0 : (p >= DEMO_N_PATCHES ? DEMO_N_PATCHES - 1 : p);
+  p = p < 0 ? 0 : (p >= SYNTH_N_PRESETS ? SYNTH_N_PRESETS - 1 : p);
   if (p == s->cur_patch) return;
-  voices_build(p, v);
-  s->synth->loadVoiceParameters(v);
-  s->synth->doRefreshVoice();
+  synth_set_preset(p);
   s->cur_patch = p;
 }
 
@@ -77,7 +69,7 @@ static void run(LV2_Handle h, uint32_t n_samples) {
 
   if (s->patch_ctl) apply_patch(s, (int)floorf(*s->patch_ctl + 0.5f));
 
-  /* process MIDI events with sample offsets */
+  /* process MIDI events */
   LV2_Atom_Sequence* seq = (LV2_Atom_Sequence*)s->midi_in;
   LV2_Atom_Event* next = nullptr;
   uintptr_t seq_end = 0;
@@ -90,14 +82,13 @@ static void run(LV2_Handle h, uint32_t n_samples) {
   float* out = s->audio_out;
   uint32_t done = 0;
   while (done < n_samples) {
-    /* fire events due up to the next 64-sample boundary */
-    uint32_t upto = done + 64 < n_samples ? done + 64 : n_samples;
+    uint32_t upto = done + 256 < n_samples ? done + 256 : n_samples;
     while (next && (uint32_t)next->time.frames < upto) {
       if (next->body.type == s->midi_event) {
         const uint8_t* m = (const uint8_t*)(next + 1);
         uint8_t st = m[0] & 0xF0;
-        if (st == 0x90) { if (m[2]) s->synth->keydown(m[1], m[2]); else s->synth->keyup(m[1]); }
-        else if (st == 0x80) s->synth->keyup(m[1]);
+        if (st == 0x90) { if (m[2]) synth_note_on(m[1], m[2]); else synth_note_off(m[1]); }
+        else if (st == 0x80) synth_note_off(m[1]);
         else if (st == 0xC0) apply_patch(s, m[1]);
       }
       uintptr_t evnext = (uintptr_t)next + sizeof(LV2_Atom_Event) + ((next->body.size + 7u) & ~7u);
@@ -105,7 +96,8 @@ static void run(LV2_Handle h, uint32_t n_samples) {
     }
     uint32_t chunk = upto - done;
     if (chunk) {
-      s->synth->getSamples(out + done, (uint16_t)chunk);
+      synth_render(s->scratch, (int)chunk);
+      for (uint32_t i = 0; i < chunk; i++) out[done + i] = s->scratch[i] / 32768.0f;
       done += chunk;
     } else break;
   }
@@ -113,8 +105,7 @@ static void run(LV2_Handle h, uint32_t n_samples) {
 
 static void cleanup(LV2_Handle h) {
   FM1Synth* s = (FM1Synth*)h;
-  free(s->render_buf);
-  delete s->synth;
+  free(s->scratch);
   free(s);
 }
 

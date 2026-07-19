@@ -199,20 +199,36 @@ GATT (service/char UUIDs at `0x020436C5/0x020436E0`, MIDI on ATT handle
 ### Design
 
 The demo is a **patched hybrid image**: the stock firmware stays intact
-(drivers, OS, USB-MIDI, UI all keep working), and our own msfa/Dexed engine
-is grafted in at three points:
+(drivers, OS, USB-MIDI, UI all keep working), and our own synthesizer is
+grafted in at three points:
 
 | hook | mechanism | effect |
 |---|---|---|
-| boot install | trampoline patched over `usr_app_task` entry (`0x02022CFE`) → `__tramp_usr_app_task` | runs `demo_install()` at app start: builds the engine + patches, swaps the DAC feed |
-| DAC render | RAM pointer `[0x01C0F6F4+36] = demo_dac_cb` (atomic, at install) | the DAC plays **our** engine; stock synth compute disabled |
-| MIDI | trampoline over `midi_msg_dispatch` entry (`0x0201F5F4`) → `__tramp_midi` | note on/off + program change forwarded to our engine, stock handler resumes |
+| boot install | trampoline patched over `usr_app_task` entry (`0x02022CFE`) → `__tramp_usr_app_task` | runs `demo_install()` at app start: brings up synth + LCD overlay + UI timer, swaps the DAC feed |
+| DAC render | RAM pointer `[0x01C0F6F4+36] = demo_dac_cb` (atomic, at install) | the DAC plays **our** synth; stock synth compute disabled |
+| MIDI | trampoline over `midi_msg_dispatch` entry (`0x0201F5F4`) → `__tramp_midi` | note on/off + program change forwarded to our synth, stock handler resumes |
 
-The demo code (Dexed engine, 8 voices, 4 patches: E.PIANO/BASS/BRASS/LEAD,
-autoplay melody after 4 s idle) is compiled for pi32v2 with the JieLi
-toolchain and linked at **XIP `0x020E5EE0`** — the **USR flash region
-`0xEA000`** (user patch storage), inside the whole-flash linear XIP map.
-~21 KB.
+The demo uses a small **basic polyphonic synthesizer** (`firmware/src/synth.cpp`,
+shared verbatim with the host build): 8 voices, polyblep saw/square/sine
+oscillators + sub-osc, linear ADSR, Chamberlin state-variable lowpass, and 4
+presets (SAW LEAD / SQ BASS / SYNC PAD / PLUCK) selected by program change.
+~13 KB — small enough to sit in the USR flash region (`0xEA000`, XIP
+`0x020E5EE0`).
+
+### On-device display
+
+A 240×56 RGB565 overlay at the bottom of the LCD (SPI1, driven directly per
+the stock `lcd_spi_write_window` protocol, see `io/08-display.md`) is
+refreshed at ~8 Hz from a `sys_timer` and shows:
+
+- `KEY` — physical key ids currently held, read from the key scanner's
+  per-key state array (`0x01C0E670+2836+i*2`, 41 keys, see `io/07-input.md`);
+- `MIDI` — the last note name/octave/velocity received through
+  `midi_msg_dispatch` (USB/UART/BLE MIDI or the stock keybed), plus active
+  voice count;
+- the current preset name.
+
+Text is rendered with an 8×16 bitmap font (`tools/make_font.py`, Pillow).
 
 ### Build
 

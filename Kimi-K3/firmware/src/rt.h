@@ -42,6 +42,9 @@ void demo_midi_note(int on, uint8_t note, uint8_t vel);
 void demo_midi_pc(uint8_t program);
 void demo_render(int16_t* buf, int nframes);
 void demo_hooks_install(void);
+void demo_ui_tick(void* priv);
+void demo_ui_timer_install(unsigned period_ms);
+unsigned char demo_key_state(int i);
 
 #ifdef __cplusplus
 }

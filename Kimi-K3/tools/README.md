@@ -44,11 +44,12 @@ tools/flash.sh write          # flash the demo
 After writing, power-cycle. Expected behavior:
 
 - the unit boots normally (stock UI shows),
-- ~4 seconds after boot an autoloop demo melody starts playing on the
-  headphone/line output,
-- USB-MIDI (and UART/BLE MIDI) notes play our engine; program change 0–3
-  selects E.PIANO / BASS / BRASS / LEAD demo patches,
-- the stock UI/menu remains usable.
+- USB-MIDI (and UART/BLE MIDI) notes play our basic synth on the
+  headphone/line output; program change 0–3 selects SAW LEAD / SQ BASS /
+  SYNC PAD / PLUCK,
+- the bottom of the LCD shows the demo overlay: physical keys held (`KEY`),
+  the last MIDI note received (`MIDI`), and the current preset,
+- the stock UI/menu remains usable above the overlay.
 
 ## Recovery (back to stock)
 

@@ -88,9 +88,19 @@ See `tools/README.md`. In short: put the FM-1 in UBOOT update mode, dump the
 flash first (`tools/flash.sh --dump`), then write the demo image
 (`tools/flash.sh --write`). Recovery = write the dumped stock image back.
 
+## The demo
+
+The on-device demo is a **basic polyphonic synthesizer** (8 voices, polyblep
+saw/square/sine oscillators + sub-osc, ADSR, Chamberlin lowpass; 4 presets:
+SAW LEAD / SQ BASS / SYNC PAD / PLUCK) grafted into the stock firmware via
+boot/MIDI trampolines + a DAC-feed hook, plus an **on-device display UI**:
+a 240×56 LCD overlay (bottom of the panel, SPI1, 8×16 font) showing physical
+keys held (`KEY`), the last MIDI note received (`MIDI`), and the preset.
+The identical synth code runs on the host (`make host`).
+
 ## Host native mode
 
-The same Dexed engine and demo patches also run on the host:
+The same basic synth and presets also run on the host:
 
 ```bash
 cd firmware && make host
@@ -103,21 +113,23 @@ cd firmware && make host
   out. Works with any MIDI keyboard (including the FM-1 itself over USB-MIDI).
 - `firmware/host/lv2/fm1_dexed.so` — **LV2 instrument plugin** (loads into
   Ardour, Carla, Zrythm and other DAWs): MIDI in → mono audio out, with a
-  `Patch` control (0–3: E.PIANO/BASS/BRASS/LEAD). Install:
+  `Patch` control (0–3: SAW LEAD/SQ BASS/SYNC PAD/PLUCK). Install:
   `mkdir -p ~/.lv2/fm1-dexed.lv2 && cp firmware/host/lv2/{fm1_dexed.so,manifest.ttl,fm1_dexed.ttl} ~/.lv2/fm1-dexed.lv2/`.
 - `firmware/host/sim` — offline render of the whole demo flow to a WAV.
 - `firmware/host/midi_blaster` — MIDI-injection test utility.
+- `firmware/host/render_test` — reference validation of the Dexed/msfa port
+  (kept in `firmware/dexed/`, used to prove the stock engine's identity).
 
 ## Verification status
 
 - all 2062 functions classified (0.5 % unknown) → `docs/function-index.md`
 - msfa/Dexed engine proven byte-exact (tables) and mapped line-by-line
-- pi32v2 demo blob builds with the JieLi toolchain (21 KB), links at XIP
+- pi32v2 demo blob builds with the JieLi toolchain (13 KB), links at XIP
   `0x020E5EE0` (flash `0xEA000`)
 - image builder re-encrypts the app area with chip key `0x980F`; hook
   patches verified by re-decryption (`tools/build_image.py`)
-- host: engine render, MIDI input path, patch switching, and the LV2 plugin
-  all validated (ASan-clean)
+- host: synth render, MIDI input path, preset switching, and the LV2 plugin
+  all validated
 - one upstream Synth_Dexed heap-overflow bug found and fixed
   (`voices[i]`→`voices[note]` in `Dexed::keydown`)
 - on-device behavior not yet flashed/verified in this workspace — the flash

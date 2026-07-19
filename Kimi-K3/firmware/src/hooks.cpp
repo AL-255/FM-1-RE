@@ -68,6 +68,20 @@ extern "C" void demo_hooks_install(void) {
   *(volatile unsigned char*)ENG_SYNTH_EN = 0;       /* stop stock synth compute */
 }
 
+/* register the ~8 Hz UI refresh timer (runs in the installing task's ctx) */
+#define SYS_TIMER_ADD ((unsigned (*)(void*, void(*)(void*), unsigned))0x02004036)
+extern "C" void demo_ui_timer_install(unsigned period_ms) {
+  SYS_TIMER_ADD(0, (void(*)(void*))&demo_ui_tick, period_ms);
+}
+
+/* physical key state: 0 released / 1 pressed / 2 held (scanner array) */
+#define KEY_STATE_BASE 0x01C0E670u
+extern "C" unsigned char demo_key_state(int i) {
+  return *(volatile unsigned char*)(KEY_STATE_BASE + 2836 + i * 2 + 1);
+}
+
 #else  /* host build: no hardware hooks */
 extern "C" void demo_hooks_install(void) {}
+extern "C" void demo_ui_timer_install(unsigned period_ms) { (void)period_ms; }
+extern "C" unsigned char demo_key_state(int i) { (void)i; return 0; }
 #endif

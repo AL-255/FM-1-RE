@@ -18,36 +18,26 @@
 #include <cmath>
 #include <pthread.h>
 #include <unistd.h>
-#include "dexed.h"
-#include "voices.h"
+#include "synth.h"
 
 static volatile int running = 1;
 static void on_sigint(int) { running = 0; }
 
-static Dexed* synth;
 static pthread_mutex_t synth_lock = PTHREAD_MUTEX_INITIALIZER;
 static int cur_patch = 0;
 
-uint32_t dexed_platform_millis(void) {
-  static uint32_t t;
-  return t += 2;
-}
-
 static void engine_note(int on, int note, int vel) {
   pthread_mutex_lock(&synth_lock);
-  if (on && vel) synth->keydown((uint8_t)note, (uint8_t)vel);
-  else synth->keyup((uint8_t)note);
+  if (on && vel) synth_note_on(note, vel);
+  else synth_note_off(note);
   pthread_mutex_unlock(&synth_lock);
 }
 static void engine_patch(int p) {
-  uint8_t v[156];
-  voices_build(p % DEMO_N_PATCHES, v);
   pthread_mutex_lock(&synth_lock);
-  synth->loadVoiceParameters(v);
-  synth->doRefreshVoice();
+  synth_set_preset(p);
   pthread_mutex_unlock(&synth_lock);
-  cur_patch = p % DEMO_N_PATCHES;
-  printf("patch %d: %.10s\n", cur_patch, voices_name(cur_patch));
+  cur_patch = p % SYNTH_N_PRESETS;
+  printf("patch %d: %s\n", cur_patch, synth_preset_name(cur_patch));
   fflush(stdout);
 }
 
@@ -96,7 +86,7 @@ static void* audio_thread(void* argp) {
   int16_t buf[1024];
   while (running) {
     pthread_mutex_lock(&synth_lock);
-    synth->getSamples(buf, (uint16_t)a->period);
+    synth_render(buf, (int)a->period);
     pthread_mutex_unlock(&synth_lock);
     snd_pcm_sframes_t w = snd_pcm_writei(a->pcm, buf, a->period);
     if (w == -EPIPE) snd_pcm_prepare(a->pcm);
@@ -119,8 +109,7 @@ int main(int argc, char** argv) {
   }
 
   signal(SIGINT, on_sigint);
-  synth = new Dexed(8, rate);
-  { uint8_t init156[156]; synth->loadInitVoice(); synth->getVoiceData(init156); voices_capture_init(init156); }
+  synth_init((float)rate);
   engine_patch(init_patch);
 
   /* audio out */
@@ -179,7 +168,7 @@ int main(int argc, char** argv) {
     printf("no MIDI input found — run with -l to list ports, -m CLIENT:PORT to choose\n");
   }
 
-  printf("FM-1 synth running (8 voices, %.10s). Ctrl-C to quit.\n", voices_name(cur_patch));
+  printf("FM-1 synth running (%s). Ctrl-C to quit.\n", synth_preset_name(cur_patch));
   while (running) {
     snd_seq_event_t* ev;
     snd_seq_event_input(seq, &ev);
@@ -190,6 +179,6 @@ int main(int argc, char** argv) {
   pthread_join(ath, nullptr);
   snd_pcm_close(pcm);
   snd_seq_close(seq);
-  delete synth;
+
   return 0;
 }
