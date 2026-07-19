@@ -2,85 +2,72 @@
 
 How the M-Vave M-UPGRADE client talks to the FM-1 (JieLi BR22/AC693N), and
 how `tools/fm1_ota.py` (the Linux CLI) replicates it. No UBOOT button exists
-on this device — the update is done over USB while the stock firmware runs.
+on this device — the update runs over USB while the stock firmware runs.
 
 ## Device identities
 
 | mode | VID:PID | name | what |
 |---|---|---|---|
 | normal | `0x4C4A:0xC755` | "FM-1 Midi" composite | USB-MIDI (EP4 bulk 0x04/0x84) + UAC1 audio |
-| OTA   | `0x4D4A:0x4155` | "ota-FM-1" USB HID   | the OTA loader (`usb_hid_ota.bin`) after the enter trigger |
+| OTA   | `0x4D4A:0x4155` | "ota-FM-1" USB HID   | the OTA loader (`usb_hid_ota.bin`) |
 
-## Enter-OTA trigger (normal → OTA)
+## Flow (from M-UPGRADE's own logs)
 
-Verified from the firmware's loader-mode check at `0x02006384`
-(`usb_midi_rx_parse`): the host writes **8 raw bytes** to the MIDI bulk
-endpoint (EP4 OUT, `0x04`) as ONE packet:
+1. **Handshake / verification query** over MIDI SysEx — device responds
+   ("Connected to device: FM-1"), stays in normal mode.
+2. (user picks the file + starts upgrade) **"First step (verification)"** →
+   the device **enters OTA mode** and re-enumerates as `ota-FM-1` (USB HID).
+3. **HID transfer** of the `.fwsc`; the loader verifies + flashes and reboots.
+
+## Handshake query (captured from M-UPGRADE, byte-identical across sessions)
+
+37-byte SysEx over the MIDI bulk endpoint:
 
 ```
-[ 0x02 0x01 0x42 0x04 0x02 0x01 , 0x7D | 0x7F , 0xF7 ]
-  \________ 6-byte magic ______/   \_ cmd _/   \_end_/
+F0 00 32 45 58 01 00 00 23 4D 5A 44 79 05 26 4C 19
+[17 × 00]
+60 06 F7
 ```
 
-- The 6-byte magic is the value stored at `0x01C07E2C` (the firmware memcmps
-  against it).
-- byte 6: `0x7D` → enter loader/OTA mode (mask-ROM call `0xFFC02532`);
-  `0x7F` → the variant that only posts a reply (no reset).
-- byte 7: `0xF7` terminator.
-- The check requires the packet to be **exactly 8 bytes** (`if (len != 8) skip`).
-
-After this, the device reboots into the OTA loader and re-enumerates as
-`0x4D4A:0x4155` (USB HID). This is a raw USB write, not a MIDI message —
-use libusb/pyusb (needs device-node write permission: install
-`tools/99-jieli-fm1.rules` or run with sudo).
+`4D 5A 44 79` = `"MZDy"`. The two trailing fields (`05 26 4C 19`, `60 06`)
+are CRCs over the packet. The device accepts it and stays in normal mode —
+this is device discovery, not the OTA trigger.
 
 ## syscmd core (device control, cmd ids 17–48)
 
-Used by the client to query the device (and for misc control) over the MIDI
-path (`serial_midi_task 0x02027AF4` → `update_cmd_dispatch 0x02026BC4`).
-
-Packet framing (from `update_cmd_dispatch`):
+Over the MIDI path (`serial_midi_task 0x02027AF4` → `update_cmd_dispatch
+0x02026BC4`). Packet framing:
 
 ```
-[ hdr : 2 ][ cmd : 1 ][ length : 3 LE ][ payload : length ][ checksum : 1 ]
+[ hdr : 2 ][ cmd : 1 ][ length : 3 LE ][ payload : length ][ ~sum(payload)&0xFF ]
 ```
 
-- `length` = payload byte count (24-bit LE). Total packet = `length + 7`.
-- `checksum` = `~sum(payload) & 0xFF` (or `0xFF` when length == 0).
-- `hdr` (2 bytes) is not validated by the dispatcher (don’t-care / magic).
+Commands: info (17, 18, 21, 33), ring read (34), invoke registered callback
+(35, 36, 48, and the default "write" for 19,20,22–32,37–47); callback table
+at `0x01C0E670+1336`.
 
-Commands (from the `tbh` jump table at `0x02026C26`):
+## Enter-OTA trigger (the "First step")
 
-| cmd | handler | meaning |
-|---|---|---|
-| 17 | `0x02026C44` | device info reply (27 B blob) |
-| 18 | `0x02026C5D` | device info reply (13 B blob) |
-| 21 | `0x02026C6A` | get version (27 B blob) |
-| 33 | `0x02026C95` | device info reply (13 B blob) |
-| 34 | `0x02026CAD` | ring-buffer read (OTA data/log out) |
-| 35 | `0x02026CD5` | invoke registered callback `[tbl+N][0]` (24-bit arg) |
-| 36 | `0x02026D16` | invoke registered callback `[tbl+N][8]` (with payload) |
-| 48 | `0x02026D5E` | invoke registered callback `[tbl+N][4]` + reply checksum |
-| default (19,20,22–32,37–47) | `0x02026D88` | invoke registered callback `[tbl+N][4]` with payload — the generic "write" |
+After the handshake, the client's upgrade command makes the device write the
+boot record `FM-1_009` + `ota-` (112 B, the `UPDATA_PARM` from JieLi's
+`update.h`) and soft-reset (`[0x10000] |= 0x10`). The SPL reads the record
+and boots the OTA loader (`usb_hid_ota.bin`).
 
-The registered-callback table is at `0x01C0E670+1336` (8 slots × {+0,+4,+8,+12}).
+**Not fully recovered here:** the exact bytes of that upgrade command and the
+HID transfer framing. A candidate loader-mode trigger found in the firmware
+(`0x02006384`): an 8-byte packet `[<6B magic @0x01C07E2C>, 0x7D|0x7F, 0xF7]`
+did not reset the device in my tests — the real "First step" is a different
+(later) command. Getting it needs a live M-UPGRADE + USB capture, which I
+could not do in this environment (GUI inaccessible, usbmon needs root).
 
 ## .fwsc transfer (OTA mode)
 
-The OTA loader (`usb_hid_ota.bin`, 19969 B, header magic `0x5881EBAA`)
-parses the `.fwsc` and its update blocks (JL update magic `0x5A04..0x5A08`,
-per-block CRC, then `jieli_ufw_update_run` in the app verifies/flashes).
-The client streams the `.fwsc` to the loader over HID reports (64-byte).
-
-**Caveat:** the exact HID report framing (command header per report) was not
-fully recovered from `usb_hid_ota.bin` in this pass — the CLI implements a
-configurable report layer (see `tools/fm1_ota.py upload()`), which should be
-validated/adjusted against a live M-UPGRADE USB capture (usbmon on Windows,
-or usbmon under Wine). Everything else (trigger, identities, syscmd framing,
-.fwsc structure) is verified against the firmware/binary.
+The OTA loader parses the `.fwsc` (JL update magic `0x5A04..0x5A08`, per-block
+CRC) and flashes it (`jieli_ufw_update_run`). The client streams it over HID
+reports (64-byte). Exact per-report framing unconfirmed — see the caveat above.
 
 ## Files
 
-- `tools/fm1_ota.py` — the Linux CLI.
+- `tools/fm1_ota.py` — the Linux CLI (handshake + syscmd core + transfer skeleton).
 - `tools/99-jieli-fm1.rules` — udev rule for plugdev USB access.
-- `tools/build_fwsc.py` — builds `build/FM-1-demo.fwsc` (the image to flash).
+- `tools/build_fwsc.py` — builds `build/FM-1-demo.fwsc`.

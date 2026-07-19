@@ -39,6 +39,15 @@ except ImportError:
 VID_NORMAL, PID_NORMAL = 0x4C4A, 0xC755      # FM-1 Midi composite
 VID_OTA, PID_OTA = 0x4D4A, 0x4155            # ota-FM-1 USB HID
 EP_MIDI_OUT = 0x04                            # EP4 OUT (bulk)
+
+# Handshake / verification query — captured verbatim from M-UPGRADE
+# (byte-identical across sessions; the device accepts it and stays in normal
+# mode; entering OTA happens on the following "upgrade" command).
+HANDSHAKE = bytes([
+    0xF0, 0x00, 0x32, 0x45, 0x58, 0x01, 0x00, 0x00, 0x23,
+    0x4D, 0x5A, 0x44, 0x79, 0x05, 0x26, 0x4C, 0x19,
+] + [0x00] * 17 + [0x60, 0x06, 0xF7])
+
 LOADER_MAGIC = bytes([0x02, 0x01, 0x42, 0x04, 0x02, 0x01])
 JL_UPDATE_MAGIC = 0x5A04
 
@@ -107,17 +116,24 @@ def cmd_enter(args):
     if not d:
         sys.exit("device not found (need normal-mode FM-1 Midi 4c4a:c755)")
     if args.dry_run:
-        print("would claim if4 and write to EP4 OUT:", (LOADER_MAGIC + bytes([0x7D, 0xF7])).hex())
+        print("handshake (EP4 OUT):", HANDSHAKE.hex())
         return
     claim(d, 4)
+    # 1. handshake / verification query over the MIDI bulk endpoint (the
+    #    M-UPGRADE "First step"; the device accepts it and stays in normal mode)
+    n = d.write(EP_MIDI_OUT, HANDSHAKE, timeout=2000)
+    print(f"sent handshake ({n} bytes)")
+    time.sleep(1.0)
+    # 2. request OTA entry (loader trigger)
     code = 0x7F if args.fake else 0x7D
     msg = LOADER_MAGIC + bytes([code, 0xF7])
     n = d.write(EP_MIDI_OUT, msg, timeout=2000)
     print(f"sent OTA-enter trigger ({n} bytes, code {code:#04x}); "
           "device should re-enumerate as ota-FM-1 (4d4a:4155)")
-    time.sleep(1.5)
+    time.sleep(2.0)
     d2 = find_device(VID_OTA, PID_OTA)
-    print("ota device present" if d2 else "ota device NOT seen (magic/transport may differ)")
+    print("ota device present" if d2 else
+          "ota device NOT seen — enter trigger may differ (see docs/io/11-ota-protocol.md)")
 
 def cmd_flash(args):
     _need_usb()
