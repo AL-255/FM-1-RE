@@ -109,7 +109,11 @@ static void draw_ui(void) {
 
 extern "C" void demo_ui_tick(void* priv) {
   (void)priv;
-  /* always refresh: heals stock-UI overdraw + live key state */
+  /* event-driven refresh + 1.2 s heartbeat to heal stock-UI overdraw */
+  static int hb;
+  if (ui_dirty) hb = 0;
+  else if (++hb < 10) return;
+  hb = 0;
   draw_ui();
   lcd_ovl_flush();
   ui_dirty = 0;

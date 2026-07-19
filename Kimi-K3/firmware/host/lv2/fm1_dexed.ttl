@@ -34,4 +34,4 @@
         lv2:maximum 3 ;
         lv2:portProperty lv2:integer
     ] ;
-    rdfs:comment "FM-1 custom Dexed/msfa 6-op FM synth (E.PIANO/BASS/BRASS/LEAD), reverse-engineered from the M-Vave FM-1." .
+    rdfs:comment "FM-1 basic poly synth (SAW LEAD/SQ BASS/SYNC PAD/PLUCK), reverse-engineered from the M-Vave FM-1." .

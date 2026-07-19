@@ -7,7 +7,7 @@
 //   fm1_synth -l                      list MIDI input ports
 //   fm1_synth [-m CLIENT:PORT] [-p 0..3] [-d hw:0,0] [-r rate]
 //     -m  connect to this MIDI source (default: first available)
-//     -p  initial patch (0 E.PIANO, 1 BASS, 2 BRASS, 3 LEAD)
+//     -p  initial patch (0 SAW LEAD, 1 SQ BASS, 2 SYNC PAD, 3 PLUCK)
 //     -d  ALSA playback device (default "default")
 //     -r  sample rate (default 44100)
 #include <alsa/asoundlib.h>
