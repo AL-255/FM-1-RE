@@ -120,16 +120,25 @@ callback table at `0x01C0E670+1336`.
   the VM/loader flash area (49 read requests), the payload-CRC self-check
   (`@0x020832E2`, plain CRC16 — verified passing for stock and patched images)
   passes, yet the device still does not reset (stays `4c4a:c755`, no error
-  frame). The verifier's result handler takes the ERROR path because a notify
-  code `b[0x1C0E670+60]` is left non-zero by an **obfuscated no-op/product
-  check** (`FUNC_02083394` → callback chain → `FUNC_02027F88`). Tried and
-  ruled out as the compare key: ota.bin outer/inner datacrc/hdrcrc, UFW edcrc,
-  inner name, the compressed bytes, and the *decompressed* image (both a
-  `.data` slack byte `0x5AD0` and a code-region string byte `0x2DA2`, the
-  latter via a literal-preserving flip). So the check is **not** a simple
-  content/CRC compare of the loader. Next: capture the exact notify code
-  (status record / RAM read), or model the SFR CRC unit (`0x13500`) and the
-  `FUNC_02027508` VM wear-level write path for a write fault.
+  frame; M-UPGRADE likewise reports only "Verification timeout"). The
+  verifier's result handler takes the ERROR path because a notify code
+  `b[0x1C0E670+60]` is left non-zero by an **obfuscated no-op/product check**
+  (`FUNC_02083394` → callback chain → `FUNC_02027F88`). Tried and ruled out as
+  the compare key: ota.bin outer/inner datacrc/hdrcrc, UFW edcrc, inner name,
+  the compressed bytes, the *decompressed* image (a `.data` slack byte
+  `0x5AD0` **and** a code-region string byte `0x2DA2`, via both a re-encode
+  and a literal-preserving flip with valid CRCs), the UFW header `wa3/wa4`
+  fields, the app `FM-1_0xx` string + header markers (bumped to `_014`, still
+  refused), and the app build strings (`VER-$…INCLUDE_…`, `V11.D11.121…`).
+  A genuinely-different loader is **not** obtainable: the V14 M-UPGRADE bundle
+  embeds the *identical* V13 `usb_hid_ota.bin` (`aa eb 81 58` = hdrcrc `0xebaa`
+  + datacrc `0x5881`, byte-identical to raw_fw), the public `FM-1.fwsc` on
+  M-Vave's CDN is byte-identical to raw_fw, and no V09/V14 `.fwsc` is exposed.
+  So the loader is V13 everywhere we can reach. So the check is **not** a
+  simple content/CRC/version compare of the loader; it most plausibly requires
+  a different loader *build* (unavailable) or a device-state value we cannot
+  read without JTAG/UART. Next: capture the exact notify code, or the stored
+  loader, via hardware access.
 - The OTA-mode ID block differs from the normal-mode one; the version
   encoding inside the ID block (`03 93 03` vs `13 33 03` region) is not
   decoded, only reproduced.
