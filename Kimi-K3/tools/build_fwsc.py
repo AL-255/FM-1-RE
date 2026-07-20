@@ -39,12 +39,12 @@ FLASH_SIZE = 0x94000
 BLOB_OFF = 0x46600              # demo blob offset inside app.bin (font region)
 CHIPKEY = 0x980F                # 38927
 
-# version identity inside app.bin: "FM-1_009" rodata string + version byte;
-# keep the product string unchanged (boot-record name must stay "FM-1_009"),
-# bump only the version byte so M-UPGRADE's same-version check passes.
-VER_OFF = 0x4F241               # offset of the 24-byte name/version field
-VER_NAME = b"FM-1_009"
-VER_BYTE = 0x0E
+# Product name + version live in the interleave block MARKERS: the byte at
+# offset 0x2F of each 0x30 block encodes one ASCII char as (char + index + 1).
+# "FM-1_009" -> markers[5,6,7] are the version digits. Bump to _014 so the
+# stock V9 device's same-version check passes (verified by the M-UPGRADE
+# parser spec: name up to '_', then 3 decimal digits, ends at raw 0x7D).
+VER_NAME = "FM-1_014"
 HDRKEY = 0xFFFF
 
 USR_APP_TASK = 0x02022CFE
@@ -53,6 +53,18 @@ MIDI_DISPATCH = 0x0201F5F4
 
 def enc_call(site, target):
     return b"\x80\xff" + struct.pack("<i", target - site - 6)
+
+
+def encode_markers(name):
+    """Encode 'FM-1_014' into the 20 interleave markers (char+index+1,
+    terminator 0x7D for the rest)."""
+    m = []
+    for i in range(20):
+        if i < len(name):
+            m.append((ord(name[i]) + i + 1) & 0xFF)
+        else:
+            m.append(0x7D)
+    return m
 
 
 def load_fwsc_header(data):
@@ -84,9 +96,14 @@ def main():
     flash[APP_BIN_FW + USR_APP_TASK - XIP: APP_BIN_FW + USR_APP_TASK - XIP + 6] = enc_call(USR_APP_TASK, tramp)
     flash[APP_BIN_FW + MIDI_DISPATCH - XIP: APP_BIN_FW + MIDI_DISPATCH - XIP + 6] = enc_call(MIDI_DISPATCH, tramp_midi)
     flash[APP_BIN_FW + BLOB_OFF: APP_BIN_FW + BLOB_OFF + len(demo)] = demo
-    # NOTE: no version bump / no JLFS datacrc touch — the stock step-1
-    # verifier accepts the image as-is; changing those fields made the
-    # verifier take a different (failing) path.
+    # product/version string in app.bin: the device's OTA verifier reads the
+    # version from here ("FM-1_009"); bump it in step with the header markers
+    voff = APP_BIN_FW + 0x4F241
+    assert bytes(flash[voff:voff + 8]) == b"FM-1_009", "product string not found"
+    flash[voff:voff + 8] = VER_NAME.encode()
+    # JLFS entry for app.bin (at 0x4020): [hdrcrc:2][datacrc:2][off][size][flags][name]
+    # datacrc must cover the patched app.bin or the OTA loader rejects the image
+    struct.pack_into("<H", flash, 0x4022, jl_crc16(bytes(flash[APP_BIN_FW:APP_BIN_FW + APP_BIN_SIZE])))
 
     jl_sfc_cipher(flash, APP_AREA_BASE, len(flash) - APP_AREA_BASE, APP_AREA_BASE, CHIPKEY)
     data[FLASH_DISK:FLASH_DISK + FLASH_SIZE] = flash
@@ -114,8 +131,10 @@ def main():
     struct.pack_into("<H", header, 0, hdrcrc)
     jl_enc_cipher(header, 0, 0x40, HDRKEY)                 # re-encrypt UFW header
 
-    # ---- 3. re-interleave the header into 0x30 blocks (keep stock markers)
+    # ---- 3. re-interleave the header into 0x30 blocks with the bumped
+    # name/version markers (FM-1_014) so the stock V9 device accepts it
     out = bytearray(data)
+    markers = encode_markers(VER_NAME)
     for i in range(20):
         blk = bytes(header[i * 0x2f:(i + 1) * 0x2f]) + bytes([markers[i]])
         out[i * 0x30:(i + 1) * 0x30] = blk

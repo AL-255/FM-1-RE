@@ -41,28 +41,10 @@ import argparse, glob, os, select, struct, sys, time
 # ---------------------------------------------------------------- constants
 HS_QUERY = bytes([0xF0, 0x00, 0x32, 0x45, 0x00, 0x00, 0x00, 0x40, 0x7F, 0xF7])
                                    # handshake query; device replies with its
-                                   # 37-byte ID block on header 00 32 45 58
+                                   # 34-byte "NAME_VERSION" ID block
 UPGRADE_CMD = bytes([0xF0, 0x22, 0x24, 0x35, 0x7F, 0xF7])
-KEEPALIVE = bytes([
-    0xF0, 0x00, 0x32, 0x41, 0x11, 0x01, 0x00, 0x00, 0x00, 0x02,
-    0x00, 0x00, 0x20, 0x01, 0x00, 0x00, 0x40, 0x03, 0x0e, 0x22,
-    0x58, 0x4b, 0x58, 0x08, 0x06, 0x19, 0x60, 0x10, 0x07, 0xF7])
-# special deterministic exchanges, captured verbatim from M-UPGRADE:
-# device "ping" request: addr=0x100 len=0x402 -> reply KEEPALIVE
-# pre-finish read: addr=0x4A00 len=16 -> reply PREFINISH_RESP
-PREFINISH_RESP = bytes([
-    0xF0, 0x00, 0x32, 0x41, 0x41, 0x01, 0x00, 0x00, 0x00, 0x14, 0x01,
-    0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x1F, 0x7C, 0x70, 0x43, 0x0F,
-    0x3E, 0x21, 0x55, 0x67, 0x1C, 0x77, 0x5D, 0x75, 0x72, 0x03, 0x0F,
-    0x3C, 0x70, 0x19, 0x05, 0xF7])
-# finish request: flashtype=0xF addr=0 len=8 -> reply "success" on channel 41 01
-FINISH_RESP = bytes([
-    0xF0, 0x00, 0x32, 0x41, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x00, 0x00, 0x0F, 0x01, 0x00, 0x00, 0x73, 0x6A, 0x0D, 0x1B, 0x56,
-    0x6C, 0x5C, 0x39, 0x00, 0x1C, 0x00, 0xF7])
-HDR_DATA = b"\x00\x32\x41\x41"   # request/response channel
-HDR_HS   = b"\x00\x32\x45\x58"   # handshake channel
-KEEPALIVE_PERIOD = 12.0
+HDR_DATA = b"\x00\x32\x41\x41"   # request/response channel (pack7 of 00 59 30)
+HDR_HS   = b"\x00\x32\x45\x58"   # handshake channel (pack7 of 00 59 11)
 REQ_TIMEOUT = 8.0                # s without requests -> step considered done
 MAXDATA = 512                    # max bytes per response
 RESP_DELAY = float(os.environ.get("FM1_RESP_DELAY", "0.010"))
@@ -107,13 +89,26 @@ def build_response(addr, data, req_len=None, flashtype=0):
             + e7((req_len << 4) | flashtype) + pack7(data + bytes([chk])) + b"\xF7")
 
 def parse_request(pkt):
-    """-> (flashtype, addr, length) or None."""
-    if len(pkt) < 18 or pkt[0] != 0xF0 or pkt[1:5] != HDR_DATA:
+    """Decode a device read-request frame -> (flashtype, addr, length) or None.
+    Frame (after pack7): [00 59][type=0x30][N:3 LE][fl][addr:4 LE][len:3 LE][chk].
+    addr is a raw u32 (0xE0000000 = verification-done, 0xF0000000 = upgrade-done)."""
+    if len(pkt) < 4 or pkt[0] != 0xF0 or pkt[-1] != 0xF7:
         return None
-    f1 = u7(pkt[5:9]); addr = u7(pkt[9:13]); lnf = u7(pkt[13:17])
-    if f1 != 0:
+    u = unpack7(pkt[1:-1])
+    if len(u) < 15 or u[:2] != b"\x00\x59" or u[2] != 0x30:
         return None
-    return (lnf & 0xF, addr, lnf >> 4)
+    fl = u[6]
+    addr = int.from_bytes(u[7:11], "little")
+    ln = int.from_bytes(u[11:14], "little")
+    return (fl, addr, ln)
+
+# "success" reply for the done-signals (verification/upgrade complete)
+def build_success(addr):
+    payload = b"success\x00"
+    body = bytes([0x00, 0x59, 0x30]) + (len(payload) + 8).to_bytes(3, "little") \
+        + bytes([0]) + addr.to_bytes(4, "little") + len(payload).to_bytes(3, "little") + payload
+    chk = (~sum(body[6:])) & 0xFF
+    return b"\xF0" + pack7(body + bytes([chk])) + b"\xF7"
 
 # ------------------------------------------------------------- .fwsc image
 def fwsc_logical(path):
@@ -200,23 +195,15 @@ class MidiLink:
 # ------------------------------------------------------------------ pieces
 def serve_requests(link, logical, stop_after=REQ_TIMEOUT, progress=True, on_finish=None):
     """Answer device read requests until they stop. Returns request count.
-    Special requests handled with the captured deterministic replies:
-    ping (addr=0x100,len=0x402) -> KEEPALIVE; pre-finish (0x4A00,16) ->
-    PREFINISH_RESP; flashtype=0xF -> FINISH_RESP (+ on_finish callback)."""
-    served = 0; last_req = time.time(); last_ka = 0.0; last_addr = -1
+    Per the M-UPGRADE spec: data requests (addr < 0x10000000) are served from
+    the logical image; addr 0xE0000000 (verification done) and 0xF0000000
+    (upgrade done) get the 8-byte "success" reply with the addr echoed."""
+    served = 0; last_req = time.time(); last_addr = -1
     while True:
         pkt = link.read_sysex(1.0)
         if pkt is None:
             if time.time() - last_req > stop_after:
                 return served
-            if time.time() - last_ka > KEEPALIVE_PERIOD:
-                try:
-                    link.write(KEEPALIVE)
-                except OSError:
-                    return served
-                last_ka = time.time()
-            continue
-        if pkt[1:5] != HDR_DATA:
             continue
         req = parse_request(pkt)
         if req is None:
@@ -224,22 +211,13 @@ def serve_requests(link, logical, stop_after=REQ_TIMEOUT, progress=True, on_fini
         fl, addr, ln = req
         if LOG:
             LOG.write(f"{time.time()-t0:9.3f} fl={fl:x} addr={addr:#x} len={ln}\n"); LOG.flush()
-        time.sleep(RESP_DELAY)   # MCU needs time to process (M-UPGRADE paces ~10ms)
-        if fl == 0xF:
-            link.write(FINISH_RESP)
+        if addr in (0xE0000000, 0xF0000000):
+            link.write(build_success(addr))
+            last_req = time.time()
             if on_finish:
-                on_finish()
-            last_req = time.time()
+                on_finish(addr)
             continue
-        if addr == 0x100 and ln == 0x402:
-            link.write(KEEPALIVE)
-            last_req = time.time()
-            continue
-        if addr == 0x4A00 and ln == 16:
-            link.write(PREFINISH_RESP)
-            served += 1
-            last_req = time.time()
-            continue
+        time.sleep(RESP_DELAY)   # MCU needs time to process (M-UPGRADE paces ~10ms)
         data = logical[addr:addr + ln]
         if len(data) < ln:
             data = data + bytes(ln - len(data))
@@ -291,8 +269,15 @@ def cmd_serve(a):
     link.write(HS_QUERY)
     link.read_sysex(2.0)
     link.write(UPGRADE_CMD)
-    done = []
-    n = serve_requests(link, logical, on_finish=lambda: done.append(1) or setattr(link, '_fin', 1))
+    fin = {}
+    def _fin(addr):
+        if addr == 0xF0000000:
+            fin['done'] = True
+            raise StopIteration
+    try:
+        n = serve_requests(link, logical, on_finish=_fin)
+    except StopIteration:
+        n = -1
     print(f"\n  done: {n} requests served")
     return 0
 
@@ -308,8 +293,16 @@ def cmd_flash(a):
     link.write(HS_QUERY)
     link.read_sysex(2.0)
     link.write(UPGRADE_CMD)
-    n = serve_requests(link, logical, stop_after=6.0, progress=False)
-    print(f"  step 1 served {n} verification requests; waiting for OTA mode ...")
+    fin = {}
+    def _fin1(addr):
+        if addr == 0xE0000000:
+            fin['v'] = True
+            raise StopIteration
+    try:
+        n = serve_requests(link, logical, stop_after=6.0, progress=False, on_finish=_fin1)
+    except StopIteration:
+        n = -1
+    print(f"  step 1 served {n} requests{' (verification done)' if fin.get('v') else ''}; waiting for OTA mode ...")
     try:
         os.close(link.fileno())
     except OSError:
@@ -324,12 +317,13 @@ def cmd_flash(a):
     link.write(HS_QUERY)
     link.read_sysex(2.0)
     link.write(UPGRADE_CMD)
-    fin = {}
-    def _fin():
-        fin['done'] = True
-        raise StopIteration
+    fin2 = {}
+    def _fin2(addr):
+        if addr == 0xF0000000:
+            fin2['done'] = True
+            raise StopIteration
     try:
-        n = serve_requests(link, logical, on_finish=_fin)
+        n = serve_requests(link, logical, on_finish=_fin2)
     except StopIteration:
         n = -1
     print(f"\n  step 2 complete (finish exchange answered); waiting for reboot ...")
