@@ -90,14 +90,46 @@ callback table at `0x01C0E670+1336`.
 
 ## Known open items
 
-- **Same-version refusal.** With the device running V9 firmware, both
-  M-UPGRADE ("Same firmware version detected: 9") and the device itself
-  (step-1 stalls after the JLFS entry walk at logical `0x92C3B`, the
-  `cfg`/`eq_cfg_hw.bin` entries) refuse a V9 file. With the device on V13,
-  the same V9 file passes step 1 and flashes. The exact field that carries
-  the product version for this check is not pinned down yet (not app.bin's
-  `FM-1_009` string/byte, not `script.ver`, not isd_config.ini, not the UFW
-  header; probably inside the still-undecrypted `ota.bin` payload).
+- **Same-version / no-op refusal — how far we got.** The step-1 verifier
+  (`FUNC_02082D24`, called from `FUNC_02083394` when the update-state field is
+  `0x5A06`) reads the incoming image and refuses to reboot into the OTA loader
+  when it judges the update a "no-op" vs what's already on the device. The
+  accept path (`FUNC_02027F88`) requires verifier-return==0 **and** the notify
+  byte `b[0x1C0E670+60]==0` to build the `FM-1_009 + ota-` boot record and
+  soft-reset (`[0x10000] |= 0x10`).
+- **cfg gate — BYPASSED (verified on hardware).** The verifier reads the
+  incoming `cfg` JLFS daisychain entry header (32 bytes at flash `0x9283B`,
+  logical `0x92C3B`) and compares it to the stored cfg; identical → refuse.
+  `tools/build_fwsc.py` flips one padding byte in the nested `eq_cfg_hw.bin`
+  entry's 16-byte name field, which changes the cfg `datacrc`/`hdrcrc` while
+  leaving the eq payload and both entry names byte-identical. The device then
+  proceeds past cfg to the `ota.bin` stage. (This is the first no-op gate;
+  confirmed by request-log: 9 requests → 49 requests.)
+- **ota.bin format — fully reverse-engineered.** It is a nested bootable
+  image at logical `0xA6F20` (fwsc file `0xA6F34`, `0x4E01` bytes):
+  `[outer_hdrcrc:2][outer_datacrc:2][doff=0x20][dlen=0x4DE1][attr=0x41][rsvd][last]["usb_hid_ota.bin"]`
+  then an inner boot header
+  `[inner_hdrcrc:2][inner_datacrc:2][imgsize=0x5B1C][loadaddr=0x1C0A800][rsvd]["usb_hid_ota.bin"]`
+  then 6 back-to-back **LZ4 block-format** chunks (continuous dictionary;
+  dsize `0x1000`×5 + `0xB1C` = `0x5B1C`). All CRCs are `jl_crc16`
+  (CRC-16/CCITT-FALSE); `inner_datacrc` covers the *decompressed* image;
+  `outer_datacrc` covers `ota[0x20:]`. UFW-entry dcrc covers the whole file.
+  See `tools/patch_ota.py` / `tools/patch_ota2.py` for a field-by-field proof
+  and a working LZ4 decoder/encoder.
+- **ota.bin / accept gate — STILL BLOCKED.** The verifier loads ota.bin to
+  the VM/loader flash area (49 read requests), the payload-CRC self-check
+  (`@0x020832E2`, plain CRC16 — verified passing for stock and patched images)
+  passes, yet the device still does not reset (stays `4c4a:c755`, no error
+  frame). The verifier's result handler takes the ERROR path because a notify
+  code `b[0x1C0E670+60]` is left non-zero by an **obfuscated no-op/product
+  check** (`FUNC_02083394` → callback chain → `FUNC_02027F88`). Tried and
+  ruled out as the compare key: ota.bin outer/inner datacrc/hdrcrc, UFW edcrc,
+  inner name, the compressed bytes, and the *decompressed* image (both a
+  `.data` slack byte `0x5AD0` and a code-region string byte `0x2DA2`, the
+  latter via a literal-preserving flip). So the check is **not** a simple
+  content/CRC compare of the loader. Next: capture the exact notify code
+  (status record / RAM read), or model the SFR CRC unit (`0x13500`) and the
+  `FUNC_02027508` VM wear-level write path for a write fault.
 - The OTA-mode ID block differs from the normal-mode one; the version
   encoding inside the ID block (`03 93 03` vs `13 33 03` region) is not
   decoded, only reproduced.

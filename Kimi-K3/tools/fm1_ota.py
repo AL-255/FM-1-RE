@@ -207,6 +207,8 @@ def serve_requests(link, logical, stop_after=REQ_TIMEOUT, progress=True, on_fini
             continue
         req = parse_request(pkt)
         if req is None:
+            if LOG:
+                LOG.write(f"{time.time()-t0:9.3f} RAW {pkt.hex()}\n"); LOG.flush()
             continue
         fl, addr, ln = req
         if LOG:

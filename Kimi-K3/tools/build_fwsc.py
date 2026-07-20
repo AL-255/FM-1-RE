@@ -38,13 +38,17 @@ FLASH_DISK = 0x414              # flash.bin offset inside the .fwsc
 FLASH_SIZE = 0x94000
 BLOB_OFF = 0x46600              # demo blob offset inside app.bin (font region)
 CHIPKEY = 0x980F                # 38927
+# ota.bin (the OTA loader) UFW entry: logical 0xA6F20 == fwsc file offset 0xA6F34
+# (logical = file - 20 for offsets past the 960-byte interleaved header).
+OTA_FW = 0xA6F34
+OTA_SIZE = 0x4E01
 
 # Product name + version live in the interleave block MARKERS: the byte at
 # offset 0x2F of each 0x30 block encodes one ASCII char as (char + index + 1).
 # "FM-1_009" -> markers[5,6,7] are the version digits. Bump to _014 so the
 # stock V9 device's same-version check passes (verified by the M-UPGRADE
 # parser spec: name up to '_', then 3 decimal digits, ends at raw 0x7D).
-VER_NAME = "FM-1_014"
+VER_NAME = "FM-1_009"
 HDRKEY = 0xFFFF
 
 USR_APP_TASK = 0x02022CFE
@@ -81,10 +85,14 @@ def load_fwsc_header(data):
 
 def main():
     data = bytearray(open(FWSC, "rb").read())
-    demo = open(DEMO_BIN, "rb").read()
-    dmap = json.load(open(DEMO_MAP))
-    tramp, tramp_midi = dmap["__tramp_usr_app_task"], dmap["__tramp_midi"]
-    assert dmap["demo_install"] >= XIP + BLOB_OFF, "blob must be linked at the font region"
+    # FM1_STOCK_APP=1 builds a control image: NO demo app.bin modifications
+    # (used to isolate whether the OTA refusal is caused by the demo code).
+    stock_app = os.environ.get("FM1_STOCK_APP") == "1"
+    if not stock_app:
+        demo = open(DEMO_BIN, "rb").read()
+        dmap = json.load(open(DEMO_MAP))
+        tramp, tramp_midi = dmap["__tramp_usr_app_task"], dmap["__tramp_midi"]
+        assert dmap["demo_install"] >= XIP + BLOB_OFF, "blob must be linked at the font region"
 
     # ---- 1. flash.bin: decrypt app area, patch, write blob, re-encrypt
     flash = bytearray(data[FLASH_DISK:FLASH_DISK + FLASH_SIZE])
@@ -93,9 +101,10 @@ def main():
     assert bytes(flash[APP_BIN_FW:APP_BIN_FW + APP_BIN_SIZE]) == open(APPBIN, "rb").read(), \
         "app area decryption mismatch (chipkey)"
 
-    flash[APP_BIN_FW + USR_APP_TASK - XIP: APP_BIN_FW + USR_APP_TASK - XIP + 6] = enc_call(USR_APP_TASK, tramp)
-    flash[APP_BIN_FW + MIDI_DISPATCH - XIP: APP_BIN_FW + MIDI_DISPATCH - XIP + 6] = enc_call(MIDI_DISPATCH, tramp_midi)
-    flash[APP_BIN_FW + BLOB_OFF: APP_BIN_FW + BLOB_OFF + len(demo)] = demo
+    if not stock_app:
+        flash[APP_BIN_FW + USR_APP_TASK - XIP: APP_BIN_FW + USR_APP_TASK - XIP + 6] = enc_call(USR_APP_TASK, tramp)
+        flash[APP_BIN_FW + MIDI_DISPATCH - XIP: APP_BIN_FW + MIDI_DISPATCH - XIP + 6] = enc_call(MIDI_DISPATCH, tramp_midi)
+        flash[APP_BIN_FW + BLOB_OFF: APP_BIN_FW + BLOB_OFF + len(demo)] = demo
     # product/version string in app.bin: the device's OTA verifier reads the
     # version from here ("FM-1_009"); bump it in step with the header markers
     voff = APP_BIN_FW + 0x4F241
@@ -105,8 +114,52 @@ def main():
     # datacrc must cover the patched app.bin or the OTA loader rejects the image
     struct.pack_into("<H", flash, 0x4022, jl_crc16(bytes(flash[APP_BIN_FW:APP_BIN_FW + APP_BIN_SIZE])))
 
+    # --- cfg "same-version" no-op bypass -----------------------------------
+    # The on-device step-1 verifier reads the incoming cfg JLFS entry header
+    # (32 bytes at flash 0x9283B) and refuses the update when it matches the
+    # cfg already stored on the device (a same-config no-op). The stored cfg
+    # is byte-identical to the stock one in every image we have, so every
+    # stock-cfg image is refused regardless of the FM-1_0xx version strings.
+    # Fix: change ONE padding byte in the nested eq_cfg_hw.bin entry's 16-byte
+    # name field (inside the cfg data). That changes the cfg datacrc/hdrcrc
+    # the verifier reads, so the incoming cfg no longer matches, while the eq
+    # payload and both entry names stay byte-identical (fully valid JLFS).
+    CFG_E = 0x9283B          # cfg daisychain entry offset in flash
+    EQ_E = 0x9285B           # nested eq_cfg_hw.bin entry offset
+    EQ_DATA_LEN = 2873       # eq_cfg_hw.bin payload length
+    EQ_NAME_PAD = 0x9287A    # last pad byte of eq entry's 16-byte name field
+    assert flash[EQ_NAME_PAD] == 0xFF, "eq name padding not where expected"
+    flash[EQ_NAME_PAD] = 0xFE
+    # eq entry hdrcrc (eq datacrc unchanged: eq payload untouched)
+    struct.pack_into("<H", flash, EQ_E, jl_crc16(bytes(flash[EQ_E + 2:EQ_E + 32])))
+    # cfg datacrc covers the nested eq entry (header + payload = 32 + 2873)
+    struct.pack_into("<H", flash, CFG_E + 2,
+                     jl_crc16(bytes(flash[EQ_E:EQ_E + 32 + EQ_DATA_LEN])))
+    # cfg hdrcrc
+    struct.pack_into("<H", flash, CFG_E, jl_crc16(bytes(flash[CFG_E + 2:CFG_E + 32])))
+
     jl_sfc_cipher(flash, APP_AREA_BASE, len(flash) - APP_AREA_BASE, APP_AREA_BASE, CHIPKEY)
     data[FLASH_DISK:FLASH_DISK + FLASH_SIZE] = flash
+
+    # ---- 1.5. ota.bin (the OTA loader): the second no-op gate. The verifier
+    # loads the incoming ota.bin, DECOMPRESSES it, and refuses when the image
+    # matches the loader already on the device (same-loader no-op; a
+    # container-only edit leaves the decompressed image identical, so it does
+    # NOT work). patch_ota2 flips one provably-dead slack byte in the
+    # decompressed image (inner_datacrc 0xb295 -> 0x53e9) so the loader
+    # differs while remaining functionally identical and bootable; total size
+    # stays 0x4e01. See tools/patch_ota2.py for the proof + self-check.
+    if os.environ.get("FM1_STOCK_OTA") == "1":
+        patched_ota = bytes(data[OTA_FW:OTA_FW + OTA_SIZE])   # leave ota.bin stock
+    elif os.environ.get("FM1_OTA_FILE"):
+        patched_ota = open(os.environ["FM1_OTA_FILE"], "rb").read()
+        assert len(patched_ota) == OTA_SIZE
+    else:
+        import patch_ota2
+        ota = bytes(data[OTA_FW:OTA_FW + OTA_SIZE])
+        patched_ota = patch_ota2.patch(ota)
+        assert len(patched_ota) == OTA_SIZE
+        data[OTA_FW:OTA_FW + OTA_SIZE] = patched_ota
 
     # ---- 2. fix the UFW header: flash.bin edcrc, then listcrc, then hdrcrc
     # (listcrc is over the ENCRYPTED entry list; hdrcrc over decrypted [2:0x40])
@@ -116,13 +169,15 @@ def main():
     headersize = 0x40 + numents * 0x50
     for off in range(0x40, headersize, 0x50):
         jl_enc_cipher(header, off, 0x50, HDRKEY)           # decrypt entries
-    # update flash.bin entry's data crc (etype == 0, field at entry+4)
+    # update the data crc of the entries we modified (etype 0 = flash.bin,
+    # etype 100 = ota.bin; dcrc field at entry+4)
     for off in range(0x40, headersize, 0x50):
         etype, eindex, edcrc, ewa1, eoffset, esize, esize2, ewa2, ename = \
             struct.unpack_from("<HHHHIII44s16s", header, off)
         if etype == 0:
             struct.pack_into("<H", header, off + 4, jl_crc16(flash))
-            break
+        elif etype == 100:
+            struct.pack_into("<H", header, off + 4, jl_crc16(patched_ota))
     for off in range(0x40, headersize, 0x50):
         jl_enc_cipher(header, off, 0x50, HDRKEY)           # re-encrypt entries
     listcrc = jl_crc16(header[0x40:headersize])            # over ENCRYPTED list
