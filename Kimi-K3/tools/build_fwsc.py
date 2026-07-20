@@ -38,6 +38,13 @@ FLASH_DISK = 0x414              # flash.bin offset inside the .fwsc
 FLASH_SIZE = 0x94000
 BLOB_OFF = 0x46600              # demo blob offset inside app.bin (font region)
 CHIPKEY = 0x980F                # 38927
+
+# version identity inside app.bin: "FM-1_009" rodata string + version byte;
+# keep the product string unchanged (boot-record name must stay "FM-1_009"),
+# bump only the version byte so M-UPGRADE's same-version check passes.
+VER_OFF = 0x4F241               # offset of the 24-byte name/version field
+VER_NAME = b"FM-1_009"
+VER_BYTE = 0x0E
 HDRKEY = 0xFFFF
 
 USR_APP_TASK = 0x02022CFE
@@ -77,6 +84,9 @@ def main():
     flash[APP_BIN_FW + USR_APP_TASK - XIP: APP_BIN_FW + USR_APP_TASK - XIP + 6] = enc_call(USR_APP_TASK, tramp)
     flash[APP_BIN_FW + MIDI_DISPATCH - XIP: APP_BIN_FW + MIDI_DISPATCH - XIP + 6] = enc_call(MIDI_DISPATCH, tramp_midi)
     flash[APP_BIN_FW + BLOB_OFF: APP_BIN_FW + BLOB_OFF + len(demo)] = demo
+    # NOTE: no version bump / no JLFS datacrc touch — the stock step-1
+    # verifier accepts the image as-is; changing those fields made the
+    # verifier take a different (failing) path.
 
     jl_sfc_cipher(flash, APP_AREA_BASE, len(flash) - APP_AREA_BASE, APP_AREA_BASE, CHIPKEY)
     data[FLASH_DISK:FLASH_DISK + FLASH_SIZE] = flash

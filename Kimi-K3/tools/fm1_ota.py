@@ -1,231 +1,359 @@
 #!/usr/bin/env python3
-"""fm1_ota — Linux CLI for the M-Vave FM-1 (JieLi BR22/AC693N) firmware
-update, replicating the M-UPGRADE client's OTA flow (no UBOOT button).
+"""fm1_ota — Linux CLI reimplementation of the M-Vave M-UPGRADE OTA client
+for the FM-1 synthesizer (JieLi AC791N/BR22-class), protocol reverse-engineered
+from live ALSA-seq captures of M-UPGRADE (see Kimi-K3/docs/io/11-ota-protocol.md).
 
-Protocol (reverse-engineered, see Kimi-K3/docs/io/05-midi.md + ota.md):
+Transport: MIDI System-Exclusive messages over the device's USB-MIDI port via
+the ALSA sequencer (libasound). No pyusb, no HID, no UBOOT button.
 
-  Normal mode : FM-1 Midi composite device, VID 0x4C4A PID 0xC755.
-  Enter OTA   : raw 8-byte USB bulk write to the MIDI endpoint (EP4 OUT,
-                0x04):  [02 01 42 04 02 01, 0x7D | 0x7F, 0xF7]
-                (verified against the firmware's loader-mode check at
-                0x02006384). The device then reboots into the OTA loader.
-  OTA mode    : "ota-FM-1" USB HID device, VID 0x4D4A PID 0x4155.
-  Transfer    : the .fwsc is uploaded to the OTA loader over HID reports;
-                update blocks carry the 0x5A04..0x5A08 JL update magic and
-                are CRC-verified by the loader (jieli_ufw_update_run).
+Session flow:
+  1. normal mode ("FM-1 Midi", 4c4a:c755): handshake query -> ID block,
+     then the "upgrade" command; the device verifies the .fwsc (pulling it
+     with read requests) and reboots into the OTA loader.
+  2. OTA mode ("ota-FM-1", 4d4a:4155, still USB-MIDI): handshake again,
+     the same upgrade command, then the device pulls the whole image with
+     read requests; a flashtype=0xF "finish" request ends the transfer and
+     the loader flashes + reboots.
 
-  syscmd core (device control, cmd ids 17-48 over MIDI/USB):
-                packet = [hdr:2][cmd:1][len:3 LE][payload:len][~sum&0xFF]
-
-USB access needs write permission to the device node; install
-tools/99-jieli-fm1.rules (udev) or run with sudo.
+Wire protocol (both directions):
+  F0 00 32 41 41 [f1:4][addr:4][len:4] [pack7(data)...] F7
+    f1/addr/len : three little-endian u32, each sent as 4 x 7-bit groups
+                  (b0|b1<<7|b2<<14|b3<<21). len field = (length<<4)|flashtype.
+    request     : device->host, f1=0
+    response    : host->device, f1 = length>>4
+    data        : 8->7 LSB-first bit-packed, plus one trailing checksum byte
+                  ~(sum(data)+sum(addr_LE)+sum(len_LE)) & 0xFF
+  Handshake:    F0 00 32 45 00 00 00 40 7F F7 -> ID block on 00 32 45 58
+  Upgrade cmd:  F0 22 24 35 7F F7
+  Keepalive:    F0 00 32 41 11 ... F7 every ~13 s while transferring
+  .fwsc image : the first 20*0x30 header bytes are interleaved as
+                47 data + 1 marker per block; requests address the
+                *logical* image (markers stripped), the rest is raw.
 
 Usage:
-  fm1_ota.py find                 list the FM-1 device state (normal / OTA)
-  fm1_ota.py enter [--fake]       send the OTA-enter trigger (normal mode)
-  fm1_ota.py flash FILE.fwsc      enter OTA mode + upload the firmware
-  fm1_ota.py info                 query device version via syscmd (MIDI)
-  fm1_ota.py packet CMD [hexpay]  build a syscmd packet (offline test)
-Options: --dry-run (build/print, don't send), --vid/--pid overrides.
+  fm1_ota.py scan                    show device state (normal / OTA / none)
+  fm1_ota.py flash FILE.fwsc         full update: enter OTA + transfer + finish
+  fm1_ota.py serve FILE.fwsc         answer OTA requests (device already in OTA mode)
+  fm1_ota.py logical FILE.fwsc       offline: write the marker-stripped image
 """
-import argparse, os, struct, sys, time
+import argparse, glob, os, select, struct, sys, time
 
-try:
-    import usb.core, usb.util
-except ImportError:
-    usb = None
+# ---------------------------------------------------------------- constants
+HS_QUERY = bytes([0xF0, 0x00, 0x32, 0x45, 0x00, 0x00, 0x00, 0x40, 0x7F, 0xF7])
+                                   # handshake query; device replies with its
+                                   # 37-byte ID block on header 00 32 45 58
+UPGRADE_CMD = bytes([0xF0, 0x22, 0x24, 0x35, 0x7F, 0xF7])
+KEEPALIVE = bytes([
+    0xF0, 0x00, 0x32, 0x41, 0x11, 0x01, 0x00, 0x00, 0x00, 0x02,
+    0x00, 0x00, 0x20, 0x01, 0x00, 0x00, 0x40, 0x03, 0x0e, 0x22,
+    0x58, 0x4b, 0x58, 0x08, 0x06, 0x19, 0x60, 0x10, 0x07, 0xF7])
+# special deterministic exchanges, captured verbatim from M-UPGRADE:
+# device "ping" request: addr=0x100 len=0x402 -> reply KEEPALIVE
+# pre-finish read: addr=0x4A00 len=16 -> reply PREFINISH_RESP
+PREFINISH_RESP = bytes([
+    0xF0, 0x00, 0x32, 0x41, 0x41, 0x01, 0x00, 0x00, 0x00, 0x14, 0x01,
+    0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x1F, 0x7C, 0x70, 0x43, 0x0F,
+    0x3E, 0x21, 0x55, 0x67, 0x1C, 0x77, 0x5D, 0x75, 0x72, 0x03, 0x0F,
+    0x3C, 0x70, 0x19, 0x05, 0xF7])
+# finish request: flashtype=0xF addr=0 len=8 -> reply "success" on channel 41 01
+FINISH_RESP = bytes([
+    0xF0, 0x00, 0x32, 0x41, 0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x0F, 0x01, 0x00, 0x00, 0x73, 0x6A, 0x0D, 0x1B, 0x56,
+    0x6C, 0x5C, 0x39, 0x00, 0x1C, 0x00, 0xF7])
+HDR_DATA = b"\x00\x32\x41\x41"   # request/response channel
+HDR_HS   = b"\x00\x32\x45\x58"   # handshake channel
+KEEPALIVE_PERIOD = 12.0
+REQ_TIMEOUT = 8.0                # s without requests -> step considered done
+MAXDATA = 512                    # max bytes per response
+RESP_DELAY = float(os.environ.get("FM1_RESP_DELAY", "0.010"))
+LOG = open(os.environ.get("FM1_OTA_LOG", "/dev/null"), "a")
+t0 = time.time()
 
-# ---- device identities -----------------------------------------------------
-VID_NORMAL, PID_NORMAL = 0x4C4A, 0xC755      # FM-1 Midi composite
-VID_OTA, PID_OTA = 0x4D4A, 0x4155            # ota-FM-1 USB HID
-EP_MIDI_OUT = 0x04                            # EP4 OUT (bulk)
+# ------------------------------------------------------------------ packing
+def pack7(data):
+    out = bytearray(); acc = 0; nb = 0
+    for b in data:
+        acc |= b << nb; nb += 8
+        while nb >= 7:
+            out.append(acc & 0x7F); acc >>= 7; nb -= 7
+    if nb: out.append(acc & 0x7F)
+    return bytes(out)
 
-# Handshake / verification query — captured verbatim from M-UPGRADE
-# (byte-identical across sessions; the device accepts it and stays in normal
-# mode; entering OTA happens on the following "upgrade" command).
-HANDSHAKE = bytes([
-    0xF0, 0x00, 0x32, 0x45, 0x58, 0x01, 0x00, 0x00, 0x23,
-    0x4D, 0x5A, 0x44, 0x79, 0x05, 0x26, 0x4C, 0x19,
-] + [0x00] * 17 + [0x60, 0x06, 0xF7])
+def unpack7(s):
+    out = bytearray(); acc = 0; nb = 0
+    for b in s:
+        acc |= b << nb; nb += 7
+        while nb >= 8:
+            out.append(acc & 0xFF); acc >>= 8; nb -= 8
+    return bytes(out)
 
-LOADER_MAGIC = bytes([0x02, 0x01, 0x42, 0x04, 0x02, 0x01])
-JL_UPDATE_MAGIC = 0x5A04
+def u7(b):
+    return b[0] | (b[1] << 7) | (b[2] << 14) | (b[3] << 21)
 
-# ---- syscmd core -----------------------------------------------------------
+def e7(v):
+    return bytes([(v) & 0x7F, (v >> 7) & 0x7F, (v >> 14) & 0x7F, (v >> 21) & 0x7F])
 
-def syscmd_packet(cmd, payload=b"", hdr=0):
-    """[hdr:2][cmd:1][len:3 LE][payload][~sum(payload)&0xFF]"""
-    ck = (~sum(payload)) & 0xFF if payload else 0xFF
-    return struct.pack("<H", hdr) + bytes([cmd]) + \
-           len(payload).to_bytes(3, "little") + payload + bytes([ck])
+def build_response(addr, data, req_len=None, flashtype=0):
+    """Data response. req_len = requested length (echoed in the len field and
+    f1); the payload is the (full) data actually sent, followed by one
+    checksum byte: ~(sum(data)+sum(addr_LE)+sum(len_LE)) & 0xFF — algorithm
+    verified 48/48 against the firmware's verifier at update_cmd_dispatch
+    (0x02026BC4)."""
+    if req_len is None:
+        req_len = len(data)
+    chk = (~(sum(data) + sum(addr.to_bytes(4, 'little'))
+             + sum(req_len.to_bytes(4, 'little')))) & 0xFF
+    return (b"\xF0" + HDR_DATA + e7(req_len >> 4) + e7(addr)
+            + e7((req_len << 4) | flashtype) + pack7(data + bytes([chk])) + b"\xF7")
 
-def syscmd_parse(buf):
-    if len(buf) < 7:
-        raise ValueError("short packet")
-    hdr = struct.unpack_from("<H", buf, 0)[0]
-    cmd = buf[2]
-    ln = int.from_bytes(buf[3:6], "little")
-    if ln + 7 != len(buf):
-        raise ValueError(f"bad length {ln}+7 != {len(buf)}")
-    payload = buf[6:6 + ln]
-    ck = buf[6 + ln]
-    want = (~sum(payload)) & 0xFF if payload else 0xFF
-    if ck != want:
-        raise ValueError(f"bad checksum {ck:#x} != {want:#x}")
-    return hdr, cmd, payload
+def parse_request(pkt):
+    """-> (flashtype, addr, length) or None."""
+    if len(pkt) < 18 or pkt[0] != 0xF0 or pkt[1:5] != HDR_DATA:
+        return None
+    f1 = u7(pkt[5:9]); addr = u7(pkt[9:13]); lnf = u7(pkt[13:17])
+    if f1 != 0:
+        return None
+    return (lnf & 0xF, addr, lnf >> 4)
 
-SYSCMD = {
-    17: "get_device_info_a", 18: "get_device_info_b", 21: "get_version",
-    33: "get_device_info_c", 34: "ring_read", 35: "invoke_a", 36: "invoke_b",
-    48: "invoke_c",
-}
+# ------------------------------------------------------------- .fwsc image
+def fwsc_logical(path):
+    """Return the marker-stripped logical image the device requests into."""
+    raw = open(path, "rb").read()
+    out = bytearray()
+    for off in range(0, 20 * 0x30, 0x30):
+        blk = raw[off:off + 0x30]
+        if len(blk) < 0x30:
+            raise SystemExit(f"{path}: truncated header block at {off:#x}")
+        out += blk[:0x2F]
+    out += raw[20 * 0x30:]
+    return bytes(out)
 
-# ---- USB helpers -----------------------------------------------------------
+def fwsc_info(path):
+    """Best-effort parse of the 20-slot header for display."""
+    lg = fwsc_logical(path)
+    # UFW header is HDRKEY(0xFFFF)-scrambled; chipname sits at offset 0x10
+    hdr = bytearray(lg[:0x40])
+    import sys as _s
+    _s.path.insert(0, "/home/yukidama/JL/FM-1/3rd-party/jl-misctools/firmware")
+    from jltech.cipher import jl_enc_cipher
+    jl_enc_cipher(hdr, 0, 0x40, 0xFFFF)
+    name = bytes(hdr[0x10:0x10 + 16]).split(b"\0")[0].decode("ascii", "replace")
+    return {"name": name, "logical_size": len(lg)}
 
-def _need_usb():
-    if usb is None:
-        sys.exit("pyusb not installed (pip3 install pyusb)")
+# ------------------------------------------------------------------ rawmidi
+import alsalib, alsaseq
 
-def find_device(vid, pid):
-    return usb.core.find(idVendor=vid, idProduct=pid)
-
-def claim(dev, ifnum=4):
+def find_midi_port():
+    """Locate the FM-1 kernel MIDI port (client, port), or None."""
+    c = alsaseq.SeqClient()
     try:
-        if dev.is_kernel_driver_active(ifnum):
-            dev.detach_kernel_driver(ifnum)
-    except Exception:
-        pass
-    usb.util.claim_interface(dev, ifnum)
+        return c.find_port(b'USB Composite Device')
+    finally:
+        c.close()
 
-# ---- commands --------------------------------------------------------------
+def device_is_ota():
+    import subprocess
+    out = subprocess.run(['lsusb'], capture_output=True, text=True).stdout
+    if '4d4a:4155' in out:
+        return True
+    if '4c4a:c755' in out:
+        return False
+    return None
 
-def cmd_find(args):
-    _need_usb()
-    d = find_device(args.vid, args.pid)
-    if d:
-        print(f"normal mode : {hex(d.idVendor)}:{hex(d.idProduct)} (FM-1 Midi)")
-    d2 = find_device(VID_OTA, PID_OTA)
-    if d2:
-        print(f"OTA mode    : {hex(d2.idVendor)}:{hex(d2.idProduct)} (ota-FM-1)")
-    if not d and not d2:
-        print("no FM-1 device found (normal 4c4a:c755 or ota 4d4a:4155)")
+def find_rawmidi(prefer_ota=None):
+    """Compatibility shim: returns (description, is_ota, card) — port lookup
+    is done separately via find_midi_port()."""
+    st = device_is_ota()
+    if st is None:
+        return None
+    if prefer_ota is not None and st != prefer_ota:
+        return None
+    return ('seq', st, -1)
 
-def cmd_enter(args):
-    _need_usb()
-    d = find_device(args.vid, args.pid)
-    if not d:
-        sys.exit("device not found (need normal-mode FM-1 Midi 4c4a:c755)")
-    if args.dry_run:
-        print("handshake (EP4 OUT):", HANDSHAKE.hex())
-        return
-    claim(d, 4)
-    # 1. handshake / verification query over the MIDI bulk endpoint (the
-    #    M-UPGRADE "First step"; the device accepts it and stays in normal mode)
-    n = d.write(EP_MIDI_OUT, HANDSHAKE, timeout=2000)
-    print(f"sent handshake ({n} bytes)")
-    time.sleep(1.0)
-    # 2. request OTA entry (loader trigger)
-    code = 0x7F if args.fake else 0x7D
-    msg = LOADER_MAGIC + bytes([code, 0xF7])
-    n = d.write(EP_MIDI_OUT, msg, timeout=2000)
-    print(f"sent OTA-enter trigger ({n} bytes, code {code:#04x}); "
-          "device should re-enumerate as ota-FM-1 (4d4a:4155)")
-    time.sleep(2.0)
-    d2 = find_device(VID_OTA, PID_OTA)
-    print("ota device present" if d2 else
-          "ota device NOT seen — enter trigger may differ (see docs/io/11-ota-protocol.md)")
+class MidiLink:
+    def __init__(self, _path=None):
+        self.link = alsalib.MidiLink()
+        addr = find_midi_port()
+        if not addr:
+            raise RuntimeError("FM-1 MIDI port not found")
+        self.link.connect(addr)
+        self.buf = bytearray()
 
-def cmd_flash(args):
-    _need_usb()
-    data = open(args.file, "rb").read()
-    print(f"image {args.file}: {len(data)} bytes")
-    if not args.no_enter:
-        cmd_enter(args)
-        time.sleep(1.0)
-    d = find_device(VID_OTA, PID_OTA)
-    if not d and not args.dry_run:
-        sys.exit("ota-FM-1 (4d4a:4155) not found — device did not enter OTA mode")
-    upload(d, data, args)
+    def fileno(self):
+        return self.link.fileno()
 
-def upload(dev, data, args):
-    """Upload the .fwsc to the OTA loader.
+    def write(self, data):
+        self.link.send(bytes(data))
 
-    The loader (`usb_hid_ota.bin`) parses the .fwsc stream itself; the host
-    just streams it in report-sized chunks. The exact per-report command
-    header was not recovered from ota.bin in this pass, so the default is a
-    plain raw stream (63 B reports, no per-report header) — validate/adjust
-    against a live M-UPGRADE capture. Set FM1_OTA_CHUNK / FM1_OTA_HEADER=hex
-    to tweak without editing.
-    """
-    chunk_sz = int(os.environ.get("FM1_OTA_CHUNK", "63"))
-    header = bytes.fromhex(os.environ.get("FM1_OTA_HEADER", ""))
-    off, total, t0 = 0, len(data), time.time()
-    last_pct = -1
-    if header:
-        dev.write(0x01, header + struct.pack("<I", total), timeout=2000)
-    while off < total:
-        chunk = data[off:off + chunk_sz]
-        if args.dry_run:
-            if off == 0 or off + chunk_sz >= total:
-                print(f"  [{off:#07x}] report {len(chunk)}B {chunk[:8].hex()}..")
-        else:
-            dev.write(0x01, chunk, timeout=3000)   # EP1 OUT (HID interrupt)
-        off += len(chunk)
-        pct = 100 * off // total
-        if pct != last_pct and (pct % 5 == 0 or off >= total):
-            print(f"  {pct:3d}% ({off}/{total})")
-            last_pct = pct
-    print(f"streamed {total} bytes in {time.time()-t0:.1f}s"
-          + (" (dry-run)" if args.dry_run else ""))
-    if not args.dry_run:
-        print("loader verifies + flashes, then reboots to normal mode")
+    def read_sysex(self, timeout):
+        pkt = self.link.recv_sysex(int(timeout * 1000))
+        if not pkt:
+            return None
+        if pkt and pkt[0] != 0xF0:
+            return b""
+        return pkt
 
-def cmd_info(args):
-    """syscmd get_version (cmd 21) over raw USB-MIDI bulk (normal mode)."""
-    _need_usb()
-    d = find_device(args.vid, args.pid)
-    if not d:
-        sys.exit("device not found")
-    pkt = syscmd_packet(21)
-    if args.dry_run:
-        print("syscmd get_version packet:", pkt.hex())
-        return
-    claim(d, 4)
-    d.write(EP_MIDI_OUT, pkt, timeout=1000)
-    try:
-        rep = bytes(d.read(0x84, 64, timeout=1000))
-        print("reply:", rep.hex())
+    def drain(self):
+        while self.link.recv_sysex(0):
+            pass
+
+# ------------------------------------------------------------------ pieces
+def serve_requests(link, logical, stop_after=REQ_TIMEOUT, progress=True, on_finish=None):
+    """Answer device read requests until they stop. Returns request count.
+    Special requests handled with the captured deterministic replies:
+    ping (addr=0x100,len=0x402) -> KEEPALIVE; pre-finish (0x4A00,16) ->
+    PREFINISH_RESP; flashtype=0xF -> FINISH_RESP (+ on_finish callback)."""
+    served = 0; last_req = time.time(); last_ka = 0.0; last_addr = -1
+    while True:
+        pkt = link.read_sysex(1.0)
+        if pkt is None:
+            if time.time() - last_req > stop_after:
+                return served
+            if time.time() - last_ka > KEEPALIVE_PERIOD:
+                try:
+                    link.write(KEEPALIVE)
+                except OSError:
+                    return served
+                last_ka = time.time()
+            continue
+        if pkt[1:5] != HDR_DATA:
+            continue
+        req = parse_request(pkt)
+        if req is None:
+            continue
+        fl, addr, ln = req
+        if LOG:
+            LOG.write(f"{time.time()-t0:9.3f} fl={fl:x} addr={addr:#x} len={ln}\n"); LOG.flush()
+        time.sleep(RESP_DELAY)   # MCU needs time to process (M-UPGRADE paces ~10ms)
+        if fl == 0xF:
+            link.write(FINISH_RESP)
+            if on_finish:
+                on_finish()
+            last_req = time.time()
+            continue
+        if addr == 0x100 and ln == 0x402:
+            link.write(KEEPALIVE)
+            last_req = time.time()
+            continue
+        if addr == 0x4A00 and ln == 16:
+            link.write(PREFINISH_RESP)
+            served += 1
+            last_req = time.time()
+            continue
+        data = logical[addr:addr + ln]
+        if len(data) < ln:
+            data = data + bytes(ln - len(data))
         try:
-            hdr, cmd, payload = syscmd_parse(rep)
-            print(f"  hdr={hdr:#x} cmd={cmd} payload={payload!r}")
-        except ValueError as e:
-            print("  (parse:", e, ")")
-    except usb.core.USBTimeoutError:
-        print("no reply (syscmd may use a different transport)")
+            link.write(build_response(addr, data, ln, fl))
+        except OSError:
+            return served
+        served += 1
+        last_req = time.time()
+        if progress and (addr != last_addr + 512 or served % 200 == 0):
+            print(f"\r  served {served} reqs, addr={addr:#08x} ({100*addr/len(logical):.0f}%)",
+                  end="", flush=True)
+        last_addr = addr
 
-def cmd_packet(args):
-    pkt = syscmd_packet(args.code, bytes.fromhex(args.payload or ""))
-    print(pkt.hex())
+def wait_device(is_ota, timeout=30.0):
+    end = time.time() + timeout
+    while time.time() < end:
+        got = find_rawmidi(prefer_ota=is_ota)
+        if got:
+            return got
+        time.sleep(0.5)
+    return None
+
+# ------------------------------------------------------------------- verbs
+def cmd_scan(_):
+    got = find_rawmidi()
+    if not got:
+        print("no FM-1 device found")
+        return 1
+    path, is_ota, card = got
+    print(f"{'OTA' if is_ota else 'NORMAL'} mode: {path} (card {card})")
+    return 0
+
+def cmd_logical(a):
+    lg = fwsc_logical(a.file)
+    out = a.out or a.file + ".logical"
+    open(out, "wb").write(lg)
+    print(f"wrote {out} ({len(lg)} bytes)")
+    return 0
+
+def cmd_serve(a):
+    got = find_rawmidi(prefer_ota=True)
+    if not got:
+        print("device not in OTA mode"); return 1
+    logical = fwsc_logical(a.file)
+    print(f"serving {a.file} ({len(logical)} logical bytes) on {got[0]}")
+    link = MidiLink(got[0])
+    link.drain()
+    link.write(HS_QUERY)
+    link.read_sysex(2.0)
+    link.write(UPGRADE_CMD)
+    done = []
+    n = serve_requests(link, logical, on_finish=lambda: done.append(1) or setattr(link, '_fin', 1))
+    print(f"\n  done: {n} requests served")
+    return 0
+
+def cmd_flash(a):
+    logical = fwsc_logical(a.file)
+    print(f"image: {fwsc_info(a.file)} ({len(logical)} logical bytes)")
+    got = find_rawmidi(prefer_ota=False)
+    if not got:
+        print("FM-1 not found in normal mode"); return 1
+    link = MidiLink(got[0])
+    print("step 1: handshake + enter OTA (verification) ...")
+    link.drain()
+    link.write(HS_QUERY)
+    link.read_sysex(2.0)
+    link.write(UPGRADE_CMD)
+    n = serve_requests(link, logical, stop_after=6.0, progress=False)
+    print(f"  step 1 served {n} verification requests; waiting for OTA mode ...")
+    try:
+        os.close(link.fileno())
+    except OSError:
+        pass
+    got = wait_device(is_ota=True, timeout=30.0)
+    if not got:
+        print("device did not re-enumerate in OTA mode"); return 1
+    time.sleep(1.0)
+    link = MidiLink(got[0])
+    print("step 2: handshake + transfer ...")
+    link.drain()
+    link.write(HS_QUERY)
+    link.read_sysex(2.0)
+    link.write(UPGRADE_CMD)
+    fin = {}
+    def _fin():
+        fin['done'] = True
+        raise StopIteration
+    try:
+        n = serve_requests(link, logical, on_finish=_fin)
+    except StopIteration:
+        n = -1
+    print(f"\n  step 2 complete (finish exchange answered); waiting for reboot ...")
+    try:
+        os.close(link.fileno())
+    except OSError:
+        pass
+    got = wait_device(is_ota=False, timeout=30.0)
+    if not got:
+        print("device did not come back in normal mode"); return 1
+    print("flash complete: device back in normal mode")
+    return 0
 
 def main():
-    ap = argparse.ArgumentParser(description="FM-1 OTA Linux CLI (M-UPGRADE core)")
-    ap.add_argument("--vid", type=lambda x: int(x, 0), default=VID_NORMAL)
-    ap.add_argument("--pid", type=lambda x: int(x, 0), default=PID_NORMAL)
-    ap.add_argument("--dry-run", action="store_true")
+    ap = argparse.ArgumentParser(description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("find")
-    e = sub.add_parser("enter")
-    e.add_argument("--fake", action="store_true", help="send 0x7F instead of 0x7D")
-    f = sub.add_parser("flash")
-    f.add_argument("file")
-    f.add_argument("--no-enter", action="store_true", help="device already in OTA mode")
-    sub.add_parser("info")
-    p = sub.add_parser("packet")
-    p.add_argument("code", type=int)
-    p.add_argument("payload", nargs="?")
-    args = ap.parse_args()
-    {"find": cmd_find, "enter": cmd_enter, "flash": cmd_flash,
-     "info": cmd_info, "packet": cmd_packet}[args.cmd](args)
+    sub.add_parser("scan")
+    p = sub.add_parser("logical"); p.add_argument("file"); p.add_argument("-o", "--out")
+    p = sub.add_parser("serve"); p.add_argument("file")
+    p = sub.add_parser("flash"); p.add_argument("file")
+    a = ap.parse_args()
+    return {"scan": cmd_scan, "logical": cmd_logical,
+            "serve": cmd_serve, "flash": cmd_flash}[a.cmd](a)
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
