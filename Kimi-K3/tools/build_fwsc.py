@@ -48,7 +48,7 @@ OTA_SIZE = 0x4E01
 # "FM-1_009" -> markers[5,6,7] are the version digits. Bump to _014 so the
 # stock V9 device's same-version check passes (verified by the M-UPGRADE
 # parser spec: name up to '_', then 3 decimal digits, ends at raw 0x7D).
-VER_NAME = "FM-1_009"
+VER_NAME = "FM-1_015"
 HDRKEY = 0xFFFF
 
 USR_APP_TASK = 0x02022CFE
@@ -163,6 +163,16 @@ def main():
     else:
         import patch_ota2
         ota = bytearray(patch_ota2.patch(bytes(data[OTA_FW:OTA_FW + OTA_SIZE])))
+    # The step-1 verifier uses the ota.bin outer header's dlen field to decide
+    # how many payload bytes to copy to the loader region.  The UFW entry's
+    # `size` must match dlen+0x20 so the boot record's loader size is correct.
+    # Shrunken loaders may be shorter than OTA_SIZE; pad to the disk allocation
+    # so the rest of the layout is unchanged.
+    ota_dlen = struct.unpack_from("<I", ota, 0x08)[0]
+    ota_ufw_size = ota_dlen + 0x20
+    assert 0x20 < ota_ufw_size <= OTA_SIZE
+    if len(ota) < OTA_SIZE:
+        ota.extend(bytes(OTA_SIZE - len(ota)))
     assert len(ota) == OTA_SIZE
     seed_s = os.environ.get("FM1_OTA_SEED", "none")
     if seed_s.lower() != "none":
@@ -193,7 +203,11 @@ def main():
         if etype == 0:
             struct.pack_into("<H", header, off + 4, jl_crc16(flash))
         elif etype == 100:
-            struct.pack_into("<H", header, off + 4, jl_crc16(patched_ota))
+            # Shrink the UFW-reported size to the actual valid ota.bin length;
+            # keep size2 (disk allocation) unchanged so the rest of the layout
+            # does not move.  The dcrc covers only the valid bytes.
+            struct.pack_into("<I", header, off + 12, ota_ufw_size)
+            struct.pack_into("<H", header, off + 4, jl_crc16(patched_ota[:ota_ufw_size]))
     for off in range(0x40, headersize, 0x50):
         jl_enc_cipher(header, off, 0x50, HDRKEY)           # re-encrypt entries
     listcrc = jl_crc16(header[0x40:headersize])            # over ENCRYPTED list
@@ -203,7 +217,7 @@ def main():
     jl_enc_cipher(header, 0, 0x40, HDRKEY)                 # re-encrypt UFW header
 
     # ---- 3. re-interleave the header into 0x30 blocks with the bumped
-    # name/version markers (FM-1_014) so the stock V9 device accepts it
+    # name/version markers (FM-1_015) so the stock V9 device accepts it
     out = bytearray(data)
     markers = encode_markers(VER_NAME)
     for i in range(20):
