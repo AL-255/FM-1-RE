@@ -88,6 +88,39 @@ Separate from the OTA pull protocol: `serial_midi_task 0x02027AF4` →
 (34), invoke callback (35,36,48), default-write (19,20,22–32,37–47);
 callback table at `0x01C0E670+1336`.
 
+## Step-1 verifier — hardware-verified findings (2026-07-21)
+
+Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
+`0xE0000000` verification-done signal / a soft reset) established:
+
+- **The read-back is IDENTITY for payloads ≤ 19456 bytes (0x4C00).** The
+  verifier writes the incoming ota.bin payload to the loader flash region as
+  plaintext and reads it back for the payload CRC. 64 / 512 / 1024 / 2048 /
+  4096 / 8192 / 12288 / 16384 / 16896 / 17408 / 18432 / 19456-byte payloads all
+  PASS (verification-done + soft reset into the truncated/garbage loader, which
+  then falls back to the normal app). No scrambling/encryption is needed — the
+  earlier "SFC descramble" theory was WRONG.
+- **The loader region limit is exactly 19456 bytes.** 19456 passes, 19457
+  fails. The stock loader (`usb_hid_ota.bin`, compressed payload 0x4DE1 =
+  19937 B) is **481 bytes too big**, so the stock/full update can never pass
+  as-is. The overflow tail does not read back as the written data.
+- **The tail is NOT descrambled with any known key.** 16 pre-scramble variants
+  (plain jl_enc_cipher + jl_sfc_cipher with seeds 0x375F, 0x980F, 0xFFFF,
+  0xFFFE, 0x0000, 0x0001, 0x035e, 0x1dbf, 0x31f0, 0x67ac, 0x68ff, 0xadde, and
+  SFC bases 0/0x4000/0x94000/0x90000) all failed — so the overflow tail is
+  write-dropped at the region limit (read-back = stale data), not descrambled.
+- The seed `h[0x1C7FD6C]` (used by `FUNC_0200380a → FUNC_020037c8` for the
+  encrypted-region read-back) is a per-chip OTP value read by the SPL from a
+  companion die (see the SPL analysis); it is NOT needed for ≤ 19456-byte
+  payloads and does not affect the > 19456 overflow.
+- The result handler `FUNC_02027F88` resets into the loader **iff
+  verifier-return==0 AND notify byte `b[0x1C0E670+60]==0`** — no other no-op
+  gate after the CRC. The verifier clears notify on CRC success, so the CRC is
+  the only post-bulk-copy gate.
+- **Consequence:** to flash via OTA, the loader must be shrunk to ≤ 19456 bytes
+  (the stock 19937 B overflows). Optimal-parse LZ4 (1 block) reaches 19578 B —
+  still 122 B over; further size reduction requires trimming the loader image.
+
 ## Known open items
 
 - **Same-version / no-op refusal — how far we got.** The step-1 verifier

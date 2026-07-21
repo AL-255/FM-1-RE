@@ -141,25 +141,41 @@ def main():
     jl_sfc_cipher(flash, APP_AREA_BASE, len(flash) - APP_AREA_BASE, APP_AREA_BASE, CHIPKEY)
     data[FLASH_DISK:FLASH_DISK + FLASH_SIZE] = flash
 
-    # ---- 1.5. ota.bin (the OTA loader): the second no-op gate. The verifier
-    # loads the incoming ota.bin, DECOMPRESSES it, and refuses when the image
-    # matches the loader already on the device (same-loader no-op; a
-    # container-only edit leaves the decompressed image identical, so it does
-    # NOT work). patch_ota2 flips one provably-dead slack byte in the
-    # decompressed image (inner_datacrc 0xb295 -> 0x53e9) so the loader
-    # differs while remaining functionally identical and bootable; total size
-    # stays 0x4e01. See tools/patch_ota2.py for the proof + self-check.
+    # ---- 1.5. ota.bin (the OTA loader) -------------------------------------
+    # MECHANISM (verified on hardware 2026-07-21): the step-1 verifier writes
+    # the incoming ota.bin payload to the loader flash region as PLAINTEXT and
+    # reads it back for the payload CRC. For payloads <= 19456 bytes (0x4C00)
+    # the write/read round-trip is IDENTITY (verified: 64..19456-byte payloads
+    # all PASS with plain datacrc, no scrambling needed). The stock loader is
+    # 19937 bytes (0x4DE1) — 481 bytes over the limit; the tail does NOT read
+    # back correctly (write is dropped at the ~19456-byte region limit, not
+    # descrambled: 16 plain/SFC pre-scramble keys all failed). So the stock
+    # loader can never pass as-is; it must be SHRUNK to <= 19456 bytes.
+    # FM1_OTA_FILE: inject a pre-built ota.bin (e.g. the shrunken loader).
+    # FM1_OTA_SEED: (legacy, only for experimenting with the descramble path)
+    # per-512-byte-chunk pre-scramble of the payload; "none" (default) leaves
+    # the payload plaintext.
+    from jltech.cipher import jl_enc_cipher as _jl_enc
     if os.environ.get("FM1_STOCK_OTA") == "1":
-        patched_ota = bytes(data[OTA_FW:OTA_FW + OTA_SIZE])   # leave ota.bin stock
+        ota = bytearray(data[OTA_FW:OTA_FW + OTA_SIZE])   # leave ota.bin stock
     elif os.environ.get("FM1_OTA_FILE"):
-        patched_ota = open(os.environ["FM1_OTA_FILE"], "rb").read()
-        assert len(patched_ota) == OTA_SIZE
+        ota = bytearray(open(os.environ["FM1_OTA_FILE"], "rb").read())
     else:
         import patch_ota2
-        ota = bytes(data[OTA_FW:OTA_FW + OTA_SIZE])
-        patched_ota = patch_ota2.patch(ota)
-        assert len(patched_ota) == OTA_SIZE
-        data[OTA_FW:OTA_FW + OTA_SIZE] = patched_ota
+        ota = bytearray(patch_ota2.patch(bytes(data[OTA_FW:OTA_FW + OTA_SIZE])))
+    assert len(ota) == OTA_SIZE
+    seed_s = os.environ.get("FM1_OTA_SEED", "none")
+    if seed_s.lower() != "none":
+        seed = int(seed_s, 0) & 0xFFFF
+        # per-512-byte-chunk pre-scramble of the payload (LFSR restarts/chunk)
+        KS = bytearray(512)
+        _jl_enc(KS, 0, 512, seed)                          # one chunk keystream
+        for off in range(0x20, OTA_SIZE, 512):
+            n = min(512, OTA_SIZE - off)
+            for i in range(n):
+                ota[off + i] ^= KS[i]
+    patched_ota = bytes(ota)
+    data[OTA_FW:OTA_FW + OTA_SIZE] = patched_ota
 
     # ---- 2. fix the UFW header: flash.bin edcrc, then listcrc, then hdrcrc
     # (listcrc is over the ENCRYPTED entry list; hdrcrc over decrypted [2:0x40])
