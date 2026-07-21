@@ -116,6 +116,15 @@ def main():
     # hdrcrc covers the rest of the 32-byte entry header (bytes 2..31)
     struct.pack_into("<H", flash, 0x4020, jl_crc16(bytes(flash[0x4022:0x4040])))
 
+    # app_area_head datacrc covers the whole app area from 0x4020 to the start
+    # of the cfg daisychain at 0x9283B; update it because app.bin changed.
+    APP_AREA_HEAD = 0x4000
+    APP_AREA_CRC_END = 0x9283B
+    struct.pack_into("<H", flash, APP_AREA_HEAD + 2,
+                     jl_crc16(bytes(flash[0x4020:APP_AREA_CRC_END])))
+    struct.pack_into("<H", flash, APP_AREA_HEAD,
+                     jl_crc16(bytes(flash[APP_AREA_HEAD + 2:APP_AREA_HEAD + 32])))
+
     # --- cfg "same-version" no-op bypass -----------------------------------
     # The on-device step-1 verifier reads the incoming cfg JLFS entry header
     # (32 bytes at flash 0x9283B) and refuses the update when it matches the

@@ -36,7 +36,7 @@ Usage:
   fm1_ota.py serve FILE.fwsc         answer OTA requests (device already in OTA mode)
   fm1_ota.py logical FILE.fwsc       offline: write the marker-stripped image
 """
-import argparse, glob, os, select, struct, sys, time
+import argparse, glob, os, select, struct, subprocess, sys, time
 
 # ---------------------------------------------------------------- constants
 HS_QUERY = bytes([0xF0, 0x00, 0x32, 0x45, 0x00, 0x00, 0x00, 0x40, 0x7F, 0xF7])
@@ -243,6 +243,18 @@ def wait_device(is_ota, timeout=30.0):
         time.sleep(0.5)
     return None
 
+def wait_device_any(timeout=30.0):
+    """Wait for the FM-1 MIDI port to re-appear after step-1 reboot (used
+    because this loader re-enumerates with the same normal-mode PID)."""
+    end = time.time() + timeout
+    while time.time() < end:
+        if '4c4a:c755' in subprocess.run(['lsusb'], capture_output=True, text=True).stdout:
+            addr = find_midi_port()
+            if addr:
+                return ('seq', True, -1)
+        time.sleep(0.5)
+    return None
+
 # ------------------------------------------------------------------- verbs
 def cmd_scan(_):
     got = find_rawmidi()
@@ -309,9 +321,9 @@ def cmd_flash(a):
         os.close(link.fileno())
     except OSError:
         pass
-    got = wait_device(is_ota=True, timeout=30.0)
+    got = wait_device_any(timeout=30.0)
     if not got:
-        print("device did not re-enumerate in OTA mode"); return 1
+        print("device did not re-enumerate after step-1"); return 1
     time.sleep(1.0)
     link = MidiLink(got[0])
     print("step 2: handshake + transfer ...")
@@ -325,10 +337,12 @@ def cmd_flash(a):
             fin2['done'] = True
             raise StopIteration
     try:
-        n = serve_requests(link, logical, on_finish=_fin2)
+        # Step 2 may pause while the loader erases/writes flash; use a long
+        # idle timeout so we don't give up during a long write cycle.
+        n = serve_requests(link, logical, stop_after=180.0, on_finish=_fin2)
     except StopIteration:
         n = -1
-    print(f"\n  step 2 complete (finish exchange answered); waiting for reboot ...")
+    print(f"\n  step 2 {'finish exchange answered' if fin2.get('done') else 'idle timeout'}; waiting for reboot ...")
     try:
         os.close(link.fileno())
     except OSError:
