@@ -26,18 +26,29 @@ static void on_sigint(int) { running = 0; }
 static pthread_mutex_t synth_lock = PTHREAD_MUTEX_INITIALIZER;
 static int cur_patch = 0;
 
+static const char* note_name(int n) {
+  static const char* names[] = { "C","C#","D","D#","E","F","F#","G","G#","A","A#","B" };
+  static char buf[16];
+  snprintf(buf, sizeof(buf), "%s%d", names[n % 12], (n / 12) - 1);
+  return buf;
+}
+
 static void engine_note(int on, int note, int vel) {
   pthread_mutex_lock(&synth_lock);
   if (on && vel) synth_note_on(note, vel);
   else synth_note_off(note);
+  int active = synth_active_voices();
   pthread_mutex_unlock(&synth_lock);
+  if (on && vel) printf("NOTE ON  %-3s (midi %d) vel %d  [voices %d]\n", note_name(note), note, vel, active);
+  else           printf("NOTE OFF %-3s (midi %d)          [voices %d]\n", note_name(note), note, active);
+  fflush(stdout);
 }
 static void engine_patch(int p) {
   pthread_mutex_lock(&synth_lock);
   synth_set_preset(p);
   pthread_mutex_unlock(&synth_lock);
   cur_patch = p % SYNTH_N_PRESETS;
-  printf("patch %d: %s\n", cur_patch, synth_preset_name(cur_patch));
+  printf("PATCH %d: %s\n", cur_patch, synth_preset_name(cur_patch));
   fflush(stdout);
 }
 

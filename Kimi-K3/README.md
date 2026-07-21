@@ -115,15 +115,25 @@ The same basic synth and presets also run on the host:
 cd firmware && make host
 ./host/fm1_synth -l          # list MIDI keyboards (ALSA)
 ./host/fm1_synth -m 24:0     # play from that keyboard, audio out via ALSA
+./host/fm1_jack -l           # list JACK MIDI sources
+./host/fm1_jack              # low-latency JACK audio + MIDI
 ./host/sim                   # render the demo behavior to host/demo.wav
 ```
 
 - `firmware/host/fm1_synth` — standalone synth app: ALSA MIDI in → ALSA audio
   out. Works with any MIDI keyboard (including the FM-1 itself over USB-MIDI).
+  Prints each NOTE ON/OFF with note name, MIDI number, velocity and active
+  voice count.
+- `firmware/host/fm1_jack` — standalone JACK client: JACK MIDI in → JACK audio
+  out. Auto-connects to the first available JACK MIDI source; use `-m` to pick
+  one explicitly. Same on-screen note/patch feedback as the ALSA version.
 - `firmware/host/lv2/fm1_dexed.so` — **LV2 instrument plugin** (loads into
   Ardour, Carla, Zrythm and other DAWs): MIDI in → mono audio out, with a
   `Patch` control (0–3: SAW LEAD/SQ BASS/SYNC PAD/PLUCK). Install:
   `mkdir -p ~/.lv2/fm1-dexed.lv2 && cp firmware/host/lv2/{fm1_dexed.so,manifest.ttl,fm1_dexed.ttl} ~/.lv2/fm1-dexed.lv2/`.
+- `firmware/host/vst/fm1_dexed.so` — **VST2 instrument plugin** for DAWs that
+  still load VST2 (e.g. Reaper, older Bitwig). MIDI in → mono audio out,
+  program-change patch switching.
 - `firmware/host/sim` — offline render of the whole demo flow to a WAV.
 - `firmware/host/midi_blaster` — MIDI-injection test utility.
 - `firmware/host/render_test` — reference validation of the Dexed/msfa port
@@ -141,5 +151,8 @@ cd firmware && make host
   all validated
 - one upstream Synth_Dexed heap-overflow bug found and fixed
   (`voices[i]`→`voices[note]` in `Dexed::keydown`)
-- on-device behavior not yet flashed/verified in this workspace — the flash
-  script enforces a full backup first; see `tools/README.md` for recovery
+- on-device OTA flashing is currently blocked: step 1 passes, the shrunken
+  loader boots, step 2 serves the full image, but the loader reboots to normal
+  mode without sending the `0xF0000000` finish handshake, so the flash does not
+  take. The device still reports `FM-1_009`. Details and next debug steps are in
+  `docs/ota-loader-shrinking.md`.

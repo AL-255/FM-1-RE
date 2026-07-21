@@ -46,7 +46,7 @@ build/demo.map.json: build/demo.elf
 	python3 ../tools/symbols.py build/demo.nm $@
 
 # ---------- host ----------
-host: host/sim host/fm1_synth host/lv2/fm1_dexed.so host/vst/fm1_dexed.so host/midi_blaster host/synth_test host/render_test
+host: host/sim host/fm1_synth host/fm1_jack host/lv2/fm1_dexed.so host/vst/fm1_dexed.so host/midi_blaster host/synth_test host/render_test
 
 # sim of the on-device demo (basic synth + hooks stubs)
 host/sim: host/sim_main.cpp src/demo.cpp src/rt.cpp src/hooks.cpp src/synth.cpp src/lcd.cpp
@@ -55,6 +55,10 @@ host/sim: host/sim_main.cpp src/demo.cpp src/rt.cpp src/hooks.cpp src/synth.cpp 
 # standalone ALSA app (basic synth, same code as device)
 host/fm1_synth: host/alsa_main.cpp src/synth.cpp
 	g++ -O2 -std=c++11 -Isrc -o $@ $^ -lasound -lpthread
+
+# standalone JACK app (basic synth, low-latency audio + MIDI)
+host/fm1_jack: host/jack_main.cpp src/synth.cpp
+	g++ -O2 -std=c++11 -Isrc -o $@ $^ $(shell pkg-config --cflags --libs jack)
 
 host/midi_blaster: host/midi_blaster.cpp
 	g++ -O2 -std=c++11 -o $@ $^ -lasound
@@ -81,5 +85,5 @@ image: build/demo.bin
 	python3 ../tools/build_image.py
 
 clean:
-	rm -rf build host/sim host/render_test host/fm1_synth host/midi_blaster \
+	rm -rf build host/sim host/render_test host/fm1_synth host/fm1_jack host/midi_blaster \
 	    host/synth_test host/lv2_host_test host/lv2/fm1_dexed.so host/vst/fm1_dexed.so

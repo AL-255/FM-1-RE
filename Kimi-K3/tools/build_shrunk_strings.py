@@ -33,8 +33,8 @@ MAX_DLEN = 19456
 # Regions to zero (start inclusive, end exclusive)
 ZERO_REGIONS = [
     (0x2bc4, 0x2c4d),   # USB string descriptor content, rebuilt below
-    (0x2da4, 0x2e1e),   # POWER_PIN / cfg_tool.bin / flash.bin / uboot.boot / isd_config.ini
-    (0x5ac0, 0x5ac7),   # unused "/*.ufw" filter string
+    (0x2d98, 0x2e04),   # POWER_PIN / cfg_tool.bin / flash.bin dead strings
+    (0x5ac0, 0x5ae0),   # whole 32-byte .data buffer that holds "/*.ufw" (overwritten at runtime)
 ]
 
 # Empty USB string descriptors (bLength=2, bDescriptorType=3)

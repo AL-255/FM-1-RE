@@ -59,21 +59,63 @@ python3 tools/build_shrunk.py 0x1df2-0x1e34 0x29a8-0x29e9
 
 The output is written to `/tmp/ota_shrunk.bin` by default.
 
-## Current status
+## Current status (2026-07-21)
 
-A candidate that zeroed 13 small regions (total 509 bytes) compressed to
-`dlen = 19262`, padded to 19456, and **passes step-1 verification**.  However,
-the device did not re-enumerate in OTA mode, indicating that at least one of
-the zeroed regions is live code.  Bisection is in progress.
+Step-1 verification is fully solved:
 
-Preliminary disassembly review shows that region `0x0056..0x006a` is inside the
-early interrupt-handler path (right after the initial `rti`), so it is almost
-certainly live and must not be zeroed.
+- The cfg/eq no-op gate is bypassed (`tools/build_fwsc.py` flips a padding byte
+  in `eq_cfg_hw.bin`, changing cfg CRC while leaving payload identical).
+- The loader can be shrunk below the 19456-byte limit and step-1 now accepts
+  the image, builds the `FM-1_009 + ota-` boot record, and soft-resets into the
+  OTA loader.
+- `tools/fm1_ota.py` detects the loader re-enumeration by MIDI port presence
+  (the loader re-uses the normal `4c4a:c755` PID, not `4d4a:4155`).
+
+Step 2 now boots the shrunken loader and serves ~48 read requests covering the
+whole logical image, ending at `addr = 0xab940`.  At that point the loader sends
+a request for `addr = 0xE0000000 len = 8`, which `fm1_ota.py` answers with the
+"success" payload.  The device then reboots to normal mode (`4c4a:c755`) **without
+ever sending the `0xF0000000` upgrade-finish handshake**.
+
+A post-attempt handshake query still decodes to the stock version encoding
+(`03 93 03` region → `FM-1_009`), so **nothing was actually flashed**.
+
+The same behavior occurs with a stock-app control image (only the loader and cfg
+changed), so the failure is not caused by the custom `app.bin`.  The most likely
+remaining causes are:
+
+1. The step-2 finish handshake is different from the documented
+   `flashtype=0xF, addr=0, len=8` + `"success\0"` reply; the `0xE0000000`
+   request may be a *verify-done* signal that requires a different response,
+   and the real finish command is still unknown.
+2. The modified loader image fails an internal integrity/product check (e.g.
+   it compares the incoming `ota.bin` against a hard-coded digest or a stored
+   copy before allowing `0xF0000000`).
+3. The step-2 transfer requires an additional pre-flash verification frame
+   that M-UPGRADE sends but `fm1_ota.py` does not.
+
+Capturing a live M-UPGRADE step-2 session would resolve (1) and (3), but the
+public updater only bundles the same V13 loader we already have, so (2) may
+require a genuinely different loader build (not currently available) or a
+writable device state we cannot reach without JTAG/UART.
+
+## Hardware verification log
+
+| attempt | loader size | step-1 | step-2 requests | finish (`0xF0000000`) | result |
+|---------|-------------|--------|-----------------|-----------------------|--------|
+| stock loader (19937 B) | — | fails at region limit | — | — | never enters OTA |
+| shrunken loader (≤ 19456 B) | pass | ~48 reads to 0xab940, then `0xE0000000` | **no** | reboots to `FM-1_009` |
+| stock app + shrunken loader | pass | same | **no** | reboots to `FM-1_009` |
 
 ## Next steps
 
-1. Reconnect the device (it reset after the last failed loader attempt).
-2. Test smaller subsets of the 13 candidate regions to identify the genuinely
-   dead ones.
-3. Build a loader that uses only dead regions and verify it boots into OTA
-   mode and can complete step-2 flashing.
+1. Capture or emulate a genuine M-UPGRADE step-2 finish to learn the exact
+   response expected after `0xE0000000`.
+2. Dissect the loader's post-transfer path (`FUNC_02083394` → result handler)
+   to identify any notify code or integrity gate that suppresses the
+   `0xF0000000` request.
+3. Attempt to read back the stored loader region via the OTA protocol or any
+   exposed syscmd to see whether the new loader was written at all.
+4. Until the finish handshake is solved, the host-native synth
+   (`firmware/host/fm1_synth`, `fm1_jack`, LV2/VST plugins) is the working
+   deliverable for playing the custom synth from a MIDI keyboard.
