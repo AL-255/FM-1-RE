@@ -113,6 +113,8 @@ def main():
     # JLFS entry for app.bin (at 0x4020): [hdrcrc:2][datacrc:2][off][size][flags][name]
     # datacrc must cover the patched app.bin or the OTA loader rejects the image
     struct.pack_into("<H", flash, 0x4022, jl_crc16(bytes(flash[APP_BIN_FW:APP_BIN_FW + APP_BIN_SIZE])))
+    # hdrcrc covers the rest of the 32-byte entry header (bytes 2..31)
+    struct.pack_into("<H", flash, 0x4020, jl_crc16(bytes(flash[0x4022:0x4040])))
 
     # --- cfg "same-version" no-op bypass -----------------------------------
     # The on-device step-1 verifier reads the incoming cfg JLFS entry header

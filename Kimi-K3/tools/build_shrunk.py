@@ -46,27 +46,22 @@ def build(regions, target_dlen=19456):
     if real_dlen > target_dlen:
         raise ValueError(f"compressed payload {real_dlen} exceeds target {target_dlen}")
 
-    # Build ota.bin: keep stock headers, update dlen/datacrc, pad payload
-    ota = bytearray(stock_ota)
-    # Replace payload (everything from 0x20)
-    new = bytearray(ota[:0x20])
+    # Rebuild file: keep stock outer + inner headers, then new compressed blocks
+    new = bytearray(stock_ota[:0x40])
     new.extend(enc)
-    # Pad payload to target_dlen
+
     if len(new) < 0x20 + target_dlen:
         new.extend(bytes(target_dlen - (len(new) - 0x20)))
 
-    # Update inner_datacrc (over decompressed image)
-    struct.pack_into('<H', new, 0x22, jl_crc16(bytes(img)))
-    # Update inner_hdrcrc
-    struct.pack_into('<H', new, 0x20, jl_crc16(new[0x22:0x40]))
-    # Update outer dlen
-    struct.pack_into('<I', new, 0x08, target_dlen)
-    # Update outer datacrc over payload
-    struct.pack_into('<H', new, 0x02, jl_crc16(new[0x20:0x20 + target_dlen]))
-    # Update outer hdrcrc
-    struct.pack_into('<H', new, 0x00, jl_crc16(new[0x02:0x20]))
+    # Inner header integrity fields
+    struct.pack_into('<H', new, 0x22, jl_crc16(bytes(img)))          # inner_datacrc
+    struct.pack_into('<H', new, 0x20, jl_crc16(new[0x22:0x40]))      # inner_hdrcrc
 
-    # Pad file to OTA_SIZE
+    # Outer header
+    struct.pack_into('<I', new, 0x08, target_dlen)                   # dlen
+    struct.pack_into('<H', new, 0x02, jl_crc16(new[0x20:0x20 + target_dlen]))  # outer_datacrc
+    struct.pack_into('<H', new, 0x00, jl_crc16(new[0x02:0x20]))      # outer_hdrcrc
+
     if len(new) < OTA_SIZE:
         new.extend(bytes(OTA_SIZE - len(new)))
     return bytes(new), real_dlen
