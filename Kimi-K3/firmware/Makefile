@@ -46,7 +46,7 @@ build/demo.map.json: build/demo.elf
 	python3 ../tools/symbols.py build/demo.nm $@
 
 # ---------- host ----------
-host: host/sim host/fm1_synth host/lv2/fm1_dexed.so host/midi_blaster host/synth_test host/render_test
+host: host/sim host/fm1_synth host/lv2/fm1_dexed.so host/vst/fm1_dexed.so host/midi_blaster host/synth_test host/render_test
 
 # sim of the on-device demo (basic synth + hooks stubs)
 host/sim: host/sim_main.cpp src/demo.cpp src/rt.cpp src/hooks.cpp src/synth.cpp src/lcd.cpp
@@ -63,6 +63,10 @@ host/midi_blaster: host/midi_blaster.cpp
 host/lv2/fm1_dexed.so: host/lv2/fm1_dexed.cpp src/synth.cpp
 	g++ -O2 -std=c++11 -fPIC -shared -Ihost/lv2 -Isrc -o $@ $^
 
+# VST2 plugin (basic synth)
+host/vst/fm1_dexed.so: host/vst/fm1_vst.cpp src/synth.cpp
+	g++ -O2 -std=c++11 -fPIC -shared -Ihost/vst -Isrc -o $@ $^
+
 # synth unit test
 host/synth_test: host/synth_test.cpp src/synth.cpp
 	g++ -O2 -std=c++11 -Isrc -o $@ $^ -lm
@@ -78,4 +82,4 @@ image: build/demo.bin
 
 clean:
 	rm -rf build host/sim host/render_test host/fm1_synth host/midi_blaster \
-	    host/synth_test host/lv2_host_test host/lv2/fm1_dexed.so
+	    host/synth_test host/lv2_host_test host/lv2/fm1_dexed.so host/vst/fm1_dexed.so
