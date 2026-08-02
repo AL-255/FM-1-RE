@@ -225,24 +225,3 @@ a UART logger, formatted assertion printer, or console entry.
 5. Establish the actual AC791N MaskROM strap/pin sequence. Neither PB01 reset,
    the transpose chord, nor the optional SDK UART modes currently satisfy the
    recovery requirement.
-
-## External references
-
-- [USB_KEY | jielie](https://kagaimiq.github.io/jielie/isp/usb/usb-key.html):
-  reverse-engineered notes on invoking JieLi USB boot using a signal on D+/D-,
-  including the key waveform, acknowledgement, timing, and USB bus caveats.
-- [JL SoC forum thread](https://esp8266.ru/forum/threads/jl-soc.5500/):
-  long-running Russian community discussion of JieLi SoCs, SDKs, toolchains,
-  programmers, boot activators, and USB/ISP/UART key experiments. Reports are
-  community observations and may apply only to the chip family being discussed.
-- [kagaimiq/jl-misctools](https://github.com/kagaimiq/jl-misctools)
-  (`3rd-party/jl-misctools`, also checked out at `../jl-misctools`): utilities
-  for JieLi firmware containers, key files, UI resources, and older formats.
-- [kagaimiq/jl-uboot-tool](https://github.com/kagaimiq/jl-uboot-tool)
-  (`3rd-party/jl-uboot-tool`): Python tooling for discovering UBOOT devices,
-  loading code into RAM, and reading, writing, or erasing flash. Its support
-  table lists WL82/AC791N as unknown, so it is not an established FM-1 flasher.
-- [Jieli-Tech/fw-AC79_AIoT_SDK](https://gitee.com/Jieli-Tech/fw-AC79_AIoT_SDK)
-  (`../fw-AC79_AIoT_SDK`): official AC791N/WL82 SDK containing peripheral and
-  MaskROM API headers, boot/update configuration, libraries, build tools, and
-  application examples used to identify stock firmware behavior.
