@@ -7,27 +7,27 @@ valid package and emulate the Windows host protocol, but it has not completed a
 custom update on hardware. The last device test stopped at the loader's
 `0xE0000000` verification signal, rebooted, and left the stock image installed.
 
-Do not describe `Kimi-K3/build/FM-1-demo.fwsc` as flash-ready until every P0
+Do not describe `build/FM-1-demo.fwsc` as flash-ready until every P0
 item below is complete.
 
 ## Current status
 
 | area | status | evidence |
 |---|---|---|
-| V13 application | Broad linear disassembly and 2062 call-target-derived entries | `Opus4.8/`, `Kimi-K3/analysis/` |
+| V13 application | Broad linear disassembly and 2062 call-target-derived entries | `analysis/disassembly/`, `analysis/` |
 | V14 application | Extracted and vendor-objdump listing generated | `firmware-images/v14/` |
-| Windows updater | Critical worker and terminal protocol decompiled | `Kimi-K3/analysis/host-updater/` |
-| Linux USB-MIDI client | Wire packets and failure reporting covered by 11 offline tests | `Kimi-K3/tools/fm1_ota.py`, `Kimi-K3/tools/tests/` |
-| Device OTA loader | Container/LZ4 format understood; executable control flow not mapped | `Kimi-K3/analysis/device/ota-loader/` |
-| Custom package | UFW/JLFS structure and CRCs parse successfully | `Kimi-K3/tools/build_fwsc.py` |
-| End-to-end custom flash | Failed before commit; no `0xF0000000` request | `Kimi-K3/docs/ota-loader-shrinking.md` |
-| Recovery from a broken custom app | Unproven; no accessible hardware UBOOT mode | `Kimi-K3/tools/README.md` |
+| Windows updater | Critical worker and terminal protocol decompiled | `analysis/host-updater/` |
+| Linux USB-MIDI client | Wire packets and failure reporting covered by 11 offline tests | `tools/fm1_ota.py`, `tools/tests/` |
+| Device OTA loader | Container/LZ4 format understood; executable control flow not mapped | `analysis/device/ota-loader/` |
+| Custom package | UFW/JLFS structure and CRCs parse successfully | `tools/build_fwsc.py` |
+| End-to-end custom flash | Failed before commit; no `0xF0000000` request | `docs/ota-loader-shrinking.md` |
+| Recovery from a broken custom app | Unproven; no accessible hardware UBOOT mode | `tools/README.md` |
 
 ## P0 - required before any device flash
 
 - [ ] **Map the device-side OTA loader.** Extract the 23324-byte inner image,
   generate a vendor listing and function database at load address `0x01C0A800`,
-  and check the artifacts into `Kimi-K3/analysis/device/ota-loader/`.
+  and check the artifacts into `analysis/device/ota-loader/`.
 - [ ] **Explain the finish gate.** The loader routine at inner-image offset
   `0x1362` sends the `0xF0000000` request only after multiple package, partition,
   and flash checks return success. Name and document every return path that can
@@ -64,9 +64,9 @@ item below is complete.
   classified as code.
 - [ ] Remove the known bogus `0x020FCD26` function entry and audit the data-table
   fragments at the end of the current function index.
-- [ ] Reconcile classification confidence. The Kimi database contains 668
-  low-confidence and 11 unknown entries; the older Opus master leaves 824
-  entries unclassified.
+- [ ] Reconcile classification confidence. The current `db.json` pipeline
+  contains 668 low-confidence and 11 unknown entries; the independent
+  `master_index.json` pipeline leaves 824 entries unclassified.
 
 ## P1 - harden the host updater
 
@@ -101,8 +101,8 @@ item below is complete.
 
 ## Offline checks completed on 2026-08-01
 
-- `python3 -m unittest discover -s Kimi-K3/tools/tests -v`: 11 tests passed.
-- `make -C Kimi-K3/firmware image`: rebuilt the pi32v2 blob and verified the
+- `python3 -m unittest discover -s tools/tests -v`: 11 tests passed.
+- `make -C firmware image`: rebuilt the pi32v2 blob and verified the
   hook fingerprints in the patched application image.
 - `fwunpack_newfw.py` successfully parsed both a stock-app/stock-loader control
   package and the default experimental package, including their JLFS entries.

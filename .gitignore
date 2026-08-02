@@ -1,3 +1,23 @@
 .vscode/
 __pycache__/
 *.pyc
+
+# Generated firmware and host binaries
+/build/
+/backups/
+/firmware/build/
+/firmware/host/sim
+/firmware/host/render_test
+/firmware/host/fm1_synth
+/firmware/host/fm1_jack
+/firmware/host/midi_blaster
+/firmware/host/lv2_host_test
+/firmware/host/synth_test
+/firmware/host/lv2/fm1_dexed.so
+/firmware/host/vst/fm1_dexed.so
+/firmware/host/*.wav
+/firmware/host/lv2/*.wav
+
+# Downloaded SDKs, reference sources, and Ghidra projects
+/reference/
+/ghidra/proj/
