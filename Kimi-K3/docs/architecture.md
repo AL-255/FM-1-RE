@@ -1,8 +1,8 @@
 # FM-1 firmware architecture
 
-This document describes the complete architecture of the **M-Vave FM-1**
+This document describes the currently mapped architecture of the **M-Vave FM-1**
 synthesizer firmware (`FM-1.fwsc`, V13 / 2026-07-03 dump), as established by
-the full-disassembly classification of all **2062 functions** in `app.bin`
+the classification of **2062 direct-call-target-derived entries** in V13 `app.bin`
 (see `function-index.md` and `analysis/db.json`), and how the custom synth
 demo in `firmware/` reuses it.
 
@@ -30,7 +30,7 @@ The FM-1 is a Yamaha-DX7-compatible 6-operator FM synthesizer on a
   NOR-flash filesystem (patches), Bluetooth (Classic + BLE, mostly vestigial
   for this product), OTA update.
 
-### Firmware image composition (all 2062 functions classified)
+### Firmware image composition (2062 inferred entries categorized)
 
 | subsystem | funcs | what it is |
 |---|---|---|
@@ -212,7 +212,8 @@ The demo uses a small **basic polyphonic synthesizer** (`firmware/src/synth.cpp`
 shared verbatim with the host build): 8 voices, polyblep saw/square/sine
 oscillators + sub-osc, linear ADSR, Chamberlin state-variable lowpass, and 4
 presets (SAW LEAD / SQ BASS / SYNC PAD / PLUCK) selected by program change.
-~13 KB, appended to the end of `app.bin` (XIP `0x0208E600`).
+The ~13 KB blob links at XIP `0x02046600` and replaces part of the V13
+font/bitmap region.
 
 ### On-device display
 
@@ -241,17 +242,19 @@ make image                     # -> Kimi-K3/build/{fm1_demo_flash.bin,demo_blob.
 patches, re-encrypts, and verifies. The DAC hook needs no flash patch (RAM
 pointer at runtime).
 
-### Upload (official JieLi method)
+### ROM/UBOOT upload experiments (not available on the retail device)
 
 ```bash
-tools/upload.sh                # build + upload with JieLi isd_download
+tools/legacy-uboot/upload.sh   # requires externally forced UBOOT mode
 ```
 
-`tools/build_official.py` stages the patched `app.bin` (+demo blob at
-`0x8E600`) and support files; JieLi `isd_download` re-packs, encrypts and
-flashes the JLFS image over USB (produces `build/official/jl_isd.fw`). A
-raw alternative (`tools/flash.sh`, jl-uboot-tool) writes the same image at
-flash `0x0` after a mandatory full-flash backup. See `tools/README.md`.
+`tools/legacy-uboot/build_official.py` is an older staging experiment that
+expects a blob linked at `0x8E600`; it is incompatible with the current
+`0x46600` link layout without relinking. JieLi `isd_download` would re-pack and
+encrypt the JLFS image. A
+raw alternative (`tools/legacy-uboot/flash.sh`, jl-uboot-tool) writes the same
+image at flash `0x0` after a mandatory full-flash backup. The retail FM-1 has
+no known entry path for either workflow. See `tools/README.md`.
 
 ### Host native mode
 
@@ -273,7 +276,7 @@ cd firmware && make host       # all host targets
 
 ## 11. Where to look next
 
-- `docs/function-index.md` — all 2062 functions by subsystem.
+- `docs/function-index.md` — 2062 V13 call-target-derived entries by subsystem.
 - `docs/io/*.md` — per-subsystem teardowns with function tables.
 - `analysis/db.json` — machine-readable master DB (xrefs, strings, labels).
 - `firmware/` — demo source (engine port in `dexed/`, runtime in `src/`).

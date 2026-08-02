@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 # FM-1 demo firmware flasher — raw alternative via jl-uboot-tool.
 #
-# The PRIMARY upload path is tools/upload.sh (official JieLi isd_download).
-# This script flashes the same validated image (build/official/jl_isd.fw)
+# This reference-only script flashes build/official/jl_isd.fw
 # directly at flash offset 0 with the raw-SCSI UBOOT protocol — use it when
 # the device enumerates as a plain "UBOOT" mass-storage device and
 # isd_download's USB protocol is not usable.
@@ -10,8 +9,10 @@
 # Always dump first. Recovery = restore the dump.
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-JLTOOL="/home/yukidama/JL/FM-1/3rd-party/jl-uboot-tool/jluboottool.py"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(cd "$HERE/../.." && pwd)"
+REPO="$(cd "$ROOT/.." && pwd)"
+JLTOOL="$REPO/3rd-party/jl-uboot-tool/jluboottool.py"
 OUT="$ROOT/build/official"
 BACKUPDIR="$ROOT/backups"
 CHIP="${FM1_CHIP:-br22}"
@@ -40,8 +41,8 @@ cmd_write() {
   local img="$OUT/jl_isd.fw"
   local latest
   latest=$(ls -t "$BACKUPDIR"/fm1_stock_*.bin 2>/dev/null | head -1 || true)
-  [ -n "$latest" ] || { echo "ERROR: run 'tools/flash.sh dump' first." >&2; exit 1; }
-  [ -f "$img" ] || { echo "ERROR: $img missing — run: tools/upload.sh build" >&2; exit 1; }
+  [ -n "$latest" ] || { echo "ERROR: run 'tools/legacy-uboot/flash.sh dump' first." >&2; exit 1; }
+  [ -f "$img" ] || { echo "ERROR: $img missing — run: tools/legacy-uboot/upload.sh build" >&2; exit 1; }
   echo "Using backup $latest as safety net."
   echo "Erasing flash..."
   run_tool erase 0 "$FLASH_SIZE"
@@ -51,7 +52,7 @@ cmd_write() {
 }
 
 cmd_restore() {
-  local img="${1:?usage: tools/flash.sh restore BACKUP.bin}"
+  local img="${1:?usage: tools/legacy-uboot/flash.sh restore BACKUP.bin}"
   [ -f "$img" ] || { echo "ERROR: $img not found" >&2; exit 1; }
   run_tool erase 0 "$FLASH_SIZE"
   run_tool write 0 "$img"
@@ -63,5 +64,5 @@ case "${1:-}" in
   dump)    cmd_dump ;;
   write)   cmd_write ;;
   restore) shift; cmd_restore "$@" ;;
-  *) echo "usage: tools/flash.sh {probe|dump|write|restore FILE}" >&2; exit 1 ;;
+  *) echo "usage: tools/legacy-uboot/flash.sh {probe|dump|write|restore FILE}" >&2; exit 1 ;;
 esac

@@ -1,4 +1,4 @@
-# FM-1 OTA / M-UPGRADE protocol (fully reverse-engineered)
+# FM-1 OTA / M-UPGRADE protocol and open device-side gates
 
 How the M-Vave M-UPGRADE client updates the FM-1 (JieLi AC791N/BR22-class),
 byte-verified against live ALSA-seq captures of M-UPGRADE under Wine and
@@ -144,7 +144,7 @@ Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
   leaving the eq payload and both entry names byte-identical. The device then
   proceeds past cfg to the `ota.bin` stage. (This is the first no-op gate;
   confirmed by request-log: 9 requests → 49 requests.)
-- **ota.bin format — fully reverse-engineered.** It is a nested bootable
+- **ota.bin container format — byte-verified.** It is a nested bootable
   image at logical `0xA6F20` (fwsc file `0xA6F34`, `0x4E01` bytes):
   `[outer_hdrcrc:2][outer_datacrc:2][doff=0x20][dlen=0x4DE1][attr=0x41][rsvd][last]["usb_hid_ota.bin"]`
   then an inner boot header

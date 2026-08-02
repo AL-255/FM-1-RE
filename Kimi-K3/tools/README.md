@@ -5,7 +5,9 @@
 The FM-1 update is a two-stage USB-MIDI SysEx pull protocol. No UBOOT button
 or HID transport is involved.
 
-**What you need:** `build/FM-1-demo.fwsc` (already built and verified).
+**Development artifact:** `build/FM-1-demo.fwsc` can be rebuilt and passes
+offline container checks, but it is not flash-ready and has not completed an
+update on hardware.
 
 ```bash
 # rebuild if needed:
@@ -26,7 +28,7 @@ re-enumeration fixes have not been retested on hardware.
 
 The official Windows M-UPGRADE application remains the recovery reference. Its
 V14 executable embeds the stock `FM-1_014` image extracted under
-`disasm_FM-1_2026_07_06_V14/`.
+`firmware-images/v14/`.
 
 The `.fwsc` preserves the stock JLFS/UFW layout and chip key `0x980F`, with all
 container CRCs recomputed. The builder patches `app.bin`, changes inert cfg
@@ -34,14 +36,14 @@ padding to bypass the no-op gate, and can inject the shrunken OTA loader.
 
 ## Method 2: JieLi isd_download (needs UBOOT mode — NOT available here)
 
-`tools/upload.sh` uses JieLi's `isd_download`. It requires the device in
+`tools/legacy-uboot/upload.sh` uses JieLi's `isd_download`. It requires the device in
 **UBOOT/update mode**, which on most JieLi boards is entered with a button
 strap. **The FM-1 has no such button** (its update path is the OTA one
 above), so this method does not work on it in practice. Kept for reference.
 
 ## Method 3: raw jl-uboot-tool (needs UBOOT mass-storage — NOT available)
 
-`tools/flash.sh` likewise requires the UBOOT mass-storage device. Not
+`tools/legacy-uboot/flash.sh` likewise requires the UBOOT mass-storage device. Not
 available on the FM-1 without the button. Kept for reference / other boards.
 
 ## After flashing
@@ -53,9 +55,10 @@ synth (program change 0–3 = SAW LEAD / SQ BASS / SYNC PAD / PLUCK).
 
 ## Recovery
 
-Re-flash the stock `FM-1.fwsc` (from M-Vave's download page) with M-UPGRADE.
-The OTA loader is robust — a failed/interrupted transfer just leaves the old
-firmware running, and the device stays able to enter OTA mode again.
+The official V14 `FM-1.fwsc` and M-UPGRADE remain the recovery reference, but
+recovery from a custom image has not been demonstrated. A custom application
+that fails before USB initialization may make the buttonless OTA path
+unavailable, and no retail-device UBOOT entry method is known.
 
 Protocol details and current hardware limitations are documented in
 `docs/io/11-ota-protocol.md` and `docs/ota-loader-shrinking.md`.

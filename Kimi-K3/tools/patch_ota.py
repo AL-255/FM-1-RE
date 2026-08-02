@@ -66,9 +66,11 @@ After the edit these fields are recomputed:
 (outer_hdrcrc must be refreshed because it covers the outer_datacrc field).
 Total bytes changed: 7 (1 name byte + 3 u16 CRC fields).
 """
-import struct, sys
+import os, struct, sys
 
-sys.path.insert(0, "/home/yukidama/JL/FM-1/3rd-party/jl-misctools/firmware")
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(os.path.dirname(HERE))
+sys.path.insert(0, os.path.join(REPO, "3rd-party", "jl-misctools", "firmware"))
 from jltech.crc import jl_crc16
 
 OTA_SIZE   = 0x4e01

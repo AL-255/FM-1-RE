@@ -75,10 +75,13 @@ place; instead (strategy b):
 Integrity fields recomputed: inner_datacrc (over the MODIFIED image),
 inner_hdrcrc, outer_datacrc, outer_hdrcrc; new UFW-level dcrc printed.
 """
+import os
 import struct
 import sys
 
-sys.path.insert(0, "/home/yukidama/JL/FM-1/3rd-party/jl-misctools/firmware")
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(os.path.dirname(HERE))
+sys.path.insert(0, os.path.join(REPO, "3rd-party", "jl-misctools", "firmware"))
 from jltech.crc import jl_crc16
 
 OTA_SIZE = 0x4e01

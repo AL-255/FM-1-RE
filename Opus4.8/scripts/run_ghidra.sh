@@ -3,8 +3,9 @@
 # Requires scripts/setup_reference.sh to have run first.
 set -euo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
+REPO="$(cd "$HERE/.." && pwd)"
 G=$(ls -d "$HERE"/reference/ghidra_*_PUBLIC | head -1)
-APP="$(cd "$HERE/.." && pwd)/disasm_FM-1_2026_07_03_V13/raw_fw/FM-1.fwsc_unpack/files/app.bin"
+APP="$REPO/firmware-images/v13/raw_fw/FM-1.fwsc_unpack/files/app.bin"
 PROJ="$HERE/ghidra/proj"; SCR="$HERE/ghidra/scripts"
 mkdir -p "$PROJ" "$HERE/decomp" "$HERE/reasm"
 

@@ -1,7 +1,7 @@
 # FM-1 firmware — disassembly & reconstruction (Opus4.8 workspace)
 
 Reverse engineering of the **M-Vave FM-1** FM-synthesizer firmware
-(`disasm_FM-1_2026_07_03_V13/…/FM-1.fwsc`), a JieLi Bluetooth-audio MCU running a
+(`firmware-images/v13/raw_fw/FM-1.fwsc`), a JieLi Bluetooth-audio MCU running a
 DX7-compatible 6-operator FM engine.
 
 > All disassembly work lives here in `Opus4.8/`. Large regenerable artifacts
@@ -51,8 +51,9 @@ DX7-compatible 6-operator FM engine.
 
 ## Full firmware teardown (function map)
 
-A complete functional map — every function, by subsystem, with a rebuild guide —
-is in **`docs/reversing/`**:
+A broad call-target-derived functional map, grouped by subsystem with a rebuild
+guide, is in **`docs/reversing/`**. It is not proof that callback-only functions
+or inferred data/code boundaries are complete:
 
 | Doc | Contents |
 |---|---|

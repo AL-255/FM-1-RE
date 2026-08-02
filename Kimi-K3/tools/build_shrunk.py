@@ -2,16 +2,20 @@
 """Build a shrunken ota.bin by zeroing image regions and re-encoding with
 the stock-compatible optimal LZ4 encoder, then pad the compressed payload
 to a multiple of 512 (max 19456) so the device's step-1 verifier accepts it."""
-import struct, sys
-sys.path.insert(0, "/home/yukidama/JL/FM-1/Kimi-K3/tools")
+import os, struct, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+REPO = os.path.dirname(ROOT)
+sys.path.insert(0, HERE)
 import patch_ota2
-sys.path.insert(0, "/home/yukidama/JL/FM-1/3rd-party/jl-misctools/firmware")
+sys.path.insert(0, os.path.join(REPO, "3rd-party", "jl-misctools", "firmware"))
 from jltech.crc import jl_crc16
 
 OTA_SIZE = 0x4e01
 IMG_SIZE = 0x5b1c
 BLOCK_DSIZES = (0x1000, 0x1000, 0x1000, 0x1000, 0x1000, 0xb1c)
-STOCK_OTA = "/tmp/ota_re/ota_real.bin"
+STOCK_OTA = os.path.join(ROOT, "analysis", "device", "ota-loader", "ota_stock.bin")
 
 def decompress(ota):
     dlen = struct.unpack_from('<I', ota, 0x08)[0]

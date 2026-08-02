@@ -1,10 +1,10 @@
 # Kimi-K3 — FM-1 firmware RE: function map, architecture & custom synth demo
 
-This workspace continues and completes the reverse engineering of the **M-Vave
-FM-1** synthesizer firmware begun in `../Opus4.8`. It delivers:
+This workspace continues the reverse engineering of the **M-Vave FM-1**
+synthesizer firmware begun in `../Opus4.8`. It delivers:
 
-1. **A complete function map** — all **2062 functions** of `app.bin` classified
-   by subsystem with purpose and confidence
+1. **A broad function map** — **2062 direct-call-target-derived entries** from
+   V13 `app.bin`, categorized by subsystem with purpose and confidence
    (`docs/function-index.md`, machine-readable: `analysis/db.json`,
    `analysis/function_index.csv`).
 2. **Architecture documentation** — boot, RTOS, drivers, synth engine
@@ -22,7 +22,7 @@ FM-1** synthesizer firmware begun in `../Opus4.8`. It delivers:
 Kimi-K3/
 ├── README.md                  ← this file
 ├── docs/
-│   ├── function-index.md      ← all 2062 functions, grouped by subsystem
+│   ├── function-index.md      ← 2062 inferred entries, grouped by subsystem
 │   ├── architecture.md        ← system architecture (boot→RTOS→drivers→synth)
 │   └── io/                    ← per-subsystem I/O teardowns
 │       ├── 01-boot.md 02-rtos.md 03-audio-dac.md 04-synth-engine.md
@@ -34,7 +34,9 @@ Kimi-K3/
 │   ├── CLASSIFY_BRIEF.md      ← taxonomy/ISA guide used for classification
 │   ├── shards/                ← enriched per-range disassembly packets
 │   ├── classified/            ← per-shard classification results
-│   └── libdis/                ← toolchain library disassemblies (signatures)
+│   ├── libdis/                ← toolchain library disassemblies (signatures)
+│   ├── device/ota-loader/     ← stock/patched device-side loader images
+│   └── host-updater/          ← Windows M-UPGRADE worker decompilation
 ├── scripts/
 │   ├── build_db.py            ← parse vendor objdump → db.json
 │   ├── disasm_toolchain_libs.sh
@@ -47,15 +49,15 @@ Kimi-K3/
 │   ├── src/                   ← demo runtime, hooks, shared voices
 │   ├── host/                  ← ALSA app, LV2 plugin, test tools
 │   └── Makefile               ← `make` (blob), `make host`, `make image`
-├── build/                     ← flasher outputs (official/jl_isd.fw)
+├── build/                     ← generated firmware artifacts (git-ignored)
 ├── tools/
-│   ├── build_official.py      ← stage patched app.bin + blob for isd_download
+│   ├── fm1_ota.py             ← active USB-MIDI update client
+│   ├── build_fwsc.py          ← build a development UFW package
 │   ├── build_image.py         ← UFW decode → patch hooks → re-encrypt (reference)
 │   ├── symbols.py             ← export blob entry addresses
 │   ├── make_font.py           ← 8×16 LCD font generator (Pillow)
-│   ├── isd_config.ini         ← FM-1 (AC693N) download config
-│   ├── upload.sh              ← OFFICIAL upload via JieLi isd_download
-│   ├── flash.sh               ← raw alternative (jl-uboot-tool, dump-first)
+│   ├── tests/                 ← offline OTA protocol tests
+│   ├── legacy-uboot/          ← unavailable ROM/UBOOT workflows (reference)
 │   └── README.md              ← flashing/recovery instructions
 └── reference/                 ← (git-ignored) SDK clones
 ```
@@ -86,16 +88,13 @@ python3 scripts/aggregate.py             # → docs/function-index.md
 The 51-shard LLM classification was run over `analysis/shards/` with
 `analysis/CLASSIFY_BRIEF.md`; results are committed in `analysis/classified/`.
 
-## Flashing (real hardware)
+## Flashing status
 
-See `tools/README.md`. Primary method is JieLi's official `isd_download`:
-
-```bash
-tools/upload.sh            # build + upload (official JieLi method)
-```
-
-A raw alternative (`tools/flash.sh`, jl-uboot-tool) writes the same image
-after a mandatory full-flash backup. Recovery = restore the backup.
+See `tools/README.md` and `../TODO_Aug1.md`. The buttonless USB-MIDI client is
+implemented, but a custom image has not reached the loader's commit handshake.
+The ROM/UBOOT workflows are retained under `tools/legacy-uboot/` for analysis;
+the retail FM-1 has no known way to enter that mode. Do not flash the custom
+image until the P0 release gates in `TODO_Aug1.md` are complete.
 
 ## The demo
 
@@ -141,10 +140,11 @@ cd firmware && make host
 
 ## Verification status
 
-- all 2062 functions classified (0.5 % unknown) → `docs/function-index.md`
+- all 2062 discovered call-target entries categorized (0.5 % unknown, many
+  low-confidence) → `docs/function-index.md`
 - msfa/Dexed engine proven byte-exact (tables) and mapped line-by-line
 - pi32v2 demo blob builds with the JieLi toolchain (13 KB), links at XIP
-  `0x0208E600` (appended to `app.bin` end)
+  `0x02046600` (replaces part of the V13 font/bitmap region)
 - image builder re-encrypts the app area with chip key `0x980F`; hook
   patches verified by re-decryption (`tools/build_image.py`)
 - host: synth render, MIDI input path, preset switching, and the LV2 plugin

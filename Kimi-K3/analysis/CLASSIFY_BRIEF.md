@@ -102,9 +102,9 @@ Rules:
 ## Reference sources you may consult (read-only, on disk)
 
 - msfa (the synth engine — the single best reference for SYNTH_FM):
-  `/home/yukidama/JL/FM-1/Opus4.8/reference/dexed/Source/msfa/`
-  and `/home/yukidama/JL/FM-1/Opus4.8/reference/Synth_Dexed/src/`
-- JieLi peripheral docs (register meanings): `/home/yukidama/JL/FM-1/Opus4.8/reference/jielie/periph/*.md`
+  `Opus4.8/reference/dexed/Source/msfa/`
+  and `Opus4.8/reference/Synth_Dexed/src/`
+- JieLi peripheral docs (register meanings): `Opus4.8/reference/jielie/periph/*.md`
 - JieLi BR23 soundbox SDK source (sibling chip, same SDK generation — drivers/OS
-  structure closely match): `/home/yukidama/JL/FM-1/Kimi-K3/reference/ac695n_soundbox_sdk/`
+  structure closely match): `Kimi-K3/reference/ac695n_soundbox_sdk/`
 - DX7 patch format: msfa `dx7note.cc` `unpackProgram()`.

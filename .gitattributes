@@ -1,0 +1,6 @@
+*.bin binary
+*.boot binary
+*.fwsc binary
+Opus4.8/decomp/app_pi32v2_objdump.txt linguist-generated=true -diff
+firmware-images/**/decomp/app_pi32v2_objdump.txt linguist-generated=true -diff
+Kimi-K3/analysis/host-updater/ota_worker_decomp.c linguist-generated=true

@@ -14,8 +14,10 @@ PLAINTEXT (no chipkey encryption on our side).
 import os, struct, sys, json, shutil
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-ROOT = os.path.dirname(HERE)
-UNPACK = "/home/yukidama/JL/FM-1/disasm_FM-1_2026_07_03_V13/raw_fw/FM-1.fwsc_unpack"
+TOOLS = os.path.dirname(HERE)
+ROOT = os.path.dirname(TOOLS)
+REPO = os.path.dirname(ROOT)
+UNPACK = os.path.join(REPO, "firmware-images", "v13", "raw_fw", "FM-1.fwsc_unpack")
 APPBIN = os.path.join(UNPACK, "files", "app.bin")
 DEMO_BIN = os.path.join(ROOT, "firmware", "build", "demo.bin")
 DEMO_MAP = os.path.join(ROOT, "firmware", "build", "demo.map.json")

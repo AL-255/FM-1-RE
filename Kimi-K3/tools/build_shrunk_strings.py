@@ -17,17 +17,21 @@ into literal bytes, which does not change the decompressed image) so that the
 payload ends exactly at a 512-byte boundary with no trailing padding.  Some
 loader builds do not tolerate post-block padding, so an exact fit is safer.
 """
-import struct, sys
-sys.path.insert(0, "/home/yukidama/JL/FM-1/Kimi-K3/tools")
+import os, struct, sys
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+REPO = os.path.dirname(ROOT)
+sys.path.insert(0, HERE)
 import patch_ota2
-sys.path.insert(0, "/home/yukidama/JL/FM-1/3rd-party/jl-misctools/firmware")
+sys.path.insert(0, os.path.join(REPO, "3rd-party", "jl-misctools", "firmware"))
 from jltech.crc import jl_crc16
 
 OTA_SIZE = 0x4e01
 IMG_SIZE = 0x5b1c
 BLOCK_DSIZES = (0x1000, 0x1000, 0x1000, 0x1000, 0x1000, 0xb1c)
 BLOCK_OFFS = (0, 0x1000, 0x2000, 0x3000, 0x4000, 0x5000)
-STOCK_OTA = "/tmp/ota_re/ota_real.bin"
+STOCK_OTA = os.path.join(ROOT, "analysis", "device", "ota-loader", "ota_stock.bin")
 MAX_DLEN = 19456
 
 # Regions to zero (start inclusive, end exclusive)

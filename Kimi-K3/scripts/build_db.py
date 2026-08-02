@@ -19,10 +19,12 @@ from collections import defaultdict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-OPUS = os.path.join(os.path.dirname(ROOT), "Opus4.8")
+REPO = os.path.dirname(ROOT)
+OPUS = os.path.join(REPO, "Opus4.8")
 LISTING = os.path.join(OPUS, "decomp", "app_pi32v2_objdump.txt")
 ENTRIES = os.path.join(OPUS, "decomp", "function_entries_vendor.csv")
-APPBIN = "/home/yukidama/JL/FM-1/disasm_FM-1_2026_07_03_V13/raw_fw/FM-1.fwsc_unpack/files/app.bin"
+APPBIN = os.path.join(REPO, "firmware-images", "v13", "raw_fw",
+                      "FM-1.fwsc_unpack", "files", "app.bin")
 OUT = os.path.join(ROOT, "analysis", "db.json")
 
 BASE = 0x02000000

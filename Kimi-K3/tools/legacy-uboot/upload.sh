@@ -5,12 +5,14 @@
 # to the FM-1 over USB with JieLi's own isd_download tool, which re-packs,
 # encrypts and flashes the JLFS image via the chip's USB download protocol.
 #
-# The FM-1 must be in UBOOT/update mode (see tools/README.md §Entering UBOOT
-# mode). If no device is present, isd_download just packages build/official/
+# The FM-1 must be in an externally forced UBOOT/update mode. No working entry
+# method is known for the retail device. If no device is present, isd_download
+# just packages build/official/
 # jl_isd.fw without flashing (safe to run any time to build the image).
 set -euo pipefail
 
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+HERE="$(cd "$(dirname "$0")" && pwd)"
+ROOT="$(cd "$HERE/../.." && pwd)"
 PB=/home/yukidama/JL/toolchain/post-build/jieli-linux-post-build-tools-20260129.1
 ISD="$PB/isd_download"
 OUT="$ROOT/build/official"
@@ -24,7 +26,7 @@ build() {
   echo ">> building firmware blob (pi32v2)"
   make -C "$ROOT/firmware" build/demo.bin >/dev/null
   echo ">> staging official image files"
-  python3 "$ROOT/tools/build_official.py"
+  python3 "$HERE/build_official.py"
 }
 
 upload() {
@@ -40,5 +42,5 @@ case "${1:-}" in
   build)  build ;;
   upload) upload "${@:2}" ;;
   "")     build; upload ;;
-  *) echo "usage: tools/upload.sh [build|upload] [extra isd_download args]" >&2; exit 1 ;;
+  *) echo "usage: tools/legacy-uboot/upload.sh [build|upload] [extra isd_download args]" >&2; exit 1 ;;
 esac

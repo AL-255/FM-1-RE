@@ -83,7 +83,7 @@ const results = await parallel(shards.map((sf) => () =>
     `Classify EVERY FUNC block. Return one record per function with its exact addr ` +
     `(from the header), the best subsystem code, a one-line purpose, and confidence.\n` +
     `You may grep other shards or read reference sources under ` +
-    `/home/yukidama/JL/FM-1/Opus4.8/reference (dexed/Synth_Dexed msfa core, jielie docs) ` +
+    `Opus4.8/reference (dexed/Synth_Dexed msfa core, jielie docs) ` +
     `if it helps identify SYNTH_FM/AUDIO code. Do not skip any function.`,
     { schema: SCHEMA, label: 'classify:' + sf.split('/').pop().replace('shard_', '').replace('.txt', ''), phase: 'Classify' }
   ).then((r) => (r && r.functions) ? r.functions : [])

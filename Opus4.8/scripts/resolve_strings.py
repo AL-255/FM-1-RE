@@ -14,8 +14,13 @@ import re, json, struct, sys, os
 from collections import defaultdict
 
 BASE = 0x02000000
+HERE = os.path.dirname(os.path.abspath(__file__))
+OPUS = os.path.dirname(HERE)
+REPO = os.path.dirname(OPUS)
+ANALYSIS = os.path.join(OPUS, "analysis")
 APP = sys.argv[1] if len(sys.argv) > 1 else \
-    "/home/yukidama/JL/FM-1/disasm_FM-1_2026_07_03_V13/raw_fw/FM-1.fwsc_unpack/files/app.bin"
+    os.path.join(REPO, "firmware-images", "v13", "raw_fw",
+                 "FM-1.fwsc_unpack", "files", "app.bin")
 
 data = open(APP, "rb").read()
 code_end = BASE + len(data)
@@ -52,7 +57,7 @@ def region_of(addr):
     return None
 
 # ---- attach to functions
-db = json.load(open("analysis/function_db.json"))
+db = json.load(open(os.path.join(ANALYSIS, "function_db.json")))
 funcs = db["functions"]
 attach = defaultdict(set)
 for key, f in funcs.items():
@@ -70,7 +75,7 @@ for key, f in funcs.items():
         attach[key] = seen
 
 out = {k: sorted(strings[a] for a in v)[:40] for k, v in attach.items()}
-json.dump(out, open("analysis/func_strings.json", "w"), ensure_ascii=False)
+json.dump(out, open(os.path.join(ANALYSIS, "func_strings.json"), "w"), ensure_ascii=False)
 
 # region summary
 reg_summary = []
@@ -80,7 +85,8 @@ for r in regions:
             "start": f"0x{r[0][0]:08x}", "n": len(r),
             "sample": [strings[t] for _, t in r[:6]]
         })
-json.dump(reg_summary, open("analysis/string_tables.json", "w"), ensure_ascii=False, indent=1)
+json.dump(reg_summary, open(os.path.join(ANALYSIS, "string_tables.json"), "w"),
+          ensure_ascii=False, indent=1)
 
 print(f"real strings: {len(strings)}")
 print(f"pointer sites: {len(ptr_sites)}  table regions: {len(regions)} (>=3 entries: {len(reg_summary)})")

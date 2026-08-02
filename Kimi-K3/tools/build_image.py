@@ -18,13 +18,15 @@ import os, struct, sys, json
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
-FWSC = "/home/yukidama/JL/FM-1/disasm_FM-1_2026_07_03_V13/raw_fw/FM-1.fwsc"
-APPBIN = "/home/yukidama/JL/FM-1/disasm_FM-1_2026_07_03_V13/raw_fw/FM-1.fwsc_unpack/files/app.bin"
+REPO = os.path.dirname(ROOT)
+V13 = os.path.join(REPO, "firmware-images", "v13", "raw_fw")
+FWSC = os.path.join(V13, "FM-1.fwsc")
+APPBIN = os.path.join(V13, "FM-1.fwsc_unpack", "files", "app.bin")
 DEMO_BIN = os.path.join(ROOT, "firmware", "build", "demo.bin")
 DEMO_MAP = os.path.join(ROOT, "firmware", "build", "demo.map.json")
 OUT = os.path.join(ROOT, "build")
 
-sys.path.insert(0, "/home/yukidama/JL/FM-1/3rd-party/jl-misctools/firmware")
+sys.path.insert(0, os.path.join(REPO, "3rd-party", "jl-misctools", "firmware"))
 from jltech.crc import jl_crc16
 from jltech.cipher import jl_enc_cipher, jl_sfc_cipher
 from jltech.chipkeybin import chipkeybin_decode
