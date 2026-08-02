@@ -1,0 +1,18 @@
+# Address       Role name
+# ota_finish_gate is conservative; the next four names are SDK-correlated.
+0x01c0bb62 ota_finish_gate
+0x01c0bc10 updata_mode
+0x01c0bd7a chip_restart
+0x01c0bdba updata_check_updata_result
+0x01c0bddc uboot_main
+0x01c0dfe2 inspect_update_headers
+0x01c0f7f8 is_fatal_update_error
+0x01c0f2e4 handle_fatal_update_error
+0x01c0e60e run_partition_callbacks
+0x01c0e41c validate_required_file_heads
+0x01c0e714 verify_and_plan_update
+0x01c0ed36 prepare_flash_regions
+0x01c0efc0 write_update_regions
+0x01c0f2ae finalize_update_metadata
+0x01c0b7a2 transport_read_request
+0x01c0d1ee memcmp_exact

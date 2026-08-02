@@ -7,16 +7,32 @@ objdump annotates every in-section reference as `<_fw+0xHEX>`:
   - immediate loads (rN = <imm>): HEX is the *absolute value* loaded
     -> a pointer iff it falls in flash [0x02000000..CODE_END] or RAM [0x01c00000..]
 
-Emits analysis/function_db.json and analysis/func_index.csv.
+Defaults to the application image for backward compatibility. Use --base,
+--entry, and --out-dir for a RAM-loaded executable such as the OTA loader.
 """
-import re, json, sys, os
+import argparse
+import json
+import os
+import re
 from collections import defaultdict
 
-BASE = 0x02000000
-OBJ = sys.argv[1] if len(sys.argv) > 1 else "analysis/disassembly/app_pi32v2_objdump.txt"
-STR = sys.argv[2] if len(sys.argv) > 2 else "analysis/strings_raw.txt"
-OUT = "analysis"
-CODE_END = 0x0208e59a + 4
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument(
+    "objdump",
+    nargs="?",
+    default="analysis/disassembly/app_pi32v2_objdump.txt",
+)
+parser.add_argument("strings", nargs="?", default="analysis/strings_raw.txt")
+parser.add_argument("--base", type=lambda value: int(value, 0), default=0x02000000)
+parser.add_argument("--entry", type=lambda value: int(value, 0))
+parser.add_argument("--out-dir", default="analysis")
+args = parser.parse_args()
+
+BASE = args.base
+ENTRY = args.entry if args.entry is not None else BASE + 0xA0
+OBJ = args.objdump
+STR = args.strings
+OUT = args.out_dir
 RAM_LO, RAM_HI = 0x01c00000, 0x01c20000
 
 BRANCH = re.compile(r'\b(call|goto|gotoss|jmp)\b')
@@ -63,9 +79,12 @@ for a, nb, mn, tx, refs in insns:
         for t in refs:
             callcnt[t] += 1
 entries = set(t for t in callcnt if BASE <= t < code_end)
-entries.add(0x020000A0)
+entries.add(ENTRY)
 # also RAM-resident call targets (functions executing from RAM)
-ram_entries = set(t for t in callcnt if RAM_LO <= t < RAM_HI)
+ram_entries = set(
+    t for t in callcnt
+    if RAM_LO <= t < RAM_HI and not (BASE <= t < code_end)
+)
 
 entries = sorted(entries)
 # ---- segment flash functions: [entry, next_entry)
@@ -152,4 +171,4 @@ print(f"instructions={len(insns)}  functions={len(func)}  ram_entries={len(ram_e
 print(f"code range 0x{BASE:08x}..0x{code_end:08x}")
 tot_str = sum(1 for f in func.values() if f['str_refs'])
 print(f"functions with >=1 string xref: {tot_str}")
-print("wrote analysis/function_db.json, strings.json, func_index.csv")
+print(f"wrote {OUT}/function_db.json, strings.json, func_index.csv")

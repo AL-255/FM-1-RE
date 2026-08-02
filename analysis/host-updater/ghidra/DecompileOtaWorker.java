@@ -26,8 +26,11 @@ public class DecompileOtaWorker extends GhidraScript {
     };
 
     private static final long[] FUNCTIONS = {
+        0x14000e780L, // asynchronous device open and handshake parse
         0x140011b50L, // open/probe + handshake
+        0x1400169a0L, // initialize MIDI transport and identity fields
         0x140016c90L, // receive and parse a device read request
+        0x140016e10L, // open ports, issue handshake, and decode identity
         0x140017a30L, // build and send a data/success response
         0x140017b20L, // construct decoded response body and checksum
         0x140017cb0L, // verify decoded request checksum

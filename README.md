@@ -1,8 +1,10 @@
 # FM-1 firmware reverse engineering
 
 Reverse engineering, update-protocol tooling, and experimental firmware for the
-M-Vave FM-1 synthesizer. The target is a JieLi BR22/AC693N SoC with a pi32v2
-CPU, XIP flash at `0x02000000`, and a Dexed/msfa-derived six-operator FM engine.
+M-Vave FM-1 synthesizer. Package, SPL, and SDK provenance identify the target as
+JieLi AC791N/WL82 with a pi32v2 CPU, XIP flash at `0x02000000`, and a
+Dexed/msfa-derived six-operator FM engine. The embedded `JL-BR22` string is
+inherited library nomenclature, not reliable SoC identification.
 
 ## Repository layout
 
@@ -21,6 +23,7 @@ CPU, XIP flash at `0x02000000`, and a Dexed/msfa-derived six-operator FM engine.
 - `3rd-party/`: pinned firmware parsing and JieLi boot-tool submodules.
 - `TODO_Aug1.md`: current safety review and the release gates for device
   flashing.
+- `TODO_aug2.md`: AC791N boot-chain corrections and the latest open questions.
 
 See `analysis/README.md` for the relationship between the two function-analysis
 pipelines. `analysis/db.json` and `docs/function-index.md` are the current
@@ -40,6 +43,10 @@ python3 scripts/match_libs.py
 python3 scripts/build_master_index.py
 python3 scripts/build_slices.py
 
+# OTA loader extraction, vendor map, and corroborative Ghidra sweep
+scripts/analyze_ota_loader.sh
+scripts/run_ghidra_loader.sh
+
 # Current enriched classification database and documentation
 python3 scripts/build_db.py
 scripts/disasm_toolchain_libs.sh
@@ -55,7 +62,8 @@ python3 -m unittest discover -s tools/tests -v
 
 ## Safety status
 
-The custom firmware is **not flash-ready**. Offline package checks and protocol
-tests pass, but the device-side OTA loader has not emitted the final
-`0xF0000000` commit request for a custom image. Read `TODO_Aug1.md` before using
-any update or flash utility.
+The custom firmware is **not flash-ready**. Offline work has not established a
+ROM recovery path, rollback, or safe interrupted-write behavior for the
+single-bank layout. The console/factory-mode audit in
+`analysis/device/debug-surfaces.md` found no substitute recovery entry. Read
+`TODO_Aug1.md` and `TODO_aug2.md` before using any update or flash utility.

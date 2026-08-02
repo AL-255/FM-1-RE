@@ -1,6 +1,6 @@
 # 07 — Input: key matrix, rotary encoder, pitch/mod wheels (ADC)
 
-Target: M-Vave FM-1, JieLi BR22/AC693N (pi32v2), firmware image base `0x02000000`.
+Target: M-Vave FM-1, JieLi AC791N/WL82 (pi32v2), firmware image base `0x02000000`.
 All addresses are flash VMAs unless noted. RAM global base used throughout: `0x01C0E670`
 (the "app/IO state" struct — tick counters, event queue, ADC tables, key state all live
 inside it). Confidence tags: **high** = proven from disassembly, **med** = strong
@@ -90,10 +90,20 @@ Evidence: `0x020245D2` posts `r4-3` = `(i<<16)|0`; `0x02024650` posts `(i<<16)|1
 `0x02024748` posts `(i<<16)|2` after 41 ticks; `0x020246D6` posts `(i<<16)|3`
 (state 2 hold). 
 
-Special combo (**low**): if bytes `0x01C0E670+2837` and `+2839` are both 1, the scanner
-posts the synthetic triplet `0x00000064`, `0x00010064`, `0x06000000`
-(`0x020244A2..0x02024546`) — looks like a two-key chord mapped to key id 100
-(0x64) plus a class-6 system event.
+Special combo (**high**): if the state bytes for scanner slots 0 and 1
+(`0x01C0E670+2837` and `+2839`) are both 1, the scanner first writes
+`0x64006400` over the two state records, then posts the synthetic triplet
+`0x00000064`, `0x00010064`, `0x06000001`
+(`0x020244A2..0x02024546`). The first two words are code `0x64` for key slots
+0 and 1; the last is class 6.
+
+This is not a hidden factory/debug entry. Class 6 reaches `0x02023114`, which
+clears signed state bytes `ENG+4779` and `ENG+4780`, then refreshes the current
+UI label. Those bytes are the octave and semitone shifts used in the note
+calculation documented in `05-midi.md`. V14 preserves the same sequence at
+`0x02024B7C` and the same handler behavior at `0x0202334A` (shifted globals
+`ENG+5099/+5100`). The physical labels for scanner slots 0 and 1 remain
+unmapped, but the chord's software effect is an octave/semitone reset (**high**).
 
 ---
 
@@ -211,14 +221,19 @@ loop at `0x020237D6`:
 2. **Page handler first**: current page id `b[0x01C0E670+23]` indexes the page-handler
    table at `0x0204EA00+2828` = **`0x0204F50C`**; `handler(ev)` runs before the default
    path, non-zero return = consumed (`0x02023850..0x0202386A`).
-3. **Class dispatch**: `tbb [ev >> 24]` jump table, 8 classes 0–7 (`0x0202386C..0x02023884`).
-   - class `0x00` — keys (Section 2.2);
-   - class `0x03` — second-level fan-out: `(ev>>16) & 0xFFFF00FF ≤ 13` indexes a
-     14-entry handler table at `0x0204EA00+3600` = **`0x0204F810`**, arg `ev & 0xFF`
-     (`0x02023884..0x0202389A`);
-   - class `0x04` — wheel analog value (matched by `ev ^= 0x40000000`, `0x02023878`);
-   - class `0x06` — system/combo;
-   - class `0x07` — encoder: id = bits 23:16; ids 2..5 routed to element callbacks
+3. **Class dispatch**: `tbb [ev >> 24]` jump table, 8 classes 0–7
+   (`0x0202386C..0x02023884`). The table bytes are `07 3e 3e 3e 06 3e 05 04`;
+   pi32v2 `tbb` branches from the instruction end by twice the selected byte.
+   - class `0x00` — fallback key fan-out at `0x02023884`: masks `ev >> 16`,
+     accepts values 0..13, and performs an indirect call with `ev & 0xFF`.
+     The apparent table location does not contain flat code pointers, so the
+     callback representation/reachability remains unresolved. Page handlers
+     receive each event first.
+   - classes `0x01`, `0x02`, `0x03`, and `0x05` — default drop/end path;
+   - class `0x04` — wheel analog value (`0x020230AA`);
+   - class `0x06` — octave/semitone reset handler (`0x02023114`); it acts only
+     when `(ev >> 16) & 0xFF` is zero, as it is for `0x06000001`;
+   - class `0x07` — encoder (`0x0202315E`): id = bits 23:16; ids 2..5 routed to element callbacks
      through the current page's widget list `[0x01C0E670+356]`
      (`0x0202380E..0x02023846`), with `ui_widget_invalidate` `0x02018C9C` and
      `ui_ctx_release` `0x020174EC` around them.

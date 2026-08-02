@@ -7,7 +7,7 @@ void FUN_14000e720(QObject *param_1)
   QDebug *this_00;
   QDebug local_res10 [24];
   QMessageLogger local_28 [32];
-  
+
   this = (QMessageLogger *)QMessageLogger::QMessageLogger(local_28,(char *)0x0,0,(char *)0x0);
   this_00 = (QDebug *)QMessageLogger::debug(this);
   QDebug::operator<<(this_00,"OtaUpgradeWorker::startUpgrade() called");
@@ -52,7 +52,7 @@ void FUN_14000d750(QObject *param_1)
   undefined4 local_30;
   undefined2 local_2c;
   ulonglong local_28;
-  
+
   local_28 = DAT_14013adc0 ^ (ulonglong)auStackY_128;
   pQVar2 = (QMessageLogger *)QMessageLogger::QMessageLogger(local_90,(char *)0x0,0,(char *)0x0);
   pQVar3 = (QDebug *)QMessageLogger::debug(pQVar2);
@@ -625,6 +625,25 @@ LAB_140012a11:
 }
 
 
+/* FUN_14000e780 @ 14000e780 */
+
+undefined8 FUN_14000e780(longlong *param_1,undefined8 param_2,undefined8 param_3)
+
+{
+  byte bVar1;
+
+  bVar1 = FUN_140016e10(*param_1,*(uint *)(param_1 + 4),CONCAT71((int7)((ulonglong)param_3 >> 8),1),
+                        *(int *)((longlong)param_1 + 0x24),(int)param_1[5]);
+  LOCK();
+  *(uint *)param_1[2] = (uint)bVar1;
+  UNLOCK();
+  _Cnd_do_broadcast_at_thread_exit();
+  FUN_14000f8d0((longlong)param_1);
+  free(param_1);
+  return 0;
+}
+
+
 /* FUN_140011b50 @ 140011b50 */
 
 undefined4
@@ -893,6 +912,19 @@ FUN_140011b50(longlong param_1,undefined4 param_2,undefined4 param_3,undefined4 
 }
 
 
+/* FUN_1400169a0 @ 1400169a0 */
+
+undefined8 * FUN_1400169a0(undefined8 *param_1)
+
+{
+  FUN_140017f80(param_1);
+  param_1[0x1912] = CCriticalSection::vftable;
+  QString::QString((QString *)(param_1 + 0x5954));
+  *(undefined4 *)((longlong)param_1 + 0x2cabc) = 0x400;
+  return param_1;
+}
+
+
 /* FUN_140016c90 @ 140016c90 */
 
 ulonglong FUN_140016c90(longlong param_1,uint *param_2,undefined4 *param_3,undefined4 *param_4)
@@ -939,6 +971,464 @@ ulonglong FUN_140016c90(longlong param_1,uint *param_2,undefined4 *param_3,undef
     uVar2 = extraout_RAX;
   }
   return uVar2 & 0xffffffffffffff00;
+}
+
+
+/* FUN_140016e10 @ 140016e10 */
+
+/* WARNING: Function: __security_check_cookie replaced with injection: security_check_cookie */
+
+char FUN_140016e10(longlong param_1,uint param_2,undefined8 param_3,int param_4,undefined4 param_5)
+
+{
+  QChar *pQVar1;
+  ulonglong uVar2;
+  void *pvVar3;
+  undefined8 ******_Src;
+  void *_Size;
+  int iVar4;
+  long lVar5;
+  int iVar6;
+  QString *pQVar7;
+  ulonglong uVar8;
+  undefined8 uVar9;
+  undefined1 (*pauVar10) [32];
+  undefined8 *******pppppppuVar11;
+  undefined1 (*pauVar12) [32];
+  undefined1 (*pauVar13) [32];
+  int *piVar14;
+  void *pvVar15;
+  char *pcVar16;
+  void *pvVar17;
+  int iVar18;
+  ulonglong uVar19;
+  size_t sVar20;
+  char cVar21;
+  ulonglong uVar22;
+  uint uVar23;
+  undefined8 *******pppppppuVar24;
+  undefined1 auStackY_198 [32];
+  QChar local_158 [8];
+  void *local_150;
+  ulonglong local_148;
+  undefined1 (*local_140) [32];
+  QChar local_138 [8];
+  longlong local_130;
+  QString local_128 [24];
+  QString local_110 [24];
+  QString local_f8 [24];
+  longlong local_e0;
+  undefined1 (*local_d8) [32];
+  undefined8 uStack_d0;
+  size_t local_c8;
+  ulonglong local_c0;
+  undefined8 ******local_b8;
+  undefined8 uStack_b0;
+  void *local_a8;
+  void *local_a0;
+  undefined1 (*local_98) [32];
+  undefined8 uStack_90;
+  ulonglong local_88;
+  ulonglong uStack_80;
+  undefined8 local_78;
+  undefined8 uStack_70;
+  ulonglong local_68;
+  ulonglong uStack_60;
+  ulonglong local_40;
+
+  local_40 = DAT_14013adc0 ^ (ulonglong)auStackY_198;
+  local_150 = (void *)CONCAT44(local_150._4_4_,param_5);
+  uVar22 = 0;
+  local_130 = param_1;
+  local_e0 = param_1;
+  QString::QString(local_110,"DEBUG");
+  pQVar7 = (QString *)
+           QString::QString((QString *)&local_78,"  open(): calling M_usb.open(idx=0x%1) ...");
+  QChar::QChar(local_158,L' ');
+  pQVar7 = (QString *)QString::arg(pQVar7,local_128,param_2,0);
+  FUN_140011330(pQVar7,local_110);
+  QString::~QString(local_128);
+  QString::~QString((QString *)&local_78);
+  QString::~QString(local_110);
+  uVar8 = FUN_140018280(param_1,(ulonglong)param_2,1);
+  QString::QString(local_128,"DEBUG");
+  pQVar7 = (QString *)QString::QString(local_f8,"  open(): M_usb.open returned %1");
+  QChar::QChar(local_158,L' ');
+  pcVar16 = "false";
+  if ((char)uVar8 != '\0') {
+    pcVar16 = "true";
+  }
+  QString::QString(local_110,pcVar16);
+  pQVar7 = (QString *)QString::arg(pQVar7,&local_78);
+  FUN_140011330(pQVar7,local_128);
+  QString::~QString((QString *)&local_78);
+  QString::~QString(local_110);
+  QString::~QString(local_f8);
+  QString::~QString(local_128);
+  if ((char)uVar8 == '\0') goto LAB_1400179d0;
+  if (1 < param_4) {
+    FUN_140008e90(0x96);
+  }
+  iVar4 = 1;
+  if (0 < param_4) {
+    iVar4 = param_4;
+  }
+  uStack_d0 = 0;
+  local_c8 = 0;
+  local_c0 = 0xf;
+  local_d8 = (undefined1 (*) [32])0x0;
+  uStack_b0 = 0;
+  local_a8 = (void *)0x0;
+  pvVar17 = (void *)0xf;
+  local_a0 = (void *)0xf;
+  local_b8 = (undefined8 *******)0x0;
+  uVar8 = uVar22;
+  while (iVar18 = (int)uVar8, iVar18 < iVar4) {
+    QString::QString(local_128,"DEBUG");
+    pQVar7 = (QString *)
+             QString::QString(local_110,"  open(): handshake query attempt %1, timeout=%2ms ...");
+    QChar::QChar(local_158,L' ');
+    uVar23 = iVar18 + 1;
+    pQVar7 = (QString *)QString::arg(pQVar7,&local_78,uVar23);
+    QChar::QChar(local_138,L' ');
+    pQVar7 = (QString *)QString::arg(pQVar7,local_f8,(ulonglong)local_150 & 0xffffffff);
+    FUN_140011330(pQVar7,local_128);
+    QString::~QString(local_f8);
+    QString::~QString((QString *)&local_78);
+    QString::~QString(local_110);
+    QString::~QString(local_128);
+    uVar8 = FUN_140017f20(param_1,0x11);
+    if ((char)uVar8 != '\0') {
+      uVar9 = FUN_140017d20(param_1,0x11,(longlong)&local_78,0x22,(uint *)&local_140,(int)local_150)
+      ;
+      if ((char)uVar9 != '\0') {
+        local_c8 = 0;
+        pauVar13 = (undefined1 (*) [32])&local_d8;
+        if (0xf < local_c0) {
+          pauVar13 = local_d8;
+        }
+        (*pauVar13)[0] = '\0';
+        goto LAB_1400171d0;
+      }
+    }
+    QString::QString(local_128,"DEBUG");
+    pQVar7 = (QString *)
+             QString::QString((QString *)&local_78,
+                              "  open(): handshake query attempt %1 got no valid response");
+    QChar::QChar((QChar *)&local_148,L' ');
+    pQVar7 = (QString *)QString::arg(pQVar7,local_f8);
+    FUN_140011330(pQVar7,local_128);
+    QString::~QString(local_f8);
+    QString::~QString((QString *)&local_78);
+    QString::~QString(local_128);
+    if ((int)uVar23 < iVar4) {
+      iVar6 = 2;
+      if (iVar18 < 3) {
+        iVar6 = iVar18;
+      }
+      FUN_140008e90(*(uint *)(&DAT_140025ba0 + (longlong)iVar6 * 4));
+    }
+    uVar8 = (ulonglong)uVar23;
+  }
+  cVar21 = '\0';
+  pppppppuVar11 = (undefined8 *******)local_b8;
+  goto LAB_14001792c;
+LAB_1400171d0:
+  do {
+    uVar8 = local_c0;
+    sVar20 = local_c8;
+    local_158[0] = *(QChar *)((longlong)&local_78 + uVar22 + 6);
+    if (local_c8 < local_c0) {
+      pauVar13 = (undefined1 (*) [32])&local_d8;
+      if (0xf < local_c0) {
+        pauVar13 = local_d8;
+      }
+      pQVar1 = (QChar *)(*pauVar13 + local_c8);
+      local_c8 = local_c8 + 1;
+      *pQVar1 = local_158[0];
+      (*pauVar13)[sVar20 + 1] = '\0';
+    }
+    else {
+      if (local_c8 == 0x7fffffffffffffff) goto LAB_140017a29;
+      uVar19 = local_c8 + 1 | 0xf;
+      if (uVar19 < 0x8000000000000000) {
+        if (0x7fffffffffffffff - (local_c0 >> 1) < local_c0) {
+          uVar19 = 0x7fffffffffffffff;
+        }
+        else {
+          uVar2 = local_c0 + (local_c0 >> 1);
+          if (uVar19 < uVar2) {
+            uVar19 = uVar2;
+          }
+        }
+      }
+      else {
+        uVar19 = 0x7fffffffffffffff;
+      }
+      pauVar10 = (undefined1 (*) [32])FUN_1400076d0(uVar19 + 1);
+      pauVar13 = local_d8;
+      local_c8 = sVar20 + 1;
+      local_c0 = uVar19;
+      if (uVar8 < 0x10) {
+        memcpy(pauVar10,&local_d8,sVar20);
+        *(QChar *)(*pauVar10 + sVar20) = local_158[0];
+        (*pauVar10)[sVar20 + 1] = '\0';
+        local_d8 = pauVar10;
+      }
+      else {
+        memcpy(pauVar10,local_d8,sVar20);
+        *(QChar *)(*pauVar10 + sVar20) = local_158[0];
+        (*pauVar10)[sVar20 + 1] = '\0';
+        pauVar12 = pauVar13;
+        if ((0xfff < uVar8 + 1) &&
+           (pauVar12 = *(undefined1 (**) [32])(pauVar13[-1] + 0x18),
+           (char *)0x1f < (char *)((longlong)pauVar13 + (-8 - (longlong)pauVar12))))
+        goto LAB_1400174e5;
+        free(pauVar12);
+        local_d8 = pauVar10;
+      }
+    }
+    uVar22 = uVar22 + 1;
+  } while ((longlong)uVar22 < 0x19);
+  local_a8 = (void *)0x0;
+  local_b8 = (undefined8 ******)((ulonglong)local_b8 & 0xffffffffffffff00);
+  local_148 = 8;
+  pvVar15 = local_a0;
+  do {
+    _Size = local_a8;
+    _Src = local_b8;
+    cVar21 = *(char *)((longlong)&local_78 + local_148 + 6) + '0';
+    if (local_a8 < pvVar15) {
+      pppppppuVar11 = &local_b8;
+      if ((void *)0xf < pvVar15) {
+        pppppppuVar11 = (undefined8 *******)local_b8;
+      }
+      pcVar16 = (char *)((longlong)pppppppuVar11 + (longlong)local_a8);
+      local_a8 = (void *)((longlong)local_a8 + 1);
+      *pcVar16 = cVar21;
+      *(undefined1 *)((longlong)pppppppuVar11 + 1 + (longlong)_Size) = 0;
+      pvVar17 = local_a0;
+    }
+    else {
+      if (local_a8 == (void *)0x7fffffffffffffff) goto LAB_140017a29;
+      pvVar17 = (void *)((longlong)local_a8 + 1U | 0xf);
+      if (pvVar17 < (void *)0x8000000000000000) {
+        if ((void *)(0x7fffffffffffffff - ((ulonglong)pvVar15 >> 1)) < pvVar15) {
+          pvVar17 = (void *)0x7fffffffffffffff;
+        }
+        else {
+          pvVar3 = (void *)((longlong)pvVar15 + ((ulonglong)pvVar15 >> 1));
+          if (pvVar17 < pvVar3) {
+            pvVar17 = pvVar3;
+          }
+        }
+      }
+      else {
+        pvVar17 = (void *)0x7fffffffffffffff;
+      }
+      local_150 = pvVar15;
+      pppppppuVar11 = (undefined8 *******)FUN_1400076d0((longlong)pvVar17 + 1);
+      local_a8 = (void *)((longlong)_Size + 1);
+      local_a0 = pvVar17;
+      if (local_150 < (void *)0x10) {
+        memcpy(pppppppuVar11,&local_b8,(size_t)_Size);
+        *(char *)((longlong)_Size + (longlong)pppppppuVar11) = cVar21;
+        *(undefined1 *)((longlong)_Size + 1 + (longlong)pppppppuVar11) = 0;
+        local_b8 = pppppppuVar11;
+      }
+      else {
+        memcpy(pppppppuVar11,_Src,(size_t)_Size);
+        *(char *)((longlong)_Size + (longlong)pppppppuVar11) = cVar21;
+        *(undefined1 *)((longlong)_Size + 1 + (longlong)pppppppuVar11) = 0;
+        pppppppuVar24 = (undefined8 *******)_Src;
+        if ((0xfff < (longlong)local_150 + 1U) &&
+           (pppppppuVar24 = (undefined8 *******)_Src[-1],
+           0x1f < (ulonglong)((longlong)_Src + (-8 - (longlong)pppppppuVar24)))) {
+LAB_1400174e5:
+                    /* WARNING: Subroutine does not return */
+          _invoke_watson((wchar_t *)0x0,(wchar_t *)0x0,(wchar_t *)0x0,0,0);
+        }
+        free(pppppppuVar24);
+        local_b8 = pppppppuVar11;
+      }
+    }
+    pppppppuVar11 = (undefined8 *******)local_b8;
+    local_148 = local_148 + 1;
+    pvVar15 = pvVar17;
+  } while ((longlong)local_148 < 0x1c);
+  pauVar13 = (undefined1 (*) [32])&local_d8;
+  if (0xf < local_c0) {
+    pauVar13 = local_d8;
+  }
+  if ((local_c8 == 0) ||
+     (pauVar10 = (undefined1 (*) [32])(*pauVar13 + local_c8),
+     pauVar12 = thunk_FUN_14001abd0(pauVar13,pauVar10,(undefined1 (*) [16])&DAT_140025c40,1),
+     pauVar12 == pauVar10)) {
+    iVar4 = -1;
+  }
+  else {
+    iVar4 = (int)pauVar12 - (int)pauVar13;
+  }
+  if (iVar4 == -1) {
+    cVar21 = '\x01';
+    param_1 = local_130;
+  }
+  else {
+    local_78 = (void *)0x0;
+    uStack_70 = 0;
+    local_68 = 0;
+    uStack_60 = 0;
+    uVar8 = (ulonglong)iVar4;
+    uVar22 = uVar8;
+    if (local_c8 < uVar8) {
+      uVar22 = local_c8;
+    }
+    local_140 = (undefined1 (*) [32])&local_d8;
+    if (0xf < local_c0) {
+      local_140 = local_d8;
+    }
+    local_148 = uVar8;
+    if (0x7fffffffffffffff < uVar22) {
+                    /* WARNING: Subroutine does not return */
+      FUN_1400087e0();
+    }
+    if (uVar22 < 0x10) {
+      uStack_60 = 0xf;
+      local_68 = uVar22;
+      memcpy(&local_78,local_140,uVar22);
+      *(undefined1 *)((longlong)&local_78 + uVar22) = 0;
+    }
+    else {
+      uVar8 = uVar22 | 0xf;
+      if (uVar8 < 0x8000000000000000) {
+        if (uVar8 < 0x16) {
+          uVar8 = 0x16;
+        }
+      }
+      else {
+        uVar8 = 0x7fffffffffffffff;
+      }
+      local_150 = (void *)FUN_1400076d0(uVar8 + 1);
+      local_78 = local_150;
+      local_68 = uVar22;
+      uStack_60 = uVar8;
+      memcpy(local_150,local_140,uVar22);
+      *(undefined1 *)((longlong)local_150 + uVar22) = 0;
+      uVar8 = local_148;
+    }
+    pQVar7 = (QString *)
+             QString::fromStdString
+                       ((basic_string<char,std::char_traits<char>,std::allocator<char>_> *)local_f8)
+    ;
+    QString::operator=((QString *)(local_130 + 0x2caa0),pQVar7);
+    QString::~QString(local_f8);
+    if (0xf < uStack_60) {
+      pvVar15 = local_78;
+      if ((0xfff < uStack_60 + 1) &&
+         (pvVar15 = *(void **)((longlong)local_78 + -8),
+         0x1f < (ulonglong)((longlong)local_78 + (-8 - (longlong)pvVar15)))) {
+                    /* WARNING: Subroutine does not return */
+        _invoke_watson((wchar_t *)0x0,(wchar_t *)0x0,(wchar_t *)0x0,0,0);
+      }
+      free(pvVar15);
+    }
+    uVar8 = uVar8 + 1;
+    local_98 = (undefined1 (*) [32])0x0;
+    uStack_90 = 0;
+    local_88 = 0;
+    uStack_80 = 0;
+    if (local_c8 < uVar8) {
+      FUN_140016a90();
+LAB_140017a0a:
+                    /* WARNING: Subroutine does not return */
+      FUN_1400087e0();
+    }
+    sVar20 = local_c8;
+    if (local_c8 - uVar8 < local_c8) {
+      sVar20 = local_c8 - uVar8;
+    }
+    pauVar13 = (undefined1 (*) [32])&local_d8;
+    if (0xf < local_c0) {
+      pauVar13 = local_d8;
+    }
+    local_140 = (undefined1 (*) [32])(*pauVar13 + uVar8);
+    if (0x7fffffffffffffff < sVar20) goto LAB_140017a0a;
+    if (sVar20 < 0x10) {
+      uStack_80 = 0xf;
+      local_88 = sVar20;
+      memcpy(&local_98,local_140,sVar20);
+      *(undefined1 *)((longlong)&local_98 + sVar20) = 0;
+    }
+    else {
+      uVar22 = sVar20 | 0xf;
+      uVar8 = 0x7fffffffffffffff;
+      if ((uVar22 < 0x8000000000000000) && (uVar8 = uVar22, uVar22 < 0x16)) {
+        uVar8 = 0x16;
+      }
+      pauVar13 = (undefined1 (*) [32])FUN_1400076d0(uVar8 + 1);
+      local_98 = pauVar13;
+      local_88 = sVar20;
+      uStack_80 = uVar8;
+      memcpy(pauVar13,local_140,sVar20);
+      (*pauVar13)[sVar20] = '\0';
+    }
+    piVar14 = _errno();
+    pauVar13 = (undefined1 (*) [32])&local_98;
+    if (0xf < uStack_80) {
+      pauVar13 = local_98;
+    }
+    *piVar14 = 0;
+    lVar5 = strtol((char *)pauVar13,(char **)&local_140,10);
+    param_1 = local_130;
+    if (pauVar13 == local_140) {
+      std::_Xinvalid_argument("invalid stoi argument");
+LAB_140017a1c:
+      std::_Xout_of_range("stoi argument out of range");
+LAB_140017a29:
+                    /* WARNING: Subroutine does not return */
+      FUN_1400087e0();
+    }
+    if (*piVar14 == 0x22) goto LAB_140017a1c;
+    *(long *)(local_130 + 0x2cab8) = lVar5;
+    if (0xf < uStack_80) {
+      pauVar13 = local_98;
+      if ((0xfff < uStack_80 + 1) &&
+         (pauVar13 = *(undefined1 (**) [32])(local_98[-1] + 0x18),
+         (char *)0x1f < (char *)((longlong)local_98 + (-8 - (longlong)pauVar13)))) {
+                    /* WARNING: Subroutine does not return */
+        _invoke_watson((wchar_t *)0x0,(wchar_t *)0x0,(wchar_t *)0x0,0,0);
+      }
+      free(pauVar13);
+    }
+    cVar21 = '\x01';
+  }
+LAB_14001792c:
+  if ((void *)0xf < pvVar17) {
+    pppppppuVar24 = pppppppuVar11;
+    if ((0xfff < (longlong)pvVar17 + 1U) &&
+       (pppppppuVar24 = (undefined8 *******)pppppppuVar11[-1],
+       0x1f < (ulonglong)((longlong)pppppppuVar11 + (-8 - (longlong)pppppppuVar24)))) {
+                    /* WARNING: Subroutine does not return */
+      _invoke_watson((wchar_t *)0x0,(wchar_t *)0x0,(wchar_t *)0x0,0,0);
+    }
+    free(pppppppuVar24);
+  }
+  if (0xf < local_c0) {
+    pauVar13 = local_d8;
+    if ((0xfff < local_c0 + 1) &&
+       (pauVar13 = *(undefined1 (**) [32])((longlong)local_d8[-1] + 0x18),
+       (char *)0x1f < (char *)((longlong)local_d8 + (-8 - (longlong)pauVar13)))) {
+                    /* WARNING: Subroutine does not return */
+      _invoke_watson((wchar_t *)0x0,(wchar_t *)0x0,(wchar_t *)0x0,0,0);
+    }
+    free(pauVar13);
+  }
+  if (cVar21 != '\0') {
+    return cVar21;
+  }
+LAB_1400179d0:
+  FUN_140018250(param_1);
+  return '\0';
 }
 
 
@@ -1189,5 +1679,3 @@ ulonglong FUN_140018360(longlong param_1,void *param_2,uint param_3,char param_4
   }
   return (ulonglong)plVar3 & 0xffffffffffffff00;
 }
-
-

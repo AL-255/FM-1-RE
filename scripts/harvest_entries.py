@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
 """Harvest function entries from a pi32v2 linear disassembly listing.
 
-Usage: harvest_entries.py <linear.asm> <out_dir>
+Usage: harvest_entries.py <linear.asm> <out_dir> [entry_address] [listing_name]
 Emits: function_entries.txt, functions_ranked.csv, call_targets.txt,
-       and app_pi32v2_annotated.asm (listing with FUNC headers).
+       and an annotated listing with FUNC headers.
 Method: every `call 0xADDR` target is a function entry (authoritative).
 """
 import re, sys, os
 from collections import Counter
 
 asm, outdir = sys.argv[1], sys.argv[2]
+entry = int(sys.argv[3], 0) if len(sys.argv) > 3 else 0x020000A0
+listing_name = sys.argv[4] if len(sys.argv) > 4 else "app_pi32v2_annotated.asm"
 os.makedirs(outdir, exist_ok=True)
 
 insns, addr_txt = [], {}
@@ -27,14 +29,14 @@ for _, _, txt in insns:
     if m:
         callcount[int(m.group(1), 16)] += 1
 
-entries = sorted(set(callcount) | {0x020000A0})
+entries = sorted(set(callcount) | {entry})
 entryset = set(entries)
 
 with open(f'{outdir}/call_targets.txt', 'w') as f:
     f.write('\n'.join(f'{t:08x}' for t in sorted(callcount)))
 
 with open(f'{outdir}/function_entries.txt', 'w') as f:
-    f.write(f"# {len(entries)} function entries; base 0x02000000\n")
+    f.write(f"# {len(entries)} function entries; entry 0x{entry:08x}\n")
     for t in entries:
         pl = 'PROLOGUE' if addr_txt.get(t, '').startswith('push') else '        '
         f.write(f"0x{t:08x}  {pl}  {addr_txt.get(t,'<undecoded>')}\n")
@@ -45,9 +47,10 @@ with open(f'{outdir}/functions_ranked.csv', 'w') as f:
         pl = int(addr_txt.get(t, '').startswith('push'))
         f.write(f'0x{t:08x},{callcount[t]},{pl},"{addr_txt.get(t,"<undecoded>")}"\n')
 
-with open(f'{outdir}/app_pi32v2_annotated.asm', 'w') as out:
-    out.write("; FM-1 app.bin full linear disassembly (JieLi pi32v2)\n")
-    out.write("; base=0x02000000 entry=0x020000A0\n\n")
+with open(f'{outdir}/{listing_name}', 'w') as out:
+    base = insns[0][0] if insns else entry
+    out.write("; FM-1 full linear disassembly (JieLi pi32v2)\n")
+    out.write(f"; base=0x{base:08x} entry=0x{entry:08x}\n\n")
     for a, ln, _ in insns:
         if a in entryset:
             out.write(f"\n;===== FUNC_{a:08x}  (called {callcount.get(a,0)}x) =====\n")

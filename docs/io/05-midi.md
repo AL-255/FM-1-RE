@@ -77,9 +77,12 @@ Task-loop specifics (`shard_02027346_02028fc6.txt`):
   area `ENG+6552` (index `[ENG+396]`). A 7-byte frame `F0 35 59 xx xx xx F7` sets
   `b[ENG+6555] |= 0x80` (arms the M-Vave vendor channel) and is swallowed; other
   complete frames go to `midi_message_handler`. (`0x02027D6A-0x02027D98`) [high]
-- Staged 512 B upload: state `b[ENG+648]` (1 = filling, 2 = ready) with data at
-  `ENG+9876`, end pointer `[ENG+652]`; when 2, sent via `0x02026BC4` (checksummed
-  flash/cmd protocol) — see §5.4. [med]
+- Two syscmd receive records converge here. USB-MIDI's 8-to-7 unpacker uses
+  `ENG+812` (ready state `b[ENG+813]`, bit length `h[ENG+816]`, data pointer
+  `[ENG+820]`) and calls `0x02026BC4(..., transport=0)`. Bluetooth event
+  `0x72` uses state `b[ENG+648]`, data at `ENG+9876`, and end pointer
+  `[ENG+652]`, then calls the same dispatcher with `transport=1`. See §5.4 and
+  `11-ota-protocol.md`. [high]
 - msg 128-ish sub-handler at `0x02027C56` sends a fixed 16-byte packet loaded from
   `0x0204EA00+1884` (= `0x0204F15C`) through `0x02083458` (BLE/notify-side send). [low]
 
@@ -91,7 +94,7 @@ Full USB-side detail is in `06-usb.md` §5; the MIDI-relevant facts:
 |---|---|---|
 | EP open | `usb_midi_ep_open` `0x02005BB2` [med] | EP4 bulk 64 B IN (`0x84`, DMA buf `0x01C20E1C`) + OUT (`0x04`, buf `0x01C20EA4`); TX cb `0x020061E4`, RX cb `0x0200685C`; installs `[ENG+400] = 0x02005FAC` (USB route output hook); posts taskq msg **18** to `"c04"` |
 | RX parse | `usb_midi_rx_parse` `0x02006384` [high] | 64 B packet = 16 × 4-byte USB-MIDI events; CIN/event filter `b0 ≤ 31 && (b0 & 0xE) != 0`; running-status squashing via `b[ENG+956]`; pushes merged bytes to ring `ENG+944/948/952`; posts msg **128** to task `"04"` (`0x0204EE97`) |
-| DX7 dump reassembly | same function [med] | when `b[ENG+814] != 0`: 7-bit→8-bit bitstream unpack (`ENG+812` bit state), 512 B staging `ENG+9876`; completion posts msg **144**; also a 6-byte magic + `0x7D/0x7F` + `F7` trailer enters loader mode (mask-ROM call `0xFFC02532`) — firmware-update trigger [med] |
+| Vendor binary reassembly | same function [high] | three consecutive USB-MIDI CIN-4 events initialize `ENG+812`, then 7-bit→8-bit unpack into `ENG+9876`; completion sets the receive record ready for syscmd with transport 0. A separate 6-byte magic + `0x7D/0x7F` + `F7` trailer enters loader mode (mask-ROM call `0xFFC02532`) — firmware-update trigger [med] |
 | TX sysex engine | `usb_midi_sysex_engine` `0x02005D86` (EP writer) + body `0x02005E8C` [high] | frames 64 B USB-MIDI packets: CIN 4 start/continue, CIN 5/6/7 end (1/2/3 bytes), zero-pad; DX7 dumps are re-packed 8→7 bit; suppresses looped-back `F0 35 59 … F7` (12-byte check at `ENG+800..811`); merges other routes' messages via `midi_stream_parser` (return value = CIN written to packet byte 0) |
 | Route output hook | `0x02005FAC` [med] | mid-function entry into the TX engine; called from `serial_midi_task` through `[ENG+400]` |
 
@@ -294,14 +297,27 @@ table `h[ENG+74+slot*2]` (active), per-slot state `b[ENG+3+slot]` (2/3/5/32/33),
 to `"c04"`); device-info reply builder `midi_device_info_send` `0x020008B0` (template
 `0x0204EB9E`, staged through `btstack_cmd_dispatch` `0x02074B62` types 2/3/4).
 
-### 5.4 Staged dump protocol (vendor)
+### 5.4 Staged vendor/syscmd protocol
 
-The `0x020012BA` message handler (tag-strip dispatch inside the parser FUNC) accepts a
-header `{0x00, 0x59, x, len_hi, len_mid, len_lo}` (`len+7 ≤ 1046`), copies the payload
-to `ENG+9876`, records end `[ENG+652]`, sets `b[ENG+648] = 1`; 512 B pages are paced
-out through the route pump and finally posted as msg 128 to `"c04"` (`0x02001660`) —
-this is the bank/patch upload-to-host channel. The `0x59`-magic mirrors the
-`F0 35 59` vendor prefix (0x35 59 = "5Y"). [med]
+The Bluetooth stack packet handler at `0x020012BA` dispatches event IDs
+`0x62..0x73`. Event `0x72` accepts a header
+`{0x00, 0x59, x, len_lo, len_mid, len_hi}` (`len+7 <= 1046`), copies the
+initial fragment to `ENG+9876`, records end `[ENG+652]`, and sets
+`b[ENG+648] = 1`. Further `0x72` fragments fill the record; completion sets
+state 2 and posts msg 145. `serial_midi_task` then calls syscmd with
+`transport=1`. The same record's `+1/+2/+4` fields stage replies back through
+the Bluetooth packet layer. [high]
+
+USB-MIDI does not enter through that event handler. `usb_midi_rx_parse`
+initializes the distinct `ENG+812` receive record after three CIN-4 events,
+unpacks the 7-bit stream into the same `ENG+9876` scratch area, and eventually
+posts msg 144. `serial_midi_task` calls syscmd with `transport=0`; the
+dispatcher stages USB replies in `ENG+812`, using bit lengths because the TX
+path repacks binary bytes into MIDI-safe 7-bit data. [high]
+
+The `0x59` magic mirrors the `F0 35 59` vendor prefix (0x35 59 = "5Y"), but
+this command family is separate from the normal-mode OTA trigger and loader
+pull protocol documented in `11-ota-protocol.md`.
 
 ---
 

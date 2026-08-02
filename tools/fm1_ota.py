@@ -13,7 +13,8 @@ Session flow:
   2. OTA mode ("ota-FM-1", 4d4a:4155, still USB-MIDI): handshake again,
      the same upgrade command, then the device pulls the whole image with
      read requests; an addr=0xF0000000 "finish" request ends the transfer and
-     the loader flashes + reboots.
+     indicates that the loader reached its post-write finish path. The client
+     verifies the model/version again after reboot.
 
 Wire protocol (both directions):
   F0 00 32 41 41 [f1:4][addr:4][len:4] [pack7(data)...] F7
@@ -35,7 +36,7 @@ Usage:
   fm1_ota.py serve FILE.fwsc         answer OTA requests (device already in OTA mode)
   fm1_ota.py logical FILE.fwsc       offline: write the marker-stripped image
 """
-import argparse, os, subprocess, sys, time
+import argparse, os, re, subprocess, sys, time
 
 # ---------------------------------------------------------------- constants
 HS_QUERY = bytes([0xF0, 0x00, 0x32, 0x45, 0x00, 0x00, 0x00, 0x40, 0x7F, 0xF7])
@@ -108,6 +109,37 @@ def parse_request(pkt):
     addr = int.from_bytes(u[7:11], "little")
     ln = int.from_bytes(u[11:14], "little")
     return (fl, addr, ln)
+
+def parse_handshake_identity(pkt):
+    """Decode the model and decimal version from a type-0x11 ID response.
+
+    This mirrors M-UPGRADE's parser at 0x140016e10. The 20-byte identity field
+    is stored relative to ASCII '0'; the parser adds '0' to each byte and uses
+    the underscore position from the plain identity field to find the version.
+    """
+    if len(pkt) < 4 or pkt[0] != 0xF0 or pkt[-1] != 0xF7:
+        return None
+    decoded = unpack7(pkt[1:-1])
+    if len(decoded) != 34 or decoded[:3] != b"\x00\x59\x11":
+        return None
+    body_len = int.from_bytes(decoded[3:6], "little")
+    if body_len != 27 or decoded[-1] != ((~sum(decoded[6:-1])) & 0xFF):
+        return None
+
+    plain = decoded[6:31]
+    separator = plain.find(b"_")
+    if separator < 0:
+        return None
+    try:
+        model = plain[:separator].decode("ascii")
+    except UnicodeDecodeError:
+        return None
+
+    encoded = bytes((byte + ord("0")) & 0xFF for byte in decoded[14:34])
+    match = re.match(rb"[0-9]+", encoded[separator + 1:])
+    if not match:
+        return None
+    return {"model": model, "version": int(match.group(0), 10)}
 
 # "success" reply for the done-signals (verification/upgrade complete)
 def build_success(addr):
@@ -279,7 +311,7 @@ def wait_device(is_ota, timeout=30.0):
     end = time.time() + timeout
     while time.time() < end:
         got = find_rawmidi(prefer_ota=is_ota)
-        if got:
+        if got and find_midi_port():
             return got
         time.sleep(0.5)
     return None
@@ -338,15 +370,29 @@ def cmd_serve(a):
 
 def cmd_flash(a):
     logical = fwsc_logical(a.file)
-    print(f"image: {fwsc_info(a.file)} ({len(logical)} logical bytes)")
+    image_info = fwsc_info(a.file)
+    print(f"image: {image_info} ({len(logical)} logical bytes)")
+    expected = re.fullmatch(r"(.+)_([0-9]+)", image_info.get("product", ""))
+    if expected is None:
+        print("package identity is not in MODEL_NNN form"); return 1
+    expected_model, expected_version = expected.group(1), int(expected.group(2), 10)
     got = find_rawmidi(prefer_ota=False)
     if not got:
         print("FM-1 not found in normal mode"); return 1
     link = MidiLink(got[0])
     print("step 1: handshake + enter OTA (verification) ...")
-    if not handshake(link):
+    normal_packet = handshake(link)
+    normal_identity = parse_handshake_identity(normal_packet) if normal_packet else None
+    if normal_identity is None:
         link.close()
         print("FM-1 handshake failed"); return 1
+    if normal_identity["model"] != expected_model:
+        link.close()
+        print(
+            f"connected device is {normal_identity['model']}, "
+            f"but package targets {expected_model}"
+        )
+        return 1
     link.write(UPGRADE_CMD)
     time.sleep(START_DELAY)
     fin = {}
@@ -370,9 +416,21 @@ def cmd_flash(a):
     time.sleep(1.0)
     link = MidiLink(got[0])
     print("step 2: handshake + transfer ...")
-    if not handshake(link):
+    ota_packet = handshake(link)
+    ota_identity = parse_handshake_identity(ota_packet) if ota_packet else None
+    if ota_identity is None:
         link.close()
         print("OTA-loader handshake failed"); return 1
+    ota_model = ota_identity["model"]
+    if ota_model.lower().startswith("ota-"):
+        ota_model = ota_model[4:]
+    if ota_model != expected_model:
+        link.close()
+        print(
+            f"OTA loader identifies as {ota_identity['model']}, "
+            f"but package targets {expected_model}"
+        )
+        return 1
     link.write(UPGRADE_CMD)
     time.sleep(START_DELAY)
     fin2 = {}
@@ -402,7 +460,25 @@ def cmd_flash(a):
     got = wait_device(is_ota=False, timeout=30.0)
     if not got:
         print("device did not come back in normal mode"); return 1
-    print("flash complete: device back in normal mode")
+
+    link = MidiLink(got[0])
+    identity_packet = handshake(link)
+    link.close()
+    identity = parse_handshake_identity(identity_packet) if identity_packet else None
+    if identity is None:
+        print("device returned, but installed identity could not be verified")
+        return 1
+    if (identity["model"], identity["version"]) != (expected_model, expected_version):
+        print(
+            "device returned with unexpected firmware: "
+            f"{identity['model']}_{identity['version']:03d}; expected "
+            f"{expected_model}_{expected_version:03d}"
+        )
+        return 1
+    print(
+        "finish acknowledged and installed identity verified: "
+        f"{identity['model']}_{identity['version']:03d}"
+    )
     return 0
 
 def main():

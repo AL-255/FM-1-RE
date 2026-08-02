@@ -20,11 +20,12 @@ python3 tools/fm1_ota.py scan
 python3 tools/fm1_ota.py flash build/FM-1-demo.fwsc
 ```
 
-The client validates the handshake, serves both pull stages, accepts either
-the stock OTA PID or the custom loader's reused normal PID, and reports success
-only after the loader sends `0xF0000000`. It is byte-checked against the
-2026-07-06 M-UPGRADE executable and offline tests, but the latest timing and
-re-enumeration fixes have not been retested on hardware.
+The client decodes and compares both stage handshakes, serves both pull stages,
+accepts either the stock OTA PID or the custom loader's reused normal PID, and
+reports success only after `0xF0000000`, normal-mode re-enumeration, and an
+exact post-reboot model/version match. It is byte-checked against the
+2026-07-06 M-UPGRADE executable and offline tests, but the latest timing,
+identity, and re-enumeration fixes have not been retested on hardware.
 
 The official Windows M-UPGRADE application remains the recovery reference. Its
 V14 executable embeds the stock `FM-1_014` image extracted under

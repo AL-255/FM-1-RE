@@ -1,0 +1,220 @@
+# 219 function entries; entry 0x01c0a800
+0x01c0a800            mov r5,r0
+0x01c0a88c            mov r1,#0x13e08
+0x01c0a8a8  PROLOGUE  push {0x5}
+0x01c0a902            mov r2,#0x13500
+0x01c0a91e  PROLOGUE  push {0x4}
+0x01c0a966  PROLOGUE  push {0x4}
+0x01c0a9c8  PROLOGUE  push {0x5}
+0x01c0aa2a  PROLOGUE  push rets
+0x01c0aa5e  PROLOGUE  push {0x6}
+0x01c0aa88  PROLOGUE  push {0x5}
+0x01c0aaea  PROLOGUE  push {0x4}
+0x01c0ab32            goto 0x01c0ab1e
+0x01c0ab34  PROLOGUE  push rets
+0x01c0ab58            goto 0x01c0f8ec
+0x01c0ab5c            mov r1,#0x1c103c0
+0x01c0ab66            mov r0,#0xa0
+0x01c0ab70            goto 0x01c0ab66
+0x01c0ab72            sw r0,[r0 + 0x0]
+0x01c0ab78            sw r0,[r2 + 0x4]
+0x01c0ab82            mov r2,r1
+0x01c0abca            goto 0x01c0ab88
+0x01c0abcc  PROLOGUE  push {0x4}
+0x01c0abea  PROLOGUE  push {0x5}
+0x01c0ac2a            mov r1,r0
+0x01c0ac42  PROLOGUE  push rets
+0x01c0ac88  PROLOGUE  push rets
+0x01c0aca8  PROLOGUE  push rets
+0x01c0acd2            mov r0,#0x80
+0x01c0acd8            mov r0,#0x1c7fd88
+0x01c0ace6  PROLOGUE  push {0x5}
+0x01c0ad06            mov r0,#0x1c10374
+0x01c0ad12  PROLOGUE  push {0x5}
+0x01c0ad7a            <undecoded>
+0x01c0adc2  PROLOGUE  push rets
+0x01c0ae2e  PROLOGUE  push rets
+0x01c0aeaa  PROLOGUE  push {0x5}
+0x01c0aeee  PROLOGUE  push rets
+0x01c0af08  PROLOGUE  push rets
+0x01c0af22  PROLOGUE  push rets
+0x01c0af48            mov r2,r0
+0x01c0afd6            goto 0x01c0af50
+0x01c0afd8            goto 0x01c0ab66
+0x01c0afda  PROLOGUE  push {0x5}
+0x01c0b01a  PROLOGUE  push rets
+0x01c0b038  PROLOGUE  push {0x8}
+0x01c0b0c8  PROLOGUE  push {0x6}
+0x01c0b11c  PROLOGUE  push {0x5}
+0x01c0b1c8            <undecoded>
+0x01c0b1f6  PROLOGUE  push {0x4}
+0x01c0b232  PROLOGUE  push {0x4}
+0x01c0b268            <undecoded>
+0x01c0b29e  PROLOGUE  push {0x4}
+0x01c0b2ec  PROLOGUE  push {0x4}
+0x01c0b33a  PROLOGUE  push {0x4}
+0x01c0b364  PROLOGUE  push {0x5}
+0x01c0b3d4  PROLOGUE  push {0x6}
+0x01c0b436  PROLOGUE  push {0x6}
+0x01c0b4b2  PROLOGUE  push {0x4}
+0x01c0b522            mov r0,#0x1c103c0
+0x01c0b548  PROLOGUE  push {0x4}
+0x01c0b574            mov r1,#0x1c10370
+0x01c0b57e  PROLOGUE  push rets
+0x01c0b584            mov r2,#0x0
+0x01c0b59a  PROLOGUE  push {0x6}
+0x01c0b5d4            mov r1,#0x40
+0x01c0b5da            mov r1,r0
+0x01c0b5e0  PROLOGUE  push {0x5}
+0x01c0b61c  PROLOGUE  push {0x5}
+0x01c0b66a  PROLOGUE  push {0x5}
+0x01c0b6d2  PROLOGUE  push {0xc}
+0x01c0b77e  PROLOGUE  push {0x4}
+0x01c0b7a2  PROLOGUE  push {0x5}
+0x01c0b824  PROLOGUE  push {0x5}
+0x01c0b840  PROLOGUE  push rets
+0x01c0b84c  PROLOGUE  push rets
+0x01c0b85e  PROLOGUE  push {0x4}
+0x01c0b894  PROLOGUE  push {0x4}
+0x01c0b8c2  PROLOGUE  push {0xd}
+0x01c0b926  PROLOGUE  push {0x7}
+0x01c0b95c  PROLOGUE  push {0x9}
+0x01c0ba86            goto 0x01c0b9f8
+0x01c0ba88  PROLOGUE  push {0x4}
+0x01c0bac2  PROLOGUE  push {0x8}
+0x01c0bb62  PROLOGUE  push {0x7}
+0x01c0bbea  PROLOGUE  push {0x4}
+0x01c0bc10  PROLOGUE  push {0x5}
+0x01c0bcb0  PROLOGUE  push {0x8}
+0x01c0bd1c  PROLOGUE  push {0x4}
+0x01c0bd3e            mov r0,#0x1eee240
+0x01c0bd62  PROLOGUE  push rets
+0x01c0bd76            goto 0x01c0ab66
+0x01c0bd7a  PROLOGUE  push {0x4}
+0x01c0bdba  PROLOGUE  push {0x4}
+0x01c0bf2e            mov r0,#0x0
+0x01c0bf4c            goto 0x01c0ab66
+0x01c0bf50            mov r0,#0x0
+0x01c0c02c            rts
+0x01c0c02e            sb r1,[r0 + 0x1]
+0x01c0c032  PROLOGUE  push {0x5}
+0x01c0c0d8            <undecoded>
+0x01c0c0de  PROLOGUE  push {0x5}
+0x01c0c110  PROLOGUE  push {0x5}
+0x01c0c160  PROLOGUE  push {0x8}
+0x01c0c1dc            csync
+0x01c0c22a            csync
+0x01c0c262            <undecoded>
+0x01c0c346  PROLOGUE  push {0x5}
+0x01c0c384  PROLOGUE  push {0xe}
+0x01c0c4e2  PROLOGUE  push {0x7}
+0x01c0c52a  PROLOGUE  push {0x6}
+0x01c0c584  PROLOGUE  push {0x7}
+0x01c0c68e            lb.z r0,[r5 + 0x7]
+0x01c0c736            goto 0x01c0c670
+0x01c0c750  PROLOGUE  push {0x4}
+0x01c0c784            mov r1,r0
+0x01c0c790  PROLOGUE  push rets
+0x01c0c7ac            mov r1,r0
+0x01c0c7e6  PROLOGUE  push {0x7}
+0x01c0c864  PROLOGUE  push {0x7}
+0x01c0c8d4  PROLOGUE  push {0x4}
+0x01c0c90c  PROLOGUE  push {0x6}
+0x01c0c95a  PROLOGUE  push {0x4}
+0x01c0c99a  PROLOGUE  push {0x5}
+0x01c0c9de            mov r1,#0x1c10300
+0x01c0c9ea            mov r1,#0x1c0d3c0
+0x01c0c9f6            mov r1,#0x1c0d3c4
+0x01c0ca02            mov r1,#0x1c0d408
+0x01c0ca0e            mov r1,#0x1c0d3e6
+0x01c0ca1a            <undecoded>
+0x01c0ca2a            mov r1,#0x48
+0x01c0ca2e            mov r1,#0x40
+0x01c0ca32            mov r1,#0xa
+0x01c0cab2  PROLOGUE  push {0xa}
+0x01c0cf9e  PROLOGUE  push {0x9}
+0x01c0d084            <undecoded>
+0x01c0d15a            sh r2,[r5 + 0x6]
+0x01c0d1ea            goto 0x01c0a902
+0x01c0d1ee  PROLOGUE  push {0x4}
+0x01c0d226  PROLOGUE  push {0x6}
+0x01c0d2e8  PROLOGUE  push {0x4}
+0x01c0d314  PROLOGUE  push {0x7}
+0x01c0d3b4            mov r1,r0
+0x01c0d622  PROLOGUE  push {0x5}
+0x01c0d650  PROLOGUE  push {0x4}
+0x01c0d69c  PROLOGUE  push {0xd}
+0x01c0d74c            mov r0,#0x1c10275
+0x01c0d766  PROLOGUE  push {0x8}
+0x01c0d822  PROLOGUE  push {0x5}
+0x01c0d83a  PROLOGUE  push {0xa}
+0x01c0d8ac  PROLOGUE  push {0x9}
+0x01c0d9ac  PROLOGUE  push {0x6}
+0x01c0d9fe  PROLOGUE  push {0x5}
+0x01c0da52  PROLOGUE  push {0x4}
+0x01c0da74  PROLOGUE  push {0x8}
+0x01c0dace  PROLOGUE  push rets
+0x01c0dae4            <undecoded>
+0x01c0db02            mov r2,#0x1c112d0
+0x01c0db22  PROLOGUE  push {0xa}
+0x01c0dc24  PROLOGUE  push {0xd}
+0x01c0dd82  PROLOGUE  push {0x8}
+0x01c0de26            <undecoded>
+0x01c0df9e            xor r0,r1
+0x01c0dfe2  PROLOGUE  push {0xf}
+0x01c0e1c8            <undecoded>
+0x01c0e27a            <undecoded>
+0x01c0e294            nop
+0x01c0e2fa            <undecoded>
+0x01c0e3ee            mov r2,#0x1c112d0
+0x01c0e41c  PROLOGUE  push {0xf}
+0x01c0e556            call 0x01c0b8c2
+0x01c0e5a8            mov r0_r1,r4_r5
+0x01c0e60e  PROLOGUE  push {0x8}
+0x01c0e66c  PROLOGUE  push {0x9}
+0x01c0e714  PROLOGUE  push {0xf}
+0x01c0e884            mov r0,r13
+0x01c0e8ca            mov r0,r13
+0x01c0e9e2            mov r0,r9
+0x01c0ed36  PROLOGUE  push {0xf}
+0x01c0efc0  PROLOGUE  push {0xf}
+0x01c0f2ae  PROLOGUE  push rets
+0x01c0f2e4  PROLOGUE  push {0x5}
+0x01c0f342  PROLOGUE  push rets
+0x01c0f7f8            <undecoded>
+0x01c0f814  PROLOGUE  push {0x6}
+0x01c0f856  PROLOGUE  push {0xc}
+0x01c0f9b8  PROLOGUE  push rets
+0x01c0f9ce  PROLOGUE  push {0x5}
+0x01c0f9fe  PROLOGUE  push {0x5}
+0x01c0fa8e  PROLOGUE  push rets
+0x01c0fabc  PROLOGUE  push {0x8}
+0x01c0fafa  PROLOGUE  push {0x8}
+0x01c0fbd8  PROLOGUE  push {0x4}
+0x01c0fbf0  PROLOGUE  push {0x9}
+0x01c0fc62            mov r0,#0x1c102f4
+0x01c0fc6c  PROLOGUE  push {0x4}
+0x01c0fd1c  PROLOGUE  push {0xc}
+0x01c0fdb4            mov r0,#0x1c115cc
+0x01c0fdce  PROLOGUE  push {0x6}
+0x01c0fdfe  PROLOGUE  push {0x8}
+0x01c0fe6a  PROLOGUE  push {0x7}
+0x01c0ff78            mov r1,#0x1c102e4
+0x01c0ff82            mov r1,#0x1c102e8
+0x01c0ff8c            mov r1,#0x1c102ec
+0x01c0ff96  PROLOGUE  push rets
+0x01c0ffb2            mov r1,#0x500c0
+0x01c0ffd2  PROLOGUE  push {0x4}
+0x01c1007e            <undecoded>
+0x01c10094            <undecoded>
+0x01c100b0  PROLOGUE  push {0x7}
+0x01c1010e            <undecoded>
+0x01c1012a            <undecoded>
+0x01c10146            mov r0,#0x1c1031c
+0x01c10150            add sp,#-0x4
+0x01c10166            csync
+0x01c10178            csync
+0x01c10190            cli
+0x01c1022c            mov r3,r1
+0x01c10236            mov r1,#0x1eef100
+0x01c1024c  PROLOGUE  push {0x4}

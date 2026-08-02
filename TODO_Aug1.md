@@ -6,6 +6,8 @@
 valid package and emulate the Windows host protocol, but it has not completed a
 custom update on hardware. The last device test stopped at the loader's
 `0xE0000000` verification signal, rebooted, and left the stock image installed.
+Later offline tracing shows that `0xF0000000` is a terminal acknowledgement
+after erase/write/finalization gates, not authorization to begin those writes.
 
 Do not describe `build/FM-1-demo.fwsc` as flash-ready until every P0
 item below is complete.
@@ -17,21 +19,21 @@ item below is complete.
 | V13 application | Broad linear disassembly and 2062 call-target-derived entries | `analysis/disassembly/`, `analysis/` |
 | V14 application | Extracted and vendor-objdump listing generated | `firmware-images/v14/` |
 | Windows updater | Critical worker and terminal protocol decompiled | `analysis/host-updater/` |
-| Linux USB-MIDI client | Wire packets and failure reporting covered by 11 offline tests | `tools/fm1_ota.py`, `tools/tests/` |
-| Device OTA loader | Container/LZ4 format understood; executable control flow not mapped | `analysis/device/ota-loader/` |
+| Linux USB-MIDI client | Wire packets, finish state, and identity checks covered by 14 offline tests | `tools/fm1_ota.py`, `tools/tests/` |
+| Device OTA loader | Executable extracted and indexed; finish gate traced at assembly level | `analysis/device/ota-loader/` |
 | Custom package | UFW/JLFS structure and CRCs parse successfully | `tools/build_fwsc.py` |
-| End-to-end custom flash | Failed before commit; no `0xF0000000` request | `docs/ota-loader-shrinking.md` |
+| End-to-end custom flash | Failed before terminal completion; no `0xF0000000` request | `docs/ota-loader-shrinking.md` |
 | Recovery from a broken custom app | Unproven; no accessible hardware UBOOT mode | `tools/README.md` |
 
 ## P0 - required before any device flash
 
-- [ ] **Map the device-side OTA loader.** Extract the 23324-byte inner image,
+- [x] **Map the device-side OTA loader.** Extract the 23324-byte inner image,
   generate a vendor listing and function database at load address `0x01C0A800`,
   and check the artifacts into `analysis/device/ota-loader/`.
-- [ ] **Explain the finish gate.** The loader routine at inner-image offset
-  `0x1362` sends the `0xF0000000` request only after multiple package, partition,
-  and flash checks return success. Name and document every return path that can
-  suppress this request.
+- [x] **Explain the finish gate.** The routine starts at inner-image offset
+  `0x1362`; the actual `0xF0000000` request is at `0x1398`, after package,
+  partition, and flash gates. Every suppressing branch is documented in
+  `analysis/device/ota-loader/finish-gates.md`. This is offline evidence only.
 - [ ] **Retest the corrected host timing.** The current client now matches the
   updater's 2000 ms start delay and 3000 ms post-verification delay, but those
   changes have not been exercised against hardware.
@@ -41,8 +43,9 @@ item below is complete.
   update service is known to be alive.
 - [ ] **Prove stock recovery.** Verify that an installed custom version can
   accept the stock V14 package. The custom builder advertises `FM-1_015`, while
-  the available recovery image advertises `FM-1_014`; downgrade acceptance is
-  unknown.
+  the available recovery image advertises `FM-1_014`. Bundled updater logs
+  prove that the stock path accepts an FM-1 downgrade from 10 to 8, but do not
+  prove that a broken custom application's update service remains reachable.
 - [ ] **Use recoverable hardware for first commit tests.** Obtain a full flash
   dump and working JTAG/UART or other ROM-level recovery before testing erase or
   commit behavior. Include interrupted-transfer and invalid-image tests.
@@ -76,10 +79,12 @@ item below is complete.
   header validation.
 - [ ] Reject unknown or structurally modified loaders by default. Require an
   explicit development override for experimental loader images.
-- [ ] Decode and compare the normal-mode and OTA-mode handshake identity blocks
-  instead of treating any truthy reply as the expected stage.
-- [ ] Verify the reported version after reboot. USB normal-mode presence alone
-  does not prove that the requested image was committed.
+- [ ] Hardware-test normal-mode and OTA-mode identity comparisons. The client
+  now decodes both handshakes and rejects a model mismatch before either
+  transfer; the comparison has only offline coverage.
+- [ ] Hardware-test post-reboot identity verification. The client now mirrors
+  M-UPGRADE's model/version parser and fails when the reported identity differs
+  from the package header; this has only offline coverage.
 - [ ] Add replay tests using complete captured request sequences. The existing
   state-machine tests mock `serve_requests()` and do not exercise re-enumeration,
   ALSA behavior, or the real loader's error paths.
@@ -101,11 +106,16 @@ item below is complete.
 
 ## Offline checks completed on 2026-08-01
 
-- `python3 -m unittest discover -s tools/tests -v`: 11 tests passed.
+- `python3 -m unittest discover -s tools/tests -v`: 14 tests passed.
 - `make -C firmware image`: rebuilt the pi32v2 blob and verified the
   hook fingerprints in the patched application image.
 - `fwunpack_newfw.py` successfully parsed both a stock-app/stock-loader control
   package and the default experimental package, including their JLFS entries.
+- `scripts/analyze_ota_loader.sh` reproduced the 23324-byte executable, vendor
+  listing, 204-entry function database, and 219 extracted printable strings.
+- `scripts/run_ghidra_loader.sh` produced a 6992-instruction corroborative
+  sweep and 219 call-target-derived entries; incomplete pi32v2 decoding remains
+  a known Ghidra limitation.
 
 These checks prove serialization and build consistency only. They do not prove
 flash erase/write behavior, bootability, rollback, or recovery.

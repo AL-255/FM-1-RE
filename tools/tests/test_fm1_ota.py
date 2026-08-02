@@ -23,6 +23,17 @@ def request(addr, length, flash_type=0):
     return b"\xF0" + fm1_ota.pack7(body + bytes([checksum])) + b"\xF7"
 
 
+def identity(name_version):
+    plain = name_version.encode("ascii")
+    if len(plain) != 8:
+        raise ValueError("test identity must occupy the eight-byte plain field")
+    encoded = bytes((byte - ord("0")) & 0xFF for byte in plain)
+    payload = plain + encoded + bytes([0xD0]) * (19 - len(encoded))
+    body = b"\x00\x59\x11" + len(payload).to_bytes(3, "little") + payload
+    checksum = (~sum(payload)) & 0xFF
+    return b"\xF0" + fm1_ota.pack7(body + bytes([checksum])) + b"\xF7"
+
+
 class FakeLink:
     def __init__(self, packets):
         self.packets = list(packets)
@@ -72,6 +83,16 @@ class CodecTests(unittest.TestCase):
         self.assertEqual(fm1_ota.build_success(0xE0000000), expected_verify)
         self.assertEqual(fm1_ota.build_success(0xF0000000), expected_finish)
 
+    def test_handshake_identity_matches_windows_parser(self):
+        packet = identity("FM-1_015")
+        self.assertEqual(
+            fm1_ota.parse_handshake_identity(packet),
+            {"model": "FM-1", "version": 15},
+        )
+        damaged = bytearray(packet)
+        damaged[-2] ^= 1
+        self.assertIsNone(fm1_ota.parse_handshake_identity(bytes(damaged)))
+
 
 class TransferTests(unittest.TestCase):
     def setUp(self):
@@ -119,7 +140,7 @@ class ImageTests(unittest.TestCase):
 
 
 class FlashStateTests(unittest.TestCase):
-    def run_flash(self, second_stage_signal):
+    def run_flash(self, second_stage_signal, installed="FM-1_014"):
         signals = iter((0xE0000000, second_stage_signal))
 
         def serve(_link, _logical, **kwargs):
@@ -131,7 +152,7 @@ class FlashStateTests(unittest.TestCase):
             mock.patch.object(fm1_ota, "fwsc_info", return_value={"product": "FM-1_014"}),
             mock.patch.object(fm1_ota, "find_rawmidi", return_value=("seq", False, -1)),
             mock.patch.object(fm1_ota, "MidiLink", side_effect=lambda _path: FakeLink([])),
-            mock.patch.object(fm1_ota, "handshake", return_value=b"id"),
+            mock.patch.object(fm1_ota, "handshake", return_value=identity(installed)),
             mock.patch.object(fm1_ota, "serve_requests", side_effect=serve),
             mock.patch.object(fm1_ota, "wait_device_any", return_value=("seq", True, -1)),
             mock.patch.object(fm1_ota, "wait_device", return_value=("seq", False, -1)),
@@ -147,6 +168,12 @@ class FlashStateTests(unittest.TestCase):
 
     def test_second_verification_signal_is_failure(self):
         self.assertEqual(self.run_flash(0xE0000000), 1)
+
+    def test_flash_rejects_wrong_installed_version(self):
+        self.assertEqual(self.run_flash(0xF0000000, installed="FM-1_009"), 1)
+
+    def test_flash_rejects_wrong_device_model(self):
+        self.assertEqual(self.run_flash(0xF0000000, installed="FX-1_014"), 1)
 
 
 if __name__ == "__main__":

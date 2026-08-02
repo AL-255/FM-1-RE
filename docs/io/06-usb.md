@@ -166,7 +166,7 @@ Controller / DMA block:
 (`shard_02005ce4_020081a4.txt`) [high]
 
 ```
-usb_device_mode(class_mode r0, usb_id r1)
+usb_device_mode(usb_id r0, class_mode r1)
 class_mode: 0 = teardown; bit1 (2) = MIDI; bit2 (4) = audio; 6 = composite;
             bit7 (0x80) = extra class hook
 ```
@@ -195,9 +195,18 @@ Setup (mode ≠ 0), in order:
 12. If `[ENG+672+id*4] != 0`: installs `[func_struct+12] = 0x020077EA` (descriptor
     hook override) [med].
 
-Runtime mode switching exists as a console command: `0x02006D38` parses a 3-byte
-`"s" + flag + digit` command (`usb:N`), masks `[0x11800] &= ~0x800`, then calls
-`usb_device_mode(N, id)` [med].
+An unresolved binary callback at `0x02006D38` can switch modes, but it is not a
+proven console command. It accepts a structure with a length/type byte at `+2`,
+a selector byte at `+4`, and a data pointer at `+8`. It handles only a 3-byte
+payload whose first byte is `'s'`; payload byte 2 is converted from an ASCII
+digit without range validation. Selector 0 calls `usb_device_mode(digit, 0x86)`.
+Selector 1 masks the selected USB interrupt route and calls
+`usb_device_mode(digit, 0)` [high for parsing, low for transport/reachability].
+
+No direct call, flat pointer reference, text command table, or input transport
+for this callback has been located in V13. V14 contains the same routine at
+`0x02006F90`. Treat it as library packet/configuration glue until its registration
+path is recovered; it does not establish a UART or USB shell.
 
 ### 3.2 Descriptor assembly — `usb_config_desc_build` `0x0200681E`
 
@@ -475,9 +484,10 @@ shutdown `usb_device_shutdown` `0x02060A56`.
 
 ### 7.4 Switch modes at runtime
 
-Call `usb_device_mode` `0x02006B7C` (§3.1) with your mode bitmask after registering
-custom builders/handlers; or reuse the built-in console command (`"usb:N"`,
-`0x02006D38`) if you keep the command parser. Enumeration itself (soft connect) is
+Call `usb_device_mode` `0x02006B7C` (§3.1) as `(usb_id, mode_bitmask)` after
+registering custom builders/handlers. Do not rely on the callback at
+`0x02006D38`: its packet source and registration path are unresolved.
+Enumeration itself (soft connect) is
 under your control via `usb_sie_power_write` (POWER 0x60) / `usb_device_hold`
 `0x0200675A`.
 
@@ -528,7 +538,7 @@ under your control via `usb_sie_power_write` (POWER 0x60) / `usb_device_hold`
 | `0x02006AC2` | usb_set_intr_rxe (SIE 0x08/0x09) | high |
 | `0x02006B70` | usb_id2device | med |
 | `0x02006B7C` | usb_device_mode | high |
-| `0x02006D38` | usb mode console command ("usb:N") | med |
+| `0x02006D38` | unresolved 3-byte USB mode-control callback | med |
 | `0x02006D84` | usb_read_ep0 | high |
 | `0x02006E74` | uac_class_request_handler | med |
 | `0x0200707C` | usb_std_request_dispatch (head: bind setup_recv) | high |

@@ -14,8 +14,22 @@ ROOT="$(cd "$HERE/../.." && pwd)"
 JLTOOL="$ROOT/3rd-party/jl-uboot-tool/jluboottool.py"
 OUT="$ROOT/build/official"
 BACKUPDIR="$ROOT/backups"
-CHIP="${FM1_CHIP:-br22}"
-FLASH_SIZE=$((0x100000))
+CHIP="${FM1_CHIP:-}"
+FLASH_SIZE="${FM1_FLASH_SIZE:-}"
+
+require_unverified_target() {
+  [ "${FM1_ALLOW_UNVERIFIED_ROM_FLASH:-}" = "AC791N" ] || {
+    echo "ERROR: jl-uboot-tool does not document AC791N/WL82 support." >&2
+    echo "Set FM1_ALLOW_UNVERIFIED_ROM_FLASH=AC791N only on recoverable hardware." >&2
+    exit 1
+  }
+  [ -n "$CHIP" ] || { echo "ERROR: set an independently verified FM1_CHIP." >&2; exit 1; }
+  [ -n "$FLASH_SIZE" ] || { echo "ERROR: set a verified FM1_FLASH_SIZE in bytes." >&2; exit 1; }
+  [[ "$FLASH_SIZE" =~ ^(0x[0-9a-fA-F]+|[0-9]+)$ ]] || {
+    echo "ERROR: FM1_FLASH_SIZE must be decimal or 0x-prefixed hexadecimal." >&2
+    exit 1
+  }
+}
 
 find_device() {
   if [ -n "${FM1_DEVICE:-}" ]; then echo "$FM1_DEVICE"; return; fi
@@ -29,6 +43,7 @@ cmd_probe() {
 }
 
 cmd_dump() {
+  require_unverified_target
   mkdir -p "$BACKUPDIR"
   local out="$BACKUPDIR/fm1_stock_$(date +%Y%m%d_%H%M%S).bin"
   echo "Reading $((FLASH_SIZE)) bytes of flash into $out ..."
@@ -37,6 +52,7 @@ cmd_dump() {
 }
 
 cmd_write() {
+  require_unverified_target
   local img="$OUT/jl_isd.fw"
   local latest
   latest=$(ls -t "$BACKUPDIR"/fm1_stock_*.bin 2>/dev/null | head -1 || true)
@@ -51,6 +67,7 @@ cmd_write() {
 }
 
 cmd_restore() {
+  require_unverified_target
   local img="${1:?usage: tools/legacy-uboot/flash.sh restore BACKUP.bin}"
   [ -f "$img" ] || { echo "ERROR: $img not found" >&2; exit 1; }
   run_tool erase 0 "$FLASH_SIZE"

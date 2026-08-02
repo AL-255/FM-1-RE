@@ -17,10 +17,20 @@ PB=/home/yukidama/JL/toolchain/post-build/jieli-linux-post-build-tools-20260129.
 ISD="$PB/isd_download"
 OUT="$ROOT/build/official"
 
-# chip/download parameters (BR22 / AC693N; boot SPL at flash 0x120)
-DEV="${FM1_DEV:-br22}"
-BOOT="${FM1_BOOT:-0x120}"
+# The correct isd_download identifiers for AC791N/WL82 are not yet verified.
+DEV="${FM1_DEV:-}"
+BOOT="${FM1_BOOT:-}"
 WAIT="${FM1_WAIT:-300}"
+
+require_unverified_target() {
+  [ "${FM1_ALLOW_UNVERIFIED_ROM_FLASH:-}" = "AC791N" ] || {
+    echo "ERROR: FM-1 is AC791N/WL82; this legacy ROM path is unverified." >&2
+    echo "Set FM1_ALLOW_UNVERIFIED_ROM_FLASH=AC791N only on recoverable hardware." >&2
+    exit 1
+  }
+  [ -n "$DEV" ] || { echo "ERROR: set an independently verified FM1_DEV." >&2; exit 1; }
+  [ -n "$BOOT" ] || { echo "ERROR: set an independently verified FM1_BOOT." >&2; exit 1; }
+}
 
 build() {
   echo ">> building firmware blob (pi32v2)"
@@ -30,6 +40,7 @@ build() {
 }
 
 upload() {
+  require_unverified_target
   echo ">> uploading with JieLi isd_download (official method)"
   cd "$OUT"
   "$ISD" -tonorflash -dev "$DEV" -boot "$BOOT" -div8 -wait "$WAIT" \
@@ -41,6 +52,6 @@ upload() {
 case "${1:-}" in
   build)  build ;;
   upload) upload "${@:2}" ;;
-  "")     build; upload ;;
+  "")     build; echo ">> build only; device upload requires the explicit 'upload' command" ;;
   *) echo "usage: tools/legacy-uboot/upload.sh [build|upload] [extra isd_download args]" >&2; exit 1 ;;
 esac

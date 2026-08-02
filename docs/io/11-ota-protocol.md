@@ -21,8 +21,9 @@ itself (the "USB HID" interface on the OTA device is unused by M-UPGRADE).
 
 1. **Handshake query** (host→device):
    `F0 00 32 45 00 00 00 40 7F F7`
-   The device answers with its 37-byte **ID block** on header `00 32 45 58`,
-   e.g. `F0 00 32 45 58 01 00 00 23 4D 5A 44 79 05 06 4C 1C [17×00] 40 05 F7`
+   The device answers with a 34-byte decoded (41-byte packed) **ID block** on
+   header `00 32 45 58`, e.g.
+   `F0 00 32 45 58 01 00 00 23 4D 5A 44 79 05 06 4C 1C [21×00] 40 05 F7`
    (`4D 5A 44 79` = `"MZDy"`; name + version are encoded further in).
 2. **Upgrade command** (host→device, same bytes for step 1 and step 2):
    `F0 22 24 35 7F F7`
@@ -35,7 +36,8 @@ itself (the "USB HID" interface on the OTA device is unused by M-UPGRADE).
    from the top, then the bulk data ascending).
 5. **Finish**: the device requests raw address `0xF0000000`, length 8; the host
    answers with the 8-byte payload `"success\0"` on channel `00 32 41 01`.
-   The loader flashes and reboots into the new firmware.
+   Static loader analysis places this request after its write and metadata
+   gates. Post-reboot identity must still be checked before reporting success.
 
 ## Read-request / data-response framing
 
@@ -79,8 +81,9 @@ terminal conditions are raw addresses, not flash types:
 
 - `0xE0000000`, length 8: verification complete. Reply with `success\0`, keep
   the MIDI connection open for 3000 ms, then wait for re-enumeration.
-- `0xF0000000`, length 8: upgrade complete. Reply with `success\0`; only this
-  signal means that the image was flashed.
+- `0xF0000000`, length 8: loader finish request. Reply with `success\0`. Its
+  receipt proves that the loader reached the post-write finish path, not that
+  the requested version subsequently booted.
 
 The worker sleeps 2000 ms after each upgrade command before reading requests,
 and each receive has an 8000 ms timeout. It sends no keepalive or pre-finish
@@ -90,9 +93,45 @@ packet; those were artifacts of an earlier incorrect frame interpretation.
 
 Separate from the OTA pull protocol: `serial_midi_task 0x02027AF4` →
 `update_cmd_dispatch 0x02026BC4`, framing
-`[hdr:2][cmd:1][len:3 LE][payload][~sum]`; info (17,18,21,33), ring read
-(34), invoke callback (35,36,48), default-write (19,20,22–32,37–47);
-callback table at `0x01C0E670+1336`.
+`[00 59][cmd:1][len:3 LE][payload][~sum(payload)]`. V14 has the same
+dispatcher at `0x0202730E` and the same 32-entry branch table.
+
+The decoded command map is:
+
+| command | behavior |
+|---|---|
+| 17 | return a fixed 27-byte record |
+| 18 | return a fixed 13-byte descriptor |
+| 19, 20 | no operation; return without a response |
+| 21 | drain up to the requested length from the common ring at `ENG+960/+964/+968` |
+| 22–32 | no operation; return without a response |
+| 33 | callback object method `+0`: `(u32 arg)` |
+| 34 | callback object method `+8`: `(payload_data, u32 arg, u24 len)`; write-shaped |
+| 35 | callback object method `+4`: `(response_data, u32 arg, u24 len)`; read-shaped |
+| 36 | callback object method `+12`: `(u32 arg0, u32 arg1)`; returns a 16-bit value |
+| 37–47 | no operation; return without a response |
+| 48 | complete a previously armed transfer after matching stored token and length |
+
+Commands 33–36 select one of eight callback objects. The table is at V13
+`ENG+1336` (`0x01C0EBA8`) and V14 `ENG+1400` (`0x01C0EC08`). Only the four
+dispatcher reads have been found; no direct writer or non-null stock object
+has been recovered. Command 48 is not an arbitrary callback or unconditional
+write: it compares the request against `ENG+416/+420`, requires the destination
+at `ENG+424`, copies only after those checks, clears the armed state, and posts
+`ENG+1876`.
+
+The dispatcher's third argument is a transport selector. `0` is the USB-MIDI
+8-to-7-bit SysEx path staged at V13 `ENG+812`; `1` is the Bluetooth packet
+handler's event `0x72` path staged at `ENG+648`. Replies use different length
+units/staging records. Guessed requests, especially commands 33–36 and 48,
+must not be sent to the only recoverable device.
+
+This is also distinct from the SDK's optional `new_cfg_tool.c` protocol. That
+tool uses a `5A AA A5`/CRC16 frame over USB CDC and includes physical flash
+read, erase, write, and MaskROM-entry commands. The signature is absent from
+the V13/V14 applications, UBOOTs, and extracted OTA loaders, and stock normal
+USB exposes no CDC interface. The packaged `cfg_tool.bin` is a data resource,
+not evidence that this transport is linked or usable as recovery.
 
 ## Step-1 verifier — hardware-verified findings (2026-07-21)
 
@@ -180,9 +219,15 @@ Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
   its `app.bin` is 1888 bytes larger than V13. Focused decompilation of the
   updater confirms the raw `0xE0000000`/`0xF0000000` state machine above. No
   device was available to retest the corrected Linux client.
-- The OTA-mode ID block differs from the normal-mode one; the version
-  encoding inside the ID block (`03 93 03` vs `13 33 03` region) is not
-  decoded, only reproduced.
+- **ID block decoded (2026-08-01).** M-UPGRADE function `0x140016E10` takes the
+  model before `_`, adds ASCII `0` to each byte of a second 20-byte identity
+  field, and parses the decimal suffix as the version. The Linux client now
+  validates the post-reboot model and version using this algorithm. Hardware
+  validation of the Linux parser remains pending.
+- **Stock downgrade accepted.** The bundled 2026-06-26 log records FM-1
+  version 10 successfully installing `FM-1_008`, receiving the second-stage
+  completion, and reconnecting as version 8. This does not establish recovery
+  from a custom application whose update service cannot start.
 
 ## Files
 
