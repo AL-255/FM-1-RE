@@ -84,20 +84,21 @@ The same behavior occurs with a stock-app control image (only the loader and cfg
 changed), so the failure is not caused by the custom `app.bin`.  The most likely
 remaining causes are:
 
-1. The step-2 finish handshake is different from the documented
-   `flashtype=0xF, addr=0, len=8` + `"success\0"` reply; the `0xE0000000`
-   request may be a *verify-done* signal that requires a different response,
-   and the real finish command is still unknown.
+1. The shrunken loader stops at the `0xE0000000` verification-complete signal
+   and never reaches the `0xF0000000` upgrade-complete signal. Static analysis
+   of M-UPGRADE V14 confirms both raw-address sentinels and the `success\0`
+   response, so the finish command itself is no longer unknown.
 2. The modified loader image fails an internal integrity/product check (e.g.
    it compares the incoming `ota.bin` against a hard-coded digest or a stored
    copy before allowing `0xF0000000`).
-3. The step-2 transfer requires an additional pre-flash verification frame
-   that M-UPGRADE sends but `fm1_ota.py` does not.
+3. The previous client closed the ALSA connection immediately after the
+   verification reply and could reopen the pre-reset normal-mode port. The
+   corrected client now matches M-UPGRADE's 3-second post-reply delay and
+   accepts either the stock OTA PID or the custom loader's normal PID.
 
-Capturing a live M-UPGRADE step-2 session would resolve (1) and (3), but the
-public updater only bundles the same V13 loader we already have, so (2) may
-require a genuinely different loader build (not currently available) or a
-writable device state we cannot reach without JTAG/UART.
+The V14 updater embeds a genuine new application image, but its loader is
+still byte-identical to V13. Hardware is required to distinguish the remaining
+loader integrity gate from the corrected host-side timing.
 
 ## Hardware verification log
 
@@ -109,13 +110,13 @@ writable device state we cannot reach without JTAG/UART.
 
 ## Next steps
 
-1. Capture or emulate a genuine M-UPGRADE step-2 finish to learn the exact
-   response expected after `0xE0000000`.
+1. Retest with the corrected timing and re-enumeration logic in
+   `tools/fm1_ota.py`.
 2. Dissect the loader's post-transfer path (`FUNC_02083394` → result handler)
    to identify any notify code or integrity gate that suppresses the
    `0xF0000000` request.
 3. Attempt to read back the stored loader region via the OTA protocol or any
    exposed syscmd to see whether the new loader was written at all.
-4. Until the finish handshake is solved, the host-native synth
+4. Until the loader reaches the finish handshake, the host-native synth
    (`firmware/host/fm1_synth`, `fm1_jack`, LV2/VST plugins) is the working
    deliverable for playing the custom synth from a MIDI keyboard.

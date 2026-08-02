@@ -12,7 +12,7 @@ Session flow:
      with read requests) and reboots into the OTA loader.
   2. OTA mode ("ota-FM-1", 4d4a:4155, still USB-MIDI): handshake again,
      the same upgrade command, then the device pulls the whole image with
-     read requests; a flashtype=0xF "finish" request ends the transfer and
+     read requests; an addr=0xF0000000 "finish" request ends the transfer and
      the loader flashes + reboots.
 
 Wire protocol (both directions):
@@ -22,10 +22,9 @@ Wire protocol (both directions):
     request     : device->host, f1=0
     response    : host->device, f1 = length>>4
     data        : 8->7 LSB-first bit-packed, plus one trailing checksum byte
-                  ~(sum(data)+sum(addr_LE)+sum(len_LE)) & 0xFF
+                  ~(flashtype+sum(data)+sum(addr_LE)+sum(len_LE3)) & 0xFF
   Handshake:    F0 00 32 45 00 00 00 40 7F F7 -> ID block on 00 32 45 58
   Upgrade cmd:  F0 22 24 35 7F F7
-  Keepalive:    F0 00 32 41 11 ... F7 every ~13 s while transferring
   .fwsc image : the first 20*0x30 header bytes are interleaved as
                 47 data + 1 marker per block; requests address the
                 *logical* image (markers stripped), the rest is raw.
@@ -36,7 +35,7 @@ Usage:
   fm1_ota.py serve FILE.fwsc         answer OTA requests (device already in OTA mode)
   fm1_ota.py logical FILE.fwsc       offline: write the marker-stripped image
 """
-import argparse, glob, os, select, struct, subprocess, sys, time
+import argparse, os, subprocess, sys, time
 
 # ---------------------------------------------------------------- constants
 HS_QUERY = bytes([0xF0, 0x00, 0x32, 0x45, 0x00, 0x00, 0x00, 0x40, 0x7F, 0xF7])
@@ -48,7 +47,12 @@ HDR_HS   = b"\x00\x32\x45\x58"   # handshake channel (pack7 of 00 59 11)
 REQ_TIMEOUT = 8.0                # s without requests -> step considered done
 MAXDATA = 512                    # max bytes per response
 RESP_DELAY = float(os.environ.get("FM1_RESP_DELAY", "0.010"))
-LOG = open(os.environ.get("FM1_OTA_LOG", "/dev/null"), "a")
+START_DELAY = float(os.environ.get("FM1_START_DELAY", "2.0"))
+VERIFY_DELAY = float(os.environ.get("FM1_VERIFY_DELAY", "3.0"))
+NORMAL_USB_ID = "4c4a:c755"
+OTA_USB_ID = "4d4a:4155"
+LOG_PATH = os.environ.get("FM1_OTA_LOG", "/dev/null")
+LOG = None if LOG_PATH == "/dev/null" else open(LOG_PATH, "a")
 t0 = time.time()
 
 # ------------------------------------------------------------------ packing
@@ -78,13 +82,13 @@ def e7(v):
 def build_response(addr, data, req_len=None, flashtype=0):
     """Data response. req_len = requested length (echoed in the len field and
     f1); the payload is the (full) data actually sent, followed by one
-    checksum byte: ~(sum(data)+sum(addr_LE)+sum(len_LE)) & 0xFF — algorithm
+    checksum byte: ~(flashtype+sum(data)+sum(addr_LE)+sum(len_LE3)) & 0xFF — algorithm
     verified 48/48 against the firmware's verifier at update_cmd_dispatch
     (0x02026BC4)."""
     if req_len is None:
         req_len = len(data)
-    chk = (~(sum(data) + sum(addr.to_bytes(4, 'little'))
-             + sum(req_len.to_bytes(4, 'little')))) & 0xFF
+    chk = (~(flashtype + sum(data) + sum(addr.to_bytes(4, 'little'))
+             + sum(req_len.to_bytes(3, 'little')))) & 0xFF
     return (b"\xF0" + HDR_DATA + e7(req_len >> 4) + e7(addr)
             + e7((req_len << 4) | flashtype) + pack7(data + bytes([chk])) + b"\xF7")
 
@@ -95,7 +99,10 @@ def parse_request(pkt):
     if len(pkt) < 4 or pkt[0] != 0xF0 or pkt[-1] != 0xF7:
         return None
     u = unpack7(pkt[1:-1])
-    if len(u) < 15 or u[:2] != b"\x00\x59" or u[2] != 0x30:
+    if len(u) != 15 or u[:3] != b"\x00\x59\x30":
+        return None
+    body_len = int.from_bytes(u[3:6], "little")
+    if body_len != 8 or u[-1] != ((~sum(u[6:-1])) & 0xFF):
         return None
     fl = u[6]
     addr = int.from_bytes(u[7:11], "little")
@@ -113,7 +120,8 @@ def build_success(addr):
 # ------------------------------------------------------------- .fwsc image
 def fwsc_logical(path):
     """Return the marker-stripped logical image the device requests into."""
-    raw = open(path, "rb").read()
+    with open(path, "rb") as image:
+        raw = image.read()
     out = bytearray()
     for off in range(0, 20 * 0x30, 0x30):
         blk = raw[off:off + 0x30]
@@ -129,11 +137,17 @@ def fwsc_info(path):
     # UFW header is HDRKEY(0xFFFF)-scrambled; chipname sits at offset 0x10
     hdr = bytearray(lg[:0x40])
     import sys as _s
-    _s.path.insert(0, "/home/yukidama/JL/FM-1/3rd-party/jl-misctools/firmware")
+    tools = os.path.dirname(os.path.abspath(__file__))
+    _s.path.insert(0, os.path.join(tools, "..", "..", "3rd-party", "jl-misctools", "firmware"))
     from jltech.cipher import jl_enc_cipher
     jl_enc_cipher(hdr, 0, 0x40, 0xFFFF)
     name = bytes(hdr[0x10:0x10 + 16]).split(b"\0")[0].decode("ascii", "replace")
-    return {"name": name, "logical_size": len(lg)}
+    with open(path, "rb") as image:
+        raw = image.read(20 * 0x30)
+    markers = [raw[i * 0x30 + 0x2F] for i in range(20)]
+    product = "".join(chr((marker - i - 1) & 0xFF)
+                      for i, marker in enumerate(markers) if marker != 0x7D)
+    return {"chip": name, "product": product, "logical_size": len(lg)}
 
 # ------------------------------------------------------------------ rawmidi
 import alsalib, alsaseq
@@ -142,16 +156,22 @@ def find_midi_port():
     """Locate the FM-1 kernel MIDI port (client, port), or None."""
     c = alsaseq.SeqClient()
     try:
-        return c.find_port(b'USB Composite Device')
+        for name in (b'USB Composite Device', b'FM-1', b'USB-Midi', b'Sinco-Midi'):
+            port = c.find_port(name)
+            if port:
+                return port
+        return None
     finally:
         c.close()
 
 def device_is_ota():
-    import subprocess
-    out = subprocess.run(['lsusb'], capture_output=True, text=True).stdout
-    if '4d4a:4155' in out:
+    try:
+        out = subprocess.run(['lsusb'], capture_output=True, text=True).stdout.lower()
+    except FileNotFoundError:
+        return None
+    if OTA_USB_ID in out:
         return True
-    if '4c4a:c755' in out:
+    if NORMAL_USB_ID in out:
         return False
     return None
 
@@ -192,6 +212,24 @@ class MidiLink:
         while self.link.recv_sysex(0):
             pass
 
+    def close(self):
+        self.link.close()
+
+
+def handshake(link, attempts=3, timeout=1.0):
+    """Probe a candidate port and return its ID block, or None."""
+    link.drain()
+    for _ in range(attempts):
+        link.write(HS_QUERY)
+        end = time.time() + timeout
+        while time.time() < end:
+            pkt = link.read_sysex(end - time.time())
+            if pkt is None:
+                break
+            if pkt.startswith(b"\xF0" + HDR_HS) and pkt.endswith(b"\xF7"):
+                return pkt
+    return None
+
 # ------------------------------------------------------------------ pieces
 def serve_requests(link, logical, stop_after=REQ_TIMEOUT, progress=True, on_finish=None):
     """Answer device read requests until they stop. Returns request count.
@@ -214,15 +252,18 @@ def serve_requests(link, logical, stop_after=REQ_TIMEOUT, progress=True, on_fini
         if LOG:
             LOG.write(f"{time.time()-t0:9.3f} fl={fl:x} addr={addr:#x} len={ln}\n"); LOG.flush()
         if addr in (0xE0000000, 0xF0000000):
-            link.write(build_success(addr))
+            try:
+                link.write(build_success(addr))
+            except OSError:
+                return served
             last_req = time.time()
-            if on_finish:
-                on_finish(addr)
+            if on_finish and on_finish(addr):
+                return served
             continue
+        if ln > MAXDATA or addr > len(logical) or addr + ln > len(logical):
+            raise RuntimeError(f"invalid device request: addr={addr:#x}, len={ln}")
         time.sleep(RESP_DELAY)   # MCU needs time to process (M-UPGRADE paces ~10ms)
         data = logical[addr:addr + ln]
-        if len(data) < ln:
-            data = data + bytes(ln - len(data))
         try:
             link.write(build_response(addr, data, ln, fl))
         except OSError:
@@ -244,14 +285,12 @@ def wait_device(is_ota, timeout=30.0):
     return None
 
 def wait_device_any(timeout=30.0):
-    """Wait for the FM-1 MIDI port to re-appear after step-1 reboot (used
-    because this loader re-enumerates with the same normal-mode PID)."""
+    """Wait for either stock or custom-loader USB identity after step 1."""
     end = time.time() + timeout
     while time.time() < end:
-        if '4c4a:c755' in subprocess.run(['lsusb'], capture_output=True, text=True).stdout:
-            addr = find_midi_port()
-            if addr:
-                return ('seq', True, -1)
+        got = find_rawmidi()
+        if got and find_midi_port():
+            return got
         time.sleep(0.5)
     return None
 
@@ -268,32 +307,34 @@ def cmd_scan(_):
 def cmd_logical(a):
     lg = fwsc_logical(a.file)
     out = a.out or a.file + ".logical"
-    open(out, "wb").write(lg)
+    with open(out, "wb") as image:
+        image.write(lg)
     print(f"wrote {out} ({len(lg)} bytes)")
     return 0
 
 def cmd_serve(a):
-    got = find_rawmidi(prefer_ota=True)
+    got = find_rawmidi()
     if not got:
-        print("device not in OTA mode"); return 1
+        print("FM-1 device not found"); return 1
     logical = fwsc_logical(a.file)
     print(f"serving {a.file} ({len(logical)} logical bytes) on {got[0]}")
     link = MidiLink(got[0])
-    link.drain()
-    link.write(HS_QUERY)
-    link.read_sysex(2.0)
+    if not handshake(link):
+        link.close()
+        print("FM-1 handshake failed"); return 1
     link.write(UPGRADE_CMD)
+    time.sleep(START_DELAY)
     fin = {}
     def _fin(addr):
         if addr == 0xF0000000:
             fin['done'] = True
-            raise StopIteration
-    try:
-        n = serve_requests(link, logical, on_finish=_fin)
-    except StopIteration:
-        n = -1
+        else:
+            fin['verification_only'] = True
+        return True
+    n = serve_requests(link, logical, on_finish=_fin)
+    link.close()
     print(f"\n  done: {n} requests served")
-    return 0
+    return 0 if fin.get('done') else 1
 
 def cmd_flash(a):
     logical = fwsc_logical(a.file)
@@ -303,50 +344,61 @@ def cmd_flash(a):
         print("FM-1 not found in normal mode"); return 1
     link = MidiLink(got[0])
     print("step 1: handshake + enter OTA (verification) ...")
-    link.drain()
-    link.write(HS_QUERY)
-    link.read_sysex(2.0)
+    if not handshake(link):
+        link.close()
+        print("FM-1 handshake failed"); return 1
     link.write(UPGRADE_CMD)
+    time.sleep(START_DELAY)
     fin = {}
     def _fin1(addr):
         if addr == 0xE0000000:
             fin['v'] = True
-            raise StopIteration
-    try:
-        n = serve_requests(link, logical, stop_after=6.0, progress=False, on_finish=_fin1)
-    except StopIteration:
-        n = -1
+            return True
+        return False
+    n = serve_requests(link, logical, stop_after=8.0, progress=False, on_finish=_fin1)
     print(f"  step 1 served {n} requests{' (verification done)' if fin.get('v') else ''}; waiting for OTA mode ...")
-    try:
-        os.close(link.fileno())
-    except OSError:
-        pass
+    if not fin.get('v'):
+        link.close()
+        print("device did not confirm step-1 verification"); return 1
+    # M-UPGRADE keeps the connection alive for three seconds after replying
+    # to 0xE0000000, allowing the response to drain before re-enumeration.
+    time.sleep(VERIFY_DELAY)
+    link.close()
     got = wait_device_any(timeout=30.0)
     if not got:
         print("device did not re-enumerate after step-1"); return 1
     time.sleep(1.0)
     link = MidiLink(got[0])
     print("step 2: handshake + transfer ...")
-    link.drain()
-    link.write(HS_QUERY)
-    link.read_sysex(2.0)
+    if not handshake(link):
+        link.close()
+        print("OTA-loader handshake failed"); return 1
     link.write(UPGRADE_CMD)
+    time.sleep(START_DELAY)
     fin2 = {}
     def _fin2(addr):
         if addr == 0xF0000000:
             fin2['done'] = True
-            raise StopIteration
-    try:
-        # Step 2 may pause while the loader erases/writes flash; use a long
-        # idle timeout so we don't give up during a long write cycle.
-        n = serve_requests(link, logical, stop_after=180.0, on_finish=_fin2)
-    except StopIteration:
-        n = -1
-    print(f"\n  step 2 {'finish exchange answered' if fin2.get('done') else 'idle timeout'}; waiting for reboot ...")
-    try:
-        os.close(link.fileno())
-    except OSError:
-        pass
+        else:
+            fin2['verification_only'] = True
+        return True
+    # Step 2 may pause while the loader erases/writes flash; use a long idle
+    # timeout so we don't give up during a long write cycle.
+    n = serve_requests(link, logical, stop_after=180.0, on_finish=_fin2)
+    if fin2.get('done'):
+        outcome = "finish exchange answered"
+    elif fin2.get('verification_only'):
+        outcome = "stopped at verification"
+    else:
+        outcome = "idle timeout"
+    print(f"\n  step 2 {outcome}; waiting for reboot ...")
+    link.close()
+    if not fin2.get('done'):
+        if fin2.get('verification_only'):
+            print("loader stopped at verification; image was not flashed")
+        else:
+            print("loader never sent the upgrade-complete signal")
+        return 1
     got = wait_device(is_ota=False, timeout=30.0)
     if not got:
         print("device did not come back in normal mode"); return 1

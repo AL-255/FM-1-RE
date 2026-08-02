@@ -33,7 +33,7 @@ itself (the "USB HID" interface on the OTA device is unused by M-UPGRADE).
 4. **Step 2 (upgrade)**: handshake again, upgrade command again, then the
    device pulls the entire image (header reads, entry-list reads descending
    from the top, then the bulk data ascending).
-5. **Finish**: the device requests `flashtype=0xF, addr=0, len=8`; the host
+5. **Finish**: the device requests raw address `0xF0000000`, length 8; the host
    answers with the 8-byte payload `"success\0"` on channel `00 32 41 01`.
    The loader flashes and reboots into the new firmware.
 
@@ -52,8 +52,8 @@ F0 00 32 41 41 [f1:4][addr:4][len:4] [pack7(data)…] F7
 - `data` is an **8→7 LSB-first continuous bitstream** (7 wire bytes per 8
   data bytes). The packed stream holds `length+1` unpacked bytes: the data
   plus **one checksum byte** at the end:
-  `chk = ~(sum(data) + sum(addr_LE_4) + sum(length_LE_4)) & 0xFF`
-  (length as the plain u32, not the wire `(len<<4)` form; algorithm verified
+  `chk = ~(flashtype + sum(data) + sum(addr_LE_4) + sum(length_LE_3)) & 0xFF`
+  (length is plain little-endian u24, not the wire `(len<<4)` form; algorithm verified
   48/48 against captured packets and against the firmware's verifier at
   `update_cmd_dispatch 0x02026BC4`).
 
@@ -72,13 +72,19 @@ The UFW header decrypts (HDRKEY `0xFFFF`) to hdrcrc/listcrc/imgsize/numents
 `script.ver`, `blimit.bin`, `tail.bin`. `script.ver` (SFC-encrypted, chipkey
 `0x980F`) decrypts to `AC791N-v0.01-cfg_tool-v0.10`.
 
-## Keepalive / ping
+## Terminal signals and timing
 
-During long transfers the device pings every ~13 s with a request
-`addr=0x100, len=0x402`; the host answers with the fixed 31-byte packet on
-header `00 32 41 11`:
-`F0 00 32 41 11 01 00 00 00 00 02 00 00 20 01 00 00 40 03 0E 22 58 4B 58 08 06 19 60 10 07 F7`.
-The host also sends this spontaneously about every 13 s while streaming.
+Static decompilation of the 2026-07-06 M-UPGRADE worker confirms that the
+terminal conditions are raw addresses, not flash types:
+
+- `0xE0000000`, length 8: verification complete. Reply with `success\0`, keep
+  the MIDI connection open for 3000 ms, then wait for re-enumeration.
+- `0xF0000000`, length 8: upgrade complete. Reply with `success\0`; only this
+  signal means that the image was flashed.
+
+The worker sleeps 2000 ms after each upgrade command before reading requests,
+and each receive has an 8000 ms timeout. It sends no keepalive or pre-finish
+packet; those were artifacts of an earlier incorrect frame interpretation.
 
 ## syscmd core (normal-mode device control, cmd ids 17–48)
 
@@ -163,15 +169,17 @@ Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
   and a literal-preserving flip with valid CRCs), the UFW header `wa3/wa4`
   fields, the app `FM-1_0xx` string + header markers (bumped to `_014`, still
   refused), and the app build strings (`VER-$…INCLUDE_…`, `V11.D11.121…`).
-  A genuinely-different loader is **not** obtainable: the V14 M-UPGRADE bundle
-  embeds the *identical* V13 `usb_hid_ota.bin` (`aa eb 81 58` = hdrcrc `0xebaa`
-  + datacrc `0x5881`, byte-identical to raw_fw), the public `FM-1.fwsc` on
-  M-Vave's CDN is byte-identical to raw_fw, and no V09/V14 `.fwsc` is exposed.
-  So the loader is V13 everywhere we can reach. So the check is **not** a
+  The V14 M-UPGRADE bundle embeds a genuine `FM-1_014` image with a changed
+  application, but its `usb_hid_ota.bin` is byte-identical to V13 (`aa eb 81 58`
+  = hdrcrc `0xebaa` + datacrc `0x5881`). So the check is **not** a
   simple content/CRC/version compare of the loader; it most plausibly requires
   a different loader *build* (unavailable) or a device-state value we cannot
   read without JTAG/UART. Next: capture the exact notify code, or the stored
   loader, via hardware access.
+- **V14 recovery (2026-08-01).** The embedded V14 `.fwsc` is 704052 bytes and
+  its `app.bin` is 1888 bytes larger than V13. Focused decompilation of the
+  updater confirms the raw `0xE0000000`/`0xF0000000` state machine above. No
+  device was available to retest the corrected Linux client.
 - The OTA-mode ID block differs from the normal-mode one; the version
   encoding inside the ID block (`03 93 03` vs `13 33 03` region) is not
   decoded, only reproduced.
@@ -179,7 +187,7 @@ Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
 ## Files
 
 - `tools/fm1_ota.py` — the Linux CLI (full client: handshake, serve requests,
-  keepalive, finish; `flash` = both steps, `serve` = OTA-mode only).
+  terminal replies; `flash` = both steps, `serve` = OTA-mode only).
 - `tools/alsalib.py` — ALSA sequencer transport via libasound (ctypes).
   (Rawmidi is unusable while any seq subscriber exists, and PipeWire holds
   the input — the seq interface is what RtMidi/M-UPGRADE use.)

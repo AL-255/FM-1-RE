@@ -151,8 +151,9 @@ cd firmware && make host
   all validated
 - one upstream Synth_Dexed heap-overflow bug found and fixed
   (`voices[i]`→`voices[note]` in `Dexed::keydown`)
-- on-device OTA flashing is currently blocked: step 1 passes, the shrunken
-  loader boots, step 2 serves the full image, but the loader reboots to normal
-  mode without sending the `0xF0000000` finish handshake, so the flash does not
-  take. The device still reports `FM-1_009`. Details and next debug steps are in
-  `docs/ota-loader-shrinking.md`.
+- on-device OTA flashing remains hardware-unverified after correcting the
+  Linux client's handshake, timing, ALSA polling, re-enumeration, and terminal
+  status handling. The prior shrunken-loader run stopped at `0xE0000000`
+  without sending the required `0xF0000000` finish signal. V14 (`FM-1_014`)
+  and the matching Windows worker are now extracted and disassembled; details
+  are in `docs/ota-loader-shrinking.md`.

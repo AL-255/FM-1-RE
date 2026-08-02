@@ -34,6 +34,14 @@ EV_SYSEX = 130
 EV_LENGTH_VARIABLE = 4
 QUEUE_DIRECT = 253
 
+
+class PollFD(ctypes.Structure):
+    _fields_ = [
+        ("fd", ctypes.c_int),
+        ("events", ctypes.c_short),
+        ("revents", ctypes.c_short),
+    ]
+
 # struct snd_seq_event (28 bytes):
 #   0 type, 1 flags, 2 tag, 3 queue, 4..11 time, 12 src.client, 13 src.port,
 #  14 dst.client, 15 dst.port, 16..27 data union (ext: u32 len @16, u64 ptr @20? )
@@ -62,9 +70,10 @@ class MidiLink:
 
     def fileno(self):
         n = lib.snd_seq_poll_descriptors_count(self.seq, 1)
-        arr = (ctypes.c_int * n)()
+        assert n > 0, f"poll_descriptors_count: {n}"
+        arr = (PollFD * n)()
         lib.snd_seq_poll_descriptors(self.seq, arr, n, 1)
-        return arr[0]
+        return arr[0].fd
 
     def send(self, data):
         if not hasattr(self, '_mev'):
