@@ -1,8 +1,8 @@
 # FM-1 MIDI I/O
 
-Reverse-engineered from `app.bin` (pi32v2, flash VMA `0x02000000`). Audience: engineers
-building custom firmware on this image. Every claim carries the function address it was
-read from; `[high|med|low]` marks confidence. Code citations name the enriched shard the
+Reverse-engineered from `app.bin` (pi32v2, flash VMA `0x02000000`). Every claim
+carries the function address it was read from; `[high|med|low]` marks
+confidence. Code citations name the enriched shard the
 disassembly was taken from (e.g. `shard_020000a0_020020de.txt`).
 
 Terminology used below:

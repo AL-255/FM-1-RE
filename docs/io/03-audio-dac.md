@@ -1,8 +1,7 @@
 # FM-1 — Audio Output Path & DAC
 
 Target: M-Vave FM-1 firmware `app.bin` (pi32v2, flash VMA `0x02000000`,
-JieLi BR22/AC693N). Audience: engineers building a custom synth on this
-hardware. Every claim carries the function address it was read from; confidence
+JieLi AC791N/WL82). Every claim carries the function address it was read from; confidence
 is marked **[high]** (direct disassembly evidence), **[med]** (strong
 inference), **[low]** (guess). Disassembly quotes cite the shard file in
 `analysis/shards/`.

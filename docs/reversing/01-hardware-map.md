@@ -1,6 +1,7 @@
-# 01 — Hardware & memory map (for reusing the board)
+# 01 — Hardware & memory map
 
-Target SoC: **JieLi JL-BR22 / AC693N** (Bluetooth-audio), custom **pi32v2** CPU.
+Target SoC: **JieLi AC791N/WL82**, custom **pi32v2** CPU. Embedded `JL-BR22`
+tokens identify linked library lineage rather than the physical SoC.
 Physical marking on this unit: **`C156211-11B8`** (LQFP48). Single CPU core
 (`CPU_CORE_NUM 1`).
 
@@ -54,19 +55,19 @@ value against a comparator SFR) is at `0x0203eeee`/`0x0203ef56`. See
 Outside audio, the firmware touches the low SFR region heavily but accesses
 individual registers through a base-register + offset pattern (and immediate
 constants like `256/512/4096` are bit masks, not addresses), so most non-audio
-register names are **not** recoverable from the binary alone. To name them, use the JieLi SDK register
-headers for BR22/AC693N (in `fw-AC63_BT_SDK`, `cpu/br22/…/includes`). Observed
+register names are **not** recoverable from the binary alone. The AC791N/WL82
+SDK headers provide the closest authoritative names. Observed
 SFR-region reference hot addresses (offsets into the SFR window) include
 `0x100, 0x10c, 0x110, 0x114, 0x140, 0x200, 0x270, 0x712/0x714/0x716,
 0x1004/0x1008/0x1032, 0x1810/0x1812, 0x8080` — candidate clock-gate / GPIO /
 timer / audio blocks to confirm against the SDK map.
 
-## Peripherals you must re-drive to reuse the board
+## Observed board peripherals
 
-For "build your own synth on this hardware", the peripherals the firmware uses
-(confirmed by subsystem analysis — see `04-subsystems.md`) are:
+The peripherals used by the stock firmware, confirmed by subsystem analysis,
+are:
 
-| Function | Peripheral (JieLi BR22) | Notes |
+| Function | Peripheral | Notes |
 |---|---|---|
 | Audio output | internal audio **DAC** + DAC-DMA ring buffer | 6-op FM render feeds this |
 | MIDI I/O | **USB** device (USB-MIDI) + UART MIDI | class-compliant USB-MIDI |
@@ -76,11 +77,3 @@ For "build your own synth on this hardware", the peripherals the firmware uses
 | Pitch / Mod wheels | **ADC** channels | calibration mode exists in FW |
 | Display | segment/char LCD or small OLED over GPIO/SPI/I2C | menu UI |
 | Preset storage | on-chip **flash** (`nor_sdfile`) + FAT/jlfs | `/mnt/sdfile/app/usr` |
-
-## What to pull from the SDK vs. reconstruct
-
-- **From SDK / vendored:** SPL, clock/power init, SFR headers, USB stack, BT
-  stack, flash + FAT (`nor_sdfile`, `jlfs`) driver, DAC driver, task scheduler.
-- **Reconstruct (product-specific):** the FM synth core (open source — Dexed/
-  msfa), the menu/UI, patch/bank management, MIDI routing, arpeggiator/sequencer,
-  effects. See `../05-reconstruction-plan.md`.

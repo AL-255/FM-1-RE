@@ -5,8 +5,6 @@ step-1 verifier. The inner LZ4 stream expands to a 23324-byte pi32v2 executable
 loaded at `0x01C0A800`.
 
 - `ota_stock.bin`: byte-exact loader from the V13 and V14 stock packages.
-- `ota_patched2.bin`: same-size experimental image with an inert decompressed
-  data byte changed and all nested CRC fields repaired.
 
 Reproduce the checked-in analysis with:
 
@@ -41,7 +39,9 @@ transport-specific bodies diverge at that boundary. This is close lineage, not
 an exact source match; the branch `.text` is 23812 bytes while the stock inner
 executable is 23324 bytes.
 
-Neither image demonstrates a successful custom flash. Current hardware tests
-with a shrunken loader ended at `0xE0000000` and never reached the loader's
-`0xF0000000` terminal handshake. See `docs/ota-loader-shrinking.md` and the root
-`TODO_Aug1.md` before attempting device updates.
+Hardware experiments with a modified, shrunken loader ended at `0xE0000000`
+and never reached the loader's `0xF0000000` terminal handshake. The modified
+binary and its construction utilities are preserved only on the
+`with-custom-firmware` branch; the observations remain documented in
+`docs/ota-loader-shrinking.md`. See `TODO_aug2.md` before attempting device
+updates.

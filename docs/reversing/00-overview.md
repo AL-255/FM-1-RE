@@ -1,19 +1,20 @@
 # 00 — FM-1 firmware: overview & how to read these docs
 
 This doc set is a functional map of the **M-Vave FM-1** firmware, produced by
-disassembling `app.bin` and analysing all ~2000 functions. The aim is enough
-understanding to **build your own synthesizer on the same JieLi hardware**.
+disassembling `app.bin` and analysing all ~2000 functions.
 
 ## The device in one paragraph
 
 The FM-1 is a **Yamaha DX7-compatible 6-operator FM synthesizer** built on a
-**JieLi JL-BR22 / AC693N** Bluetooth-audio SoC (custom **pi32v2** CPU). The synth
-engine is a port of the open-source **Dexed / MicroDexed** core (Google
+**JieLi AC791N/WL82** multimedia SoC (custom **pi32v2** CPU). Embedded BR22
+tokens come from linked library lineage. The synth engine is a port of the
+open-source **Dexed / MicroDexed** core (Google
 *music-synthesizer-for-android*, "msfa"); factory patches are the literal DX7
 ROM1A cartridge. It has USB-MIDI, an on-device menu UI for editing all DX7
 parameters, an arpeggiator, a sequencer, effects (reverb/filter/phaser), patch
-banks stored on internal flash, and Bluetooth. Firmware is built on JieLi's
-`fw-AC63_BT_SDK`.
+banks stored on internal flash, and Bluetooth. Several linked Bluetooth
+components retain `fw-AC63_BT_SDK`/BR22 lineage markers, while the package and
+SPL identify the platform as AC791N/WL82.
 
 ## Document map
 
@@ -27,7 +28,6 @@ banks stored on internal flash, and Bluetooth. Firmware is built on JieLi's
 | `09-function-index.md` | **every** function: address, subsystem, purpose, call degree |
 | `../03-dx7-core-identification.md` | proof the engine is Dexed/msfa |
 | `../04-toolchain-and-vendoring.md` | JieLi toolchain + which blobs to vendor |
-| `../05-reconstruction-plan.md` | how to build your own firmware |
 
 ## Method (so you can trust / extend it)
 
@@ -50,5 +50,5 @@ banks stored on internal flash, and Bluetooth. Firmware is built on JieLi's
   library and string-anchored code, lower for leaf helpers. Confidence is noted
   per function. The UI text is resource-driven (in `files/cfg`), so menu strings
   don't always attach to code by pointer.
-- Exact peripheral register names need the JieLi BR22 SDK headers (not in the
-  binary). Pointers given in `01-hardware-map.md`.
+- Exact peripheral register names require the AC791N/WL82 SDK headers. Pointers
+  found in the binary are recorded in `01-hardware-map.md`.

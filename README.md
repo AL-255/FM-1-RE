@@ -1,28 +1,28 @@
 # FM-1 firmware reverse engineering
 
-Reverse engineering, update-protocol tooling, and experimental firmware for the
-M-Vave FM-1 synthesizer. Package, SPL, and SDK provenance identify the target as
-JieLi AC791N/WL82 with a pi32v2 CPU, XIP flash at `0x02000000`, and a
+Reverse engineering and update-protocol research for the M-Vave FM-1
+synthesizer. Package, SPL, and SDK provenance identify the target as JieLi
+AC791N/WL82 with a pi32v2 CPU, XIP flash at `0x02000000`, and a
 Dexed/msfa-derived six-operator FM engine. The embedded `JL-BR22` string is
 inherited library nomenclature, not reliable SoC identification.
+
+This `main` branch intentionally contains no replacement firmware or custom
+image builders. The former experimental implementation is preserved on the
+[`with-custom-firmware`](https://github.com/AL-255/FM-1-RE/tree/with-custom-firmware)
+branch.
 
 ## Repository layout
 
 - `analysis/`: V13 disassembly, reassembly, function databases, classifications,
   raw and enriched shards, OTA loader images, and host updater decompilation.
 - `docs/`: firmware characterization, architecture, subsystem teardowns,
-  function indexes, reconstruction notes, and OTA protocol findings.
-- `firmware/`: the experimental on-device synth, shared Dexed port, host tools,
-  and plugin targets.
+  function indexes, and OTA protocol findings.
 - `scripts/`: the unified disassembly and classification pipelines.
-- `tools/`: firmware package builders, USB-MIDI updater, tests, and quarantined
-  legacy UBOOT helpers.
+- `tools/`: USB-MIDI updater protocol client and offline tests.
 - `ghidra/`: checked-in pi32v2 headless analysis scripts.
 - `firmware-images/`: immutable V13 and V14 packages and unpacked inputs.
 - `reference/`: ignored SDKs, Ghidra installation, and upstream source mirrors.
 - `3rd-party/`: pinned firmware parsing and JieLi boot-tool submodules.
-- `TODO_Aug1.md`: current safety review and the release gates for device
-  flashing.
 - `TODO_aug2.md`: AC791N boot-chain corrections and the latest open questions.
 
 See `analysis/README.md` for the relationship between the two function-analysis
@@ -55,18 +55,17 @@ python3 scripts/mech_tag.py
 python3 scripts/export_shards.py
 python3 scripts/aggregate.py
 
-# Firmware and offline OTA checks
-make -C firmware image
+# Offline OTA protocol checks
 python3 -m unittest discover -s tools/tests -v
 ```
 
 ## Safety status
 
-The custom firmware is **not flash-ready**. Offline work has not established a
-ROM recovery path, rollback, or safe interrupted-write behavior for the
-single-bank layout. The console/factory-mode audit in
+The update protocol is not a demonstrated recovery mechanism. Offline work has
+not established ROM recovery, rollback, or safe interrupted-write behavior for
+the single-bank layout. The console/factory-mode audit in
 `analysis/device/debug-surfaces.md` found no substitute recovery entry. Read
-`TODO_Aug1.md` and `TODO_aug2.md` before using any update or flash utility.
+`TODO_aug2.md` before using any update or flash utility.
 
 ## External references
 
@@ -77,6 +76,9 @@ single-bank layout. The console/factory-mode audit in
   long-running Russian community discussion of JieLi SoCs, SDKs, toolchains,
   programmers, boot activators, and USB/ISP/UART key experiments. Reports are
   community observations and may apply only to the chip family being discussed.
+- [SMK-37 Pro community notes](https://gist.github.com/probonopd/18b3ed65a69d0229eb630c47d7e316dc):
+  observations about a related M-Vave/JieLi keyboard that may help identify
+  shared packaging, update, and hardware conventions.
 - [kagaimiq/jl-misctools](https://github.com/kagaimiq/jl-misctools)
   (`3rd-party/jl-misctools`, also checked out at `../jl-misctools`): utilities
   for JieLi firmware containers, key files, UI resources, and older formats.

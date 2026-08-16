@@ -107,11 +107,6 @@ does not route a debug signal to a pad. `UTRX`, if enabled in a different
 build, is described by the SDK as a serial updater rather than an interactive
 shell.
 
-`tools/legacy-uboot/isd_config.ini` is not the stock config: it explicitly sets
-`UTTX=PB04`. It must not be cited as proof that production FM-1 firmware emits
-on PB04. Repacking that file would also change boot configuration and is not a
-safe diagnostic experiment without a ROM recovery procedure.
-
 ## Key chord trace
 
 V13 scanner entry `0x020244A2` tests the state bytes for scanner slots 0 and 1

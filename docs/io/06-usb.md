@@ -1,8 +1,7 @@
 # FM-1 USB device stack
 
-Reverse-engineered from `app.bin` (pi32v2, flash VMA `0x02000000`). Audience: engineers
-building custom firmware who want to reuse, extend or replace the stock USB device
-stack. Every claim carries the function address it was read from; `[high|med|low]`
+Reverse-engineered from `app.bin` (pi32v2, flash VMA `0x02000000`). Every claim
+carries the function address it was read from; `[high|med|low]`
 marks confidence. Code citations name the enriched shard the disassembly was taken
 from. Cross-references: MIDI side in `05-midi.md`; SIE register semantics in
 `reference/jielie/periph/usb-fs.md`; SDK structure reference in
@@ -434,10 +433,10 @@ ISR (`0x0205E736`).
 
 ---
 
-## 7. Reusing the USB stack from custom firmware
+## 7. Recovered USB extension APIs
 
-The stack is the JieLi soundbox SDK device stack (BR23 headers match). Extension
-points, all verified against the firmware:
+The stack retains JieLi SDK extension points. The following ABIs are verified
+against the stock firmware:
 
 ### 7.1 Register a configuration (class) — desc_config ABI
 
@@ -449,7 +448,7 @@ void usb_add_desc_config(usb_dev id, u32 index, desc_config fn);  // 0x020067B0
 // index 0..7 → hook slots at 0x01C0E520 + id*32 + index*4; index > 7 clears all.
 ```
 
-The stock builders to imitate: `0x020070E4` (MIDI), `0x020074CA` (audio),
+The stock builders are `0x020070E4` (MIDI), `0x020074CA` (audio),
 `0x02007676` (composite). Total config ≤ 768 B (`usb_config_desc_build`
 `0x0200681E`).
 
@@ -484,23 +483,11 @@ shutdown `usb_device_shutdown` `0x02060A56`.
 
 ### 7.4 Switch modes at runtime
 
-Call `usb_device_mode` `0x02006B7C` (§3.1) as `(usb_id, mode_bitmask)` after
-registering custom builders/handlers. Do not rely on the callback at
-`0x02006D38`: its packet source and registration path are unresolved.
-Enumeration itself (soft connect) is
-under your control via `usb_sie_power_write` (POWER 0x60) / `usb_device_hold`
+`usb_device_mode` `0x02006B7C` (§3.1) has the ABI `(usb_id, mode_bitmask)`.
+The packet source and registration path of callback `0x02006D38` are
+unresolved.
+Enumeration uses `usb_sie_power_write` (POWER 0x60) / `usb_device_hold`
 `0x0200675A`.
-
-### 7.5 Gotchas
-
-- Keep the SMP ticket-lock pattern (§2.2) around SFR accesses — the second core
-  runs the BLE link-layer concurrently.
-- The RAM-resident EP0 engine (`0x02086F2A` region) is what actually calls your
-  handlers; it executes from RAM — do not patch it in place without remapping.
-- EP3/EP4 have the high-bandwidth multiplier logic and dedicated DMA count regs;
-  EP4 additionally owns `0x11834`. Stay on EP1/EP2 for simple custom classes.
-- The MIDI engine shares `ENG` offsets up to `ENG+1552+` — new users should
-  allocate state above `ENG+1572` or in the per-dev areas to avoid collisions.
 
 ---
 

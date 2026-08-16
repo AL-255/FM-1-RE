@@ -1,4 +1,4 @@
-# Shrinking the FM-1 OTA loader
+# FM-1 OTA loader size-limit experiments
 
 ## The problem
 
@@ -9,7 +9,8 @@ write/read round-trip is identity only when the payload is **≤ 19456 bytes**
 (`0x4c00`).  For the 19937-byte stock loader the tail does **not** read back
 correctly, so step-1 always fails with `LOADER_VERIFY_ERR` (131).
 
-Conclusion: any custom loader must be compressed to **≤ 19456 payload bytes**.
+Conclusion: the tested verifier accepts loader payloads no larger than
+**19456 bytes**.
 
 ## Hidden size rule: payload must be a multiple of 512
 
@@ -40,31 +41,12 @@ payload must be **padded** with harmless bytes (zeros work) up to the next
 The padding sits after the last LZ4 block and is ignored by the loader's
 decoder.
 
-## Builder tool
-
-`tools/build_shrunk.py` automates this:
-
-1. Start from the stock decompressed loader image.
-2. Zero the requested image region(s).
-3. Re-encode all six LZ4 blocks with the stock-compatible optimal parser from
-   `patch_ota2.py` (continuous dictionary across blocks).
-4. Pad the compressed payload to the largest multiple of 512 that is ≤ 19456.
-5. Recompute inner/outer CRCs and write a valid `ota.bin`.
-
-Usage example (zeroing regions that are believed to be dead code):
-
-```bash
-python3 tools/build_shrunk.py 0x1df2-0x1e34 0x29a8-0x29e9
-```
-
-The output is written to `/tmp/ota_shrunk.bin` by default.
-
 ## Current status (2026-07-21)
 
 Step-1 verification is fully solved:
 
-- The cfg/eq no-op gate is bypassed (`tools/build_fwsc.py` flips a padding byte
-  in `eq_cfg_hw.bin`, changing cfg CRC while leaving payload identical).
+- A test package changed only padding in `eq_cfg_hw.bin`, changing the cfg CRC
+  while leaving its payload identical, and passed the cfg/eq no-op gate.
 - The loader can be shrunk below the 19456-byte limit and step-1 now accepts
   the image, builds the `FM-1_009 + ota-` boot record, and soft-resets into the
   OTA loader.
@@ -117,6 +99,7 @@ loader integrity gate from the corrected host-side timing.
    `0xF0000000` request.
 3. Attempt to read back the stored loader region via the OTA protocol or any
    exposed syscmd to see whether the new loader was written at all.
-4. Until the loader reaches the finish handshake, the host-native synth
-   (`firmware/host/fm1_synth`, `fm1_jack`, LV2/VST plugins) is the working
-   deliverable for playing the custom synth from a MIDI keyboard.
+
+The modified loader binaries and construction utilities used for these
+experiments are preserved on the `with-custom-firmware` branch. This branch
+retains only the observations and stock-loader analysis.

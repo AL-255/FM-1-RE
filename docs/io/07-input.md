@@ -162,9 +162,8 @@ adc_add_sample_ch(3);    // SARADC ch3
 adc_add_sample_ch(4);    // SARADC ch4
 ```
 
-These are the **pitch and mod wheels** (per the project classification; which of 3/4 is
-pitch vs mod is **low** — on BR23 ch3=PA10, ch4=PA12 per `adc.md`, BR22 pinout similar
-but unverified).
+These are the **pitch and mod wheels** (per the project classification); which
+channel is pitch versus mod remains unverified.
 
 The wheel/battery tick `0x02024358`:
 

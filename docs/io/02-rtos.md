@@ -1,8 +1,8 @@
 # FM-1 RTOS (JieLi OS, FreeRTOS-derived SMP port)
 
-Reverse-engineered from `app.bin` (pi32v2, flash XIP VMA `0x02000000`). Audience:
-engineers writing custom firmware on this image. Every claim carries the function
-address it was read from; `[high|med|low]` marks confidence. Code citations name the
+Reverse-engineered from `app.bin` (pi32v2, flash XIP VMA `0x02000000`). Every
+claim carries the function address it was read from; `[high|med|low]` marks
+confidence. Code citations name the
 enriched shard the disassembly was taken from. The sibling BR23 soundbox SDK
 (`reference/ac695n_soundbox_sdk`) was used to cross-check API signatures; where the
 FM-1 binary diverges from the SDK headers, the binary wins and the divergence is

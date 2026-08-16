@@ -1,65 +1,32 @@
-# Uploading the FM-1 demo firmware
+# FM-1 update-protocol tools
 
-## Method 1 (buttonless): Linux USB-MIDI OTA client
+These tools reproduce and inspect the stock FM-1 USB-MIDI update protocol.
+They do not build replacement firmware.
 
-The FM-1 update is a two-stage USB-MIDI SysEx pull protocol. No UBOOT button
-or HID transport is involved.
+## USB-MIDI client
 
-**Development artifact:** `build/FM-1-demo.fwsc` can be rebuilt and passes
-offline container checks, but it is not flash-ready and has not completed an
-update on hardware.
-
-```bash
-# rebuild if needed:
-make -C firmware
-python3 tools/build_fwsc.py              # -> build/FM-1-demo.fwsc
-```
+`fm1_ota.py` implements the two-stage pull protocol observed in the Windows
+M-UPGRADE application. It supports discovery, handshake inspection, request
+serving, and transmission of an existing `.fwsc` package:
 
 ```bash
 python3 tools/fm1_ota.py scan
-python3 tools/fm1_ota.py flash build/FM-1-demo.fwsc
+python3 tools/fm1_ota.py flash path/to/official-package.fwsc
 ```
 
-The client decodes and compares both stage handshakes, serves both pull stages,
-accepts either the stock OTA PID or the custom loader's reused normal PID, and
-reports success only after `0xF0000000`, normal-mode re-enumeration, and an
-exact post-reboot model/version match. It is byte-checked against the
-2026-07-06 M-UPGRADE executable and offline tests, but the latest timing,
-identity, and re-enumeration fixes have not been retested on hardware.
+The client validates the device identity, bounds-checks loader requests, waits
+for the observed terminal signals, and checks the post-reboot identity. Its
+packet codec and state machine have offline unit coverage, but current timing
+and recovery behavior have not been verified on available hardware.
 
-The official Windows M-UPGRADE application remains the recovery reference. Its
-V14 executable embeds the stock `FM-1_014` image extracted under
-`firmware-images/v14/`.
+## UBOOT reference
 
-The `.fwsc` preserves the stock JLFS/UFW layout and chip key `0x980F`, with all
-container CRCs recomputed. The builder patches `app.bin`, changes inert cfg
-padding to bypass the no-op gate, and can inject the shrunken OTA loader.
+The pinned `3rd-party/jl-uboot-tool` submodule documents JieLi UBOOT discovery,
+RAM execution, and flash commands. It lists WL82/AC791N support as unknown, and
+an externally entered UBOOT/MaskROM mode has not been demonstrated on the
+retail FM-1. This branch contains no wrapper that invokes its write or erase
+operations.
 
-## Method 2: JieLi isd_download (needs UBOOT mode — NOT available here)
-
-`tools/legacy-uboot/upload.sh` uses JieLi's `isd_download`. It requires the device in
-**UBOOT/update mode**, which on most JieLi boards is entered with a button
-strap. **The FM-1 has no such button** (its update path is the OTA one
-above), so this method does not work on it in practice. Kept for reference.
-
-## Method 3: raw jl-uboot-tool (needs UBOOT mass-storage — NOT available)
-
-`tools/legacy-uboot/flash.sh` likewise requires the UBOOT mass-storage device. Not
-available on the FM-1 without the button. Kept for reference / other boards.
-
-## After flashing
-
-Power-cycle (or it reboots itself after OTA). The unit boots the stock UI;
-the bottom LCD strip shows the demo overlay (`KEY` = physical keys held,
-`MIDI` = last MIDI note + preset), and USB/UART/BLE MIDI plays the basic
-synth (program change 0–3 = SAW LEAD / SQ BASS / SYNC PAD / PLUCK).
-
-## Recovery
-
-The official V14 `FM-1.fwsc` and M-UPGRADE remain the recovery reference, but
-recovery from a custom image has not been demonstrated. A custom application
-that fails before USB initialization may make the buttonless OTA path
-unavailable, and no retail-device UBOOT entry method is known.
-
-Protocol details and current hardware limitations are documented in
-`docs/io/11-ota-protocol.md` and `docs/ota-loader-shrinking.md`.
+Do not treat normal-mode OTA as recovery from a corrupt application. The
+single-bank write behavior, interrupted-update behavior, and ROM-level restore
+procedure remain open questions in `TODO_aug2.md`.

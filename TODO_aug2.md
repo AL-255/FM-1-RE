@@ -323,8 +323,6 @@ normal-mode OTA trigger and the RAM loader's UFW pull protocol.
   stock reachability.
 - `scripts/run_ghidra_loader.sh` now treats Ghidra's `SCRIPT ERROR` output as a
   failure because the headless launcher can still return process status zero.
-- `tools/legacy-uboot/{upload,flash}.sh` no longer default to BR22 or perform
-  device operations without an explicit unverified-AC791N acknowledgement.
 
 These artifacts improve traceability and reduce guesswork. They do not change
 the hardware safety decision.

@@ -1,6 +1,6 @@
 # 08 — Display: 240×240 SPI LCD, ui_core framework, FM-1 menu
 
-Target: M-Vave FM-1, JieLi BR22/AC693N. The UI is JieLi's element-tree UI framework
+Target: M-Vave FM-1, JieLi AC791N/WL82. The UI is JieLi's element-tree UI framework
 ("ui_core"): 64-byte elements with attribute lists, a layout/scroll engine, an
 RGB565 layer compositor, and a strip-buffered flush path to the LCD over SPI1.
 Confidence tags: **high** = proven from disassembly, **med** = strong inference,

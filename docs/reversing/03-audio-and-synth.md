@@ -103,7 +103,5 @@ Patch pack/unpack functions (from analysis):
 - `0x0201dab8` — select/load a patch: unpack, apply params+name+LFO, persist index.
 - `0x02027af4` — settings/patch persistence task (message loop, flash commit).
 
-## To reuse
-
-Drop in `Synth_Dexed` (`EngineMsfa`) — it *is* this engine — compile for pi32v2,
-and feed the DAC. See `10-rebuild-guide.md`.
+The `Synth_Dexed` `EngineMsfa` source is retained as a behavioral reference for
+the matching stock DSP routines.

@@ -1,6 +1,6 @@
 # 09 — Storage: NOR flash driver, norfs/FAT filesystems, VM key-value store, DX7 patches, firmware update
 
-Target: M-Vave FM-1, JieLi BR22/AC693N. One external SPI NOR flash holds everything:
+Target: M-Vave FM-1, JieLi AC791N/WL82. One external SPI NOR flash holds everything:
 the firmware XIP image, a small NOR-resident file area ("sdfile"/norfs), a FAT/exFAT
 volume, the VM (virtual-memory EEPROM-emulation) key-value area used by syscfg, and the
 raw DX7 bank/patch region. Confidence: **high** = proven, **med** = strong inference,

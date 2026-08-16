@@ -1,9 +1,9 @@
 # FM-1 Boot, Clocks and Interrupts
 
-Reverse-engineered from `app.bin` (pi32v2 ISA, flash XIP VMA `0x02000000`). Audience:
-engineers writing custom firmware for the M-Vave FM-1 (JieLi BR22/AC693N, dual-core
-pi32v2). Every claim carries the address it was read from; `[high|med|low]` marks
-confidence from the master DB (`analysis/db.json`), refined by manual review. Code
+Reverse-engineered from `app.bin` (pi32v2 ISA, flash XIP VMA `0x02000000`) on
+the JieLi AC791N/WL82 target. Every claim carries the address it was read from;
+`[high|med|low]` marks confidence from the master DB (`analysis/db.json`),
+refined by manual review. Code
 citations name the enriched shard the disassembly was taken from
 (e.g. `shard_020000a0_020020de.txt`); reset-vector instructions before the first shard
 were re-verified against the raw bytes of `app.bin` with the vendor pi32v2 objdump.
@@ -354,42 +354,3 @@ machine from its node-table entry (fallback entry `0x0200473C`).
 | `0x01C7FE00` | RAM IRQ vector table (4 B/IRQ) | high |
 | `0x01C7FFF8` | cpu1 boot mailbox | high |
 | `0x01C20160` | spinlock/critical debug state (timestamps, per-cpu flags) | med |
-
-## 9. How custom firmware boots (replication checklist)
-
-A replacement `app.bin` that keeps the stock SPL/boot ROM must reproduce:
-
-1. **Vector area at `0x02000000`**: `goto +4`, then set `sp`/`ssp`. You may choose
-   your own stack tops, but the stock values (`0x01C14BB4`/`0x01C15BB4` cpu0,
-   `0x01C15EB4`/`0x01C16EB4` cpu1) are known-good and other code
-   (`cpu_link_irq_init 0x02001758`) reprograms the same values into the per-core
-   control registers.
-2. **Consume `r0` = SPL boot params** like `boot_hwinfo_save 0x020000C6` (or at
-   least preserve the hwinfo struct at `0x01C7FD50` if you want `syscfg` id 102 /
-   BT MAC to keep working).
-3. **Zero `.bss`, copy `.data`** (your own linker layout), then any RAM-resident
-   code. The 0x04000120 overlay window is optional (unused in the stock build).
-4. **Clocks**: either reuse the stock `pll_clock_init 0x020000F8` /
-   `clock_board_init 0x02001AB0` code, or program the same sequence: PLL ref
-   24 MHz → 240 MHz, sysclk struct at `0x01C1FF0C`, tick-timer scale
-   `sysclk/100` at `0x1EEF0F4`. The 24-vs-40 MHz xtal detect reads
-   `[0x119A0] & 0x0C000000 != 0x08000000`.
-5. **Interrupts**: `irq_mask_arrays_clear 0x02001696`, then register handlers with
-   `request_irq(index, prio, handler, cpu)` (`0x020016D2`). Minimum set to stay
-   compatible with the stock kernel: IRQ3 (OS tick, prio 1) and the per-cpu SWI
-   (`0x7F - cnum`, handler `0x020419DA` if you reuse the stock dispatcher) before
-   `os_start`.
-6. **Enter the OS**: replicate the tail of `0x02001B04` — `os_mutex_create` on the
-   kernel global, ROM config writes as needed, `cpu1_boot_start 0x0205A0C8` if
-   using core 1, `os_init 0x0205A10A`, create the boot task
-   (`os_task_create 0x0205B1D0`), then `os_start 0x0205A6B6`. Note the
-   tail-jump anomaly (§5.2): use `0x02001B04`-equivalent flow, not a bare jump to
-   mid-function addresses.
-7. **Do not rely on the mask ROM being callable from your entry with arbitrary
-   register state** — the stock CRT establishes its own context before touching
-   clock/tree registers; do the same.
-
-Things that are safe to reuse unchanged (verified stable addresses): the RAM vector
-table convention (`0x01C7FE00`), the SMP lock words (`0x01C09534/3C/44`), the
-kernel state block (`0x01C0973C`–`0x01C09778`, `0x01C20318` ready lists), and all
-RTOS APIs documented in `02-rtos.md`.

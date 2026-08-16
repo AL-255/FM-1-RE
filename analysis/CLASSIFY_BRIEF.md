@@ -2,7 +2,7 @@
 
 You are classifying functions from a full disassembly of the **M-Vave FM-1**
 firmware (`app.bin`, pi32v2 ISA, loaded at flash VMA `0x02000000`). The FM-1 is a
-Yamaha-DX7-compatible 6-op FM synthesizer on a **JieLi BR22 / AC693N** Bluetooth-audio
+Yamaha-DX7-compatible 6-op FM synthesizer on a **JieLi AC791N/WL82** multimedia
 SoC. The synth engine is a port of **Google msfa (Dexed/MicroDexed)**; the OS is
 JieLi's soundbox SDK (small RTOS: tasks, messages, timers).
 

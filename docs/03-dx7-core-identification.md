@@ -43,15 +43,12 @@ The msfa core stays Apache-2.0 specifically so it can be reused across
 Dexed/MicroDexed/MiniDexed; that is the code the firmware's synth section
 corresponds to.
 
-## Consequence for reconstruction
+## Reverse-engineering consequence
 
-The DSP core does **not** need to be recovered by disassembly — it is
-open-source. `reference/Synth_Dexed` (embeds `EngineMsfa`) is the drop-in
-upstream. What is genuinely product-specific and worth recovering from the
-binary is the *glue*: patch/bank management, the menu/UI tree (strings above),
-MIDI routing (`midi_route`), arpeggiator, sequencer, and the effects
-(`Reverb`, `Filter`). See `04-toolchain-and-vendoring.md` and the reconstruction
-plan.
+The DSP core has an open-source reference implementation, so disassembly can
+focus on FM-1-specific glue: patch/bank management, the menu/UI tree, MIDI
+routing (`midi_route`), arpeggiator, sequencer, and effects (`Reverb`,
+`Filter`). See `04-toolchain-and-vendoring.md` for provenance.
 
 ## References
 

@@ -1,7 +1,7 @@
 # Stock firmware images
 
-This directory keeps immutable stock firmware inputs separate from the custom
-firmware source and derived analysis databases.
+This directory keeps immutable stock firmware inputs separate from derived
+analysis databases and generated output.
 
 | directory | bundle label | product marker | application size | status |
 |---|---|---|---:|---|

@@ -1,7 +1,6 @@
 # FM-1 — The FM Synth Engine (msfa / Dexed port)
 
-Target: M-Vave FM-1 firmware `app.bin` (pi32v2, JieLi BR22/AC693N).
-Audience: engineers building a custom synth on this hardware. Every claim
+Target: M-Vave FM-1 firmware `app.bin` (pi32v2, JieLi AC791N/WL82). Every claim
 carries a firmware address; confidence **[high]** / **[med]** / **[low]**.
 Disassembly quotes cite shards in `analysis/shards/`. The reference
 source is Google **msfa** (`reference/dexed/Source/msfa/`) and

@@ -3,8 +3,7 @@
 This document describes the currently mapped architecture of the **M-Vave FM-1**
 synthesizer firmware (`FM-1.fwsc`, V13 / 2026-07-03 dump), as established by
 the classification of **2062 direct-call-target-derived entries** in V13 `app.bin`
-(see `function-index.md` and `analysis/db.json`), and how the custom synth
-demo in `firmware/` reuses it.
+(see `function-index.md` and `analysis/db.json`).
 
 Confidence: addresses, sizes, call graphs and byte-level facts are exact;
 per-function purposes are tagged high/med/low confidence in the index.
@@ -12,7 +11,8 @@ per-function purposes are tagged high/med/low confidence in the index.
 ## 1. System overview
 
 The FM-1 is a Yamaha-DX7-compatible 6-operator FM synthesizer on a
-**JieLi BR22 / AC693N** Bluetooth-audio SoC:
+**JieLi AC791N/WL82** multimedia SoC. Embedded `JL-BR22` strings identify
+linked library lineage, not the physical SoC:
 
 - **CPU**: JieLi **pi32v2** (custom Blackfin-derived 32-bit core, 16-bit LE
   instruction words, algebraic asm). 240 MHz (PLL from 24 MHz xtal).
@@ -85,8 +85,8 @@ The FM-1 is a Yamaha-DX7-compatible 6-operator FM synthesizer on a
 The firmware container is a **UFW** update package (chip "AC791N") holding
 `flash.bin` (0x94000, the image above) plus update scripts; the JLFS app
 area is encrypted with the chip key (`jl_sfc_cipher`, base 0x4000), the SPL
-with the fixed header key `0xFFFF` — see `tools/build_image.py` for the
-complete decode/re-encode implementation.
+with the fixed header key `0xFFFF`; the unpacked metadata is retained in
+`firmware-images/v13/raw_fw/FM-1.fwsc_unpack/jlfw.yaml`.
 
 ## 3. Boot chain
 
@@ -109,7 +109,7 @@ the C dispatcher `0x020002A2` scans pending IRQ bitfields and calls handlers
 registered with `request_irq(index, prio, handler, cpu) 0x020016D2` (RAM
 vector table `0x01C7FE00`). Details: `io/01-boot.md`, `io/02-rtos.md`.
 
-## 4. The audio path (what the demo hooks)
+## 4. The audio path
 
 ```
  USB-MIDI ─┐
@@ -134,10 +134,7 @@ vector table `0x01C7FE00`). Details: `io/01-boot.md`, `io/02-rtos.md`.
                                                    internal audio DAC
 ```
 
-**The demo's render hook** replaces `[0x01C0F6F4 + 36]` with our own
-`demo_dac_cb`, so the DAC plays our engine instead of the stock synth
-(disabled via `b[0x01C0E670+19] = 0`). Full path: `io/03-audio-dac.md`,
-`io/04-synth-engine.md`.
+Full path: `io/03-audio-dac.md`, `io/04-synth-engine.md`.
 
 ## 5. The MIDI surface
 
@@ -151,10 +148,6 @@ vector table `0x01C7FE00`). Details: `io/01-boot.md`, `io/02-rtos.md`.
 - **Vendor sysex** magic `F0 35 59 F7` (config/update).
 - **Arpeggiator** `0x02020724` (patterns, octaves, random via SFR RNG) and a
   step sequencer (`io/05-midi.md`).
-
-**The demo's MIDI hook** patches `midi_msg_dispatch`'s entry with a
-trampoline that forwards note on/off and program change into our engine,
-then resumes the stock handler (stock UI/synth stay coherent).
 
 ## 6. USB device
 
@@ -194,90 +187,9 @@ GATT (service/char UUIDs at `0x020436C5/0x020436E0`, MIDI on ATT handle
 (A2DP/AVRCP/HFP/SBC) is present as SDK carryover — vestigial for the FM-1
 (`io/10-bluetooth.md`).
 
-## 10. The custom synth demo (`firmware/`)
-
-### Design
-
-The demo is a **patched hybrid image**: the stock firmware stays intact
-(drivers, OS, USB-MIDI, UI all keep working), and our own synthesizer is
-grafted in at three points:
-
-| hook | mechanism | effect |
-|---|---|---|
-| boot install | trampoline patched over `usr_app_task` entry (`0x02022CFE`) → `__tramp_usr_app_task` | runs `demo_install()` at app start: brings up synth + LCD overlay + UI timer, swaps the DAC feed |
-| DAC render | RAM pointer `[0x01C0F6F4+36] = demo_dac_cb` (atomic, at install) | the DAC plays **our** synth; stock synth compute disabled |
-| MIDI | trampoline over `midi_msg_dispatch` entry (`0x0201F5F4`) → `__tramp_midi` | note on/off + program change forwarded to our synth, stock handler resumes |
-
-The demo uses a small **basic polyphonic synthesizer** (`firmware/src/synth.cpp`,
-shared verbatim with the host build): 8 voices, polyblep saw/square/sine
-oscillators + sub-osc, linear ADSR, Chamberlin state-variable lowpass, and 4
-presets (SAW LEAD / SQ BASS / SYNC PAD / PLUCK) selected by program change.
-The ~13 KB blob links at XIP `0x02046600` and replaces part of the V13
-font/bitmap region.
-
-### On-device display
-
-A 240×56 RGB565 overlay at the bottom of the LCD (SPI1, driven directly per
-the stock `lcd_spi_write_window` protocol, see `io/08-display.md`) is
-refreshed at ~8 Hz from a `sys_timer` and shows:
-
-- `KEY` — physical key ids currently held, read from the key scanner's
-  per-key state array (`0x01C0E670+2836+i*2`, 41 keys, see `io/07-input.md`);
-- `MIDI` — the last note name/octave/velocity received through
-  `midi_msg_dispatch` (USB/UART/BLE MIDI or the stock keybed), plus active
-  voice count;
-- the current preset name.
-
-Text is rendered with an 8×16 bitmap font (`tools/make_font.py`, Pillow).
-
-### Build
-
-```bash
-cd firmware && make            # pi32v2 blob -> build/demo.bin
-make image                     # -> build/{fm1_demo_flash.bin,demo_blob.bin}
-```
-
-`tools/build_image.py` decodes the UFW (`FM-1.fwsc`), decrypts the app area
-(chip key `0x980F`, `jl_sfc_cipher` base 0x4000), applies the two flash
-patches, re-encrypts, and verifies. The DAC hook needs no flash patch (RAM
-pointer at runtime).
-
-### ROM/UBOOT upload experiments (not available on the retail device)
-
-```bash
-tools/legacy-uboot/upload.sh   # requires externally forced UBOOT mode
-```
-
-`tools/legacy-uboot/build_official.py` is an older staging experiment that
-expects a blob linked at `0x8E600`; it is incompatible with the current
-`0x46600` link layout without relinking. JieLi `isd_download` would re-pack and
-encrypt the JLFS image. A
-raw alternative (`tools/legacy-uboot/flash.sh`, jl-uboot-tool) writes the same
-image at flash `0x0` after a mandatory full-flash backup. The retail FM-1 has
-no known entry path for either workflow. See `tools/README.md`.
-
-### Host native mode
-
-The same engine and patches also build for the host:
-
-- `firmware/host/fm1_synth` — standalone app: ALSA MIDI in (any MIDI
-  keyboard; the FM-1 itself over USB-MIDI works) → ALSA audio out.
-  `fm1_synth -l` lists ports; `-m C:P` picks one; `-p 0..3` picks the patch.
-- `firmware/host/lv2/fm1_dexed.so` — **LV2 instrument plugin** (loads in
-  Ardour/Carla/Zrythm etc.): MIDI in → mono out, "Patch" control 0–3.
-  Metadata: `host/lv2/{manifest,fm1_dexed}.ttl`. (LV2 is the Linux-native
-  plugin ABI; a VST3 wrapper can be added the same way around the engine.)
-- `firmware/host/sim` — renders the demo's full behavior (autoplay + MIDI +
-  patch switch) to a WAV, no audio device needed.
-
-```bash
-cd firmware && make host       # all host targets
-```
-
-## 11. Where to look next
+## 10. Where to look next
 
 - `docs/function-index.md` — 2062 V13 call-target-derived entries by subsystem.
 - `docs/io/*.md` — per-subsystem teardowns with function tables.
 - `analysis/db.json` — machine-readable master DB (xrefs, strings, labels).
-- `firmware/` — demo source (engine port in `dexed/`, runtime in `src/`).
-- `tools/` — image builder, symbols, flasher.
+- `tools/` — updater protocol client and offline tests.

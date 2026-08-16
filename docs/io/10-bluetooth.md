@@ -1,6 +1,6 @@
 # 10 — Bluetooth: BLE link layer, HCI/L2CAP/ATT/SM, BLE-MIDI, classic BT
 
-Target: M-Vave FM-1, JieLi BR22/AC693N. The firmware carries JieLi's full dual-mode
+Target: M-Vave FM-1, JieLi AC791N/WL82. The firmware carries JieLi's full dual-mode
 stack: a vendor BLE link layer ("btctrler"/"link_layer" task strings `0x020557C9` /
 `0x020557D2`), a btstack-derived host ("btstack" `0x02055814`, HCI H4 transport string
 `'H4_Controller'` `0x02055860`), and the FM-1 BLE-MIDI service on top. Build stamps:

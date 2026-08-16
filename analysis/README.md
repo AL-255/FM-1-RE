@@ -22,7 +22,7 @@ the later OTA work. The pipelines are complementary rather than interchangeable.
   newer `shards/` add different call/data-reference annotations and are not
   byte-equivalent replacements.
 - `subsystems/` and `../docs/reversing/`: the earlier classification output and
-  rebuild-oriented documentation.
+  subsystem-oriented documentation.
 
 The four baseline toolchain listings formerly present under two names were
 byte-identical. Only `libdis/base_libc.txt`, `base_libcompiler-rt.txt`,
@@ -30,8 +30,9 @@ byte-identical. Only `libdis/base_libc.txt`, `base_libcompiler-rt.txt`,
 
 ## OTA analysis
 
-- `device/ota-loader/`: stock and experimental device-side OTA loader images.
+- `device/ota-loader/`: stock device-side OTA loader image and its analysis.
 - `host-updater/`: decompilation of the Windows M-UPGRADE worker.
 
-Neither the databases nor the offline OTA checks establish that a custom image
-is safe to flash. See `../TODO_Aug1.md` for the remaining release blockers.
+Neither the databases nor the offline OTA checks establish a ROM-level recovery
+path or safe interrupted-write behavior. See `../TODO_aug2.md` for the open
+questions.

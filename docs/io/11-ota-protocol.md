@@ -1,6 +1,6 @@
 # FM-1 OTA / M-UPGRADE protocol and open device-side gates
 
-How the M-Vave M-UPGRADE client updates the FM-1 (JieLi AC791N/BR22-class),
+How the M-Vave M-UPGRADE client updates the FM-1 (JieLi AC791N/WL82),
 byte-verified against live ALSA-seq captures of M-UPGRADE under Wine and
 against the stock `.fwsc`. `tools/fm1_ota.py` is a byte-exact Linux
 reimplementation of the client. No UBOOT button exists on the device — the
@@ -178,11 +178,12 @@ Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
 - **cfg gate — BYPASSED (verified on hardware).** The verifier reads the
   incoming `cfg` JLFS daisychain entry header (32 bytes at flash `0x9283B`,
   logical `0x92C3B`) and compares it to the stored cfg; identical → refuse.
-  `tools/build_fwsc.py` flips one padding byte in the nested `eq_cfg_hw.bin`
-  entry's 16-byte name field, which changes the cfg `datacrc`/`hdrcrc` while
-  leaving the eq payload and both entry names byte-identical. The device then
-  proceeds past cfg to the `ota.bin` stage. (This is the first no-op gate;
-  confirmed by request-log: 9 requests → 49 requests.)
+  An experimental package flipped one padding byte in the nested
+  `eq_cfg_hw.bin` entry's 16-byte name field, which changed the cfg
+  `datacrc`/`hdrcrc` while leaving the EQ payload and both entry names
+  byte-identical. The device then proceeded past cfg to the `ota.bin` stage.
+  This is the first no-op gate (confirmed by request log: 9 requests became
+  49 requests).
 - **ota.bin container format — byte-verified.** It is a nested bootable
   image at logical `0xA6F20` (fwsc file `0xA6F34`, `0x4E01` bytes):
   `[outer_hdrcrc:2][outer_datacrc:2][doff=0x20][dlen=0x4DE1][attr=0x41][rsvd][last]["usb_hid_ota.bin"]`
@@ -192,8 +193,8 @@ Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
   dsize `0x1000`×5 + `0xB1C` = `0x5B1C`). All CRCs are `jl_crc16`
   (CRC-16/CCITT-FALSE); `inner_datacrc` covers the *decompressed* image;
   `outer_datacrc` covers `ota[0x20:]`. UFW-entry dcrc covers the whole file.
-  See `tools/patch_ota.py` / `tools/patch_ota2.py` for a field-by-field proof
-  and a working LZ4 decoder/encoder.
+  `scripts/extract_ota_loader.py` contains the retained integrity verifier and
+  continuous-dictionary LZ4 decoder.
 - **ota.bin / accept gate — STILL BLOCKED.** The verifier loads ota.bin to
   the VM/loader flash area (49 read requests), the payload-CRC self-check
   (`@0x020832E2`, plain CRC16 — verified passing for stock and patched images)
@@ -238,4 +239,5 @@ Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
   the input — the seq interface is what RtMidi/M-UPGRADE use.)
 - `tools/alsaseq.py` — tiny pure-ioctl seq helper used for port discovery.
 - `tools/99-jieli-fm1.rules` — udev rule for plugdev USB access.
-- `tools/build_fwsc.py` — builds `build/FM-1-demo.fwsc`.
+- `scripts/extract_ota_loader.py` — validates and extracts the stock nested OTA
+  executable.

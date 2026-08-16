@@ -28,12 +28,13 @@ and is vendored, not disassembled.
 
 ## SoC / CPU
 
-Strings in `app.bin` (`JL-BR22`, `br22xx`, `JL_A2DP`, `INCLUDE_BTSTACK-$ac3ebaf`,
-`SYSTEM-*modified #define CPU_CORE_NUM 1 *`) identify the chip as **JieLi
-JL-BR22 = AC693N**, a Bluetooth-audio SoC. The physical part is marked
-**`C156211-11B8`** (LQFP48). (JieLi laser markings are a house code, not the
-catalog part number; the firmware's own build strings are the authoritative
-chip ID.) Per
+The package header and configuration identify the target as **JieLi
+AC791N/WL82**. The stock SPL also byte-matches the AC79 SDK lineage documented
+in `analysis/device/uboot/README.md`. Strings in `app.bin` (`JL-BR22`, `br22xx`,
+`JL_A2DP`, `INCLUDE_BTSTACK-$ac3ebaf`) come from linked Bluetooth-library
+lineage and are not authoritative SoC identification. The physical part is
+marked **`C156211-11B8`** (LQFP48); JieLi laser markings are house codes rather
+than catalog part numbers. Per
 [kagaimiq/jielie](https://github.com/kagaimiq/jielie), the BR2x generation uses
 the **pi32v2** CPU (custom, Blackfin-derived, 32-bit, 16-bit little-endian
 instruction words). This was confirmed empirically: importing `app.bin` with the
