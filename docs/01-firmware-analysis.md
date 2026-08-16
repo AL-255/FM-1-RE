@@ -23,8 +23,10 @@ Components:
 | `files/cfg_tool.bin` | config-tool descriptor | vendor blob |
 | `files/cfg` | packed resources (EQ, tone cfg, UI) | vendor blob / resource |
 
-Only `app.bin` is pi32v2 CPU code. Everything else is produced by JieLi tools
-and is vendored, not disassembled.
+`app.bin` is the main pi32v2 executable analyzed by the two function-mapping
+pipelines. The SPL and nested OTA loader are separate pi32v2 executables with
+focused analyses under `analysis/device/`; configuration and UI files are data
+resources rather than application code.
 
 ## SoC / CPU
 

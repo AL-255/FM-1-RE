@@ -175,27 +175,21 @@ append-only records, ids 0..255.
 
 ---
 
-## 6. Storing data from custom code — recipe
+## 6. Recovered storage interfaces
 
-**Small config values (preferred):** go through the VM layer, exactly like syscfg does:
+- `vm_read 0x0203249C(id, buffer, length)` returns a stored record length or a
+  negative status. `vm_id_valid 0x02032490` restricts IDs to values below 256.
+- `vm_chunk_write 0x02076B7A` appends a four-byte-header record while holding
+  the VM mutex at `ENG+9788`; `syscfg_write 0x020032B8` dispatches through the
+  higher-level configuration backends.
+- `norflash_write 0x020038A2` reaches the low-level write path, while erase
+  operations use 4 KiB granularity. `norflash_write_core 0x0200380A` applies
+  transformation rules around the encrypted-region boundary stored at
+  `[0x01C20190+36]`.
+- `fatfs_fopen 0x0202CA26`, `norfs_fopen 0x020286A0`, and
+  `fat_fsel 0x0202EC6A` expose the file and directory operations used by the
+  application.
 
-```c
-// read:  vm_read(id, buf, buflen) -> length or <0 on error
-int n = ((int (*)(int id, void *buf, int len))0x0203249C)(MY_ID, buf, sizeof buf);
-```
-
-For writes, mirror the stock path: append the record with `vm_chunk_write`
-`0x02076B7A` under the VM mutex (`0x1C0E670+9788`, `os_mutex_pend` `0x0205AE98` /
-`os_mutex_post` `0x0205B036`) with the same 4-byte header {check, flags, len} the
-reader expects, or — simpler and safer — reuse a free syscfg item id and call
-`syscfg_write` `0x020032B8`. Keep ids < 256 (`vm_id_valid` `0x02032490`); the GC will
-copy your record as long as the header CRC is right.
-
-**Blobs / patch-like data:** find a free flash region, erase with
-`norflash_ioctl(erase)` or the `0x02084D4E` erase body (4 kB granularity!), then
-`norflash_write` `0x020038A2`. Never write without erasing; never write across the
-encrypted-region boundary (`[0x1C20190+36]`) unless you replicate the re-scramble in
-`norflash_write_core` `0x0200380A`.
-
-**Files:** on the FAT volume use `fatfs_fopen` `0x0202CA26` ("rb"/"w"), on the NOR
-sdfile area use `norfs_fopen` `0x020286A0`; browse with `fat_fsel` `0x0202EC6A`.
+These are internal stock-firmware entry points, not stable APIs. In particular,
+the inferred free regions and encryption boundary have not been validated as
+safe targets for external writes.

@@ -135,38 +135,16 @@ engine `0x0200ACD0` (`h[r9+20]`, `h[r9+24]`).
 
 ---
 
-## 4. Drawing from custom code — minimal recipe
+## 4. Recovered display interfaces
 
-**The friendly way (a text widget):**
+`ui_core_register_element 0x0200965C` registers 64-byte element records whose
+rectangle halfwords occupy offsets `+20..+26`. `ui_text_set_str 0x02017F22`
+updates a text element, and `ui_widget_invalidate 0x02018C9C` schedules it for
+the next `ui_core_redraw 0x0200EF3A` pass.
 
-```c
-// 1. clone an element from an existing page's template (64 B) — or reuse one
-//    ui_core_register_element: 0x0200965C
-// 2. set rect halfwords x,y,w,h at elm+20..+26
-// 3. set text and let the framework repaint:
-((void (*)(void *elm, const char *s))0x02017F22)(elm, "HELLO");   // ui_text_set_str
-((void (*)(void *elm, int))0x02018C9C)(elm, 1);                   // ui_widget_invalidate
-```
-
-The next `ui_core_redraw` `0x0200EF3A` pass (driven by the UI timers the app already
-runs) will composite and flush automatically.
-
-**The hard way (straight to panel, full screen):**
-
-```c
-// assumes SPI1 + D/C already configured (usr_app_task did it):
-// write your 240*240 RGB565 image through the same burst loop as
-// lcd_spi_write_window 0x02021486, or just call it to clear:
-((void (*)(void))0x02021486)();      // sends 2A/2B/2C + 115200 zeros + 29h
-```
-
-**The middle way (strip buffers):** paint RGB565 into the active strip at
-`0x1C16F4C` / `0x1C19C4C` (240×24 each; active buffer selected in the layer struct at
-`0x1C16F30`), then trigger the layer flush `ui_layer_flush` `0x0200EA02` with the
-dirty rect covering your change — this is exactly what the framework does after
-`ui_core_redraw`. Use this when you need custom graphics (meters, waveform plots)
-without fighting the element tree; keep the stock widgets for text.
-
-Caveats (**med**): the flush path assumes the strip geometry (240×24) — a full-screen
-framebuffer does *not* exist in RAM, so arbitrary fullscreen graphics must be drawn
-strip-by-strip or pushed directly over SPI1 like `lcd_spi_write_window` does.
+The renderer uses alternating RGB565 strip buffers at `0x01C16F4C` and
+`0x01C19C4C`, each 240×24 pixels. The layer at `0x01C16F30` selects the active
+strip, and `ui_layer_flush 0x0200EA02` transfers its dirty rectangle. There is
+no full-screen framebuffer in RAM. `lcd_spi_write_window 0x02021486` is the
+direct full-panel SPI1 path and emits commands `2A`, `2B`, `2C`, and `29`
+around a 115200-byte RGB565 transfer **[med]**.

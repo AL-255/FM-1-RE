@@ -3,19 +3,25 @@
 How the M-Vave M-UPGRADE client updates the FM-1 (JieLi AC791N/WL82),
 byte-verified against live ALSA-seq captures of M-UPGRADE under Wine and
 against the stock `.fwsc`. `tools/fm1_ota.py` is a byte-exact Linux
-reimplementation of the client. No UBOOT button exists on the device — the
-whole update runs over USB-MIDI SysEx while the stock firmware runs.
+reimplementation of the client framing and state machine. No physical UBOOT
+entry has been demonstrated; the observed update starts over USB-MIDI SysEx
+while the stock firmware is running.
 
 ## Device identities
 
-| mode   | VID:PID       | enumerates as                              | MIDI |
-|--------|---------------|--------------------------------------------|------|
-| normal | `4c4a:c755`   | "FM-1 Midi" composite (USB-MIDI + UAC audio) | client 24 `USB Composite Device MIDI 1` |
-| OTA    | `4d4a:4155`   | "ota-FM-1" composite (the OTA loader)      | same MIDI port name |
+| mode | observed VID:PID | enumerates as | MIDI |
+|---|---|---|---|
+| normal | `4c4a:c755` | "FM-1 Midi" composite (USB-MIDI + UAC audio) | capture used client 24, `USB Composite Device MIDI 1` |
+| stock OTA | `4d4a:4155` | "ota-FM-1" composite | same MIDI port name |
 
 Everything — discovery, enter-OTA, and the transfer — runs over MIDI
 System-Exclusive messages. There is no HID report traffic for the update
 itself (the "USB HID" interface on the OTA device is unused by M-UPGRADE).
+
+The V13 application also embeds a device-descriptor template at `0x0204F07D`
+with VID:PID `4c4a:4155`. This differs from the captured normal-mode PID
+`c755`, so the template is either patched or superseded before enumeration.
+The USB teardown records the template; host discovery uses the observed IDs.
 
 ## Session flow
 
@@ -138,17 +144,19 @@ not evidence that this transport is linked or usable as recovery.
 Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
 `0xE0000000` verification-done signal / a soft reset) established:
 
-- **The read-back is IDENTITY for payloads ≤ 19456 bytes (0x4C00).** The
-  verifier writes the incoming ota.bin payload to the loader flash region as
-  plaintext and reads it back for the payload CRC. 64 / 512 / 1024 / 2048 /
-  4096 / 8192 / 12288 / 16384 / 16896 / 17408 / 18432 / 19456-byte payloads all
-  PASS (verification-done + soft reset into the truncated/garbage loader, which
-  then falls back to the normal app). No scrambling/encryption is needed — the
-  earlier "SFC descramble" theory was WRONG.
-- **The loader region limit is exactly 19456 bytes.** 19456 passes, 19457
-  fails. The stock loader (`usb_hid_ota.bin`, compressed payload 0x4DE1 =
-  19937 B) is **481 bytes too big**, so the stock/full update can never pass
-  as-is. The overflow tail does not read back as the written data.
+- **The forced loader-replacement read-back is identical for payloads up to
+  19456 bytes (0x4C00).** In these modified-package tests, the verifier wrote
+  the incoming `ota.bin` payload to the loader flash region as plaintext and
+  read it back for the payload CRC. Payloads of 64, 512, 1024, 2048, 4096,
+  8192, 12288, 16384, 16896, 17408, 18432, and 19456 bytes passed. No
+  scrambling was required, disproving the earlier SFC-descramble theory.
+- **The tested replacement path rejects payloads above 19456 bytes.** A
+  19456-byte payload passes and a 19457-byte payload fails. The stock loader's
+  compressed payload is 19937 bytes (`dlen=0x4DE1`), 481 bytes above this
+  observed staging limit, and its overflow tail did not read back correctly.
+  This does not mean an ordinary stock update must replace the loader: the
+  stock V13/V14 loader is identical, and bundled logs record a successful
+  stock downgrade.
 - **The tail is NOT descrambled with any known key.** 16 pre-scramble variants
   (plain jl_enc_cipher + jl_sfc_cipher with seeds 0x375F, 0x980F, 0xFFFF,
   0xFFFE, 0x0000, 0x0001, 0x035e, 0x1dbf, 0x31f0, 0x67ac, 0x68ff, 0xadde, and
@@ -162,9 +170,10 @@ Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
   verifier-return==0 AND notify byte `b[0x1C0E670+60]==0`** — no other no-op
   gate after the CRC. The verifier clears notify on CRC success, so the CRC is
   the only post-bulk-copy gate.
-- **Consequence:** to flash via OTA, the loader must be shrunk to ≤ 19456 bytes
-  (the stock 19937 B overflows). Optimal-parse LZ4 (1 block) reaches 19578 B —
-  still 122 B over; further size reduction requires trimming the loader image.
+- **Consequence for the historical experiment:** forcing a different loader
+  through this staging path required a payload no larger than 19456 bytes.
+  Optimal-parse one-block LZ4 reached 19578 bytes, still 122 bytes over, so the
+  preservation branch trimmed the loader image for subsequent tests.
 
 ## Known open items
 
@@ -228,7 +237,7 @@ Exhaustive on-device probing (build a fwsc, flash step-1, watch for the
 - **Stock downgrade accepted.** The bundled 2026-06-26 log records FM-1
   version 10 successfully installing `FM-1_008`, receiving the second-stage
   completion, and reconnecting as version 8. This does not establish recovery
-  from a custom application whose update service cannot start.
+  from an application whose update service cannot start.
 
 ## Files
 

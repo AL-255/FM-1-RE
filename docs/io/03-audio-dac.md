@@ -37,9 +37,10 @@ terminate in the same DAC device struct at `0x01C0E670`.
 
 ## 1. Hardware register blocks
 
-SFRs are identified from disassembly; bit meanings cross-checked against
-`reference/jielie/periph/audio-br21.md` (BR21 sibling codec — the
-BR22 block is a superset; where the two disagree, the disassembly wins).
+SFRs are identified from disassembly. Some bit meanings are cross-checked
+against `reference/jielie/periph/audio-br21.md`, a sibling implementation;
+those borrowed names remain provisional where AC791N/WL82 headers or direct
+disassembly do not corroborate them.
 
 | Block | Address range | Seen in | What it controls |
 |---|---|---|---|
@@ -78,7 +79,7 @@ and the IRQ handler at `0x020414AA` gates on `[0x12F00] & 0x20` (IE) **and**
 `[0x12F00] & 0x80` (PND, bit 7 ✓ br21), then clears with `|= 0x40` (CPND).
 So: bit4 = EN, bit5 = IE, bit6 = CPND, bit7 = PND — matches br21 `DAC_CON`
 **[high]**. The buffer flag BUFF (bit 8) and sample-rate field DACSR (bits 3:0)
-exist on BR21; on BR22 the sample rate is instead programmed by clock dividers
+exist on BR21; in the FM-1 image the sample rate is instead programmed by clock dividers
 (`0x10014`/`0x119A8`, see §3.4) plus the rate field written by
 `audio_dac_set_sample_rate 0x0203F730` **[med]**.
 
@@ -195,7 +196,9 @@ Flow:
 1. `strcmp(name, …)` against the device-name strings (`"spdif"`, `"plnk0"`,
    `"plnk1"`, `"timer"` at `0x0204EB04`…) to pick the sub-device slot
    (dev+1740 or dev+1808); the name is taken from the open-args struct `[+32]`.
-2. Reads chip ID `[0x10200] == 0x6F00` (BR22 rev gate) **[high]**.
+2. Reads chip-identification register `[0x10200]` and takes a separate path
+   when it equals `0x6F00`; the physical revision represented by this value is
+   not established **[high for the comparison, low for its meaning]**.
 3. Programs the DAC digital hub:
    - `[0x119E0]` (`0x119C4+28`): clears bits 31/30/29/27/25/24, sets bit 28
      (`0x10000000`) — master config;
@@ -545,38 +548,19 @@ Persistent trim: `dac_trim_save 0x0205CB5E` writes 6 bytes to VM slot 110;
 
 ---
 
-## 7. How to feed your own samples
+## 7. Recovered render interfaces
 
-Two practical hook points, both verified in disassembly.
+### 7.1 DAC half-buffer callback
 
-### 7.1 Hook the DAC half-buffer callback (recommended)
+The DMA ring descriptor at `0x01C0E670+4228` stores a private pointer at
+offset `+32` and a callback at `+36`. The IRQ at `0x020414DE` invokes the
+callback as `(priv, buffer_half, half_length_bytes)` on both half and full DMA
+events. The synth device supplies interleaved signed 16-bit stereo at 44118 Hz.
+The callback runs in interrupt context; `0x020413FA` also contains a
+mono-to-stereo expansion path when the configured channel count is one
+**[high]**.
 
-This is the JieLi-native render hook — everything downstream (FIFO, gain,
-analog) keeps working.
-
-1. Open the DAC the way the firmware does, or reuse the running device
-   struct at `0x01C0E670`. The DMA ring descriptor is at `0x01C0E670+4228`.
-2. Install your renderer:
-   ```c
-   struct dac_ring *ring = (void *)0x01C0E670 + 4228;
-   ring->priv = my_state;              // [+32]
-   ring->cb   = my_render;             // [+36]
-   ```
-   Callback ABI (from the IRQ at `0x020414DE`):
-   `void my_render(void *priv, int16_t *buf, int half_len_bytes)` —
-   called from IRQ at both half and full DMA events; `buf` already points at
-   the half that must be refilled; interleaved stereo s16 at the DAC's
-   current rate (44118 Hz for the synth device).
-3. Keep `b[dev+4242] == 2` (run state) and don't touch `[0x12F00]` bits
-   4–7 — the IRQ clears PND itself.
-
-Caveats: the callback runs in IRQ context (prologue at `0x02041478`); keep
-it short or defer to a task via the same event-post primitive the firmware
-uses (`0x0204DF000`-family event post, see `audio_dac_dma_irq 0x02088EEE`).
-Sample format note: the feed helper `0x020413FA` can mono→stereo-expand for
-you if cfg channels == 1 **[high]**.
-
-### 7.2 Replace the synth node / render body
+### 7.2 Synth render pump
 
 The FM engine renders 64-sample blocks through this pump:
 
@@ -591,25 +575,11 @@ DAC DMA IRQ (0x12E00, handler 0x02088F06)
   → staging 0x01C0FEF8 → pcm_mix_to_dac 0x02088FC2 → DAC ring
 ```
 
-To plug your own engine in:
-
-- **Easiest**: write your 64-sample stereo s16 blocks into the ping-pong at
-  `0x01C0E670 + 0x2024 + phase*256` (`0x01C10694`/`0x01C10794`), toggling
-  `b[dev+20]` (phase 0/1). `fx_chain_process 0x02087A26` swaps that half
-  with the stream buffer and runs the FX slots — your audio gets the same
-  reverb/filter/phaser treatment as the FM engine **[high]**.
-- **Cleaner**: replace the body the pump calls: the loop at `0x02086B16`
-  (RAM) alternates `audio_buf_state_init 0x020857FE` and
-  `dx7note_compute_block 0x020862FA` while `b[0x1C16EC0] == 2`. Point that
-  call at your own RAM-resident `render64(void)` — same ABI (no args; write
-  256 B into the current ping-pong half).
-- **With your own task**: create it exactly like `board_init` does
-  (`os_task_create 0x0205B1D0`, prio 5, 1 KiB stack) and wait on the same
-  DMA-half event the pump uses.
-
-Buffer sizes for reference: engine block = **64 frames** (`[engine+8] =
-0x40`); ping-pong halves = 256 B; DAC ring halves = `h[dac+4228+4]` frames
-(default 320 total when cfg is 0, set in `audio_dac_open`).
+The engine block is 64 frames (`[engine+8] = 0x40`), each ping-pong half is
+256 bytes, and the DAC ring half length is `h[dac+4228+4]` frames. The default
+ring contains 320 total frames when the configuration selector is zero. These
+sizes and state fields describe the stock implementation; they are not a
+validated extension ABI.
 
 ---
 

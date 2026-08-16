@@ -9,7 +9,13 @@ All 2062 call-target-derived functions in `app.bin`, grouped by subsystem. Addre
 - locality-inferred (loc): **112**
 - unresolved: **824**
 
-> 27 of 51 analysis shards hit the session usage limit, so the `0x0206xxxx-0x0208xxxx` band (mostly vendored Bluetooth/SDK, low priority for reuse) is largely locality-inferred. The product-critical code (`0x0200xxxx-0x0205xxxx`: synth, MIDI, UI, audio, storage) is individually analysed. Re-run `scripts/wf_classify.js` after the limit resets to fill in.
+> In the original classification pass, 27 of 51 shards were only partially
+> reviewed. The `0x0206xxxx-0x0208xxxx` band, mostly Bluetooth and vendor SDK
+> code, is therefore largely locality-inferred. The
+> `0x0200xxxx-0x0205xxxx` synth, MIDI, UI, audio, and storage regions received
+> individual review. Extend the incomplete classifications with
+> `scripts/wf_classify.js` before relying on leaf-function labels in the upper
+> address band.
 
 ## Top-level entry points (112 zero-caller roots)
 

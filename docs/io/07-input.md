@@ -243,36 +243,16 @@ Idle-loop extras: every 40 iterations the battery/charge UI is refreshed
 
 ---
 
-## 6. Reading keys/wheels from custom code — recipe
+## 6. Recovered input interfaces
 
-**Read an ADC channel (wheel, your own analog input):**
+`adc_add_sample_ch 0x0200407A(channel)` registers a sampled channel, and
+`adc_value_get 0x0202423C(channel)` returns its latest approximately 10-bit
+value. Channel IDs 0–14 map directly into `CON[11:8]`; ID 15 and `0x5000E` are
+reserved for internal and battery paths. Sampling advances only while the
+input timers run.
 
-```c
-// one-time init (or reuse channels 3/4 already registered by board_init):
-((void (*)(int ch))0x0200407A)(MY_CH);            // adc_add_sample_ch
-// poll anywhere:
-unsigned v = ((unsigned (*)(int id))0x0202423C)(MY_CH);   // adc_value_get, ~10-bit
-```
-
-Channel id must be 0..14 (programmed straight into CON[11:8]); id 15 and `0x5000E`
-are reserved for the internal/battery paths. The scan only advances while the input
-timers run, so call this from a task/timer context, not from early boot.
-
-**Get key/encoder events the clean way:** register your own periodic poster with
-`sys_timer_add` `0x02004036` (priv, handler, period_ms) and push event words into the
-queue exactly like the scanner does:
-
-```c
-// post(ev): replicate 0x02024424..0x02024498
-cli(); lock_counters();                       // 0x01C09534/0x01C0953C protocol
-unsigned short head = *(volatile short*)0x01C0E6D0;      // base+96
-*(volatile int*)(0x01C0F474 + head*4) = ev;
-*(volatile short*)0x01C0E6D0 = (head <= 30) ? head+1 : 0;
-unlock_counters(); sti();
-```
-
-**Intercept events:** the least invasive hook is the page-handler table at
-`0x0204F50C` (32-bit slots indexed by page id) — replace or wrap a slot to see every
-event before the stock handler; or snoop the queue yourself by watching
-`h[0x01C0E670+96/98]`. Remember the stock consumer also drains the queue, so snooping
-is racy; wrapping a page handler is deterministic.
+The scanner posts 32-bit event words into a 31-entry ring at `0x01C0F474`.
+Head and tail indices are the halfwords at `ENG+96` and `ENG+98`; updates use
+the SMP lock counters at `0x01C09534` and `0x01C0953C`. Page handlers are
+selected through the 32-bit table at `0x0204F50C`, indexed by page ID. These
+locations describe the stock event path and are not established public APIs.

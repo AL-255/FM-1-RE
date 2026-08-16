@@ -3,4 +3,4 @@
 	url = https://github.com/kagaimiq/jl-misctools
 [submodule "3rd-party/jl-uboot-tool"]
 	path = 3rd-party/jl-uboot-tool
-	url = git@github.com:kagaimiq/jl-uboot-tool.git
+	url = https://github.com/kagaimiq/jl-uboot-tool.git

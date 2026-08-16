@@ -11,24 +11,51 @@ image builders. The former experimental implementation is preserved on the
 [`with-custom-firmware`](https://github.com/AL-255/FM-1-RE/tree/with-custom-firmware)
 branch.
 
+## Start here
+
+- [Architecture overview](docs/architecture.md): mapped hardware, boot chain,
+  memory layout, and major subsystems.
+- [OTA protocol](docs/io/11-ota-protocol.md): captured USB-MIDI framing, session
+  flow, loader behavior, and unresolved gates.
+- [Safety verdict and open questions](TODO_aug2.md): evidence required before
+  treating any update path as recoverable.
+- [Debug-surface audit](analysis/device/debug-surfaces.md): static search for
+  consoles, factory modes, test commands, and recovery entry points.
+- [Device OTA loader](analysis/device/ota-loader/README.md) and
+  [finish-gate trace](analysis/device/ota-loader/finish-gates.md): extraction,
+  control flow, flash gates, and terminal handshake.
+- [Windows updater analysis](analysis/host-updater/README.md): decompiled
+  M-UPGRADE state machine and identity parsing.
+- [Linux protocol client](tools/fm1_ota.py), [tool notes](tools/README.md), and
+  [offline tests](tools/tests/test_fm1_ota.py).
+
 ## Repository layout
 
-- `analysis/`: V13 disassembly, reassembly, function databases, classifications,
-  raw and enriched shards, OTA loader images, and host updater decompilation.
-- `docs/`: firmware characterization, architecture, subsystem teardowns,
-  function indexes, and OTA protocol findings.
-- `scripts/`: the unified disassembly and classification pipelines.
-- `tools/`: USB-MIDI updater protocol client and offline tests.
-- `ghidra/`: checked-in pi32v2 headless analysis scripts.
-- `firmware-images/`: immutable V13 and V14 packages and unpacked inputs.
-- `reference/`: ignored SDKs, Ghidra installation, and upstream source mirrors.
-- `3rd-party/`: pinned firmware parsing and JieLi boot-tool submodules.
-- `TODO_aug2.md`: AC791N boot-chain corrections and the latest open questions.
+- [analysis/](analysis/README.md): V13 disassembly, byte-identical reassembly,
+  function databases, classifications, OTA loader analysis, and host updater
+  decompilation.
+- [docs/](docs/reversing/00-overview.md): firmware characterization,
+  architecture, subsystem teardowns, function indexes, and OTA findings.
+- [scripts/](scripts/run_ghidra.sh): disassembly, extraction, indexing, and
+  classification pipelines.
+- [tools/](tools/README.md): USB-MIDI update-protocol client and offline tests.
+- [ghidra/scripts/](ghidra/scripts/FullAnalyzeExport.java): checked-in pi32v2
+  headless-analysis scripts.
+- [firmware-images/](firmware-images/README.md): immutable V13 and V14 packages
+  and unpacked inputs.
+- `reference/`: ignored SDKs, Ghidra installations, and upstream source mirrors
+  populated by [scripts/setup_reference.sh](scripts/setup_reference.sh).
+- [3rd-party/jl-misctools](3rd-party/jl-misctools) and
+  [3rd-party/jl-uboot-tool](3rd-party/jl-uboot-tool): pinned submodules used for
+  firmware parsing and boot-tool reference.
 
-See `analysis/README.md` for the relationship between the two function-analysis
-pipelines. `analysis/db.json` and `docs/function-index.md` are the current
-classification outputs; the independent `function_db.json`/`master_index.json`
-pipeline remains checked in for cross-validation and provenance.
+The repository retains two independently developed V13 analysis pipelines.
+[analysis/README.md](analysis/README.md) explains their roles.
+[analysis/db.json](analysis/db.json) and
+[docs/function-index.md](docs/function-index.md) are the current classification
+outputs; [analysis/function_db.json](analysis/function_db.json) and
+[analysis/master_index.json](analysis/master_index.json) provide independent
+cross-validation and provenance.
 
 ## Reproduce
 
@@ -61,11 +88,12 @@ python3 -m unittest discover -s tools/tests -v
 
 ## Safety status
 
-The update protocol is not a demonstrated recovery mechanism. Offline work has
+The update protocol is not a demonstrated recovery mechanism. Current work has
 not established ROM recovery, rollback, or safe interrupted-write behavior for
 the single-bank layout. The console/factory-mode audit in
-`analysis/device/debug-surfaces.md` found no substitute recovery entry. Read
-`TODO_aug2.md` before using any update or flash utility.
+[analysis/device/debug-surfaces.md](analysis/device/debug-surfaces.md) found no
+substitute recovery entry. Read [TODO_aug2.md](TODO_aug2.md) before using any
+update or flash utility.
 
 ## External references
 

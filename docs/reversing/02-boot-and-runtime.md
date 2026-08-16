@@ -51,7 +51,7 @@ save the full pi32v2 context (`sp/ssp/usp/icfg/psr/rets/retx/rete/reti` plus
 ## Top-level structure: tasks, ISRs, callbacks
 
 The firmware is event-driven on a JieLi RTOS (SDK task scheduler + software
-timers + message queues). **103 functions have no direct caller** — they are
+timers + message queues). **112 indexed functions have no direct caller** — they are
 reached indirectly as ISR vectors, scheduler task entries, or callbacks
 registered through vtables/function pointers. The largest zero-caller roots are
 the main dispatchers / task loops; see the "Top-level entry points" table in

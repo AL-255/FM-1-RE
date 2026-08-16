@@ -144,5 +144,5 @@ single-bank write.
 - Determine whether a power loss after flash writes but before or during
   `0xF0000000` leaves a bootable bank or recoverable ROM path.
 
-These findings close the offline control-flow question only. They do not make
-the current custom package safe to flash.
+These findings close the offline control-flow question only. They do not
+establish that any non-stock package is safe to flash.

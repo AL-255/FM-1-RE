@@ -443,23 +443,18 @@ target low]:
 
 ---
 
-## 9. Driving MIDI from custom code
+## 9. Recovered MIDI entry points
 
-### 9.1 Injecting notes into the synth
+### 9.1 Note injection and routing
 
-```c
-// note on, velocity vel, r2=0 → also mirror to MIDI-out ring
-((void(*)(u8,u8,u8))0x02020552)(note, vel, 0);      // midi_note_on_inject
-// note off (fixed release velocity 100), r1=0 → mirror too
-((void(*)(u8,u8))0x0201FE64)(note, 0);              // midi_note_off_inject
-// raw message straight into the dispatcher (no arp/seq capture):
-((void(*)(u32,u8*,u8))0x0201F5F4)(*(u32*)0x01C0E76C, msg, len); // ctx=[ENG+252]
-```
+`midi_note_on_inject 0x02020552(note, velocity, mirror)` and
+`midi_note_off_inject 0x0201FE64(note, mirror)` feed the common note path. A
+mirror value of zero also forwards the event to the MIDI output ring; note-off
+uses release velocity 100. `midi_msg_dispatch 0x0201F5F4(ctx, msg, len)` is the
+lower-level channel-message dispatcher. Engine byte `ENG+25` selects direct
+dispatch or arpeggiator/sequencer capture **[high]**.
 
-Routing flag: set `b[ENG+25] = 2` to force note_on/off through the arp/seq capture
-path (`note_on_route`/`note_off_route`), 0 for direct dispatch.
-
-### 9.2 Emitting MIDI bytes (out of the box)
+### 9.2 MIDI output funnels
 
 - **All transports (serializer)**: push raw bytes through
   `midi_out_fifo_push` `0x0201FDDE` (db name `midi_rx_fifo_push`): running-status
@@ -471,20 +466,16 @@ path (`note_on_route`/`note_off_route`), 0 for direct dispatch.
   `0x80|lo7(ms)`) and call `att_server_notify` `0x020801A4(con_handle, att_handle,
   buf, len)`; large frames fragment through `bt_pkt_fragment_write` `0x020748A0`.
 
-### 9.3 Consuming incoming MIDI
+### 9.3 MIDI input funnels
 
-- Feed any byte stream into a route ring (descriptor: wr/size/base/status), then call
-  `midi_stream_parser` `0x02000C48(out3, ctx12, mode)` per message; translate CIN via
-  the length table (§3.3), and pass complete frames to
-  `midi_message_handler` `0x02023EA0(buf, len)` — you get DX7 sysex, notes, CC and the
-  CC map for free.
-- To hook note events without replacing the dispatcher: wrap
-  `midi_note_on_inject`/`midi_note_off_inject` (single funnel for keyboard, arp, seq,
-  BLE and UI notes) or replace the `[ENG+252]` synth ctx pointer with your own engine
-  context (layout in §4).
-- Route output hooks `[ENG+400]` / `[ENG+412]` are polled by `serial_midi_task` —
-  install your own transmitter there (called once per loop iteration; return ≠0 to
-  claim the slot, dedup is done with the `r15` bitmask in the loop).
+- Route rings use a write-index/size/base/status descriptor and feed
+  `midi_stream_parser 0x02000C48(out3, ctx12, mode)`. Complete frames then pass
+  to `midi_message_handler 0x02023EA0(buf, len)`, which handles DX7 SysEx,
+  channel messages, and the CC map.
+- `midi_note_on_inject` and `midi_note_off_inject` are the common note funnels
+  for the keyboard, arpeggiator, sequencer, BLE, and UI paths.
+- `serial_midi_task` polls output callbacks at `ENG+400` and `ENG+412` once per
+  loop and uses an `r15` bitmask to suppress duplicate claims.
 
 ---
 
@@ -496,6 +487,6 @@ path (`note_on_route`/`note_off_route`), 0 for direct dispatch.
 - The `0x0204F10C` length-table anomaly (§3.3) and the `0x02045FC4` CC-table caveat
   (§7) are the two spots where the shipped image does not match the disassembly's
   constant pool; both need one runtime probe (`memdump` over SWD or a debug build)
-  before being trusted in a derivative firmware.
+  before their inferred meanings are treated as confirmed.
 - Mask-ROM stubs seen on these paths: `0xFFC02532` (loader entry from USB magic),
   `0xFFC028A0` (IRQ trampoline `0x0200796A/0x0200797E`).

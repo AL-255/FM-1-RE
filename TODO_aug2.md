@@ -2,11 +2,11 @@
 
 ## Safety verdict
 
-**NO-GO for custom flashing remains in force.** Offline work now identifies the
+**NO-GO for non-stock flashing remains in force.** Offline work now identifies the
 actual AC791N/WL82 boot chain and gives the stock OTA loader a close
 symbol-bearing SDK relative. It still does not prove a ROM-level recovery path,
 automatic rollback, or survival of interrupted single-bank writes. Do not use
-the custom package on hardware that cannot be recovered independently.
+an experimental package on hardware that cannot be recovered independently.
 
 ## Findings closed offline
 
@@ -30,11 +30,9 @@ therefore not sufficient SoC identification; it is likely inherited library or
 filesystem nomenclature.
 
 **Consequence:** documentation and scripts that select BR22/AC693N registers or
-download tools are unsafe. The legacy upload and raw-flash scripts previously
-defaulted to BR22. They now fail closed for device operations unless the caller
-acknowledges the unverified AC791N path and supplies explicit target parameters.
-Do not use that override until the WL82/AC791N MaskROM/flash procedure is
-independently established.
+download tools are unsafe. Legacy upload and raw-flash scripts preserved on the
+`with-custom-firmware` branch are not validated for this target and must not be
+used until the WL82/AC791N MaskROM/flash procedure is independently established.
 
 ### V14 retains the same application update subsystem
 
@@ -266,26 +264,27 @@ normal-mode OTA trigger and the RAM loader's UFW pull protocol.
 
 ## Remaining work
 
-### P0 - required before custom flashing
+### P0 - required before non-stock flashing
 
 - [ ] Identify a repeatable AC791N/WL82 ROM-level recovery entry and confirm
   that it works when the primary application is corrupt. Record the physical
   pins/test pads, USB identity, host command, and restoration procedure.
 - [ ] Obtain a complete stock flash dump on recoverable hardware and verify a
-  byte-for-byte restoration path before the first custom erase/write test.
+  byte-for-byte restoration path before the first non-stock erase/write test.
 - [ ] Test power loss and disconnect at header validation, erase, write,
   whole-flash verify, metadata finalization, and the four finish-handshake
   attempts. A bootable app or proven ROM recovery is required after every case.
 - [ ] Retest the Linux client's 2000 ms start delay, 3000 ms post-verification
   delay, model checks, and post-reboot identity checks on recoverable hardware.
-- [ ] Prove that stock V14 can restore a custom version. A normal-mode updater
-  inside a broken custom app is not a recovery strategy.
+- [ ] Prove that stock V14 can restore a deliberately altered application. A
+  normal-mode updater inside a non-booting application is not a recovery
+  strategy.
 
 ### P1 - offline hardening
 
-- [ ] Correct BR22/AC693N claims throughout `README.md`, `docs/`, and analysis
-  briefs. Revalidate every borrowed register address and peripheral assumption
-  against WL82 headers; string similarity is not hardware proof.
+- [ ] Revalidate every register address and peripheral assumption borrowed
+  from BR21/BR22 sibling documentation against WL82 headers; string similarity
+  is not hardware proof. Known sibling-derived claims are now labeled as such.
 - [ ] Use the branch ELF symbols and debug information to fingerprint and name
   the exact stock loader functions. Keep byte-different functions marked as
   inferred rather than source-recovered.
@@ -342,7 +341,7 @@ the hardware safety decision.
   stock application/UBOOT/OTA-loader artifacts and verified that both
   `cfg_tool.bin` resources are identical 383-byte files with SHA-256
   `276579954f076886a6a7694f65dc71c034a63a2c204b76749065c0ac7b010d1b`.
-- Unacknowledged legacy `upload` and raw `dump` commands were rejected before
-  device access; Bash and POSIX-shell syntax checks passed.
+- Historical tests on the preservation branch rejected unacknowledged legacy
+  `upload` and raw `dump` commands before device access.
 
 All checks are offline. None validates erase/write behavior on an FM-1.

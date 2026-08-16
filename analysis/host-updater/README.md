@@ -35,7 +35,7 @@ to match the package header.
 The bundled logs also contain a successful stock downgrade on 2026-06-26:
 the updater reports FM-1 version 10, installs `FM-1_008`, receives the second
 stage completion, and subsequently reports version 8. This proves that the
-stock path accepts a lower version; it does not prove recovery when a custom
+stock path accepts a lower version; it does not prove recovery when the primary
 application cannot start its update service.
 
 The executable embeds a genuine V14 image (`FM-1_014`), not the V13 image.

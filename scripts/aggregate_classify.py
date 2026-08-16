@@ -5,6 +5,9 @@ into the master index and emit the function-map documents.
 import json, sys, os, re
 from collections import defaultdict, Counter
 
+if len(sys.argv) != 2:
+    raise SystemExit(f"usage: {sys.argv[0]} JOURNAL.jsonl")
+
 JOURNAL = sys.argv[1]
 master = json.load(open("analysis/master_index.json"))
 valid = set(master)
@@ -130,11 +133,13 @@ with open("docs/reversing/09-function-index.md", "w") as fo:
              f"- exact library match (lib): **{nlib}**\n"
              f"- locality-inferred (loc): **{nloc}**\n"
              f"- unresolved: **{nnone}**\n\n")
-    fo.write("> 27 of 51 analysis shards hit the session usage limit, so the "
-             "`0x0206xxxx-0x0208xxxx` band (mostly vendored Bluetooth/SDK, low priority "
-             "for reuse) is largely locality-inferred. The product-critical code "
-             "(`0x0200xxxx-0x0205xxxx`: synth, MIDI, UI, audio, storage) is individually "
-             "analysed. Re-run `scripts/wf_classify.js` after the limit resets to fill in.\n\n")
+    fo.write("> In the original classification pass, 27 of 51 shards were only partially\n"
+             "> reviewed. The `0x0206xxxx-0x0208xxxx` band, mostly Bluetooth and vendor SDK\n"
+             "> code, is therefore largely locality-inferred. The\n"
+             "> `0x0200xxxx-0x0205xxxx` synth, MIDI, UI, audio, and storage regions received\n"
+             "> individual review. Extend the incomplete classifications with\n"
+             "> `scripts/wf_classify.js` before relying on leaf-function labels in the upper\n"
+             "> address band.\n\n")
     # entry points = zero-caller roots (callback/vtable/ISR/task registered indirectly)
     roots = sorted((m for m in master.values() if m["ncallers"] == 0),
                    key=lambda m: -m["ncallees"])

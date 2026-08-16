@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """fm1_ota — Linux CLI reimplementation of the M-Vave M-UPGRADE OTA client
-for the FM-1 synthesizer (JieLi AC791N/BR22-class), protocol reverse-engineered
+for the FM-1 synthesizer (JieLi AC791N/WL82), protocol reverse-engineered
 from live ALSA-seq captures of M-UPGRADE (see docs/io/11-ota-protocol.md).
 
 Transport: MIDI System-Exclusive messages over the device's USB-MIDI port via
-the ALSA sequencer (libasound). No pyusb, no HID, no UBOOT button.
+the ALSA sequencer (libasound). It uses neither pyusb nor HID and assumes no
+physical UBOOT entry.
 
 Session flow:
   1. normal mode ("FM-1 Midi", 4c4a:c755): handshake query -> ID block,
@@ -317,7 +318,7 @@ def wait_device(is_ota, timeout=30.0):
     return None
 
 def wait_device_any(timeout=30.0):
-    """Wait for either stock or custom-loader USB identity after step 1."""
+    """Wait for either stock or alternate-loader USB identity after step 1."""
     end = time.time() + timeout
     while time.time() < end:
         got = find_rawmidi()

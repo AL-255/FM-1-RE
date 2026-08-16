@@ -5,8 +5,9 @@ synthesizer firmware (`FM-1.fwsc`, V13 / 2026-07-03 dump), as established by
 the classification of **2062 direct-call-target-derived entries** in V13 `app.bin`
 (see `function-index.md` and `analysis/db.json`).
 
-Confidence: addresses, sizes, call graphs and byte-level facts are exact;
-per-function purposes are tagged high/med/low confidence in the index.
+Confidence: recorded addresses, sizes, direct calls, and byte comparisons are
+exact for the checked-in V13 image. Function boundaries are call-target-derived,
+and purposes are tagged high/med/low confidence in the index.
 
 ## 1. System overview
 
@@ -151,8 +152,10 @@ Full path: `io/03-audio-dac.md`, `io/04-synth-engine.md`.
 
 ## 6. USB device
 
-Composite **USB-MIDI + UAC1 audio** device: VID `0x4C4A` ("JL") PID `0x4155`
-("UA"), strings "FM-1 Midi" / "FM-1 Audio" / "Jieli Technology" / "USB
+Composite **USB-MIDI + UAC1 audio** device. Its embedded descriptor template
+uses VID:PID `4c4a:4155`; hardware captures enumerate normal mode as
+`4c4a:c755` (see `io/11-ota-protocol.md`). Strings are "FM-1 Midi" / "FM-1
+Audio" / "Jieli Technology" / "USB
 Composite Device", serial = hex chip ID. MUSB-derived SIE, 8-endpoint table
 `0x01C0C3C0`, EP0 dispatcher `0x0200707C`, USB-MIDI on a 64-byte bulk EP
 pair (RX parse `0x02006384`, TX sysex engine `0x02005D86`), UAC1 24-bit/2-ch

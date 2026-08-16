@@ -24,8 +24,7 @@ Exact signature matches against the toolchain libs (hot functions, called 100s×
 `strcmp 0x02042730`, `strcpy 0x020427d0`, `strlen 0x0204283e`,
 `strncmp 0x0204284a`, `strcat 0x02042704`, `strchr 0x0204271c`,
 `__udivdi3 0x020023e8`, `get_number 0x02028fdc`, plus libm (`remquol`, …).
-The `0x0204xxxx` band is largely libc/libm. These come from the SDK — reuse, don't
-rewrite.
+The `0x0204xxxx` band is largely libc/libm linked from the vendor toolchain.
 
 ## SYNTH_FM — the DX7 / Dexed engine  **[exact tables]**
 Full detail in `03-audio-and-synth.md`. The engine is msfa (Dexed/MicroDexed),
@@ -46,8 +45,10 @@ plumbing. Tagged `AUDIO_OUT` in the index.
 
 ## MIDI + USB — control I/O  **[exact descriptors]**
 USB is a **composite MIDI + Audio device**:
-- Device descriptor `0x0204f07d`: **VID `0x4C4A` ("JL"), PID `0x4155` ("UA")**,
-  USB 2.0, 64-byte EP0, iMfr/iProduct/iSerial = 1/2/3.
+- Embedded device-descriptor template `0x0204f07d`: **VID `0x4C4A` ("JL"),
+  PID `0x4155` ("UA")**, USB 2.0, 64-byte EP0, iMfr/iProduct/iSerial = 1/2/3.
+  Captured normal-mode enumeration instead uses PID `0xC755`; the source of
+  that runtime difference remains unresolved.
 - Strings: `"FM-1 Midi" 0x0204f0cb`, `"FM-1 Audio" 0x0204f182`,
   `"Jieli Technology" 0x0204f46f`, `"USB Composite Device" 0x0204f573`.
 - `midi_route 0x0204ed77` string → the MIDI routing layer (USB↔synth↔BLE).

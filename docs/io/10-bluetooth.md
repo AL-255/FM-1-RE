@@ -180,34 +180,23 @@ device; classic paths are SDK carryover, **med**):
 
 ---
 
-## 8. Using BT from custom code
+## 8. Recovered Bluetooth interfaces and limits
 
-**Feasible (reuse, low risk):**
+- `att_server_notify 0x020801A4(conn, handle, value, length)` sends ATT
+  notifications. BLE-MIDI uses handle `0x72`, an MTU-limited payload, and the
+  Apple timestamp framing described above.
+- The ATT write callback slot is at `0x01C0D6F4+24` and defaults to
+  `0x020013DA`. `att_server_register_packet_handler 0x0208015A` feeds the HCI
+  event broadcast list at `0x02076C90`.
+- Connection-parameter defaults reside at `0x01C09C50` and `0x01C09C54`;
+  `hci_le_conn_update 0x02065196` consumes updated values.
 
-- **Send MIDI (or arbitrary bytes) over BLE**: once a central has connected and enabled
-  CCCDs, call `att_server_notify` with the MIDI handle:
-  ```c
-  // att_server_notify(att_conn, handle, value, len) — conn from the ATT ctx
-  // (0x01C0D6F4 chain; att_server_handle_request already tracks it)
-  ((int (*)(void *conn, int handle, const void *val, int len))0x020801A4)(
-      conn, 0x72, buf, n);
-  ```
-  Respect the negotiated MTU (≤ 517; payload = MTU − 3) and Apple BLE-MIDI framing
-  (0x80-timestamp header) if the peer is a MIDI host.
-- **Receive**: hook the ATT write callback slot at `[0x01C0D6F4+24]` (default
-  `0x020013DA`) to intercept BLE-MIDI writes before/instead of the MIDI engine.
-- **Events**: register a handler through `hci_event_broadcast`'s list
-  (`0x02076C90`) / `att_server_register_packet_handler` `0x0208015A`.
-- **Config**: connection-parameter defaults live at `0x1C09C50`/`0x1C09C54`;
-  update at runtime with `hci_le_conn_update` `0x02065196`.
+Limits of the recovered surface:
 
-**Vendored / not practically reusable (high risk):**
-
-- The link layer itself (`btctrler` 0x0205Exxx) is tied to JieLi baseband hardware
-  (slot programming via HW fields, AA/CRC in `ble_ll_conn_create`) — do not re-enter;
-  drive it only through the HCI builders in §2.
+- The link layer itself (`btctrler` 0x0205Exxx) is tied to JieLi baseband
+  hardware, including slot programming and AA/CRC setup in
+  `ble_ll_conn_create`; it is not a portable component.
 - Vendor HCI opcodes `0xF883`/`0xF884` (`0x0206549A`/`0x020654BC`) are JieLi-private.
-- Classic A2DP/AVRCP stacks are compiled in but not wired into the FM-1 UI/audio path;
-  enabling them means re-plumbing the audio server — possible in principle, untested,
-  and the SBC encoder side (`'sbc_encoder'`) is present but the FM-1 audio pipeline is
-  its own (see AUDIO_OUT docs).
+- Classic A2DP/AVRCP stacks are compiled in but not shown to be wired into the
+  FM-1 UI/audio path. The SBC encoder string is present, while the FM-1 output
+  path remains separate (see the AUDIO_OUT documentation).

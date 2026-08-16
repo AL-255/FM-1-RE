@@ -1,7 +1,9 @@
 # FM-1 V14 firmware
 
-This directory contains the firmware embedded in the Windows updater at
-`/home/yukidama/JL/fwupdate-V14_260706/M-UPGRADE-FM1/M-UPGRADE-FM1.exe`.
+This directory contains the firmware extracted from the Windows
+`M-UPGRADE-FM1.exe` updater dated 2026-07-06. The original local source was
+`../fwupdate-V14_260706/M-UPGRADE-FM1/M-UPGRADE-FM1.exe`, relative to this
+repository's parent directory.
 
 The executable registers Qt resource data at PE virtual address `0x140026030`.
 The `:/Resources/FM-1.fwsc` resource begins at resource-data offset `0x4004`;
@@ -12,7 +14,7 @@ Reproduce the extraction and unpacking:
 ```bash
 cd raw_fw
 python3 extract_from_updater.py \
-  /home/yukidama/JL/fwupdate-V14_260706/M-UPGRADE-FM1/M-UPGRADE-FM1.exe
+  ../../../../fwupdate-V14_260706/M-UPGRADE-FM1/M-UPGRADE-FM1.exe
 ./extract.sh
 ```
 
@@ -22,6 +24,8 @@ are byte-identical to the V13 baseline; `app.bin` and the flash image changed.
 
 `decomp/app_pi32v2_objdump.txt` is the authoritative listing generated with
 JieLi's vendor toolchain from `raw_fw/FM-1.fwsc_unpack/files/app.bin`.
+`analysis/function_db.json` and `analysis/func_index.csv` contain the
+call-target-derived V14 function map.
 
 SHA-256:
 

@@ -37,10 +37,12 @@ application.
 
 ## USB exposure
 
-Normal mode enumerates as VID:PID `4C4A:4155` with UAC1 audio and USB-MIDI
-interfaces. The descriptor builder's stock mode is class mask 6 (audio + MIDI),
-and no CDC ACM interface is present. USB-MIDI does expose the vendor SysEx and
-normal-mode update protocols already documented in `docs/io/05-midi.md` and
+Normal mode was captured as VID:PID `4C4A:C755` with UAC1 audio and USB-MIDI
+interfaces. The V13 image's static descriptor template instead contains
+`4C4A:4155`; the runtime source of that difference is unresolved. The
+descriptor builder's stock mode is class mask 6 (audio + MIDI), and no CDC ACM
+interface is present. USB-MIDI does expose the vendor SysEx and normal-mode
+update protocols documented in `docs/io/05-midi.md` and
 `docs/io/11-ota-protocol.md`; these are binary control surfaces, not terminals.
 
 The routine previously described as a `"usb:N"` console command is not an

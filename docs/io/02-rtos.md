@@ -568,7 +568,7 @@ Known IDs:
 `boot_record_load 0x020053DE` also reads a 78-byte record at `0x01C7FD88`
 (crc16-checked) into `[0x1C0E670+140]` during boot `[low]`.
 
-## 9. Calling RTOS services from custom code
+## 9. Recovered RTOS ABI and service entry points
 
 **ABI** (pi32v2, JieLi toolchain):
 
@@ -583,8 +583,8 @@ Known IDs:
 - Beware the vendor objdump's fused listings: lines ending in `#` are one
   parallel-issue pair — the second slot reads the **old** register values.
 
-**Minimal service set** (all verified addresses; signatures per the bodies
-above):
+The following service addresses and signatures are recovered from the stock
+image:
 
 | Service | Address | Signature |
 |---|---|---|
@@ -610,27 +610,22 @@ above):
 | device open/close/ioctl | `0x020033C4` / `0x020035F4` / `0x020035E4` | `(name, arg)` / `(handle)` / `(handle, cmd, arg)` |
 | syscfg read/write | `0x02002612` / `0x020032B8` | `(id, buf, len)` |
 
-**Rules when calling from custom code:**
+Observed constraints:
 
-1. Never call blocking APIs (mutex pend, q pend with timeout, taskq pend,
-   os_time_dly) from ISR context — the kernel checks `(icfg & 0xFF)` and either
-   fails (3) or asserts. Use the ISR-safe post paths (`os_sem_post 0x0205A7E0`
-   has an explicit inline ISR path).
-2. Wrap shared-state updates in the Pattern-A critical section (§6) or call the
-   kernel's own locked helpers (`atomic_inc_locked 0x02037438`,
+1. Blocking APIs check `(icfg & 0xFF)` in interrupt context and either return
+   status 3 or assert. `os_sem_post 0x0205A7E0` contains a separate ISR path.
+2. Shared-state helpers use the Pattern-A critical section (§6) or locked
+   primitives such as `atomic_inc_locked 0x02037438`,
    `atomic_refcount_inc 0x0203C8B2`, `atomic_refcount_dec 0x0203CCB2`,
-   `list_add_locked 0x02036842`, `list_pop_head_locked 0x020369E0`).
-3. If you create tasks, priorities are 0–30 (31 clamps); stksize is in
-   **words**; the trampoline `0x0205C4D2` runs before your entry — your task
-   starts with the standard frame (§3.2), argument in `r0`.
-4. The ready bitmap has 31 bits; don't install a priority-31 task.
-5. Task names must be unique and < 64 chars; kernel lookups are by name
-   (`os_task_get_handle 0x020590FC`).
-6. Custom IRQ handlers must respect the vector entry convention: the common
-   entry at `0x020000B0` saves full context and calls `irq_c_dispatch
-   0x020002A2`; lightweight handlers installed via `request_irq` are entered by
-   the dispatch path — return through `rti` and don't clobber `reti` state.
-   Keep handlers off the dlmalloc lock path.
+   `list_add_locked 0x02036842`, and `list_pop_head_locked 0x020369E0`.
+3. Task priorities span 0–30; 31 is clamped. Stack size is expressed in words,
+   and trampoline `0x0205C4D2` constructs the standard frame described in §3.2
+   before calling the entry point with its argument in `r0`.
+4. The ready bitmap has 31 usable bits. Task names are unique, shorter than 64
+   bytes, and used as lookup keys by `os_task_get_handle 0x020590FC`.
+5. The common interrupt entry at `0x020000B0` saves full context before calling
+   `irq_c_dispatch 0x020002A2`; handlers registered through `request_irq` are
+   invoked from that dispatch path.
 
 ## 10. Quick map of the kernel image
 

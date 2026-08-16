@@ -295,7 +295,7 @@ clock by `strap+1`; the xtal detect branch returns 24000000 or 40000000.
    `sys_timer` task (scan body at `0x02031AF4`, loop at `0x02031B7E`) and
    `usr_timer` task (`0x02031E88`), named from the table.
 5. **Module init table** `0x0208392C..0x02083944` (12-byte entries
-   `{name, dev, arg}`): calls `[dev+4](entry, arg)`; fatal-hangs on failure.
+   `{name, dev, arg}`): calls ``[dev+4](entry, arg)``; fatal-hangs on failure.
 6. **Initcall level 1** `0x02083894..0x020838A4`, **level 2**
    `0x020838A8..0x020838AC`: arrays of 4-byte function pointers, called in order.
 7. `memset(0x01C09548, 0, 496)` (system message-queue area), then board/chip

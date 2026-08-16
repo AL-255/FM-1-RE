@@ -80,12 +80,10 @@ Above the raw msfa kernel sits the product's voice/patch/note layer at
 
 The synth renders signed PCM blocks that are pushed to the on-chip **audio DAC**
 via a DMA ring buffer (JieLi SDK audio driver). The render is driven from the
-audio interrupt/task at the DAC sample rate (set during boot clock config, doc
-02; JieLi BR audio DACs run 44.1/48 kHz). For a reuse project you feed
-`Dexed::getSamples()` into the same DAC ring buffer.
+audio interrupt/task at the DAC sample rate established during boot clock
+configuration (44118 Hz in the recovered engine state).
 
-Concretely (confirmed once classification lands in `09-function-index.md`, subsystem
-`AUDIO_OUT`/`SYNTH_FM`): the chain is
+The classified `AUDIO_OUT` and `SYNTH_FM` functions establish this chain:
 `MIDI note → voice allocation → Dx7Note::compute (per active voice) → mix →
 volume/effects → DAC DMA ring`.
 
@@ -103,5 +101,5 @@ Patch pack/unpack functions (from analysis):
 - `0x0201dab8` — select/load a patch: unpack, apply params+name+LFO, persist index.
 - `0x02027af4` — settings/patch persistence task (message loop, flash commit).
 
-The `Synth_Dexed` `EngineMsfa` source is retained as a behavioral reference for
-the matching stock DSP routines.
+The ignored `reference/Synth_Dexed` checkout provides behavioral source for
+comparison with the matching stock DSP routines.

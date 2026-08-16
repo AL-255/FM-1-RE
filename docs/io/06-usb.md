@@ -25,10 +25,16 @@ Device descriptor template at `0x0204F07D` (18 bytes) [high]:
 | bcdUSB | 2.00 |
 | bDeviceClass/SubClass/Protocol | 0 / 0 / 0 (per-interface) |
 | bMaxPacketSize0 | 64 |
-| idVendor / idProduct | `0x4C4A` "JL" / `0x4155` "UA" |
+| embedded idVendor / idProduct | `0x4C4A` "JL" / `0x4155` "UA" |
 | bcdDevice | 1.00 |
 | iManufacturer / iProduct / iSerialNumber | 1 / 2 / 3 |
 | bNumConfigurations | 1 |
+
+This table describes the static V13 template. Hardware captures enumerate the
+normal application as `4c4a:c755`, while the stock OTA loader uses
+`4d4a:4155`. No static write that explains the normal-mode PID difference has
+yet been identified; host tools therefore use captured identities rather than
+the embedded template.
 
 String descriptors (UTF-16LE) [high]:
 
@@ -136,8 +142,8 @@ Controller / DMA block:
 - **Dual-core locking**: shared-memory peripherals are accessed under an SMP
   ticket lock — `cli`, counter `0x01C0953C[cnum]++`, `lockset`/`lockclr` on
   `0x01C09534[cnum]`, `csync`, `sti` — visible in `usb_txcsr_read` `0x02005CFE`,
-  `usb_rxcsr_read` `0x020060D8`, `usb_intr_usbe_write` `0x020069A6`, etc. Keep this
-  discipline in custom code touching USB SFRs.
+  `usb_rxcsr_read` `0x020060D8`, `usb_intr_usbe_write` `0x020069A6`, etc. This
+  establishes that direct USB SFR access is not single-core-safe.
 
 ### 2.3 Interrupts
 
@@ -443,7 +449,7 @@ against the stock firmware:
 ```c
 void usb_add_desc_config(usb_dev id, u32 index, desc_config fn);  // 0x020067B0
 // fn: u32 (*)(usb_dev id, u8 *ptr, u32 *cur_itf_num)
-//   write your interface+endpoint descriptors at ptr, return byte count;
+//   writes interface+endpoint descriptors at ptr and returns their byte count;
 //   *cur_itf_num is the running bInterfaceNumber (increment it per interface).
 // index 0..7 → hook slots at 0x01C0E520 + id*32 + index*4; index > 7 clears all.
 ```

@@ -394,55 +394,26 @@ Block cadence: 64 / 44118 Hz ≈ 1.45 ms.
 
 ---
 
-## 6. Reusing this engine / replacing it
+## 6. Stock interfaces and upstream differences
 
-### 6.1 Reuse as-is
+The following entry points connect the stock control layer to the engine:
 
-The engine is a faithful msfa port — you can drive it exactly like Dexed:
+- The 155-byte VCED edit buffer begins at `0x1C0E670+5608`.
+  `dx7patch_select_apply 0x0201DAB8`, `dx7_global_params_apply 0x0201D99C`,
+  and `dx7_lfo_params_compute 0x0201DA10` apply its contents **[med]**.
+- `midi_msg_dispatch 0x0201F5F4` receives standard MIDI messages and performs
+  allocation, stealing, controller handling, and pitch bend **[high]**.
+- Master tune is stored at `[engine+56]`; digital volume passes through
+  `audio_dac_set_digital_volume 0x0203F018`; the FX table is at `0x02045FC4`
+  with 12-byte entries **[med]**.
+- The pump at `0x02086AD6` calls the RAM-resident renderer
+  `dx7note_compute_block 0x020862FA` and writes 64 signed 16-bit stereo frames
+  into alternating 256-byte buffers at `0x01C10694` and `0x01C10794`
+  **[high]**.
 
-- **Patches**: write a 155 B VCED block to `0x1C0E670+5608` and call the
-  apply path (`dx7patch_select_apply 0x0201DAB8` with a slot, or the apply
-  pieces: `dx7_global_params_apply 0x0201D99C` + `dx7_lfo_params_compute
-  0x0201DA10`) **[med]**; or inject MIDI program change / sysex through
-  `midi_message_handler 0x02023EA0`.
-- **Notes**: call `midi_msg_dispatch 0x0201F5F4(midi_state, msg3)` with
-  standard 3-byte MIDI — allocation, steal, controllers, bend are all
-  handled **[high]**.
-- **Parameters**: master tune at `[engine+56]`, volume/gain byte via
-  `audio_dac_set_digital_volume 0x0203F018`, FX slots via the
-  `0x02045FC4` table (12 B/entry: `{params…, init@+0, process@+8}`).
+Known differences from upstream msfa:
 
-### 6.2 Swap in your own engine (e.g. your own Dexed build)
-
-Cleanest hook points, all verified:
-
-1. **Replace the block renderer** — the pump calls
-   `dx7note_compute_block 0x020862FA` from `0x02086B3E` (RAM). Patch that
-   call (or the whole pump `0x02086AD6`, both copied from the flash image
-   `0x02084824+`) to your own `render64(void)`:
-   - input: nothing (pull MIDI/controllers yourself, or reuse
-     `midi_msg_dispatch` for voice management),
-   - output: 64 stereo s16 frames into the ping-pong half at
-     `0x01C0E670 + 0x2024 + b[dev+20]*256` (`0x01C10694`/…794),
-     then toggle `b[dev+20]` — FX chain, fades, volume and DAC feed all
-     keep working **[high]**.
-2. **Reuse the engine's config/ABI**: mirror the 160 B config block at
-   `[dev+252]` (rate 44118, 64-frame blocks, 12 × 468 B voices) so the
-   existing plumbing (`fx_chain_process 0x02087A26`,
-   `audio_stream_frame_fsm 0x0208B736`) stays valid **[med]**.
-3. **Bypass the engine entirely**: hook the DAC render callback
-   `[0x01C0E670+4228+36]` (ABI: `cb(priv, buf+half_off, half_len)` from
-   IRQ) — see doc 03 §7.1. Your engine then owns the DAC directly; the
-   FM engine must be suspended (`b[dev+19] > 1` gates its render at
-   `0x02086312`) **[high]**.
-4. **Reuse the RAM LUTs for your own DSP**: freqlut `0x1C138B0`
-   (1025 × u32, `2^44/44118` scaled), sin `0x1C06678` (u16
-   quarter-wave-folded), exp2 `0x1C05E78` (u16), quarter-wave Q24 sin
-   `0x2050FAC` (rodata), plus all the rodata tables of §1.
-
-### 6.3 Known differences from stock msfa (watch these)
-
-- 12 voices (Dexed usually 16) — allocation-proven **[high]**.
+- 12 voices (Dexed commonly defaults to 16) — allocation-proven **[high]**.
 - u16 sin/exp2 LUTs (msfa uses s32) and no sin interpolation in the op
   kernels — slightly cheaper/rougher operators; the LFO sine path *is*
   interpolated (`0x2050FAC`) **[high]**.
