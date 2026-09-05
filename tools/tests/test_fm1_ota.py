@@ -11,7 +11,6 @@ from unittest import mock
 TOOLS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, TOOLS)
 
-import alsalib
 import fm1_ota
 
 
@@ -31,6 +30,14 @@ def identity(name_version):
     payload = plain + encoded + bytes([0xD0]) * (19 - len(encoded))
     body = b"\x00\x59\x11" + len(payload).to_bytes(3, "little") + payload
     checksum = (~sum(payload)) & 0xFF
+    return b"\xF0" + fm1_ota.pack7(body + bytes([checksum])) + b"\xF7"
+
+
+def plain_identity(name_version, checksum=None):
+    payload = name_version.encode("ascii").ljust(27, b"\0")
+    body = b"\x00\x59\x11" + len(payload).to_bytes(3, "little") + payload
+    if checksum is None:
+        checksum = (~sum(payload)) & 0xFF
     return b"\xF0" + fm1_ota.pack7(body + bytes([checksum])) + b"\xF7"
 
 
@@ -64,16 +71,60 @@ class CodecTests(unittest.TestCase):
 
     def test_data_response_matches_known_packet(self):
         actual = fm1_ota.build_response(0x1234, b"\x00\x7f\x80\xff", 4)
-        expected = bytes.fromhex("f000324141000000003424000040000000007e017c7f16f7")
+        # The old 00 32 41 41 prefix declared 8 body bytes instead of 12.
+        expected = bytes.fromhex("f000324161000000003424000040000000007e017c7f16f7")
         self.assertEqual(actual, expected)
 
     def test_data_response_checksum_includes_flash_type(self):
         packet = fm1_ota.build_response(0x1234, b"\x00\x7f\x80\xff", 4, 3)
-        payload = fm1_ota.unpack7(packet[17:-1])
+        decoded = fm1_ota.unpack7(packet[1:-1])
         expected = (~(3 + sum(b"\x00\x7f\x80\xff")
                        + sum((0x1234).to_bytes(4, "little"))
                        + sum((4).to_bytes(3, "little")))) & 0xFF
-        self.assertEqual(payload[-1], expected)
+        self.assertEqual(decoded[-1], expected)
+
+    def test_response_contract_for_every_supported_length(self):
+        # The dispatcher requires body length + 7 == decoded packet length.
+        # Check this independently of the response builder, including every
+        # partial length and addresses that cannot fit in four 7-bit groups.
+        for length in range(513):
+            data = bytes((i * 37 + length) & 0xFF for i in range(length))
+            for addr, flash_type in ((0x000AAB20, 0), (0xFFFFFFFF, 0xFF)):
+                with self.subTest(length=length, addr=addr, flash_type=flash_type):
+                    packet = fm1_ota.build_response(addr, data, length, flash_type)
+                    self.assertEqual((packet[0], packet[-1]), (0xF0, 0xF7))
+                    self.assertTrue(all(byte < 0x80 for byte in packet[1:-1]))
+                    decoded = fm1_ota.unpack7(packet[1:-1])
+                    self.assertEqual(decoded[:3], b"\x00\x59\x30")
+                    self.assertEqual(int.from_bytes(decoded[3:6], "little"), length + 8)
+                    self.assertEqual(len(decoded), length + 15)
+                    self.assertEqual(decoded[6], flash_type)
+                    self.assertEqual(int.from_bytes(decoded[7:11], "little"), addr)
+                    self.assertEqual(int.from_bytes(decoded[11:14], "little"), length)
+                    self.assertEqual(decoded[14:-1], data)
+                    self.assertEqual(sum(decoded[6:]) & 0xFF, 0xFF)
+
+    def test_stock_v15_final_loader_block_declares_489_body_bytes(self):
+        # Observed final request: address 0xAAB20, length 481. Synthetic data
+        # reproduces the framing bug without redistributing vendor firmware.
+        packet = fm1_ota.build_response(0x000AAB20, bytes(481), 481)
+        decoded = fm1_ota.unpack7(packet[1:-1])
+        self.assertEqual(decoded[3:6], b"\xe9\x01\x00")
+        self.assertEqual(len(decoded), 496)
+
+    def test_response_rejects_wrong_payload_length(self):
+        for data, length in ((b"", -1), (b"short", 512), (b"long", 3), (bytes(513), 513)):
+            with self.subTest(length=length, actual_length=len(data)):
+                with self.assertRaisesRegex(ValueError, "exact requested payload"):
+                    fm1_ota.build_response(0, data, length)
+        with self.assertRaises(ValueError):
+            fm1_ota.build_response(0, bytes(513))
+
+    def test_response_rejects_out_of_range_wire_fields(self):
+        for addr, flash_type in ((-1, 0), (0x100000000, 0), (0, -1), (0, 256)):
+            with self.subTest(addr=addr, flash_type=flash_type):
+                with self.assertRaisesRegex(ValueError, "wire field range"):
+                    fm1_ota.build_response(addr, b"", flashtype=flash_type)
 
     def test_done_responses_match_updater(self):
         expected_verify = bytes.fromhex(
@@ -92,6 +143,62 @@ class CodecTests(unittest.TestCase):
         damaged = bytearray(packet)
         damaged[-2] ^= 1
         self.assertIsNone(fm1_ota.parse_handshake_identity(bytes(damaged)))
+
+    def test_handshake_accepts_stock_plain_identities(self):
+        for name, model in (("FM-1_015", "FM-1"), ("ota-FM-1_015", "ota-FM-1")):
+            with self.subTest(name=name):
+                self.assertEqual(
+                    fm1_ota.parse_handshake_identity(plain_identity(name)),
+                    {"model": model, "version": 15},
+                )
+
+    def test_handshake_accepts_observed_41_byte_stock_ota_frame(self):
+        # Read-only identity query captured on 2026-09-04; only public model,
+        # version, padding and checksum are present (no serial or device ID).
+        packet = bytes.fromhex(
+            "f0 00 32 45 58 01 00 40 37 74 42 35 31 54 29 4b 18 5f 60 44 29 03 "
+            "00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 2a f7")
+        self.assertEqual(len(packet), 41)
+        self.assertEqual(
+            fm1_ota.parse_handshake_identity(packet),
+            {"model": "ota-FM-1", "version": 15},
+        )
+        decoded = fm1_ota.unpack7(packet[1:-1])
+        self.assertEqual(decoded[-1], 0xA8)
+        self.assertEqual(sum(decoded[6:]) & 0xFF, 0xFF)
+        # Corrupt one payload byte or the checksum without repairing the sum.
+        for offset in (8, 20, -2):
+            damaged = bytearray(packet)
+            damaged[offset] ^= 1
+            with self.subTest(offset=offset):
+                self.assertIsNone(fm1_ota.parse_handshake_identity(bytes(damaged)))
+
+    def test_handshake_legacy_checksum_exception_is_exact(self):
+        self.assertEqual(
+            fm1_ota.parse_handshake_identity(plain_identity("FM-1_016", checksum=0x19)),
+            {"model": "FM-1", "version": 16},
+        )
+        for name, checksum in (("FM-1_017", 0x19), ("ota-FM-1_016", 0x19),
+                               ("FM-1_016", 0x1A), ("FM-1_015", 0)):
+            with self.subTest(name=name, checksum=checksum):
+                self.assertIsNone(
+                    fm1_ota.parse_handshake_identity(plain_identity(name, checksum)))
+        decoded = bytearray(fm1_ota.unpack7(plain_identity("FM-1_016", 0x19)[1:-1]))
+        decoded[-2] = 1  # Same visible name, but no longer the exact legacy payload.
+        self.assertIsNone(fm1_ota.parse_handshake_identity(
+            b"\xF0" + fm1_ota.pack7(decoded) + b"\xF7"))
+
+    def test_handshake_rejects_invalid_header_length_and_framing(self):
+        packet = plain_identity("FM-1_015")
+        for invalid in (b"", packet[1:], packet[:-1], packet + b"\x00"):
+            with self.subTest(packet=invalid):
+                self.assertIsNone(fm1_ota.parse_handshake_identity(invalid))
+        for offset, value in ((0, 1), (2, 0x12), (3, 26)):
+            decoded = bytearray(fm1_ota.unpack7(packet[1:-1]))
+            decoded[offset] = value
+            with self.subTest(offset=offset):
+                self.assertIsNone(fm1_ota.parse_handshake_identity(
+                    b"\xF0" + fm1_ota.pack7(decoded) + b"\xF7"))
 
 
 class TransferTests(unittest.TestCase):
@@ -126,14 +233,18 @@ class ImageTests(unittest.TestCase):
     def test_logical_image_strips_twenty_marker_bytes(self):
         header = b"".join(bytes([i]) * 47 + bytes([0xA0 + i]) for i in range(20))
         tail = b"payload"
-        with tempfile.NamedTemporaryFile() as image:
-            image.write(header + tail)
-            image.flush()
-            logical = fm1_ota.fwsc_logical(image.name)
+        with tempfile.TemporaryDirectory() as directory:
+            path = os.path.join(directory, "test.fwsc")
+            with open(path, "wb") as image:
+                image.write(header + tail)
+            logical = fm1_ota.fwsc_logical(path)
         expected = b"".join(bytes([i]) * 47 for i in range(20)) + tail
         self.assertEqual(logical, expected)
 
+    @unittest.skipUnless(sys.platform.startswith("linux"), "ALSA layout requires Linux/libasound")
     def test_alsa_pollfd_layout(self):
+        import alsalib
+
         self.assertEqual(ctypes.sizeof(alsalib.PollFD), 8)
         self.assertEqual(alsalib.PollFD.events.offset, 4)
         self.assertEqual(alsalib.PollFD.revents.offset, 6)
