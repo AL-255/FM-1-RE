@@ -1,20 +1,18 @@
-# Verified V16 to stock V15 reflash - 2026-09-04
+# Verified rollback from a modified V15-derived build to stock V15 - 2026-09-04
 
-I got my FM-1 back from a modified V16 to stock V15 over USB. The application
-still answered MIDI commands, but its USB configuration descriptor was broken.
-An already-active Windows descriptor filter made the MIDI port available.
+I recovered my FM-1 from a locally modified firmware package back to stock V15 over USB. There is no official FM-1 V16 release involved here: the device reported version 16 only because my test package was derived from stock V15 and had its version identity intentionally bumped to 16 so the normal updater would accept the modified image.
 
-The failure was in the host response framing. The device's final 481-byte loader
-request got a reply declaring 488 body bytes while containing 489. The device
-checks that length before dispatching the response. Encoding the entire message
-fixed it. The same fix also matters for the 10-byte request near the end of the
-second stage.
+That distinction matters. This recovery demonstrates that the FM-1 can be moved backward from a higher reported version identity to an older stock package when the application is still running and the update transport remains reachable. In this case, the modified package had also broken the normal USB configuration descriptor, but an already-active Windows descriptor filter still exposed the MIDI port.
 
-The live run used a local Windows.Devices.Midi adapter. This PR brings the shared
-protocol corrections into the Linux client; it does not claim a hardware test of
-the ALSA transport. The adapter also needed to accept Windows' numbered port
-labels (`2 - USB-Midi`) and stock identity checksums. No Windows driver or
-replacement firmware is included here.
+The recovery failure turned out to be in the host response framing, not an anti-rollback fuse or permanent device-side downgrade block. The device's final 481-byte loader request got a reply declaring 488 body bytes while actually containing 489. The device checks that decoded length before dispatching the response, so it rejected the packet. Encoding the complete decoded message first and then packing it into MIDI-safe 7-bit bytes fixed the transfer. The same correction also applies to other partial-block requests.
+
+The live run used a local Windows.Devices.Midi adapter. This PR brings the shared protocol corrections into the Linux client; it does not claim a hardware test of the ALSA transport. The adapter also needed to accept Windows' numbered port labels (`2 - USB-Midi`) and stock identity checksums. No Windows driver or replacement firmware is included here.
+
+## What this proves
+
+The successful rollback is evidence that, for this tested path, the version restriction enforced by the normal updater is at least partly host-side policy rather than a one-way device fuse. The device was running a V15-derived test build that identified itself as version 16, and the corrected client successfully supplied the stock V15 package, completed the normal OTA write, rebooted, and returned as stock V15.
+
+This does not yet prove arbitrary rollback between every historical FM-1 release. Older packages may differ in metadata, loader behavior, or package layout and should still be checked before use. It also does not replace the lower-level JieLi USB_KEY/UBOOT recovery path for a hard brick where the application no longer runs or no usable update transport is reachable.
 
 ## Code path
 
@@ -36,13 +34,12 @@ in the [vendor disassembly](../../analysis/disassembly/app_pi32v2_objdump.txt#L5
 Stock V15 and its loader return a zero-padded plain identity, such as
 `ota-FM-1_015`. The client now reads that format while retaining the older
 encoded identity format. Stock replies use the one's-complement checksum.
-My modified V16 had kept V15's checksum after changing its version digit;
-the exception is limited to that exact captured V16 response.
+My modified V15-derived test build reported `FM-1_016` but retained V15's checksum after the version digit was changed; the exception is limited to that exact captured response.
 
 ## Instrumentation and observed result
 
 ```text
-read-only command: FM-1 V16 on 4C4A:C755
+read-only command: modified V15-derived test build reporting FM-1 V16 on 4C4A:C755
   -> hash-check the unchanged stock V15 package
   -> 48 staging data requests, then E0000000
   -> capture new USB identity 4D4A:4155
@@ -94,6 +91,8 @@ Expected first line:
 ```text
 Recorded capture chain verified: FM-1 V16 -> OTA V15 -> flash complete -> FM-1 V15.
 ```
+
+In that checker output, `FM-1 V16` is the captured identity of the locally modified V15-derived test package, not an official V16 firmware release.
 
 That command checks the supplied record's consistency. It does not independently
 authenticate a historical capture or perform another flash. The hardware result
