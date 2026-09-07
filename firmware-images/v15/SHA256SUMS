@@ -1,0 +1,4 @@
+db1642b2b6fa5c2cccb11ffd13878068bb28601678d3644049f99dc40e7edb8a  raw_fw/FM-1.fwsc
+306e47065f35d7a7a05ada7f5dd092f6e770952054f33f0a86b75fd10ffe3203  raw_fw/FM-1.fwsc_unpack/files/app.bin
+730e54f0a439f58d147be4364ad21e19566945ada9d3a7bbc8371dce5068d3ef  raw_fw/FM-1.fwsc_unpack/top/uboot.boot
+3e1e95392797a162caef1f6f69d1c28a65142f6b0e11911348bb9bb7fdd8e049  raw_fw/FM-1.fwsc_unpack/decrypted.bin
