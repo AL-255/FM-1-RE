@@ -1,0 +1,12 @@
+app-files:
+- files/app.bin
+- files/cfg_tool.bin
+base-offset: 0
+chip-key: 38927
+entry-point: 33554720
+format: jl-new-fw
+res-files:
+- files/cfg
+spl:
+  compressed: false
+  file: top/uboot.boot

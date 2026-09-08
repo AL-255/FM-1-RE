@@ -41,7 +41,7 @@ branch.
 - [tools/](tools/README.md): USB-MIDI update-protocol client and offline tests.
 - [ghidra/scripts/](ghidra/scripts/FullAnalyzeExport.java): checked-in pi32v2
   headless-analysis scripts.
-- [firmware-images/](firmware-images/README.md): immutable V13 and V14 packages
+- [firmware-images/](firmware-images/README.md): immutable V13, V14 and V15 packages
   and unpacked inputs.
 - `reference/`: ignored SDKs, Ghidra installations, and upstream source mirrors
   populated by [scripts/setup_reference.sh](scripts/setup_reference.sh).

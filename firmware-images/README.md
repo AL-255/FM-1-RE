@@ -7,6 +7,7 @@ artifacts separate from the repository-wide analysis under `analysis/`.
 |---|---|---|---:|---|
 | `v13/` | 2026-07-03 V13 baseline | `FM-1_009` | 583068 bytes | indexed under `analysis/` and `docs/` |
 | `v14/` | 2026-07-06 M-UPGRADE bundle | `FM-1_014` | 584956 bytes | extracted, linearly disassembled, and indexed under `v14/analysis/` |
+| `v15/` | 2026-07-30 CDN release | `FM-1_015` | 581564 bytes | extracted and unpacked; string index under `v15/analysis/`, no disassembly yet |
 
 Each version keeps the original `.fwsc`, reproducible extraction scripts, and
 the unpacked JLFS files together. V14 also retains its version-local function
