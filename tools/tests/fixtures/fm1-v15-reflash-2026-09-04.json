@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "capture_date": "2026-09-04",
+  "firmware": {
+    "product": "FM-1_015",
+    "raw_size": 699956,
+    "logical_size": 699936,
+    "sha256": "DB1642B2B6FA5C2CCCB11FFD13878068BB28601678D3644049F99DC40E7EDB8A"
+  },
+  "transport": "Windows.Devices.Midi with an already-active descriptor filter",
+  "request_run_columns": [
+    "address_hex",
+    "length",
+    "flash_type",
+    "count",
+    "stride"
+  ],
+  "before": {
+    "model": "FM-1",
+    "version": 16,
+    "read_only": true,
+    "usb_id": "4C4A:C755"
+  },
+  "stage": {
+    "data_requests": 48,
+    "request_runs": [
+      ["0x00000000", 512, 0, 3, 512],
+      ["0x00000400", 512, 0, 2, 16384],
+      ["0x00000400", 32, 0, 1, 0],
+      ["0x00000400", 512, 0, 1, 0],
+      ["0x00004400", 32, 0, 1, 0],
+      ["0x000A5F00", 512, 0, 2, 32],
+      ["0x000A6120", 512, 0, 37, 512],
+      ["0x000AAB20", 481, 0, 1, 0],
+      ["0xE0000000", 8, 0, 1, 0]
+    ]
+  },
+  "ota": {
+    "usb_id": "4D4A:4155",
+    "model": "ota-FM-1",
+    "version": 15,
+    "identity_sysex_hex": "F0 00 32 45 58 01 00 40 37 74 42 35 31 54 29 4B 18 5F 60 44 29 03 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 2A F7"
+  },
+  "flash": {
+    "data_requests": 1167,
+    "request_runs": [
+      ["0x00000000", 512, 0, 3, 512],
+      ["0x00000400", 32, 0, 1, 0],
+      ["0x00000400", 512, 0, 2, 16384],
+      ["0x00004400", 32, 0, 7, 32],
+      ["0x00092640", 32, 0, 2, 32],
+      ["0x00000005", 16, 0, 4, 0],
+      ["0x00093200", 512, 0, 1144, -512],
+      ["0x00000100", 10, 0, 1, 0],
+      ["0x00000093", 16, 0, 3, 0],
+      ["0xF0000000", 8, 0, 1, 0]
+    ]
+  },
+  "after": {
+    "usb_id": "4C4A:C755",
+    "model": "FM-1",
+    "version": 15,
+    "read_only": true,
+    "descriptor": {
+      "length": 293,
+      "declared_length": 293,
+      "valid": true,
+      "sha256": "8E5F630AEF8941ECDCC59628B616216D9C15AC25A1BB6A03A97C430A08614DBF"
+    },
+    "interfaces": [
+      {
+        "name": "FM-1 Audio",
+        "status": "OK",
+        "problem": 0
+      },
+      {
+        "name": "FM-1 Midi",
+        "status": "OK",
+        "problem": 0
+      }
+    ]
+  },
+  "limitations": {
+    "raw_flash_readback": false,
+    "audio_io_tested": false,
+    "whole_chip_wipe": false
+  }
+}

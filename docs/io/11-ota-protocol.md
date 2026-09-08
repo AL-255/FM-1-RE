@@ -7,6 +7,9 @@ reimplementation of the client framing and state machine. No physical UBOOT
 entry has been demonstrated; the observed update starts over USB-MIDI SysEx
 while the stock firmware is running.
 
+The [2026-09-04 V16 to stock V15 reflash](12-v15-reflash-proof.md) records a
+successful Windows MIDI run and corrects the partial-block framing below.
+
 ## Device identities
 
 | mode | observed VID:PID | enumerates as | MIDI |
@@ -47,23 +50,27 @@ The USB teardown records the template; host discovery uses the observed IDs.
 
 ## Read-request / data-response framing
 
-Device → host (request), host → device (response):
+Build the complete unpacked message, then encode it as one continuous
+LSB-first 8-to-7-bit stream between `F0` and `F7`:
 
 ```
-F0 00 32 41 41 [f1:4][addr:4][len:4] [pack7(data)…] F7
+00 59 30 | body_length:u24le | flash_type:u8 | address:u32le |
+requested_length:u24le | data (response only) | checksum:u8
 ```
 
-- `f1`, `addr`, `len` are three little-endian u32, each sent as 4×7-bit
-  groups (`b0|b1<<7|b2<<14|b3<<21`).
-- `len` field = `(length << 4) | flashtype`. Requests have `f1 = 0`;
-  responses have `f1 = length >> 4`.
-- `data` is an **8→7 LSB-first continuous bitstream** (7 wire bytes per 8
-  data bytes). The packed stream holds `length+1` unpacked bytes: the data
-  plus **one checksum byte** at the end:
-  `chk = ~(flashtype + sum(data) + sum(addr_LE_4) + sum(length_LE_3)) & 0xFF`
-  (length is plain little-endian u24, not the wire `(len<<4)` form; algorithm verified
-  48/48 against captured packets and against the firmware's verifier at
-  `update_cmd_dispatch 0x02026BC4`).
+- `body_length` is 8 for requests and `len(data) + 8` for responses.
+- `requested_length` is the exact requested payload size; ordinary responses
+  must contain that many bytes. The address retains all 32 bits, including
+  `0xE0000000` and `0xF0000000`.
+- `checksum = ~sum(bytes from flash_type through the end of data) & 0xFF`.
+- The device requires `body_length + 7 == decoded_packet_length` before
+  dispatching a command. A checksum-correct message can still fail this check.
+
+The former fixed `00 32 41 41` prefix only happened to encode the correct
+length for aligned blocks. A 481-byte response needs body length 489, whereas
+the old builder declared 488. The [vendor host builder](../../analysis/host-updater/ota_worker_decomp.c#L1455)
+writes the complete length before packing. See the
+[recorded failure, correction and reflash](12-v15-reflash-proof.md).
 
 ## The .fwsc logical image
 

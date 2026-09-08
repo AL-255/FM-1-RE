@@ -19,6 +19,17 @@ for the observed terminal signals, and checks the post-reboot identity. Its
 packet codec and state machine have offline unit coverage, but current timing
 and recovery behavior have not been verified on available hardware.
 
+The [V16 to stock V15 record](../docs/io/12-v15-reflash-proof.md) documents a
+successful reflash through a local Windows MIDI adapter using the corrected
+framing. Check the redacted request sequence and generated packets offline:
+
+```sh
+python tools/verify_reflash_record.py
+```
+
+This checks saved evidence, not current hardware. The ALSA transport was not
+used in that live run. No firmware payload or Windows driver is included.
+
 ## UBOOT reference
 
 The pinned `3rd-party/jl-uboot-tool` submodule documents JieLi UBOOT discovery,

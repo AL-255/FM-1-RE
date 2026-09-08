@@ -18,13 +18,13 @@ Session flow:
      verifies the model/version again after reboot.
 
 Wire protocol (both directions):
-  F0 00 32 41 41 [f1:4][addr:4][len:4] [pack7(data)...] F7
-    f1/addr/len : three little-endian u32, each sent as 4 x 7-bit groups
-                  (b0|b1<<7|b2<<14|b3<<21). len field = (length<<4)|flashtype.
-    request     : device->host, f1=0
-    response    : host->device, f1 = length>>4
-    data        : 8->7 LSB-first bit-packed, plus one trailing checksum byte
-                  ~(flashtype+sum(data)+sum(addr_LE)+sum(len_LE3)) & 0xFF
+  F0 pack7(00 59 30 [body_len:u24le] [flashtype:u8] [addr:u32le]
+           [length:u24le] [data...] [checksum:u8]) F7
+    The complete message is one continuous 8->7 LSB-first bitstream.
+    request     : body_len=8, no data
+    response    : body_len=length+8, exactly length data bytes
+    checksum    : ~(flashtype+sum(addr_LE)+sum(length_LE3)+sum(data)) & 0xFF
+    A fixed packed prefix loses low body-length bits for partial blocks.
   Handshake:    F0 00 32 45 00 00 00 40 7F F7 -> ID block on 00 32 45 58
   Upgrade cmd:  F0 22 24 35 7F F7
   .fwsc image : the first 20*0x30 header bytes are interleaved as
@@ -82,17 +82,22 @@ def e7(v):
     return bytes([(v) & 0x7F, (v >> 7) & 0x7F, (v >> 14) & 0x7F, (v >> 21) & 0x7F])
 
 def build_response(addr, data, req_len=None, flashtype=0):
-    """Data response. req_len = requested length (echoed in the len field and
-    f1); the payload is the (full) data actually sent, followed by one
-    checksum byte: ~(flashtype+sum(data)+sum(addr_LE)+sum(len_LE3)) & 0xFF — algorithm
-    verified 48/48 against the firmware's verifier at update_cmd_dispatch
-    (0x02026BC4)."""
+    """Build the complete decoded response before packing, as M-UPGRADE does.
+
+    The body length is req_len + 8, including the flash type, address and
+    requested length. The checksum follows the body and covers all of it.
+    """
     if req_len is None:
         req_len = len(data)
-    chk = (~(flashtype + sum(data) + sum(addr.to_bytes(4, 'little'))
-             + sum(req_len.to_bytes(3, 'little')))) & 0xFF
-    return (b"\xF0" + HDR_DATA + e7(req_len >> 4) + e7(addr)
-            + e7((req_len << 4) | flashtype) + pack7(data + bytes([chk])) + b"\xF7")
+    if not 0 <= req_len <= MAXDATA or len(data) != req_len:
+        raise ValueError("response must contain the exact requested payload, at most 512 bytes")
+    if not 0 <= addr <= 0xFFFFFFFF or not 0 <= flashtype <= 0xFF:
+        raise ValueError("address or flash type is outside the wire field range")
+    body = (b"\x00\x59\x30" + (req_len + 8).to_bytes(3, "little")
+            + bytes([flashtype]) + addr.to_bytes(4, "little")
+            + req_len.to_bytes(3, "little") + data)
+    chk = (~sum(body[6:])) & 0xFF
+    return b"\xF0" + pack7(body + bytes([chk])) + b"\xF7"
 
 def parse_request(pkt):
     """Decode a device read-request frame -> (flashtype, addr, length) or None.
@@ -114,9 +119,10 @@ def parse_request(pkt):
 def parse_handshake_identity(pkt):
     """Decode the model and decimal version from a type-0x11 ID response.
 
-    This mirrors M-UPGRADE's parser at 0x140016e10. The 20-byte identity field
-    is stored relative to ASCII '0'; the parser adds '0' to each byte and uses
-    the underscore position from the plain identity field to find the version.
+    Stock V15 and its OTA loader return a plain, zero-padded identity. Also
+    retain the encoded-field format from M-UPGRADE's parser at 0x140016e10:
+    add ASCII '0' to the 20-byte field, then find the version using the plain
+    identity's underscore position.
     """
     if len(pkt) < 4 or pkt[0] != 0xF0 or pkt[-1] != 0xF7:
         return None
@@ -124,8 +130,21 @@ def parse_handshake_identity(pkt):
     if len(decoded) != 34 or decoded[:3] != b"\x00\x59\x11":
         return None
     body_len = int.from_bytes(decoded[3:6], "little")
-    if body_len != 27 or decoded[-1] != ((~sum(decoded[6:-1])) & 0xFF):
+    if body_len != 27:
         return None
+    # The observed custom V16 changed the version digit but retained V15's
+    # checksum. Permit only that exact legacy payload, not other bad checksums.
+    legacy_v16 = decoded[6:] == b"FM-1_016".ljust(27, b"\0") + b"\x19"
+    if decoded[-1] != ((~sum(decoded[6:-1])) & 0xFF) and not legacy_v16:
+        return None
+
+    plain_match = re.fullmatch(rb"([^_\x00]+)_([0-9]+)\x00*", decoded[6:-1])
+    if plain_match:
+        try:
+            model = plain_match.group(1).decode("ascii")
+        except UnicodeDecodeError:
+            return None
+        return {"model": model, "version": int(plain_match.group(2), 10)}
 
     plain = decoded[6:31]
     separator = plain.find(b"_")
@@ -145,10 +164,7 @@ def parse_handshake_identity(pkt):
 # "success" reply for the done-signals (verification/upgrade complete)
 def build_success(addr):
     payload = b"success\x00"
-    body = bytes([0x00, 0x59, 0x30]) + (len(payload) + 8).to_bytes(3, "little") \
-        + bytes([0]) + addr.to_bytes(4, "little") + len(payload).to_bytes(3, "little") + payload
-    chk = (~sum(body[6:])) & 0xFF
-    return b"\xF0" + pack7(body + bytes([chk])) + b"\xF7"
+    return build_response(addr, payload)
 
 # ------------------------------------------------------------- .fwsc image
 def fwsc_logical(path):
@@ -183,10 +199,11 @@ def fwsc_info(path):
     return {"chip": name, "product": product, "logical_size": len(lg)}
 
 # ------------------------------------------------------------------ rawmidi
-import alsalib, alsaseq
 
 def find_midi_port():
     """Locate the FM-1 kernel MIDI port (client, port), or None."""
+    import alsaseq
+
     c = alsaseq.SeqClient()
     try:
         for name in (b'USB Composite Device', b'FM-1', b'USB-Midi', b'Sinco-Midi'):
@@ -220,6 +237,8 @@ def find_rawmidi(prefer_ota=None):
 
 class MidiLink:
     def __init__(self, _path=None):
+        import alsalib
+
         self.link = alsalib.MidiLink()
         addr = find_midi_port()
         if not addr:
