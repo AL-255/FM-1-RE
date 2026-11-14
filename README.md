@@ -118,3 +118,5 @@ update or flash utility.
   (`../fw-AC79_AIoT_SDK`): official AC791N/WL82 SDK containing peripheral and
   MaskROM API headers, boot/update configuration, libraries, build tools, and
   application examples used to identify stock firmware behavior.
+
+You can also try FM-1 RE in the browser, no flashing needed, in the free community [FM-1 Emulator](https://fm1-emulator.atst.tools/).
